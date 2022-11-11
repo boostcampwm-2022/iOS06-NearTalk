@@ -11,6 +11,7 @@ included: # 린트 과정에 포함할 파일 경로. 이 항목이 존재하면
   - NearTalk
 
 excluded: # 린트 과정에서 무시할 파일 경로. `included`보다 우선순위 높음
+  - Pods
   - NearTalk/Application/AppDelegate.swift
   - NearTalk/Application/SceneDelegate.swift
 
