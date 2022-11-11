@@ -1,0 +1,867 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		16530574291E17A50026B815 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530573291E17A40026B815 /* DeviceType.swift */; };
+		16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530575291E17F70026B815 /* UIViewController+Preview.swift */; };
+		16530578291E18560026B815 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530577291E18560026B815 /* UIViewPreview.swift */; };
+		1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1653057D291E19150026B815 /* ChattingRoomListViewController.swift */; };
+		16530580291E19250026B815 /* ChattingRoomListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1653057F291E19250026B815 /* ChattingRoomListViewModel.swift */; };
+		16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530581291E19350026B815 /* ChattingRoomListCoordinator.swift */; };
+		1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D227291DDB37005F7B24 /* AppDelegate.swift */; };
+		1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D229291DDB38005F7B24 /* SceneDelegate.swift */; };
+		1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D22B291DDB38005F7B24 /* ViewController.swift */; };
+		1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1660D230291DDB38005F7B24 /* NearTalk.xcdatamodeld */; };
+		1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1660D233291DDB39005F7B24 /* Assets.xcassets */; };
+		1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */; };
+		1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D241291DDB3A005F7B24 /* NearTalkTests.swift */; };
+		1660D24C291DDB3A005F7B24 /* NearTalkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24B291DDB3A005F7B24 /* NearTalkUITests.swift */; };
+		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
+		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
+		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1660D23E291DDB3A005F7B24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1660D21C291DDB37005F7B24 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1660D223291DDB37005F7B24;
+			remoteInfo = NearTalk;
+		};
+		1660D248291DDB3A005F7B24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1660D21C291DDB37005F7B24 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1660D223291DDB37005F7B24;
+			remoteInfo = NearTalk;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		16530573291E17A40026B815 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
+		16530575291E17F70026B815 /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
+		16530577291E18560026B815 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
+		1653057D291E19150026B815 /* ChattingRoomListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListViewController.swift; sourceTree = "<group>"; };
+		1653057F291E19250026B815 /* ChattingRoomListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListViewModel.swift; sourceTree = "<group>"; };
+		16530581291E19350026B815 /* ChattingRoomListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListCoordinator.swift; sourceTree = "<group>"; };
+		1660D224291DDB37005F7B24 /* NearTalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NearTalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1660D227291DDB37005F7B24 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1660D229291DDB38005F7B24 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		1660D22B291DDB38005F7B24 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1660D231291DDB38005F7B24 /* NearTalk.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NearTalk.xcdatamodel; sourceTree = "<group>"; };
+		1660D233291DDB39005F7B24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1660D236291DDB39005F7B24 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1660D238291DDB39005F7B24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1660D23D291DDB3A005F7B24 /* NearTalkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NearTalkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1660D241291DDB3A005F7B24 /* NearTalkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkTests.swift; sourceTree = "<group>"; };
+		1660D247291DDB3A005F7B24 /* NearTalkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NearTalkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1660D24B291DDB3A005F7B24 /* NearTalkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkUITests.swift; sourceTree = "<group>"; };
+		1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1660D221291DDB37005F7B24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1660D23A291DDB3A005F7B24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1660D244291DDB3A005F7B24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		16530579291E189D0026B815 /* ChattingRoomList */ = {
+			isa = PBXGroup;
+			children = (
+				1653057A291E18CE0026B815 /* View */,
+				1653057B291E18D70026B815 /* ViewModel */,
+				1653057C291E18DF0026B815 /* Coordinator */,
+			);
+			path = ChattingRoomList;
+			sourceTree = "<group>";
+		};
+		1653057A291E18CE0026B815 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1653057D291E19150026B815 /* ChattingRoomListViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1653057B291E18D70026B815 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1653057F291E19250026B815 /* ChattingRoomListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1653057C291E18DF0026B815 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				16530581291E19350026B815 /* ChattingRoomListCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		1653058A291E1A660026B815 /* MessageCell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MessageCell;
+			sourceTree = "<group>";
+		};
+		1660D21B291DDB37005F7B24 = {
+			isa = PBXGroup;
+			children = (
+				1660D279291E09CE005F7B24 /* .swiftlint.yml */,
+				1660D226291DDB37005F7B24 /* NearTalk */,
+				1660D240291DDB3A005F7B24 /* NearTalkTests */,
+				1660D24A291DDB3A005F7B24 /* NearTalkUITests */,
+				1660D225291DDB37005F7B24 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1660D225291DDB37005F7B24 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1660D224291DDB37005F7B24 /* NearTalk.app */,
+				1660D23D291DDB3A005F7B24 /* NearTalkTests.xctest */,
+				1660D247291DDB3A005F7B24 /* NearTalkUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1660D226291DDB37005F7B24 /* NearTalk */ = {
+			isa = PBXGroup;
+			children = (
+				1660D25A291DDD73005F7B24 /* Application */,
+				1660D25F291DDE16005F7B24 /* Resource */,
+				1660D25D291DDD9C005F7B24 /* Data */,
+				1660D25B291DDD7D005F7B24 /* Domain */,
+				1660D25C291DDD88005F7B24 /* Presentation */,
+				1660D25E291DDDAA005F7B24 /* Infrastructure */,
+			);
+			path = NearTalk;
+			sourceTree = "<group>";
+		};
+		1660D240291DDB3A005F7B24 /* NearTalkTests */ = {
+			isa = PBXGroup;
+			children = (
+				1660D241291DDB3A005F7B24 /* NearTalkTests.swift */,
+			);
+			path = NearTalkTests;
+			sourceTree = "<group>";
+		};
+		1660D24A291DDB3A005F7B24 /* NearTalkUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1660D24B291DDB3A005F7B24 /* NearTalkUITests.swift */,
+				1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */,
+			);
+			path = NearTalkUITests;
+			sourceTree = "<group>";
+		};
+		1660D25A291DDD73005F7B24 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				1660D264291DE07B005F7B24 /* Coordinator */,
+				1660D227291DDB37005F7B24 /* AppDelegate.swift */,
+				1660D229291DDB38005F7B24 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		1660D25B291DDD7D005F7B24 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				1660D26B291DE326005F7B24 /* Entities */,
+				1660D26C291DE32F005F7B24 /* UseCases */,
+				1660D26D291DE336005F7B24 /* Interfaces */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		1660D25C291DDD88005F7B24 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				1653058A291E1A660026B815 /* MessageCell */,
+				16530579291E189D0026B815 /* ChattingRoomList */,
+				1660D267291DE266005F7B24 /* LaunchScreen */,
+				1660D22B291DDB38005F7B24 /* ViewController.swift */,
+				1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		1660D25D291DDD9C005F7B24 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				1660D26E291DE34E005F7B24 /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		1660D25E291DDDAA005F7B24 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				1660D263291DDEE2005F7B24 /* Extensions */,
+				1660D260291DDEB2005F7B24 /* Network */,
+				1660D262291DDEC6005F7B24 /* Coredata */,
+				1660D261291DDEBE005F7B24 /* Utils */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		1660D25F291DDE16005F7B24 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				1660D233291DDB39005F7B24 /* Assets.xcassets */,
+				1660D238291DDB39005F7B24 /* Info.plist */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		1660D260291DDEB2005F7B24 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		1660D261291DDEBE005F7B24 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				16530573291E17A40026B815 /* DeviceType.swift */,
+				16530577291E18560026B815 /* UIViewPreview.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		1660D262291DDEC6005F7B24 /* Coredata */ = {
+			isa = PBXGroup;
+			children = (
+				1660D230291DDB38005F7B24 /* NearTalk.xcdatamodeld */,
+			);
+			path = Coredata;
+			sourceTree = "<group>";
+		};
+		1660D263291DDEE2005F7B24 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				16530575291E17F70026B815 /* UIViewController+Preview.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		1660D264291DE07B005F7B24 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				1660D265291DE092005F7B24 /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		1660D267291DE266005F7B24 /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				1660D269291DE2A2005F7B24 /* View */,
+				1660D26A291DE2AA005F7B24 /* ViewModel */,
+				1660D268291DE275005F7B24 /* Coordinator */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
+		1660D268291DE275005F7B24 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		1660D269291DE2A2005F7B24 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1660D26A291DE2AA005F7B24 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1660D26B291DE326005F7B24 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		1660D26C291DE32F005F7B24 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		1660D26D291DE336005F7B24 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				1660D26F291DECF7005F7B24 /* Repositories */,
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
+		1660D26E291DE34E005F7B24 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		1660D26F291DECF7005F7B24 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1660D223291DDB37005F7B24 /* NearTalk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */;
+			buildPhases = (
+				1660D270291DEE01005F7B24 /* SwiftLint Script */,
+				1660D220291DDB37005F7B24 /* Sources */,
+				1660D221291DDB37005F7B24 /* Frameworks */,
+				1660D222291DDB37005F7B24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NearTalk;
+			productName = NearTalk;
+			productReference = 1660D224291DDB37005F7B24 /* NearTalk.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1660D23C291DDB3A005F7B24 /* NearTalkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1660D254291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkTests" */;
+			buildPhases = (
+				1660D239291DDB3A005F7B24 /* Sources */,
+				1660D23A291DDB3A005F7B24 /* Frameworks */,
+				1660D23B291DDB3A005F7B24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1660D23F291DDB3A005F7B24 /* PBXTargetDependency */,
+			);
+			name = NearTalkTests;
+			productName = NearTalkTests;
+			productReference = 1660D23D291DDB3A005F7B24 /* NearTalkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1660D246291DDB3A005F7B24 /* NearTalkUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1660D257291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkUITests" */;
+			buildPhases = (
+				1660D243291DDB3A005F7B24 /* Sources */,
+				1660D244291DDB3A005F7B24 /* Frameworks */,
+				1660D245291DDB3A005F7B24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1660D249291DDB3A005F7B24 /* PBXTargetDependency */,
+			);
+			name = NearTalkUITests;
+			productName = NearTalkUITests;
+			productReference = 1660D247291DDB3A005F7B24 /* NearTalkUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1660D21C291DDB37005F7B24 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					1660D223291DDB37005F7B24 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					1660D23C291DDB3A005F7B24 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 1660D223291DDB37005F7B24;
+					};
+					1660D246291DDB3A005F7B24 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 1660D223291DDB37005F7B24;
+					};
+				};
+			};
+			buildConfigurationList = 1660D21F291DDB37005F7B24 /* Build configuration list for PBXProject "NearTalk" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1660D21B291DDB37005F7B24;
+			productRefGroup = 1660D225291DDB37005F7B24 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1660D223291DDB37005F7B24 /* NearTalk */,
+				1660D23C291DDB3A005F7B24 /* NearTalkTests */,
+				1660D246291DDB3A005F7B24 /* NearTalkUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1660D222291DDB37005F7B24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
+				1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */,
+				1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1660D23B291DDB3A005F7B24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1660D245291DDB3A005F7B24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1660D270291DEE01005F7B24 /* SwiftLint Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1660D220291DDB37005F7B24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */,
+				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
+				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
+				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
+				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
+				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
+				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
+				16530574291E17A50026B815 /* DeviceType.swift in Sources */,
+				16530580291E19250026B815 /* ChattingRoomListViewModel.swift in Sources */,
+				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
+				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1660D239291DDB3A005F7B24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1660D243291DDB3A005F7B24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */,
+				1660D24C291DDB3A005F7B24 /* NearTalkUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1660D23F291DDB3A005F7B24 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1660D223291DDB37005F7B24 /* NearTalk */;
+			targetProxy = 1660D23E291DDB3A005F7B24 /* PBXContainerItemProxy */;
+		};
+		1660D249291DDB3A005F7B24 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1660D223291DDB37005F7B24 /* NearTalk */;
+			targetProxy = 1660D248291DDB3A005F7B24 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1660D236291DDB39005F7B24 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1660D24F291DDB3A005F7B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1660D250291DDB3A005F7B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1660D252291DDB3A005F7B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		1660D253291DDB3A005F7B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		1660D255291DDB3A005F7B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NearTalk.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NearTalk";
+			};
+			name = Debug;
+		};
+		1660D256291DDB3A005F7B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NearTalk.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/NearTalk";
+			};
+			name = Release;
+		};
+		1660D258291DDB3A005F7B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NearTalk;
+			};
+			name = Debug;
+		};
+		1660D259291DDB3A005F7B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NearTalk;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1660D21F291DDB37005F7B24 /* Build configuration list for PBXProject "NearTalk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1660D24F291DDB3A005F7B24 /* Debug */,
+				1660D250291DDB3A005F7B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1660D252291DDB3A005F7B24 /* Debug */,
+				1660D253291DDB3A005F7B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1660D254291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1660D255291DDB3A005F7B24 /* Debug */,
+				1660D256291DDB3A005F7B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1660D257291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1660D258291DDB3A005F7B24 /* Debug */,
+				1660D259291DDB3A005F7B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1660D230291DDB38005F7B24 /* NearTalk.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1660D231291DDB38005F7B24 /* NearTalk.xcdatamodel */,
+			);
+			currentVersion = 1660D231291DDB38005F7B24 /* NearTalk.xcdatamodel */;
+			path = NearTalk.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 1660D21C291DDB37005F7B24 /* Project object */;
+}

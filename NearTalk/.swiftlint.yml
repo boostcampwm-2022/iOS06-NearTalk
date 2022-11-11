@@ -1,0 +1,36 @@
+disabled_rules: # 실행에서 제외할 룰 식별자들
+  - line_length
+  - trailing_whitespace
+
+opt_in_rules: # 일부 룰은 옵트 인 형태로 제공
+  - indentation_width
+  - sorted_imports
+  - conditional_returns_on_newline
+
+included: # 린트 과정에 포함할 파일 경로. 이 항목이 존재하면 `--path`는 무시됨
+  - NearTalk
+
+excluded: # 린트 과정에서 무시할 파일 경로. `included`보다 우선순위 높음
+  - NearTalk/Application/AppDelegate.swift
+  - NearTalk/Application/SceneDelegate.swift
+
+# 설정 가능한 룰은 이 설정 파일에서 커스터마이징 가능
+# 경고나 에러 중 하나를 발생시키는 룰은 위반 수준을 설정 가능
+force_cast: warning
+
+force_try:
+  severity: warning
+
+function_body_length:
+  warning: 100
+
+type_name:
+  min_length:
+    error: 2
+
+identifier_name:
+  min_length:
+    error: 2
+    
+# 보고 유형 (xcode, json, csv, codeclimate, checkstyle, junit, html, emoji, sonarqube, markdown, github-actions-logging)
+reporter: "xcode"
