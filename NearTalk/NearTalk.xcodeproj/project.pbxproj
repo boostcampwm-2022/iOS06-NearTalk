@@ -25,6 +25,7 @@
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
 		975ABD70C1A6777A186A0BD4 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 033E29A1242064E4B338B901 /* Pods_NearTalk_NearTalkUITests.framework */; };
 		C949BDE51541616EE5E2FD07 /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD704CF65FA0993A71D5C936 /* Pods_NearTalk.framework */; };
 		F9AD533B0F819A0FEE5389CD /* Pods_NearTalkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 873E6AA8CBC14C900E9F756E /* Pods_NearTalkTests.framework */; };
@@ -72,6 +73,7 @@
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		2941A672953C39B7214BEAFF /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
+		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
 		873E6AA8CBC14C900E9F756E /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6C6F33A78BCD3BD1E102C87 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
 		AC04F5B178F0CC575E8280FE /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				83E7F8C72922AB750003A2B6 /* MyProfile */,
 				1653058A291E1A660026B815 /* MessageCell */,
 				16530579291E189D0026B815 /* ChattingRoomList */,
 				1660D267291DE266005F7B24 /* LaunchScreen */,
@@ -379,6 +382,22 @@
 				873E6AA8CBC14C900E9F756E /* Pods_NearTalkTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		83E7F8C72922AB750003A2B6 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				83E7F8C82922AB750003A2B6 /* View */,
+			);
+			path = MyProfile;
+			sourceTree = "<group>";
+		};
+		83E7F8C82922AB750003A2B6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		EF9BC89A864970D54CE8E69D /* Pods */ = {
@@ -653,6 +672,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */,
 				1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
