@@ -24,6 +24,7 @@
 		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
+		55F0908E2921DFCB008F5B9D /* ChattingRoomListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908D2921DFCB008F5B9D /* ChattingRoomListData.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
 		975ABD70C1A6777A186A0BD4 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 033E29A1242064E4B338B901 /* Pods_NearTalk_NearTalkUITests.framework */; };
 		C949BDE51541616EE5E2FD07 /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD704CF65FA0993A71D5C936 /* Pods_NearTalk.framework */; };
@@ -71,6 +72,7 @@
 		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		2941A672953C39B7214BEAFF /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
+		55F0908D2921DFCB008F5B9D /* ChattingRoomListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChattingRoomListData.swift; path = "../../../../../../../.Trash/iOS06-NearTalk/NearTalk/NearTalk/Presentation/ChattingRoomList/ViewModel/ChattingRoomListData.swift"; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
 		873E6AA8CBC14C900E9F756E /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6C6F33A78BCD3BD1E102C87 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				1653057F291E19250026B815 /* ChattingRoomListViewModel.swift */,
+				55F0908D2921DFCB008F5B9D /* ChattingRoomListData.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
+				55F0908E2921DFCB008F5B9D /* ChattingRoomListData.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
 				16530574291E17A50026B815 /* DeviceType.swift in Sources */,
