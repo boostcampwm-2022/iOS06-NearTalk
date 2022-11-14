@@ -47,10 +47,16 @@ class ChattingRoomListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(data: ChattingRoomListData) {
-        name.text = data.name
-        userDescription.text = data.description
-        date.text = data.date
+    func configure(openData: OpenChattingRoomListData) {
+        name.text = openData.name
+        userDescription.text = openData.description
+        date.text = openData.date
+    }
+    
+    func configure(dmData: DMChattingRoomListData) {
+        name.text = dmData.name
+        userDescription.text = dmData.description
+        date.text = dmData.date
     }
     
     func layoutSetup() {
