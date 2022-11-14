@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         let navigationController = UINavigationController()
+        // 시물레이션 확인용
         window?.rootViewController = ChattingRoomListViewController()
         
         appCoordinator = AppCoordinator(navigationController: navigationController)
