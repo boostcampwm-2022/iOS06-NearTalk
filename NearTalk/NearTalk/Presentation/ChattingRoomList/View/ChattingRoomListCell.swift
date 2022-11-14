@@ -16,9 +16,6 @@ class ChattingRoomListCell: UITableViewCell {
     let img = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
-        
-        $0.layer.borderWidth = 2
-        $0.layer.borderColor = UIColor.black.cgColor
         $0.image = UIImage(systemName: "photo")
     }
     
@@ -34,11 +31,11 @@ class ChattingRoomListCell: UITableViewCell {
     
     let date = UILabel().then {
         $0.numberOfLines = 2
-        $0.font = UIFont(name: "text", size: 16)
+        $0.font = UIFont.systemFont(ofSize: 14)
     }
     
     let count = UILabel().then {
-        $0.font = UIFont(name: "text", size: 12)
+        $0.font = UIFont.systemFont(ofSize: 14)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -57,7 +54,7 @@ class ChattingRoomListCell: UITableViewCell {
     }
     
     func layoutSetup() {
-        contentView.backgroundColor = .gray
+        
         self.contentView.addSubview(img)
         self.contentView.addSubview(name)
         self.contentView.addSubview(userDescription)
@@ -91,23 +88,23 @@ class ChattingRoomListCell: UITableViewCell {
             
         }
         
-        contentView.layer.borderColor = UIColor.white.cgColor
+        contentView.layer.borderColor = UIColor.gray.cgColor
         contentView.layer.borderWidth = 0.5
         
     }
     
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChattingRoomListCellPreview: PreviewProvider {
-    static var previews: some View {
-        UIViewPreview {
-            let cell = ChattingRoomListCell(frame: .zero)
-            cell.configure(data: ChattingRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
-            return cell
-        }.previewLayout(.fixed(width: 300, height: 120))
-    }
-}
-#endif
+//#if canImport(SwiftUI) && DEBUG
+//import SwiftUI
+//
+//struct ChattingRoomListCellPreview: PreviewProvider {
+//    static var previews: some View {
+//        UIViewPreview {
+//            let cell = ChattingRoomListCell(frame: .zero)
+//            cell.configure(data: ChattingRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
+//            return cell
+//        }.previewLayout(.fixed(width: 300, height: 120))
+//    }
+//}
+//#endif
