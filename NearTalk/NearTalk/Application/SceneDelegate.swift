@@ -21,7 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         let navigationController = UINavigationController()
-        window?.rootViewController = navigationController
+        window?.rootViewController = ChattingRoomListViewController()
         
         appCoordinator = AppCoordinator(navigationController: navigationController)
         appCoordinator?.start()
