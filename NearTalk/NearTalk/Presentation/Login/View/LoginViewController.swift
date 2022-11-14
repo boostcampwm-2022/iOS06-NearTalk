@@ -58,4 +58,3 @@ struct LogInViewController_Preview: PreviewProvider {
     }
 }
 #endif
-
