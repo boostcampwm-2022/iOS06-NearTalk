@@ -13,29 +13,36 @@ import UIKit
 
 class ChattingRoomListViewController: UIViewController {
     
-    var dummyData: [ChattingRoomListData] = []
+    private var dataSource: UITableViewDiffableDataSource<Int, ChattingRoomListData>?
+    private var viewModel = ChattingRoomListViewModel()
     
-    private lazy var tableView = UITableView().then {
+    let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
+        $0.rowHeight = 180
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.separatorStyle = .none
+        $0.rowHeight = UITableView.automaticDimension
         $0.backgroundColor = .clear
+        $0.register(ChattingRoomListCell.self, forCellReuseIdentifier: ChattingRoomListCell.identifier)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+ 
         setupLayout()
-        createDummyData()
-        view.backgroundColor = .gray
-    }
-    
-    func createDummyData() {
-        dummyData.append(ChattingRoomListData(img: "", name: "001", description: "asdf"))
-        dummyData.append(ChattingRoomListData(img: "", name: "002", description: "zxcv"))
-        dummyData.append(ChattingRoomListData(img: "", name: "003", description: "qwer"))
-        dummyData.append(ChattingRoomListData(img: "", name: "004", description: "asdf"))
-        dummyData.append(ChattingRoomListData(img: "", name: "005", description: "zxcv"))
+        view.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
     }
     
     func setupLayout() {
+        configureDatasource()
+        self.dataSource?.defaultRowAnimation = .fade
+        tableView.dataSource = self.dataSource
+        
+        // 빈 snapshot
+        var snapshot = NSDiffableDataSourceSnapshot<Int, ChattingRoomListData>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(viewModel.dummyData)
+        self.dataSource?.apply(snapshot)
+        
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { make in
@@ -43,8 +50,15 @@ class ChattingRoomListViewController: UIViewController {
         }
     }
     
-    func setupNavi() {
+    func configureDatasource() {
         
+        dataSource = UITableViewDiffableDataSource<Int, ChattingRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChattingRoomListCell.identifier, for: indexPath) as? ChattingRoomListCell else { return UITableViewCell() }
+            cell.configure(data: self.viewModel.dummyData[indexPath.row])
+            
+            return cell
+        })
+ 
     }
 }
 
