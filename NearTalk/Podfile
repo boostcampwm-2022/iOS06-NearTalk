@@ -1,17 +1,25 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '15.0'
+platform :ios, '15.0'
 
 target 'NearTalk' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for NearTalk
-  pod 'RxSwift'
-  pod 'RxCocoa'
-  pod 'RxGesture'
-  pod 'SnapKit'
-  pod 'Then'
-  pod 'Kingfisher'
+  
+  # Rx
+  pod 'RxSwift', '~> 6.5.0'
+  pod 'RxCocoa', '~> 6.5.0'
+  pod 'RxGesture', '~> 4.0.0'
+  
+  # UI
+  pod 'SnapKit', '~> 5.6.0'
+  
+  # Images
+  pod 'Kingfisher', '~> 7.4.1'
+  
+  # Utils
+  pod 'Then', '~> 3.0.0'
 
   target 'NearTalkTests' do
     inherit! :search_paths
