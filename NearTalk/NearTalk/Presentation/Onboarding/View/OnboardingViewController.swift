@@ -48,7 +48,9 @@ final class OnboardingViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        profileImageView.makeRounded()
+        profileImageView.clipsToBounds = true
+        profileImageView.layer.masksToBounds = true
+        profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
     }
 }
 
