@@ -59,13 +59,11 @@ private extension ProfileSettingViewController {
         nicknameField.snp.makeConstraints { (make) in
             make.horizontalEdges.equalToSuperview().inset(20)
             make.top.equalTo(profileImageView.snp.bottom).offset(10)
-//            make.height.equalTo(nicknameField.snp.width).multipliedBy(0.15)
         }
         
         messageField.snp.makeConstraints { (make) in
             make.horizontalEdges.equalToSuperview().inset(20)
             make.top.equalTo(nicknameField.snp.bottom).offset(10)
-//            make.bottom.equalToSuperview().offset(20)
         }
     }
 }
