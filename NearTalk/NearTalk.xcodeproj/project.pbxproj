@@ -32,6 +32,7 @@
 		605715A3291F93EF004A0904 /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A2291F93EF004A0904 /* FireStoreService.swift */; };
 		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8367AB632922AF6300678669 /* ProfileSettingViewController.swift */; };
@@ -92,6 +93,7 @@
 		605715A2291F93EF004A0904 /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
 		605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenDIContainer.swift; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
+		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
@@ -253,6 +255,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				8375F2202922B043004538AF /* Onboarding */,
 				83E7BBC32922AFED007C390A /* AppSetting */,
 				8367AB612922AF6300678669 /* ProfileSetting */,
 				839D5BDA2922AD1000857FDD /* Login */,
@@ -427,6 +430,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8375F2202922B043004538AF /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8375F2212922B043004538AF /* View */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		8375F2212922B043004538AF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8375F2222922B043004538AF /* OnboardingViewController.swift */,
 		83E7BBC32922AFED007C390A /* AppSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -740,6 +755,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */,
 				1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
 				601273472921EF2C00E1456B /* DefaultLaunchScreenRepository.swift in Sources */,
