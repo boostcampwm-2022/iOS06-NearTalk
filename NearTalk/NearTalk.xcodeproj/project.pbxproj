@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA962921D73E0076AC35 /* MainMapViewModel.swift */; };
+		1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA982921D7480076AC35 /* MainMapCoordinator.swift */; };
+		1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA9A2921D7570076AC35 /* MainMapViewController.swift */; };
 		16530574291E17A50026B815 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530573291E17A40026B815 /* DeviceType.swift */; };
 		16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530575291E17F70026B815 /* UIViewController+Preview.swift */; };
 		16530578291E18560026B815 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530577291E18560026B815 /* UIViewPreview.swift */; };
@@ -26,10 +29,26 @@
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
 		55F0908E2921DFCB008F5B9D /* OpenChattingRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908D2921DFCB008F5B9D /* OpenChattingRoomListModel.swift */; };
 		55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */; };
+		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
+		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
+		601273452921ED6F00E1456B /* LaunchScreenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273442921ED6F00E1456B /* LaunchScreenRepository.swift */; };
+		601273472921EF2C00E1456B /* DefaultLaunchScreenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273462921EF2C00E1456B /* DefaultLaunchScreenRepository.swift */; };
+		6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012734829221F4800E1456B /* LaunchScreenUseCase.swift */; };
+		605715A3291F93EF004A0904 /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A2291F93EF004A0904 /* FireStoreService.swift */; };
+		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
+		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
+		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
+		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
+		8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8367AB632922AF6300678669 /* ProfileSettingViewController.swift */; };
+		839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D5BDC2922AD1000857FDD /* LoginViewController.swift */; };
+		60C2A78D291F648600F7D284 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A78C291F648600F7D284 /* StorageService.swift */; };
+		60C2A78F291F649300F7D284 /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A78E291F649200F7D284 /* RealTimeDatabaseService.swift */; };
 		975ABD70C1A6777A186A0BD4 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 033E29A1242064E4B338B901 /* Pods_NearTalk_NearTalkUITests.framework */; };
 		C949BDE51541616EE5E2FD07 /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD704CF65FA0993A71D5C936 /* Pods_NearTalk.framework */; };
 		F9AD533B0F819A0FEE5389CD /* Pods_NearTalkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 873E6AA8CBC14C900E9F756E /* Pods_NearTalkTests.framework */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +69,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		033E29A1242064E4B338B901 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
+		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
+		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
 		16530573291E17A40026B815 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		16530575291E17F70026B815 /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
 		16530577291E18560026B815 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
@@ -75,7 +96,22 @@
 		2941A672953C39B7214BEAFF /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
 		55F0908D2921DFCB008F5B9D /* OpenChattingRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenChattingRoomListModel.swift; path = "../../../../../../../.Trash/iOS06-NearTalk/NearTalk/NearTalk/Presentation/ChattingRoomList/ViewModel/OpenChattingRoomListModel.swift"; sourceTree = "<group>"; };
 		55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListCell.swift; sourceTree = "<group>"; };
+		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
+		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		601273442921ED6F00E1456B /* LaunchScreenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LaunchScreenRepository.swift; path = NearTalk/Presentation/LaucnScreen/View/LaunchScreenRepository.swift; sourceTree = SOURCE_ROOT; };
+		601273462921EF2C00E1456B /* DefaultLaunchScreenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLaunchScreenRepository.swift; sourceTree = "<group>"; };
+		6012734829221F4800E1456B /* LaunchScreenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenUseCase.swift; sourceTree = "<group>"; };
+		605715A2291F93EF004A0904 /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
+		605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenDIContainer.swift; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
+		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
+		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
+		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
+		839D5BDC2922AD1000857FDD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		60C2A78C291F648600F7D284 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StorageService.swift; path = NearTalk/Infrastructure/Network/StorageService.swift; sourceTree = SOURCE_ROOT; };
+		60C2A78E291F649200F7D284 /* RealTimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RealTimeDatabaseService.swift; path = NearTalk/Infrastructure/Network/RealTimeDatabaseService.swift; sourceTree = SOURCE_ROOT; };
 		873E6AA8CBC14C900E9F756E /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6C6F33A78BCD3BD1E102C87 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
 		AC04F5B178F0CC575E8280FE /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
@@ -83,6 +119,7 @@
 		CD704CF65FA0993A71D5C936 /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5C6DAC18752C6E92C7EE0EA /* Pods-NearTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.release.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.release.xcconfig"; sourceTree = "<group>"; };
 		EE7B5338B75003EBDE260FA1 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.debug.xcconfig"; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C949BDE51541616EE5E2FD07 /* Pods_NearTalk.framework in Frameworks */,
+				17F0BB4DCC7D716DCABC3187 /* Pods_NearTalk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9AD533B0F819A0FEE5389CD /* Pods_NearTalkTests.framework in Frameworks */,
+				21C4B2CA5EF95EFFCA9502B7 /* Pods_NearTalkTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,13 +143,57 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				975ABD70C1A6777A186A0BD4 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */,
+				DDFC54572834C8444CAE6EB4 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		00FA1673AE80BB041D336B73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				601DDA986DA3B30008AF6358 /* Pods_NearTalk.framework */,
+				6E1F2A76C2FD2772EFC9B06B /* Pods_NearTalk_NearTalkUITests.framework */,
+				3FF77C4F0F2B813246E8FE01 /* Pods_NearTalkTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1648BA922921D7240076AC35 /* MainMap */ = {
+			isa = PBXGroup;
+			children = (
+				1648BA952921D7240076AC35 /* View */,
+				1648BA932921D7240076AC35 /* ViewModel */,
+				1648BA942921D7240076AC35 /* Coordinator */,
+			);
+			path = MainMap;
+			sourceTree = "<group>";
+		};
+		1648BA932921D7240076AC35 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1648BA962921D73E0076AC35 /* MainMapViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1648BA942921D7240076AC35 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				1648BA982921D7480076AC35 /* MainMapCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		1648BA952921D7240076AC35 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1648BA9A2921D7570076AC35 /* MainMapViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		16530579291E189D0026B815 /* ChattingRoomList */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,7 +246,7 @@
 				1660D24A291DDB3A005F7B24 /* NearTalkUITests */,
 				1660D225291DDB37005F7B24 /* Products */,
 				EF9BC89A864970D54CE8E69D /* Pods */,
-				67546089D6623D2844763375 /* Frameworks */,
+				00FA1673AE80BB041D336B73 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +293,7 @@
 		1660D25A291DDD73005F7B24 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				605715A42920AA0A004A0904 /* DIContainer */,
 				1660D264291DE07B005F7B24 /* Coordinator */,
 				1660D227291DDB37005F7B24 /* AppDelegate.swift */,
 				1660D229291DDB38005F7B24 /* SceneDelegate.swift */,
@@ -232,9 +314,15 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				1648BA922921D7240076AC35 /* MainMap */,
+				83E7F8C72922AB750003A2B6 /* MyProfile */,
+				8375F2202922B043004538AF /* Onboarding */,
+				83E7BBC32922AFED007C390A /* AppSetting */,
+				8367AB612922AF6300678669 /* ProfileSetting */,
+				839D5BDA2922AD1000857FDD /* Login */,
 				1653058A291E1A660026B815 /* MessageCell */,
 				16530579291E189D0026B815 /* ChattingRoomList */,
-				1660D267291DE266005F7B24 /* LaunchScreen */,
+				6012733B2921D2E400E1456B /* LaucnScreen */,
 				1660D22B291DDB38005F7B24 /* ViewController.swift */,
 				1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */,
 			);
@@ -252,9 +340,9 @@
 		1660D25E291DDDAA005F7B24 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
-				1660D263291DDEE2005F7B24 /* Extensions */,
-				1660D260291DDEB2005F7B24 /* Network */,
+				605715A1291F8AD8004A0904 /* Network */,
 				1660D262291DDEC6005F7B24 /* Coredata */,
+				1660D263291DDEE2005F7B24 /* Extensions */,
 				1660D261291DDEBE005F7B24 /* Utils */,
 			);
 			path = Infrastructure;
@@ -267,13 +355,6 @@
 				1660D238291DDB39005F7B24 /* Info.plist */,
 			);
 			path = Resource;
-			sourceTree = "<group>";
-		};
-		1660D260291DDEB2005F7B24 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 		1660D261291DDEBE005F7B24 /* Utils */ = {
@@ -305,40 +386,8 @@
 			isa = PBXGroup;
 			children = (
 				1660D265291DE092005F7B24 /* AppCoordinator.swift */,
-				60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */,
 			);
 			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		1660D267291DE266005F7B24 /* LaunchScreen */ = {
-			isa = PBXGroup;
-			children = (
-				1660D269291DE2A2005F7B24 /* View */,
-				1660D26A291DE2AA005F7B24 /* ViewModel */,
-				1660D268291DE275005F7B24 /* Coordinator */,
-			);
-			path = LaunchScreen;
-			sourceTree = "<group>";
-		};
-		1660D268291DE275005F7B24 /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		1660D269291DE2A2005F7B24 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		1660D26A291DE2AA005F7B24 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		1660D26B291DE326005F7B24 /* Entities */ = {
@@ -351,6 +400,7 @@
 		1660D26C291DE32F005F7B24 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				6012734829221F4800E1456B /* LaunchScreenUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -358,7 +408,7 @@
 		1660D26D291DE336005F7B24 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				1660D26F291DECF7005F7B24 /* Repositories */,
+				601273432921ED5100E1456B /* Repositories */,
 			);
 			path = Interfaces;
 			sourceTree = "<group>";
@@ -366,15 +416,69 @@
 		1660D26E291DE34E005F7B24 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				601273462921EF2C00E1456B /* DefaultLaunchScreenRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
 		};
-		1660D26F291DECF7005F7B24 /* Repositories */ = {
+		6012733B2921D2E400E1456B /* LaucnScreen */ = {
 			isa = PBXGroup;
 			children = (
+				6012733E2921D2F700E1456B /* Coordinator */,
+				6012733D2921D2F300E1456B /* ViewModel */,
+				6012733C2921D2EF00E1456B /* View */,
+			);
+			path = LaucnScreen;
+			sourceTree = "<group>";
+		};
+		6012733C2921D2EF00E1456B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				601273412921D34E00E1456B /* LaunchScreenViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6012733D2921D2F300E1456B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		6012733E2921D2F700E1456B /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		601273432921ED5100E1456B /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				601273442921ED6F00E1456B /* LaunchScreenRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		605715A1291F8AD8004A0904 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				60C2A78C291F648600F7D284 /* StorageService.swift */,
+				60C2A78E291F649200F7D284 /* RealTimeDatabaseService.swift */,
+				605715A2291F93EF004A0904 /* FireStoreService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		605715A42920AA0A004A0904 /* DIContainer */ = {
+			isa = PBXGroup;
+			children = (
+				605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */,
+			);
+			path = DIContainer;
 			sourceTree = "<group>";
 		};
 		67546089D6623D2844763375 /* Frameworks */ = {
@@ -387,15 +491,97 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		83E7F8C72922AB750003A2B6 /* MyProfile */ = {
+			isa = PBXGroup;
+			children = (
+				83E7F8C82922AB750003A2B6 /* View */,
+			);
+			path = MyProfile;
+			sourceTree = "<group>";
+		};
+		83E7F8C82922AB750003A2B6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */,
+			);
+            path = View;
+			sourceTree = "<group>";
+		};
+		8375F2202922B043004538AF /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8375F2212922B043004538AF /* View */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		8375F2212922B043004538AF /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8375F2222922B043004538AF /* OnboardingViewController.swift */,
+            );
+            path = View;
+            sourceTree = "<group>";
+        };
+		83E7BBC32922AFED007C390A /* AppSetting */ = {
+			isa = PBXGroup;
+			children = (
+				83E7BBC42922AFED007C390A /* View */,
+			);
+			path = AppSetting;
+			sourceTree = "<group>";
+		};
+		83E7BBC42922AFED007C390A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */,
+				83E7BBC62922AFED007C390A /* AppSettingViewController.swift */,
+                );
+            path = View;
+            sourceTree = "<group>";
+        };
+		8367AB612922AF6300678669 /* ProfileSetting */ = {
+			isa = PBXGroup;
+			children = (
+				8367AB622922AF6300678669 /* View */,
+			);
+			path = ProfileSetting;
+			sourceTree = "<group>";
+		};
+		8367AB622922AF6300678669 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8367AB632922AF6300678669 /* ProfileSettingViewController.swift */,
+                );
+            path = View;
+            sourceTree = "<group>";
+        };
+		839D5BDA2922AD1000857FDD /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				839D5BDB2922AD1000857FDD /* View */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		839D5BDB2922AD1000857FDD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				839D5BDC2922AD1000857FDD /* LoginViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+
 		EF9BC89A864970D54CE8E69D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AC04F5B178F0CC575E8280FE /* Pods-NearTalk.debug.xcconfig */,
-				D5C6DAC18752C6E92C7EE0EA /* Pods-NearTalk.release.xcconfig */,
-				EE7B5338B75003EBDE260FA1 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */,
-				A6C6F33A78BCD3BD1E102C87 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */,
-				B075D09828DEA7027BCF1078 /* Pods-NearTalkTests.debug.xcconfig */,
-				2941A672953C39B7214BEAFF /* Pods-NearTalkTests.release.xcconfig */,
+				EB1DF87AEECD2192EC05DDBD /* Pods-NearTalk.debug.xcconfig */,
+				30E7024AD86F2D4FBBAAEDFE /* Pods-NearTalk.release.xcconfig */,
+				1891DE481A06F59455175433 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */,
+				C454E2A02F58FEA97A697A12 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */,
+				A7B6C4AEA4724EA46B41FD08 /* Pods-NearTalkTests.debug.xcconfig */,
+				8DB6FFB73BADFA005D113A42 /* Pods-NearTalkTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -407,12 +593,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */;
 			buildPhases = (
-				E5B59E1F4C71ECCF0E85F154 /* [CP] Check Pods Manifest.lock */,
+				36951B444002FE644665335F /* [CP] Check Pods Manifest.lock */,
 				1660D270291DEE01005F7B24 /* SwiftLint Script */,
 				1660D220291DDB37005F7B24 /* Sources */,
 				1660D221291DDB37005F7B24 /* Frameworks */,
 				1660D222291DDB37005F7B24 /* Resources */,
-				E47B9D1AD2B308CD06F36CA3 /* [CP] Embed Pods Frameworks */,
+				A2E0F8F16F88F8AA281677DD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -427,7 +613,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D254291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkTests" */;
 			buildPhases = (
-				BA44AD92D6C1AC0CA22300FC /* [CP] Check Pods Manifest.lock */,
+				31D273E3AE4EC07CB37DE7E0 /* [CP] Check Pods Manifest.lock */,
 				1660D239291DDB3A005F7B24 /* Sources */,
 				1660D23A291DDB3A005F7B24 /* Frameworks */,
 				1660D23B291DDB3A005F7B24 /* Resources */,
@@ -446,11 +632,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D257291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkUITests" */;
 			buildPhases = (
-				4CED897E4BB56A401F6EE3EA /* [CP] Check Pods Manifest.lock */,
+				D9F8CAA073DA4B4D35EA16F2 /* [CP] Check Pods Manifest.lock */,
 				1660D243291DDB3A005F7B24 /* Sources */,
 				1660D244291DDB3A005F7B24 /* Frameworks */,
 				1660D245291DDB3A005F7B24 /* Resources */,
-				2B69DEA2ACC7519833AA7934 /* [CP] Embed Pods Frameworks */,
+				E4D680950B9D0A909BDF538A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -552,46 +738,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		2B69DEA2ACC7519833AA7934 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4CED897E4BB56A401F6EE3EA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NearTalk-NearTalkUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BA44AD92D6C1AC0CA22300FC /* [CP] Check Pods Manifest.lock */ = {
+		31D273E3AE4EC07CB37DE7E0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -613,24 +760,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E47B9D1AD2B308CD06F36CA3 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E5B59E1F4C71ECCF0E85F154 /* [CP] Check Pods Manifest.lock */ = {
+		36951B444002FE644665335F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -652,6 +782,62 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A2E0F8F16F88F8AA281677DD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D9F8CAA073DA4B4D35EA16F2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NearTalk-NearTalkUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E4D680950B9D0A909BDF538A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -659,20 +845,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */,
+				8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */,
 				1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
+				601273472921EF2C00E1456B /* DefaultLaunchScreenRepository.swift in Sources */,
+				60C2A78F291F649300F7D284 /* RealTimeDatabaseService.swift in Sources */,
+				605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */,
+				605715A3291F93EF004A0904 /* FireStoreService.swift in Sources */,
+				6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */,
+				60C2A78D291F648600F7D284 /* StorageService.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
 				55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */,
+				55F0908E2921DFCB008F5B9D /* OpenChattingRoomListModel.swift in Sources */,
+				83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */,
+				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
-				55F0908E2921DFCB008F5B9D /* OpenChattingRoomListModel.swift in Sources */,
+				8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
+				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
+				1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */,
+				83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */,
 				16530574291E17A50026B815 /* DeviceType.swift in Sources */,
+				1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */,
 				16530580291E19250026B815 /* ChattingRoomListViewModel.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
+				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
+				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
+				601273452921ED6F00E1456B /* LaunchScreenRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,7 +1040,7 @@
 		};
 		1660D252291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC04F5B178F0CC575E8280FE /* Pods-NearTalk.debug.xcconfig */;
+			baseConfigurationReference = EB1DF87AEECD2192EC05DDBD /* Pods-NearTalk.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -867,7 +1071,7 @@
 		};
 		1660D253291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D5C6DAC18752C6E92C7EE0EA /* Pods-NearTalk.release.xcconfig */;
+			baseConfigurationReference = 30E7024AD86F2D4FBBAAEDFE /* Pods-NearTalk.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -898,7 +1102,7 @@
 		};
 		1660D255291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B075D09828DEA7027BCF1078 /* Pods-NearTalkTests.debug.xcconfig */;
+			baseConfigurationReference = A7B6C4AEA4724EA46B41FD08 /* Pods-NearTalkTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -918,7 +1122,7 @@
 		};
 		1660D256291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2941A672953C39B7214BEAFF /* Pods-NearTalkTests.release.xcconfig */;
+			baseConfigurationReference = 8DB6FFB73BADFA005D113A42 /* Pods-NearTalkTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -938,7 +1142,7 @@
 		};
 		1660D258291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EE7B5338B75003EBDE260FA1 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */;
+			baseConfigurationReference = 1891DE481A06F59455175433 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -956,7 +1160,7 @@
 		};
 		1660D259291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6C6F33A78BCD3BD1E102C87 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */;
+			baseConfigurationReference = C454E2A02F58FEA97A697A12 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
