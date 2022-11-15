@@ -13,31 +13,31 @@ import UIKit
 final class MyProfileViewController: UIViewController, UITableViewDelegate {
     private let myProfileView = UIView()
     
-    private let profileImageView = UIImageView().then {
+    private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
     }
     
-    private let fieldStack = UIStackView().then {
+    private lazy var fieldStack = UIStackView().then {
         $0.distribution = .fillProportionally
         $0.alignment = .fill
         $0.axis = .vertical
     }
     
-    private let nicknameField = UITextField().then {
+    private lazy var nicknameField = UITextField().then {
         $0.textAlignment = .natural
         $0.placeholder = "닉네임"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let messageField = UITextField().then {
+    private lazy var messageField = UITextField().then {
         $0.textAlignment = .natural
         $0.placeholder = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let tableView = UITableView()
+    private lazy var tableView = UITableView()
     
     private lazy var dataSource: UITableViewDiffableDataSource<MyProfileSection, MyProfileItem> = {
         UITableViewDiffableDataSource<MyProfileSection, MyProfileItem>(tableView: self.tableView) { _, _, item in
@@ -62,9 +62,7 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.tableView.layer.cornerRadius = 5.0
-        self.tableView.layer.masksToBounds = true
-        self.tableView.clipsToBounds = true
+        configureTableView()
         super.viewWillAppear(animated)
     }
     
@@ -87,6 +85,12 @@ private extension MyProfileViewController {
         myProfileView.addSubview(fieldStack)
         fieldStack.addArrangedSubview(nicknameField)
         fieldStack.addArrangedSubview(messageField)
+    }
+    
+    func configureTableView() {
+        self.tableView.layer.cornerRadius = 5.0
+        self.tableView.layer.masksToBounds = true
+        self.tableView.clipsToBounds = true
     }
     
     func configureConstraint() {
