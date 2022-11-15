@@ -17,9 +17,7 @@ class ChattingRoomListViewController: UIViewController {
     private var dmDataSource: UITableViewDiffableDataSource<Int, DMChattingRoomListData>?
     private var viewModel = ChattingRoomListViewModel()
     
-    var naviBar = UINavigationBar()
-    
-    let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
+    private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(ChattingRoomListCell.self, forCellReuseIdentifier: ChattingRoomListCell.identifier)
     }
 
@@ -27,27 +25,23 @@ class ChattingRoomListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addNaviBar()
+        configureNavi()
         setupLayout()
         configureDmDatasource()
     }
     
     // 레이아웃 셋팅
-    func setupLayout() {
-        
+    private func setupLayout() {
         view.backgroundColor = .systemBackground
-        
         view.addSubview(tableView)
-        view.addSubview(naviBar)
-        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(self.naviBar.snp.bottom).offset(-8)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.bottom.trailing.leading.equalTo(view)
         }
     }
     
     // 데이터소스 세팅
-    func configureOpenDatasource() {
+    private func configureOpenDatasource() {
         
         self.openDataSource = UITableViewDiffableDataSource<Int, OpenChattingRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChattingRoomListCell.identifier, for: indexPath) as? ChattingRoomListCell
@@ -67,7 +61,7 @@ class ChattingRoomListViewController: UIViewController {
         
     }
     
-    func configureDmDatasource() {
+    private func configureDmDatasource() {
         self.dmDataSource = UITableViewDiffableDataSource<Int, DMChattingRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChattingRoomListCell.identifier, for: indexPath) as? ChattingRoomListCell
             else { return UITableViewCell() }
@@ -87,35 +81,27 @@ class ChattingRoomListViewController: UIViewController {
     }
     
     // 네비게이션 바
-    private func addNaviBar() {
-        // safe area
-        var statusBarHeight: CGFloat = 0
-        statusBarHeight = UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0
-
-        // navigationBar
-        self.naviBar = UINavigationBar(frame: .init(x: 0, y: statusBarHeight, width: view.frame.width, height: statusBarHeight))
-        naviBar.isTranslucent = false
-        naviBar.backgroundColor = .systemBackground
-
+    private func configureNavi() {
         let naviItem = UINavigationItem(title: "오픈채팅 목록")
-        naviItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
-        naviItem.leftBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(didTapChangeButton))
-        naviBar.items = [naviItem]
+        
+        let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(dmChatRoomListButtonTapped))
+        let openChatButton: UIBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openChatButtonTapped))
+        let creatOpenChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
+        
+        self.navigationItem.leftBarButtonItems = [dmChatButton, openChatButton]
+        self.navigationItem.rightBarButtonItem = creatOpenChatButton
     }
     
-    @objc func didTapCreateChatRoomButton() {
+    @objc private func didTapCreateChatRoomButton() {
         print("채팅방 생성 이동")
     }
     
-    @objc func didTapChangeButton() {
-        if self.naviBar.items?.first?.leftBarButtonItem?.title == "DM" {
-            self.naviBar.items?.first?.leftBarButtonItem = UIBarButtonItem(title: "오픈채팅", style: .plain, target: self, action: #selector(didTapChangeButton))
-            configureOpenDatasource()
-        } else {
-            self.naviBar.items?.first?.leftBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(didTapChangeButton))
-            configureDmDatasource()
-        }
-//        tableView.reloadData()
+    @objc private func dmChatRoomListButtonTapped() {
+        configureDmDatasource()
+    }
+    
+    @objc private func openChatButtonTapped() {
+        configureOpenDatasource()
     }
 }
 
@@ -124,7 +110,7 @@ import SwiftUI
 
 struct ChattingRoomListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        ChattingRoomListViewController().showPreview(.iPhone14Pro)
+        UINavigationController(rootViewController: ChattingRoomListViewController()) .showPreview(.iPhone14Pro)
     }
 }
 #endif

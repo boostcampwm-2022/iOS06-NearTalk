@@ -13,28 +13,26 @@ class ChattingRoomListCell: UITableViewCell {
     
     static let identifier = String(describing: ChattingRoomListCell.self)
     
-    let img = UIImageView().then {
+    private let img = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
         $0.image = UIImage(systemName: "photo")
     }
     
-    let name = UILabel().then {
+    private let name = UILabel().then {
         $0.font = UIFont(name: "text", size: 18)
     }
     
-    let userDescription = UILabel().then {
+    private let userDescription = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14)
         $0.numberOfLines = 2
-        
     }
     
-    let date = UILabel().then {
-        $0.numberOfLines = 2
+    private let date = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14)
     }
     
-    let count = UILabel().then {
+    private let count = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14)
     }
     
@@ -59,7 +57,7 @@ class ChattingRoomListCell: UITableViewCell {
         date.text = dmData.date
     }
     
-    func layoutSetup() {
+    private func layoutSetup() {
         
         self.contentView.addSubview(img)
         self.contentView.addSubview(name)
@@ -67,11 +65,9 @@ class ChattingRoomListCell: UITableViewCell {
         self.contentView.addSubview(date)
         
         img.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView).offset(16)
-            make.leading.equalTo(self.contentView).offset(16)
+            make.top.leading.equalTo(self.contentView).offset(16)
             make.bottom.equalTo(self.contentView).offset(-16)
-            make.width.equalTo(60)
-            make.height.equalTo(60)
+            make.width.height.equalTo(60)
         }
         
         name.snp.makeConstraints { make in
@@ -91,26 +87,24 @@ class ChattingRoomListCell: UITableViewCell {
         date.snp.makeConstraints { make in
             make.top.equalTo(self.contentView).offset(8)
             make.trailing.equalTo(self.contentView).offset(-16)
-            
         }
         
         contentView.layer.borderColor = UIColor.gray.cgColor
         contentView.layer.borderWidth = 0.5
-        
     }
     
 }
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct ChattingRoomListCellPreview: PreviewProvider {
-//    static var previews: some View {
-//        UIViewPreview {
-//            let cell = ChattingRoomListCell(frame: .zero)
-//            cell.configure(data: ChattingRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
-//            return cell
-//        }.previewLayout(.fixed(width: 300, height: 120))
-//    }
-//}
-//#endif
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct ChattingRoomListCellPreview: PreviewProvider {
+    static var previews: some View {
+        UIViewPreview {
+            let cell = ChattingRoomListCell(frame: .zero)
+            cell.configure(openData: OpenChattingRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
+            return cell
+        }.previewLayout(.fixed(width: 300, height: 80))
+    }
+}
+#endif

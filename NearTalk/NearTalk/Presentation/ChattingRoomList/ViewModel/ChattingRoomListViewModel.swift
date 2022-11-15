@@ -9,7 +9,7 @@ import Foundation
 import RxRelay
 import RxSwift
 
-class ChattingRoomListViewModel {
+final class ChattingRoomListViewModel {
     
     var openChattingRoomDummyData: [OpenChattingRoomListData] = []
     var dmChattingRoomDummyData: [DMChattingRoomListData] = []
