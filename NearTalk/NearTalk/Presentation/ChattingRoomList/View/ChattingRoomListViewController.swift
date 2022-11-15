@@ -82,8 +82,6 @@ class ChattingRoomListViewController: UIViewController {
     
     // 네비게이션 바
     private func configureNavi() {
-        let naviItem = UINavigationItem(title: "오픈채팅 목록")
-        
         let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(dmChatRoomListButtonTapped))
         let openChatButton: UIBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openChatButtonTapped))
         let creatOpenChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
