@@ -23,6 +23,13 @@ final class MainMapViewController: UIViewController {
         setLocationManager()
         setMoveToCurrentLocationButton()
         setCreateChatRoomButton()
+        registerAnnotationViewClass()
+    }
+    
+    private func loadDataForMapView() {
+//        guard let dummyDataURL = Bundle.main.url() else {
+//
+//        }
     }
     
     private func setMapView() {
@@ -78,9 +85,17 @@ final class MainMapViewController: UIViewController {
         
         button.addTarget(self, action: #selector(createChatRoom), for: .touchUpInside)
     }
-    
+    // 추후에 채팅 방 생성 로직 추가
     @objc func createChatRoom() {
         print("ChatRoom 생성")
+    }
+    
+    private func registerAnnotationViewClass() {
+        // Single: Open or Dm
+        mapView.register(OpenChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        mapView.register(DmChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        // Clustering
+        mapView.register(ClusterChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
     }
 }
 
@@ -113,28 +128,18 @@ extension MKMapView {
 }
 
 extension MainMapViewController: MKMapViewDelegate {
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//        guard let annotation = annotation as? ChattingRoom else {
-//            return nil
-//        }
-//
-//        var markerAnnotationView: MKMarkerAnnotationView
-//
-//        if let dequeuedAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "") as? MKMarkerAnnotationView {
-//            dequeuedAnnotationView.annotation = annotation
-//            markerAnnotationView = dequeuedAnnotationView
-//        } else {
-//            markerAnnotationView = MKMarkerAnnotationView(
-//                annotation: annotation,
-//                reuseIdentifier: ""
-//            )
-//            markerAnnotationView.canShowCallout = true
-//            markerAnnotationView.calloutOffset = CGPoint(x: -5, y: -5)
-//            // markerAnnotationView.rightCalloutAccessoryView =
-//        }
-//
-//        return markerAnnotationView
-//    }
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation else {
+            return nil
+        }
+        
+        switch chatRoomAnnotation.roomType {
+        case .open:
+            return OpenChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: OpenChatRoomAnnotationView.reuseIdentifier)
+        case .directMessage:
+            return DmChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
+        }
+    }
 }
 
 extension MainMapViewController: CLLocationManagerDelegate {
