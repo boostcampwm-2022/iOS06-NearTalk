@@ -497,6 +497,10 @@
 			isa = PBXGroup;
 			children = (
 				83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */,
+			);
+            path = View;
+			sourceTree = "<group>";
+		};
 		8375F2202922B043004538AF /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -509,6 +513,10 @@
 			isa = PBXGroup;
 			children = (
 				8375F2222922B043004538AF /* OnboardingViewController.swift */,
+            );
+            path = View;
+            sourceTree = "<group>";
+        };
 		83E7BBC32922AFED007C390A /* AppSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -522,6 +530,10 @@
 			children = (
 				83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */,
 				83E7BBC62922AFED007C390A /* AppSettingViewController.swift */,
+                );
+            path = View;
+            sourceTree = "<group>";
+        };
 		8367AB612922AF6300678669 /* ProfileSetting */ = {
 			isa = PBXGroup;
 			children = (
@@ -534,6 +546,10 @@
 			isa = PBXGroup;
 			children = (
 				8367AB632922AF6300678669 /* ProfileSettingViewController.swift */,
+                );
+            path = View;
+            sourceTree = "<group>";
+        };
 		839D5BDA2922AD1000857FDD /* Login */ = {
 			isa = PBXGroup;
 			children = (
