@@ -5,6 +5,7 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
+import RxSwift
 import SnapKit
 import UIKit
 
@@ -12,24 +13,27 @@ import RxCocoa
 import Then
 
 final class OnboardingViewController: UIViewController {
-    private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
-    private let profileImageView = UIImageView().then {
+    private lazy var logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
+    private lazy var profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
     }
 
-    private let nicknameField = UITextField().then {
+    private lazy var nicknameField = UITextField().then {
         $0.placeholder = "닉네임"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let messageField = UITextField().then {
+    private lazy var messageField = UITextField().then {
         $0.placeholder = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let registerButton = UIButton().then {
+    private var buttonToggle: Bool = false
+    
+    private lazy var registerButton = UIButton().then {
+        $0.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
         $0.layer.cornerRadius = 5
         $0.setTitleColor(.white, for: .normal)
         $0.backgroundColor = .systemBlue
@@ -37,14 +41,22 @@ final class OnboardingViewController: UIViewController {
         $0.setTitle("등록하기", for: .normal)
     }
     
-    private let scrollView = UIScrollView().then {
+    @objc private func buttonClicked() {
+        buttonToggle.toggle()
+        registerButton.backgroundColor = buttonToggle ? .systemRed : .systemBlue
+    }
+    
+    private lazy var scrollView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
     }
+    
+    private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureConstraint()
+        bindToViewModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -52,6 +64,17 @@ final class OnboardingViewController: UIViewController {
         profileImageView.clipsToBounds = true
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
+    }
+    
+    private let viewModel: any OnboardingViewModel
+    
+    init(viewModel: any OnboardingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -99,6 +122,21 @@ private extension OnboardingViewController {
             make.height.equalTo(registerButton.snp.width).multipliedBy(0.1)
         }
     }
+    
+    func bindToViewModel() {
+        let nickName = nicknameField.rx.text
+            .orEmpty
+            .debounce(.nanoseconds(30), scheduler: MainScheduler.instance)
+        let message = messageField.rx.text
+            .orEmpty
+            .debounce(.nanoseconds(30), scheduler: MainScheduler.instance)
+        let input = OnboardingInput(nickName: nickName, message: message)
+        let output = viewModel.transform(input)
+        
+        output.registerEnable
+            .drive(registerButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+    }
 }
 
 extension OnboardingViewController: UIScrollViewDelegate {
@@ -113,7 +151,8 @@ import SwiftUI
 // swiftlint:disable: type_name
 struct OnbardViewController_Preview: PreviewProvider {
     static var previews: some View {
-        OnboardingViewController().showPreview(.iPhoneSE3)
+        let viewModel = DefaultOnboardingViewModel(useCase: DefaultOnboardingValidateUseCase())
+        return OnboardingViewController(viewModel: viewModel).showPreview(.iPhoneSE3)
     }
 }
 #endif
