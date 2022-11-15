@@ -5,10 +5,11 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
-import RxCocoa
 import SnapKit
-import Then
 import UIKit
+
+import RxCocoa
+import Then
 
 final class OnboardingViewController: UIViewController {
     private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
@@ -112,7 +113,6 @@ import SwiftUI
 // swiftlint:disable: type_name
 struct OnbardViewController_Preview: PreviewProvider {
     static var previews: some View {
-        OnboardingViewController().showPreview(.iPhone14Pro)
         OnboardingViewController().showPreview(.iPhoneSE3)
     }
 }
