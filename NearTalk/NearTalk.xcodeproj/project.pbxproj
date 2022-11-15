@@ -27,6 +27,8 @@
 		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
+		55F0908E2921DFCB008F5B9D /* OpenChattingRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908D2921DFCB008F5B9D /* OpenChattingRoomListModel.swift */; };
+		55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */; };
 		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
 		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
 		601273452921ED6F00E1456B /* LaunchScreenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273442921ED6F00E1456B /* LaunchScreenRepository.swift */; };
@@ -92,6 +94,8 @@
 		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		2941A672953C39B7214BEAFF /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
+		55F0908D2921DFCB008F5B9D /* OpenChattingRoomListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OpenChattingRoomListModel.swift; path = "../../../../../../../.Trash/iOS06-NearTalk/NearTalk/NearTalk/Presentation/ChattingRoomList/ViewModel/OpenChattingRoomListModel.swift"; sourceTree = "<group>"; };
+		55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListCell.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		601273442921ED6F00E1456B /* LaunchScreenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LaunchScreenRepository.swift; path = NearTalk/Presentation/LaucnScreen/View/LaunchScreenRepository.swift; sourceTree = SOURCE_ROOT; };
@@ -204,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				1653057D291E19150026B815 /* ChattingRoomListViewController.swift */,
+				55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				1653057F291E19250026B815 /* ChattingRoomListViewModel.swift */,
+				55F0908D2921DFCB008F5B9D /* OpenChattingRoomListModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -851,6 +857,8 @@
 				60C2A78D291F648600F7D284 /* StorageService.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
+				55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */,
+				55F0908E2921DFCB008F5B9D /* OpenChattingRoomListModel.swift in Sources */,
 				83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
