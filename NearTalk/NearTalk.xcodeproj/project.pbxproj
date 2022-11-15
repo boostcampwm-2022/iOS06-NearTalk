@@ -467,17 +467,9 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
-		830E4A4329238B95009BC798 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
 		8367AB612922AF6300678669 /* ProfileSetting */ = {
 			isa = PBXGroup;
 			children = (
-				830E4A4329238B95009BC798 /* ViewModel */,
 				8367AB622922AF6300678669 /* View */,
 			);
 			path = ProfileSetting;
