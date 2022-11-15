@@ -32,6 +32,7 @@
 		605715A3291F93EF004A0904 /* FireStoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A2291F93EF004A0904 /* FireStoreService.swift */; };
 		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8367AB632922AF6300678669 /* ProfileSettingViewController.swift */; };
 		839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D5BDC2922AD1000857FDD /* LoginViewController.swift */; };
 		60C2A78D291F648600F7D284 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A78C291F648600F7D284 /* StorageService.swift */; };
 		60C2A78F291F649300F7D284 /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A78E291F649200F7D284 /* RealTimeDatabaseService.swift */; };
@@ -89,6 +90,7 @@
 		605715A2291F93EF004A0904 /* FireStoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreService.swift; sourceTree = "<group>"; };
 		605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenDIContainer.swift; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
+		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		839D5BDC2922AD1000857FDD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		60C2A78C291F648600F7D284 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StorageService.swift; path = NearTalk/Infrastructure/Network/StorageService.swift; sourceTree = SOURCE_ROOT; };
 		60C2A78E291F649200F7D284 /* RealTimeDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RealTimeDatabaseService.swift; path = NearTalk/Infrastructure/Network/RealTimeDatabaseService.swift; sourceTree = SOURCE_ROOT; };
@@ -247,6 +249,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				8367AB612922AF6300678669 /* ProfileSetting */,
 				839D5BDA2922AD1000857FDD /* Login */,
 				1653058A291E1A660026B815 /* MessageCell */,
 				16530579291E189D0026B815 /* ChattingRoomList */,
@@ -419,6 +422,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8367AB612922AF6300678669 /* ProfileSetting */ = {
+			isa = PBXGroup;
+			children = (
+				8367AB622922AF6300678669 /* View */,
+			);
+			path = ProfileSetting;
+			sourceTree = "<group>";
+		};
+		8367AB622922AF6300678669 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8367AB632922AF6300678669 /* ProfileSettingViewController.swift */,
 		839D5BDA2922AD1000857FDD /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -720,6 +735,7 @@
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
+				8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
 				16530574291E17A50026B815 /* DeviceType.swift in Sources */,
