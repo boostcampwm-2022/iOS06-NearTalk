@@ -8,13 +8,13 @@
 import MapKit
 
 final class ChatRoomClusterAnnotationView: MKAnnotationView {
-    static let reuseIdentifier = "ChatRoomClusterAnnotationView"
+    static let reuseIdentifier = String(describing: ChatRoomClusterAnnotationView.self)
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         
-        collisionMode = .circle
-        centerOffset = CGPoint(x: 0, y: -10)
+        self.collisionMode = .circle
+        self.centerOffset = CGPoint(x: 0, y: -10)
     }
     
     required init?(coder aDecoder: NSCoder) {

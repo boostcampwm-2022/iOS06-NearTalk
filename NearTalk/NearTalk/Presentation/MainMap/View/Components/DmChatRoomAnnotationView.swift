@@ -8,12 +8,12 @@
 import MapKit
 
 final class DmChatRoomAnnotationView: MKMarkerAnnotationView {
-    static let reuseIdentifier = "DmChatRoomAnnotationView"
+    static let reuseIdentifier = String(describing: DmChatRoomAnnotationView.self)
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         
-        clusteringIdentifier = "ChatRoomClustering"
+        self.clusteringIdentifier = ChatRoomClusterAnnotationView.reuseIdentifier
     }
 
     required init?(coder aDecoder: NSCoder) {
