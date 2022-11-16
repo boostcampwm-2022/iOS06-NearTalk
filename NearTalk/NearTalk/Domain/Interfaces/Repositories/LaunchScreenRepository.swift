@@ -9,5 +9,5 @@ import Foundation
 import RxSwift
 
 protocol LaunchScreenRepository {
-    func fetchCredential() -> Observable<Bool>
+    func verifyUser() -> Observable<Bool>
 }
