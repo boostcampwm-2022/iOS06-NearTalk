@@ -1,5 +1,5 @@
 //
-//  ChattingRoomListCell.swift
+//  ChatRoomListCell.swift
 //  NearTalk
 //
 //  Created by 김영욱 on 2022/11/14.
@@ -9,9 +9,9 @@ import SnapKit
 import Then
 import UIKit
 
-class ChattingRoomListCell: UITableViewCell {
+class ChatRoomListCell: UITableViewCell {
     
-    static let identifier = String(describing: ChattingRoomListCell.self)
+    static let identifier = String(describing: ChatRoomListCell.self)
     
     private let img = UIImageView().then {
         $0.layer.cornerRadius = 20
@@ -45,13 +45,13 @@ class ChattingRoomListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(openData: OpenChattingRoomListData) {
+    func configure(openData: OpenChatRoomListData) {
         name.text = openData.name
         userDescription.text = openData.description
         date.text = openData.date
     }
     
-    func configure(dmData: DMChattingRoomListData) {
+    func configure(dmData: DMChatRoomListData) {
         name.text = dmData.name
         userDescription.text = dmData.description
         date.text = dmData.date
@@ -98,11 +98,11 @@ class ChattingRoomListCell: UITableViewCell {
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 
-struct ChattingRoomListCellPreview: PreviewProvider {
+struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
-            let cell = ChattingRoomListCell(frame: .zero)
-            cell.configure(openData: OpenChattingRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
+            let cell = ChatRoomListCell(frame: .zero)
+            cell.configure(openData: OpenChatRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
             return cell
         }.previewLayout(.fixed(width: 300, height: 80))
     }

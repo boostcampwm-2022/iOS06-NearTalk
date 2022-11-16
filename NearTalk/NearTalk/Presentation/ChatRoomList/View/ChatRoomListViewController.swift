@@ -1,5 +1,5 @@
 //
-//  ChattingRoomListViewController.swift
+//  ChatRoomListViewController.swift
 //  NearTalk
 //
 //  Created by yw22 on 2022/11/11.
@@ -11,19 +11,19 @@ import SnapKit
 import Then
 import UIKit
 
-class ChattingRoomListViewController: UIViewController {
+final class ChatRoomListViewController: UIViewController {
     
-    private var openDataSource: UITableViewDiffableDataSource<Int, OpenChattingRoomListData>?
-    private var dmDataSource: UITableViewDiffableDataSource<Int, DMChattingRoomListData>?
-    private var viewModel: ChattingRoomListViewModel!
+    private var openDataSource: UITableViewDiffableDataSource<Int, OpenChatRoomListData>?
+    private var dmDataSource: UITableViewDiffableDataSource<Int, DMChatRoomListData>?
+    private var viewModel: ChatRoomListViewModel!
     
     private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
-        $0.register(ChattingRoomListCell.self, forCellReuseIdentifier: ChattingRoomListCell.identifier)
+        $0.register(ChatRoomListCell.self, forCellReuseIdentifier: ChatRoomListCell.identifier)
     }
     
     // MARK: - Lifecycle
-    static func create(with viewModel: ChattingRoomListViewModel) -> ChattingRoomListViewController {
-        let view = ChattingRoomListViewController()
+    static func create(with viewModel: ChatRoomListViewModel) -> ChatRoomListViewController {
+        let view = ChatRoomListViewController()
         view.viewModel = viewModel
         return view
     }
@@ -50,10 +50,10 @@ class ChattingRoomListViewController: UIViewController {
     // 데이터소스 세팅
     private func configureOpenDatasource() {
         
-        self.openDataSource = UITableViewDiffableDataSource<Int, OpenChattingRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChattingRoomListCell.identifier, for: indexPath) as? ChattingRoomListCell
+        self.openDataSource = UITableViewDiffableDataSource<Int, OpenChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomListCell.identifier, for: indexPath) as? ChatRoomListCell
             else { return UITableViewCell() }
-            cell.configure(openData: self.viewModel.openChattingRoomDummyData[indexPath.row])
+//            cell.configure(openData: self.viewModel.openChatRoomDummyData[indexPath.row])
             return cell
         })
         
@@ -61,20 +61,20 @@ class ChattingRoomListViewController: UIViewController {
         tableView.dataSource = self.openDataSource
         
         // 빈 snapshot
-        var snapshot = NSDiffableDataSourceSnapshot<Int, OpenChattingRoomListData>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, OpenChatRoomListData>()
         snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.openChattingRoomDummyData)
+//        snapshot.appendItems(viewModel.openChatRoomDummyData)
         self.openDataSource?.apply(snapshot)
         
     }
     
     private func configureDmDatasource() {
-        self.dmDataSource = UITableViewDiffableDataSource<Int, DMChattingRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
+        self.dmDataSource = UITableViewDiffableDataSource<Int, DMChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
             
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChattingRoomListCell.identifier, for: indexPath) as? ChattingRoomListCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomListCell.identifier, for: indexPath) as? ChatRoomListCell
             else { return UITableViewCell() }
             
-            cell.configure(dmData: self.viewModel.dmChattingRoomDummyData[indexPath.row])
+//            cell.configure(dmData: self.viewModel.dmChatRoomDummyData[indexPath.row])
             return cell
         })
         
@@ -82,9 +82,9 @@ class ChattingRoomListViewController: UIViewController {
         tableView.dataSource = self.dmDataSource
         
         // 빈 snapshot
-        var snapshot = NSDiffableDataSourceSnapshot<Int, DMChattingRoomListData>()
+        var snapshot = NSDiffableDataSourceSnapshot<Int, DMChatRoomListData>()
         snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.dmChattingRoomDummyData)
+//        snapshot.appendItems(viewModel.dmChatRoomDummyData)
         self.dmDataSource?.apply(snapshot)
         
     }
@@ -115,9 +115,9 @@ class ChattingRoomListViewController: UIViewController {
 #if canImport(SwiftUI) && DEBUG
 import SwiftUI
 
-struct ChattingRoomListViewControllerPreview: PreviewProvider {
+struct ChatRoomListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        UINavigationController(rootViewController: ChattingRoomListViewController()) .showPreview(.iPhone14Pro)
+        UINavigationController(rootViewController: ChatRoomListViewController()) .showPreview(.iPhone14Pro)
     }
 }
 #endif
