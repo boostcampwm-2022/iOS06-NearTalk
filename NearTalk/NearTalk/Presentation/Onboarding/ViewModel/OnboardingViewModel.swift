@@ -21,73 +21,27 @@ struct OnboardingOutput {
     let registerEnable: Driver<Bool>
 }
 
-protocol OnboardingValidateUseCase {
-    func validateNickName(_ value: String) -> Bool
-    func validateMessage(_ value: String) -> Bool
-}
-
 protocol ViewModelType {
     associatedtype Input
     associatedtype Output
     func transform(_ input: Input) -> Output
 }
 
-extension String {
-    private func regexList(pattern: String) -> [String] {
-        do {
-            let regex = try NSRegularExpression(pattern: pattern)
-            let founds = regex.matches(in: self, range: NSRange(self.startIndex ..< self.endIndex, in: self))
-            return founds.compactMap {
-                if let range = Range($0.range, in: self) {
-                    return String(self[range])
-                } else {
-                    return nil
-                }
-            }
-        } catch {
-            return []
-        }
-    }
-    
-    func matchRegex(_ pattern: String) -> Bool {
-        return !self.regexList(pattern: pattern).isEmpty
-    }
-}
-
-struct DefaultOnboardingValidateUseCase: OnboardingValidateUseCase {
-    private let nickNameRegex: String = #"^[\da-z_@#!=\\\^\$\.\|\[\]\(\)\*\+\?\{\}]{5,20}$"#
-    func validateNickName(_ value: String) -> Bool {
-        return value.matchRegex(nickNameRegex)
-    }
-    func validateMessage(_ value: String) -> Bool {
-        return value.count <= 50
-    }
-}
-
-struct TestOnboardingValidateUseCase: OnboardingValidateUseCase {
-    func validateNickName(_ value: String) -> Bool {
-        return !value.isEmpty
-    }
-    func validateMessage(_ value: String) -> Bool {
-        return !value.isEmpty
-    }
-}
-
 protocol OnboardingViewModel: ViewModelType where Input == OnboardingInput, Output == OnboardingOutput {
-    init(useCase: OnboardingValidateUseCase)
+    init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase)
 }
 
-struct DefaultOnboardingViewModel: OnboardingViewModel {
+final class DefaultOnboardingViewModel: OnboardingViewModel {
     func transform(_ input: OnboardingInput) -> OnboardingOutput {
         let nickNameValidity: Driver<Bool> = input.nickName
             .map { [self] text in
-                self.useCase.validateNickName(text)
+                self.validateUseCase.validateNickName(text)
             }
             .asDriver(onErrorJustReturn: false)
         
         let messageValidity: Driver<Bool> = input.message
             .map { [self] text in
-                self.useCase.validateMessage(text)
+                self.validateUseCase.validateMessage(text)
             }
             .asDriver(onErrorJustReturn: false)
         
@@ -98,9 +52,11 @@ struct DefaultOnboardingViewModel: OnboardingViewModel {
         return Output(nickNameValidity: nickNameValidity, messageValidity: messageValidity, registerEnable: registerEnable)
     }
     
-    private let useCase: OnboardingValidateUseCase
+    private let validateUseCase: any OnboardingValidateUseCase
+    private let saveProfileUseCase: any OnboardingSaveProfileUseCase
     
-    init(useCase: OnboardingValidateUseCase) {
-        self.useCase = useCase
+    init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase) {
+        self.validateUseCase = validateUseCase
+        self.saveProfileUseCase = saveProfileUseCase
     }
 }
