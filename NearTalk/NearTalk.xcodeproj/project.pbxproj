@@ -27,6 +27,11 @@
 		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
+		555A6B2B29236D51001336ED /* FriendsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendsListCell.swift */; };
+		555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendsViewController.swift */; };
+		555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendsListViewModel.swift */; };
+		555A6B3129236D86001336ED /* FriendsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3029236D86001336ED /* FriendsListModel.swift */; };
+		555A6B3329236D98001336ED /* FriendsListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3229236D98001336ED /* FriendsListCoordinator.swift */; };
 		557F0A3D292364D400D24A38 /* OpenChattingRoomListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557F0A3C292364D400D24A38 /* OpenChattingRoomListModel.swift */; };
 		55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */; };
 		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
@@ -92,6 +97,11 @@
 		258D93481B53C391D3868B92 /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
 		29F8AD6D74327BEAEF2D1152 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54A11B9541C7EC85AFC89F5B /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		555A6B2A29236D51001336ED /* FriendsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListCell.swift; sourceTree = "<group>"; };
+		555A6B2C29236D61001336ED /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		555A6B2E29236D73001336ED /* FriendsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListViewModel.swift; sourceTree = "<group>"; };
+		555A6B3029236D86001336ED /* FriendsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListModel.swift; sourceTree = "<group>"; };
+		555A6B3229236D98001336ED /* FriendsListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListCoordinator.swift; sourceTree = "<group>"; };
 		557F0A3C292364D400D24A38 /* OpenChattingRoomListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenChattingRoomListModel.swift; sourceTree = "<group>"; };
 		55F0908F2921E3E3008F5B9D /* ChattingRoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListCell.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
@@ -307,6 +317,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				555A6B2629236C28001336ED /* FriendsList */,
 				1648BA922921D7240076AC35 /* MainMap */,
 				83E7F8C72922AB750003A2B6 /* MyProfile */,
 				8375F2202922B043004538AF /* Onboarding */,
@@ -411,6 +422,42 @@
 				601273462921EF2C00E1456B /* DefaultLaunchScreenRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		555A6B2629236C28001336ED /* FriendsList */ = {
+			isa = PBXGroup;
+			children = (
+				555A6B2929236C65001336ED /* View */,
+				555A6B2829236C5D001336ED /* ViewModel */,
+				555A6B2729236C51001336ED /* Coordinator */,
+			);
+			path = FriendsList;
+			sourceTree = "<group>";
+		};
+		555A6B2729236C51001336ED /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				555A6B3229236D98001336ED /* FriendsListCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		555A6B2829236C5D001336ED /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				555A6B2E29236D73001336ED /* FriendsListViewModel.swift */,
+				555A6B3029236D86001336ED /* FriendsListModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		555A6B2929236C65001336ED /* View */ = {
+			isa = PBXGroup;
+			children = (
+				555A6B2A29236D51001336ED /* FriendsListCell.swift */,
+				555A6B2C29236D61001336ED /* FriendsViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		6012733B2921D2E400E1456B /* LaucnScreen */ = {
@@ -820,9 +867,12 @@
 				8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */,
 				1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
+				555A6B3329236D98001336ED /* FriendsListCoordinator.swift in Sources */,
 				601273472921EF2C00E1456B /* DefaultLaunchScreenRepository.swift in Sources */,
+				555A6B2B29236D51001336ED /* FriendsListCell.swift in Sources */,
 				557F0A3D292364D400D24A38 /* OpenChattingRoomListModel.swift in Sources */,
 				605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */,
+				555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */,
 				6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
@@ -832,6 +882,7 @@
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */,
+				555A6B3129236D86001336ED /* FriendsListModel.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
@@ -840,6 +891,7 @@
 				16530574291E17A50026B815 /* DeviceType.swift in Sources */,
 				1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */,
 				16530580291E19250026B815 /* ChattingRoomListViewModel.swift in Sources */,
+				555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
 				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
