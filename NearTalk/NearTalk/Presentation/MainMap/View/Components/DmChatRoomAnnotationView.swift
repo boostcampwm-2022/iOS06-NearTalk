@@ -22,7 +22,7 @@ final class DmChatRoomAnnotationView: MKMarkerAnnotationView {
     override func prepareForDisplay() {
         super.prepareForDisplay()
         displayPriority = .defaultLow
-        markerTintColor = UIColor.cyan // 임시 색상
+        markerTintColor = UIColor.blue // 임시 색상
         glyphImage = UIImage(systemName: "figure.wave") // 임시 이미지
     }
 }

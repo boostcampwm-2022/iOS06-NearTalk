@@ -24,12 +24,40 @@ final class MainMapViewController: UIViewController {
         setMoveToCurrentLocationButton()
         setCreateChatRoomButton()
         registerAnnotationViewClass()
+        
+        loadDataForMapView()
     }
     
     private func loadDataForMapView() {
-//        guard let dummyDataURL = Bundle.main.url() else {
-//
-//        }
+        // 디버깅용
+        struct ChatRoomData: Decodable {
+            let chatRoomAnnotations: [ChatRoomAnnotation]
+
+            let centerLatitude: CLLocationDegrees
+            let centerLongitude: CLLocationDegrees
+            let latitudeDelta: CLLocationDegrees
+            let longitudeDelta: CLLocationDegrees
+
+            var region: MKCoordinateRegion {
+                let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
+                let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
+                return MKCoordinateRegion(center: center, span: span)
+            }
+        }
+        
+        guard let plistURL = Bundle.main.url(forResource: "DummyData", withExtension: "plist") else {
+            fatalError("Failed to resolve URL for `Data.plist` in bundle.")
+        }
+
+        do {
+            let plistData = try Data(contentsOf: plistURL)
+            let decoder = PropertyListDecoder()
+            let decodedData = try decoder.decode(ChatRoomData.self, from: plistData)
+            mapView.region = decodedData.region
+            mapView.addAnnotations(decodedData.chatRoomAnnotations)
+        } catch {
+            fatalError("Failed to load provided data, error: \(error.localizedDescription)")
+        }
     }
     
     private func setMapView() {
