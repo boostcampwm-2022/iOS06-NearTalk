@@ -9,11 +9,13 @@ import Foundation
 import RxSwift
 
 final class DefaultLaunchScreenRepository: LaunchScreenRepository {
-    func fetchCredential() -> Observable<Bool> {
-        Observable<Bool>.create { observer in
-            observer.onNext(true)
-            observer.onCompleted()
-            return Disposables.create()
-        }
+    private let firebaseAuthService: FirebaseAuthService
+    
+    init(firebaseAuthService: FirebaseAuthService) {
+        self.firebaseAuthService = firebaseAuthService
+    }
+    
+    func verifyUser() -> Observable<Bool> {
+        self.firebaseAuthService.verifyUser()
     }
 }
