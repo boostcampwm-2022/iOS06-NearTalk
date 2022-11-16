@@ -126,8 +126,8 @@ import SwiftUI
 
 struct ChatRoomListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        let dataTransferService: XXXDIContainer = XXXDIContainer()
-        let diContainer: ChatRoomListDIContainer = .init(dependencies: ChatRoomListDIContainer.Dependencies(aipDataTransferService: dataTransferService.apiDataTransferService, imageDataTransferService: dataTransferService.imageDataTransferService))
+        let xxxDIContainer: XXXDIContainer = XXXDIContainer()
+        let diContainer: ChatRoomListDIContainer = xxxDIContainer.makeChatRoomListDIContainer()
         let mockAction: ChatRoomListViewModelActions = .init(showChatRoom: {}, showCreateChatRoom: {})
         let mockViewModel: ChatRoomListViewModel = diContainer.makeChatRoomListViewModel(actions: mockAction)
         let viewController: ChatRoomListViewController = ChatRoomListViewController.create(with: mockViewModel)
