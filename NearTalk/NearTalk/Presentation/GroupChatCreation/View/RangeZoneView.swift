@@ -11,6 +11,9 @@ import SnapKit
 import Then
 
 final class RangeZoneView: UIView {
+    
+    // MARK: - UI Proporties
+    
     private lazy var rangeLabel = UILabel().then {
         $0.text = "1km"
     }
@@ -23,15 +26,21 @@ final class RangeZoneView: UIView {
     
     private lazy var minRangeLabel = UILabel().then {
         $0.text = "1km"
+        $0.font = .systemFont(ofSize: 11.0, weight: .light)
     }
     
     private lazy var maxRangeLabel = UILabel().then {
         $0.text = "10km"
+        $0.font = .systemFont(ofSize: 11.0, weight: .light)
     }
+    
+    // MARK: - LifeCycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.configLayout()
+        
+        self.addSubviews()
+        self.configureConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -40,27 +49,36 @@ final class RangeZoneView: UIView {
 }
 
 private extension RangeZoneView {
-    func configLayout() {
+    func addSubviews() {
         [rangeLabel, rangeSlider, minRangeLabel, maxRangeLabel].forEach {
             self.addSubview($0)
         }
-        
-        rangeLabel.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide)
-            $0.leading.equalTo(self.safeAreaLayoutGuide).inset(10)
-        }
-        
-        rangeSlider.snp.makeConstraints {
+    }
+    
+    func configureConstraints() {
+        configureSlider()
+        configureLabels()
+    }
+    
+    func configureSlider() {
+        self.rangeSlider.snp.makeConstraints {
             $0.top.equalTo(rangeLabel.snp.bottom).inset(-10)
             $0.width.equalTo(self.safeAreaLayoutGuide)
         }
-        
-        minRangeLabel.snp.makeConstraints {
+    }
+    
+    func configureLabels() {
+        self.rangeLabel.snp.makeConstraints {
+            $0.top.equalTo(self.safeAreaLayoutGuide)
+            $0.leading.equalTo(self.safeAreaLayoutGuide).inset(10)
+        }
+
+        self.minRangeLabel.snp.makeConstraints {
             $0.top.equalTo(rangeSlider.snp.bottom).inset(-10)
             $0.leading.equalTo(self.safeAreaLayoutGuide).inset(10)
         }
         
-        maxRangeLabel.snp.makeConstraints {
+        self.maxRangeLabel.snp.makeConstraints {
             $0.top.equalTo(rangeSlider.snp.bottom).inset(-10)
             $0.trailing.equalTo(self.safeAreaLayoutGuide).inset(10)
         }
