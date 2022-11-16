@@ -11,7 +11,7 @@ import UIKit
 import SnapKit
 import Then
 
-class GroupChatCreationViewController: UIViewController {
+class CreateGroupChatViewController: UIViewController {
     
     // MARK: - Proporties
     
@@ -86,7 +86,7 @@ class GroupChatCreationViewController: UIViewController {
     }
 }
 
-private extension GroupChatCreationViewController {
+private extension CreateGroupChatViewController {
     func addSubviews() {
         [thumnailImageView, titleTextField, descriptionTextField, pickerLabel, maxNumOfParticipantsPicker, rangeZoneLabel, rangeZoneView].forEach {
             self.stackView.addArrangedSubview($0)
@@ -179,13 +179,13 @@ private extension GroupChatCreationViewController {
     }
 }
 
-extension GroupChatCreationViewController: PHPickerViewControllerDelegate {
+extension CreateGroupChatViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true, completion: nil)
     }
 }
 
-extension GroupChatCreationViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
     }
