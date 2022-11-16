@@ -45,6 +45,7 @@
 		6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012734829221F4800E1456B /* LaunchScreenUseCase.swift */; };
 		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		7CFC7D70292374BD00A249E7 /* ProfileDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D6F292374BD00A249E7 /* ProfileDetailViewController.swift */; };
 		7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */; };
 		7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */; };
 		833062262924A3BF000E786E /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062232924A3BF000E786E /* OnboardingCoordinator.swift */; };
@@ -148,6 +149,7 @@
 		60FD706B2924081000A4C29A /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		60FD706D292478AA00A4C29A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		71443E2256202E270AEB57D7 /* Pods-NearTalkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7CFC7D6F292374BD00A249E7 /* ProfileDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewController.swift; sourceTree = "<group>"; };
 		7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatCreationViewController.swift; sourceTree = "<group>"; };
 		7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeZoneView.swift; sourceTree = "<group>"; };
 		833062232924A3BF000E786E /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
@@ -382,6 +384,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7CFC7D6D2923748E00A249E7 /* ProfileDetail */,
 				7CFC7D672923709C00A249E7 /* GroupChatCreation */,
 				555A6B2629236C28001336ED /* FriendsList */,
 				1648BA922921D7240076AC35 /* MainMap */,
@@ -585,6 +588,22 @@
 			);
 			path = DIContainer;
 			sourceTree = "<group>";
+		};
+		7CFC7D6D2923748E00A249E7 /* ProfileDetail */ = {
+			isa = PBXGroup;
+			children = (
+				7CFC7D6E2923749C00A249E7 /* View */,
+			);
+			path = ProfileDetail;
+			sourceTree = "<group>";
+		};
+		7CFC7D6E2923749C00A249E7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7CFC7D6F292374BD00A249E7 /* ProfileDetailViewController.swift */,
+			);
+			path = View;
+      sourceTree = "<group>";
 		};
 		7CFC7D672923709C00A249E7 /* GroupChatCreation */ = {
 			isa = PBXGroup;
@@ -1035,6 +1054,7 @@
 				60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */,
 				555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
+				7CFC7D70292374BD00A249E7 /* ProfileDetailViewController.swift in Sources */,
 				1648BAB3292389920076AC35 /* ChatRoomClusterAnnotationView.swift in Sources */,
 				833062272924A3BF000E786E /* OnboardingViewModel.swift in Sources */,
 				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
