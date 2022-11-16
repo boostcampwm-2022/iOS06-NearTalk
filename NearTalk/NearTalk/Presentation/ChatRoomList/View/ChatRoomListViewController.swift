@@ -31,8 +31,7 @@ final class ChatRoomListViewController: UIViewController {
         view.viewModel = viewModel
         return view
     }
-    
-    // viewDidLoad
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,6 +42,7 @@ final class ChatRoomListViewController: UIViewController {
         configureDmDatasource()
     }
     
+    // MARK: - Configure views
     func addSubviews() {
         self.view.addSubview(tableView)
     }
@@ -54,7 +54,6 @@ final class ChatRoomListViewController: UIViewController {
         }
     }
     
-    // 레이아웃 셋팅
     private func configureView() {
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
@@ -112,6 +111,7 @@ final class ChatRoomListViewController: UIViewController {
         
     }
     
+    // MARK: - Helper
     @objc private func didTapCreateChatRoomButton() {
         print("채팅방 생성 이동")
     }

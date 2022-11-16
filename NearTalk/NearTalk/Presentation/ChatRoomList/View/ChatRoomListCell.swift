@@ -13,6 +13,7 @@ class ChatRoomListCell: UITableViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     
+    // MARK: - UI properties
     private let img = UIImageView().then {
         $0.layer.cornerRadius = 20
         $0.clipsToBounds = true
@@ -36,9 +37,13 @@ class ChatRoomListCell: UITableViewCell {
         $0.font = UIFont.systemFont(ofSize: 14)
     }
     
+    // MARK: - Lifecycles
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        layoutSetup()
+        
+        addSubviews()
+        configureConstraints()
+        configureContentView()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -46,24 +51,26 @@ class ChatRoomListCell: UITableViewCell {
     }
     
     func configure(openData: OpenChatRoomListData) {
-        name.text = openData.name
-        userDescription.text = openData.description
-        date.text = openData.date
+        self.name.text = openData.name
+        self.userDescription.text = openData.description
+        self.date.text = openData.date
     }
     
     func configure(dmData: DMChatRoomListData) {
-        name.text = dmData.name
-        userDescription.text = dmData.description
-        date.text = dmData.date
+        self.name.text = dmData.name
+        self.userDescription.text = dmData.description
+        self.date.text = dmData.date
     }
     
-    private func layoutSetup() {
-        
+    // MARK: - Configure views
+    private func addSubviews() {
         self.contentView.addSubview(img)
         self.contentView.addSubview(name)
         self.contentView.addSubview(userDescription)
         self.contentView.addSubview(date)
-        
+    }
+    
+    private func configureConstraints() {
         img.snp.makeConstraints { make in
             make.top.leading.equalTo(self.contentView).offset(16)
             make.bottom.equalTo(self.contentView).offset(-16)
@@ -88,9 +95,11 @@ class ChatRoomListCell: UITableViewCell {
             make.top.equalTo(self.contentView).offset(8)
             make.trailing.equalTo(self.contentView).offset(-16)
         }
-        
-        contentView.layer.borderColor = UIColor.gray.cgColor
-        contentView.layer.borderWidth = 0.5
+    }
+    
+    private func configureContentView() {
+        self.contentView.layer.borderColor = UIColor.gray.cgColor
+        self.contentView.layer.borderWidth = 0.5
     }
     
 }

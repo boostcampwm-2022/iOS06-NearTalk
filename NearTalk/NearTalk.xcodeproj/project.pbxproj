@@ -273,9 +273,9 @@
 		16530579291E189D0026B815 /* ChatRoomList */ = {
 			isa = PBXGroup;
 			children = (
-				1653057A291E18CE0026B815 /* View */,
-				1653057B291E18D70026B815 /* ViewModel */,
 				1653057C291E18DF0026B815 /* Coordinator */,
+				1653057B291E18D70026B815 /* ViewModel */,
+				1653057A291E18CE0026B815 /* View */,
 			);
 			path = ChatRoomList;
 			sourceTree = "<group>";
