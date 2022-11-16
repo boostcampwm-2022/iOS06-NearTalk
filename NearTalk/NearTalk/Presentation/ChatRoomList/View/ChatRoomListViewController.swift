@@ -24,7 +24,6 @@ final class ChatRoomListViewController: UIViewController {
     private var viewModel: ChatRoomListViewModel!
     
     // MARK: - Lifecycle
-    
     // todo: - 이미지 레파지토리 추가
     static func create(with viewModel: ChatRoomListViewModel) -> ChatRoomListViewController {
         let view = ChatRoomListViewController()
@@ -59,7 +58,6 @@ final class ChatRoomListViewController: UIViewController {
         view.addSubview(tableView)
     }
     
-    // 네비게이션 바
     private func configureNavigation() {
         let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(dmChatRoomListButtonTapped))
         let openChatButton: UIBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openChatButtonTapped))
@@ -69,7 +67,6 @@ final class ChatRoomListViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = creatOpenChatButton
     }
     
-    // 데이터소스 세팅
     private func configureOpenDatasource() {
         
         self.openDataSource = UITableViewDiffableDataSource<Int, OpenChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
@@ -102,8 +99,7 @@ final class ChatRoomListViewController: UIViewController {
         
         self.dmDataSource?.defaultRowAnimation = .fade
         tableView.dataSource = self.dmDataSource
-        
-        // 빈 snapshot
+
         var snapshot = NSDiffableDataSourceSnapshot<Int, DMChatRoomListData>()
         snapshot.appendSections([0])
         snapshot.appendItems(viewModel.dmChatRoomDummyData)

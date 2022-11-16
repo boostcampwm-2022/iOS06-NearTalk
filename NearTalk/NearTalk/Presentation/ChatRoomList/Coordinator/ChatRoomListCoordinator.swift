@@ -46,7 +46,7 @@ final class ChatRoomListCoordinator {
     }
     
     private func showCreateChatRoom() {
-        // let viewController = dependencies.makeChatRoomViewController(actions: )
+        // let viewController = dependencies.makeCreateChatRoomViewController(actions: )
         // navigationController?.pushViewController(viewController, animated: true)
     }
     

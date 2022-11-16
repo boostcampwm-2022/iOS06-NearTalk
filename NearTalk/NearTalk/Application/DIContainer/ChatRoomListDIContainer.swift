@@ -11,12 +11,12 @@ import UIKit
 final class XXXDIContainer {
     // MARK: - 필요한 데이터를 가저올 네트워크 통신
     lazy var apiDataTransferService: DefaultStorageService = {
-        // api -> Data 변환 가정
+        // api -> Data 변환
         return DefaultStorageService()
     }()
     
     lazy var imageDataTransferService: DefaultStorageService = {
-        // api -> Data 변환 가정
+        // api -> Data 변환
         return DefaultStorageService()
     }()
 }
@@ -49,7 +49,6 @@ final class ChatRoomListDIContainer {
     }
     
     // ExampleMVVM에서는 보여줄수 있는 Scene의 뷰컨트롤러와 뷰모델이 존재
-    
     // MARK: - ChatRoom List
     func makeChatRoomListViewController(actions: ChatRoomListViewModelActions) -> ChatRoomListViewController {
         return ChatRoomListViewController.create(with: makeChatRoomListViewModel(actions: actions))
@@ -60,7 +59,6 @@ final class ChatRoomListDIContainer {
     }
     
     // MARK: - Chat Room
-    
     func makeChatRoomViewController() { }
     
     // func makeChatRoomViewModel() -> ChatRoomViewModel {}
