@@ -34,25 +34,25 @@ final class LaunchScreenCoordinator: Coordinator {
     // MARK: - Lifecycles
     func start() {
         let actions: LaunchScreenViewModelActions = .init(
-            showLoginViewController: showLoginViewController,
-            showMainViewController: showMainViewController
+            showLoginViewController: self.showLoginViewController,
+            showMainViewController: self.showMainViewController
         )
-        let viewController: LaunchScreenViewController = diContainer.createLaunchScreenViewController(actions: actions)
-        launchScreenViewController = viewController
-        navigationController?.pushViewController(viewController, animated: false)
+        let viewController: LaunchScreenViewController = self.diContainer.createLaunchScreenViewController(actions: actions)
+        self.launchScreenViewController = viewController
+        self.navigationController?.pushViewController(viewController, animated: false)
     }
     
     private func close() {
-        navigationController?.popViewController(animated: false)
-        launchScreenViewController = nil
+        self.navigationController?.popViewController(animated: false)
+        self.launchScreenViewController = nil
     }
     
     // MARK: - Dependency
     private func showLoginViewController() {
-        dependency.showLoginViewController()
+        self.dependency.showLoginViewController()
     }
     
     private func showMainViewController() {
-        dependency.showMainViewController()
+        self.dependency.showMainViewController()
     }
 }
