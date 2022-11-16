@@ -8,6 +8,8 @@
 import MapKit
 
 final class ChatRoomClusterAnnotationView: MKAnnotationView {
+    static let reuseIdentifier = "ChatRoomClusterAnnotationView"
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         

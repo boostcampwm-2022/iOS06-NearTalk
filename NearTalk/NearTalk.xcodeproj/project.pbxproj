@@ -13,7 +13,7 @@
 		1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAAC292385CD0076AC35 /* ChatRoomAnnotation.swift */; };
 		1648BAAF292387020076AC35 /* GroupChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */; };
 		1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */; };
-		1648BAB3292389920076AC35 /* ClusterChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB2292389920076AC35 /* ClusterChatRoomAnnotationView.swift */; };
+		1648BAB3292389920076AC35 /* ChatRoomClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */; };
 		1648BAB6292391940076AC35 /* DummyData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1648BAB5292391940076AC35 /* DummyData.plist */; };
 		16530574291E17A50026B815 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530573291E17A40026B815 /* DeviceType.swift */; };
 		16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530575291E17F70026B815 /* UIViewController+Preview.swift */; };
@@ -76,7 +76,7 @@
 		1648BAAC292385CD0076AC35 /* ChatRoomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomAnnotation.swift; sourceTree = "<group>"; };
 		1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DmChatRoomAnnotationView.swift; sourceTree = "<group>"; };
-		1648BAB2292389920076AC35 /* ClusterChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClusterChatRoomAnnotationView.swift; sourceTree = "<group>"; };
+		1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomClusterAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB5292391940076AC35 /* DummyData.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DummyData.plist; sourceTree = "<group>"; };
 		16530573291E17A40026B815 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		16530575291E17F70026B815 /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
@@ -205,7 +205,7 @@
 				1648BAAC292385CD0076AC35 /* ChatRoomAnnotation.swift */,
 				1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */,
 				1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */,
-				1648BAB2292389920076AC35 /* ClusterChatRoomAnnotationView.swift */,
+				1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -876,7 +876,7 @@
 				1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */,
 				16530580291E19250026B815 /* ChattingRoomListViewModel.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
-				1648BAB3292389920076AC35 /* ClusterChatRoomAnnotationView.swift in Sources */,
+				1648BAB3292389920076AC35 /* ChatRoomClusterAnnotationView.swift in Sources */,
 				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
