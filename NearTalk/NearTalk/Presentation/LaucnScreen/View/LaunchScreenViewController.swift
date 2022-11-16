@@ -34,13 +34,20 @@ final class LaunchScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        configureView()
+        addSubviews()
+        configureConstraints()
     }
     
-    // MARK: - Helpers
-    func configureView() {
+    // MARK: - Configure views
+    private func addSubviews() {
         self.view.addSubview(titleLabel)
-        
+    }
+    
+    private func configureConstraints() {
+        configureLogoLabel()
+    }
+    
+    private func configureLogoLabel() {
         self.titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
