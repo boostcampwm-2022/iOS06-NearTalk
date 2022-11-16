@@ -7,7 +7,7 @@
 
 import MapKit
 
-final class OpenChatRoomAnnotationView: MKMarkerAnnotationView {
+final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
     static let reuseIdentifier = "OpenChatRoomAnnotationView"
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {

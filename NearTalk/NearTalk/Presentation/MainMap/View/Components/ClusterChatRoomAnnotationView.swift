@@ -7,7 +7,7 @@
 
 import MapKit
 
-final class ClusterChatRoomAnnotationView: MKAnnotationView {
+final class ChatRoomClusterAnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         

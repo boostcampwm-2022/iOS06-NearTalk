@@ -9,11 +9,11 @@ import MapKit
 
 final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     enum RoomType: Int, Decodable {
-        case open
-        case directMessage
+        case group
+        case dm
     }
     
-    var roomType: RoomType = .open
+    var roomType: RoomType = .group
     private var latitude: CLLocationDegrees = 0
     private var longitude: CLLocationDegrees = 0
     

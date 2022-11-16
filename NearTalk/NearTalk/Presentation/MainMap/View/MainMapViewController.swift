@@ -14,7 +14,7 @@ final class MainMapViewController: UIViewController {
     private let locationManager = CLLocationManager()
     private var userLocation: CLLocation?
     
-    private let naverLocation = CLLocation(latitude: 37.3589, longitude: 127.1051)
+    // private let naverLocation = CLLocation(latitude: 37.3589, longitude: 127.1051)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,10 +92,10 @@ final class MainMapViewController: UIViewController {
     
     private func registerAnnotationViewClass() {
         // Single: Open or Dm
-        mapView.register(OpenChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        mapView.register(GroupChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         mapView.register(DmChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         // Clustering
-        mapView.register(ClusterChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
+        mapView.register(ChatRoomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
     }
 }
 
@@ -134,9 +134,9 @@ extension MainMapViewController: MKMapViewDelegate {
         }
         
         switch chatRoomAnnotation.roomType {
-        case .open:
-            return OpenChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: OpenChatRoomAnnotationView.reuseIdentifier)
-        case .directMessage:
+        case .group:
+            return GroupChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+        case .dm:
             return DmChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
         }
     }
