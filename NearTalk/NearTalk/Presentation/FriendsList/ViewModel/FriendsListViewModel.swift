@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FriendsListViewModel {
+final class FriendsListViewModel {
     var friendsListDummyData: [FriendsListModel] = []
     
     init() {
