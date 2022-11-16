@@ -5,9 +5,8 @@
 //  Created by Preston Kim on 2022/11/15.
 //
 
-import RxCocoa
-
 import Foundation
+import RxCocoa
 import RxSwift
 
 struct OnboardingInput {
@@ -53,10 +52,13 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
             }
             .asDriver(onErrorJustReturn: false)
         
-        let registerEnable: Driver<Bool> = Observable.combineLatest(nickNameValidity.asObservable(), messageValidity.asObservable()) {
-            $0 && $1
-        }
-            .asDriver(onErrorJustReturn: false)
+        let registerEnable: Driver<Bool> = Observable
+            .combineLatest(
+                nickNameValidity.asObservable(),
+                messageValidity.asObservable()) {
+                    $0 && $1
+                }
+                .asDriver(onErrorJustReturn: false)
         return Output(nickNameValidity: nickNameValidity, messageValidity: messageValidity, registerEnable: registerEnable)
     }
 }

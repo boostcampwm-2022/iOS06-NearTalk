@@ -5,12 +5,11 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
+import RxCocoa
 import RxSwift
 import SnapKit
-import UIKit
-
-import RxCocoa
 import Then
+import UIKit
 
 final class OnboardingViewController: UIViewController {
     // MARK: - UI properties
@@ -149,12 +148,8 @@ private extension OnboardingViewController {
     }
     
     func bindToViewModel() {
-        let nickName = nicknameField.rx.text
-            .orEmpty
-            .debounce(.nanoseconds(30), scheduler: MainScheduler.instance)
-        let message = messageField.rx.text
-            .orEmpty
-            .debounce(.nanoseconds(30), scheduler: MainScheduler.instance)
+        let nickName = nicknameField.rx.text.orEmpty.asObservable()
+        let message = messageField.rx.text.orEmpty.asObservable()
         let input = OnboardingInput(nickName: nickName, message: message)
         let output = viewModel.transform(input)
         

@@ -30,7 +30,9 @@ final class DefaultOnboardingDIContainer {
     
     // MARK: - ViewModels
     func makeViewModel() -> any OnboardingViewModel {
-        return DefaultOnboardingViewModel(validateUseCase: makeOnboardingValidateUseCase(), saveProfileUseCase: makeOnboardingSaveProfileUseCase(respository: makeRepository()))
+        return DefaultOnboardingViewModel(
+            validateUseCase: makeOnboardingValidateUseCase(),
+            saveProfileUseCase: makeOnboardingSaveProfileUseCase(respository: makeRepository()))
     }
     
     // MARK: - Create viewController

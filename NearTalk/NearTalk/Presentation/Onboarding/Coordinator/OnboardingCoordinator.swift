@@ -6,10 +6,9 @@
 //
 
 import Foundation
+import PhotosUI
 import RxSwift
 import UIKit
-
-import PhotosUI
 
 protocol OnboardingCoordinatorDependency {
     func makeOnboardingViewModel() -> any OnboardingViewModel
@@ -17,8 +16,10 @@ protocol OnboardingCoordinatorDependency {
 
 final class DefaultOnboardingCoordinatorDependency: OnboardingCoordinatorDependency {
     func makeOnboardingViewModel() -> any OnboardingViewModel {
-        return DefaultOnboardingViewModel(validateUseCase: DefaultOnboardingValidateUseCase(),
-            saveProfileUseCase: DefaultOnboardingSaveProfileUseCase(repository: DefaultUserProfileRepository()))
+        return DefaultOnboardingViewModel(
+            validateUseCase: DefaultOnboardingValidateUseCase(),
+            saveProfileUseCase: DefaultOnboardingSaveProfileUseCase(
+                repository: DefaultUserProfileRepository()))
     }
 }
 
@@ -30,7 +31,9 @@ final class OnboardingCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator]
     
-    init(navigationController: UINavigationController, parentCoordinator: Coordinator? = nil, dependency: any OnboardingCoordinatorDependency) {
+    init(navigationController: UINavigationController,
+         parentCoordinator: Coordinator? = nil,
+         dependency: any OnboardingCoordinatorDependency) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
         self.childCoordinators = []
@@ -42,7 +45,9 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     func showOnboardingViewController() {
-        self.navigationController?.pushViewController(OnboardingViewController(viewModel: dependency.makeOnboardingViewModel(), coordinator: self), animated: true)
+        self.navigationController?.pushViewController(
+            OnboardingViewController(viewModel: dependency.makeOnboardingViewModel(),
+                                     coordinator: self), animated: true)
     }
     
     func finish() {
@@ -59,12 +64,13 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
             return
         }
         if itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(ofClass: UIImage.self, completionHandler: { [weak self] image, _ in
+            itemProvider.loadObject(
+                ofClass: UIImage.self,
+                completionHandler: { [weak self] image, _ in
                 guard let image = image as? UIImage, let handler = self?.imageReceiveHandler else {
                     return
                 }
-                handler
-                    .onNext(image)
+                handler.onNext(image)
                 self?.imageReceiveHandler = nil
             })
         } else {
