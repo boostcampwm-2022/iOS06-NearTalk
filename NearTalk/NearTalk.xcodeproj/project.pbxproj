@@ -37,7 +37,7 @@
 		555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendsListViewModel.swift */; };
 		555A6B3129236D86001336ED /* FriendsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3029236D86001336ED /* FriendsListModel.swift */; };
 		555A6B3329236D98001336ED /* FriendsListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3229236D98001336ED /* FriendsListCoordinator.swift */; };
-		555A6B3529238C13001336ED /* ChattingRoomListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3429238C13001336ED /* ChattingRoomListDIContainer.swift */; };
+		555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */; };
 		555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3729238C69001336ED /* ChatRoomList.swift */; };
 		555A6B3A29238C9B001336ED /* ChatRoomListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */; };
 		555A6B3C29238D26001336ED /* DefaultChatRoomListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3B29238D26001336ED /* DefaultChatRoomListRepository.swift */; };
@@ -133,7 +133,7 @@
 		555A6B2E29236D73001336ED /* FriendsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListViewModel.swift; sourceTree = "<group>"; };
 		555A6B3029236D86001336ED /* FriendsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListModel.swift; sourceTree = "<group>"; };
 		555A6B3229236D98001336ED /* FriendsListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListCoordinator.swift; sourceTree = "<group>"; };
-		555A6B3429238C13001336ED /* ChattingRoomListDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingRoomListDIContainer.swift; sourceTree = "<group>"; };
+		555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListDIContainer.swift; sourceTree = "<group>"; };
 		555A6B3729238C69001336ED /* ChatRoomList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomList.swift; sourceTree = "<group>"; };
 		555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListUseCase.swift; sourceTree = "<group>"; };
 		555A6B3B29238D26001336ED /* DefaultChatRoomListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChatRoomListRepository.swift; sourceTree = "<group>"; };
@@ -593,7 +593,7 @@
 			children = (
 				833062282924A3D7000E786E /* OnboardingDIContainer.swift */,
 				605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */,
-				555A6B3429238C13001336ED /* ChattingRoomListDIContainer.swift */,
+				555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */,
 			);
 			path = DIContainer;
 			sourceTree = "<group>";
@@ -1019,7 +1019,7 @@
 				8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */,
 				60FD706C2924081000A4C29A /* ChatRoom.swift in Sources */,
 				1653057E291E19150026B815 /* ChatRoomListViewController.swift in Sources */,
-				555A6B3529238C13001336ED /* ChattingRoomListDIContainer.swift in Sources */,
+				555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */,
 				555A6B3A29238C9B001336ED /* ChatRoomListUseCase.swift in Sources */,
 				1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,

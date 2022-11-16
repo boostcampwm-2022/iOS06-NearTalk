@@ -13,19 +13,24 @@ import UIKit
 
 final class ChatRoomListViewController: UIViewController {
     
-    private var openDataSource: UITableViewDiffableDataSource<Int, OpenChatRoomListData>?
-    private var dmDataSource: UITableViewDiffableDataSource<Int, DMChatRoomListData>?
-    private var viewModel: ChatRoomListViewModel!
-    
     private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(ChatRoomListCell.self, forCellReuseIdentifier: ChatRoomListCell.identifier)
     }
     
+    private var openDataSource: UITableViewDiffableDataSource<Int, OpenChatRoomListData>?
+    private var dmDataSource: UITableViewDiffableDataSource<Int, DMChatRoomListData>?
+    private var viewModel: ChatRoomListViewModel!
+    private weak var coordinator: ChatRoomListCoordinator?
+    
     // MARK: - Lifecycle
-    static func create(with viewModel: ChatRoomListViewModel) -> ChatRoomListViewController {
-        let view = ChatRoomListViewController()
-        view.viewModel = viewModel
-        return view
+    init(viewModel: any ChatRoomListViewModel, coordinator: ChatRoomListCoordinator) {
+        self.viewModel = viewModel
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // viewDidLoad
@@ -112,12 +117,12 @@ final class ChatRoomListViewController: UIViewController {
     }
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChatRoomListViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: ChatRoomListViewController()) .showPreview(.iPhone14Pro)
-    }
-}
-#endif
+//#if canImport(SwiftUI) && DEBUG
+//import SwiftUI
+//
+//struct ChatRoomListViewControllerPreview: PreviewProvider {
+//    static var previews: some View {
+//        UINavigationController(rootViewController: ChatRoomListViewController(viewModel: <#T##ChatRoomListViewModel#>, coordinator: <#T##ChatRoomListCoordinator#>)) .showPreview(.iPhone14Pro)
+//    }
+//}
+//#endif

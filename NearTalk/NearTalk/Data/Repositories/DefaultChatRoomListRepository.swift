@@ -10,4 +10,14 @@ import RxSwift
 
 final class DefaultChatRoomListRepository: ChatRoomListRepository {
     
+//    private let chatRoomList: RxSwift.Observable<ChatRoom>
+//    
+//    init() {
+//        self.chatRoomList = self.fetchChatRoomList()
+//    }
+//    
+//    // 채팅방목록 가져오기
+//    func fetchChatRoomList() -> RxSwift.Observable<ChatRoom> {
+//        return Observable<ChatRoom>
+//    }
 }

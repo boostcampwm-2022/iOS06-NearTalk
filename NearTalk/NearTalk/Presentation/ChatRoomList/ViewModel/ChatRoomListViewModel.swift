@@ -30,8 +30,8 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     var openChatRoomDummyData: [OpenChatRoomListData] = []
     var dmChatRoomDummyData: [DMChatRoomListData] = []
     
-    init(chatRoomListUseCase: ChatRoomListUseCase, actions: ChatRoomListViewModelActions? = nil) {
-        self.chatRoomListUseCase = chatRoomListUseCase
+    init(useCase: ChatRoomListUseCase, actions: ChatRoomListViewModelActions? = nil) {
+        self.chatRoomListUseCase = useCase
         self.actions = actions
         
         createDummyData()
