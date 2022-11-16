@@ -7,9 +7,35 @@
 
 import UIKit
 
-final class ChatRoomListDIContainer {
-    // MARK: - Dependencies
+// ChatRoomListDIContainer가 필요한 DIContainer
+final class XXXDIContainer {
+    // MARK: - 필요한 데이터를 가저올 네트워크 통신
+    lazy var apiDataTransferService: DefaultStorageService = {
+        // api -> Data 변환 가정
+        return DefaultStorageService()
+    }()
     
+    lazy var imageDataTransferService: DefaultStorageService = {
+        // api -> Data 변환 가정
+        return DefaultStorageService()
+    }()
+}
+
+final class ChatRoomListDIContainer {
+    
+    // MARK: - Dependencies
+    struct Dependencies {
+        let aipDataTransferService: DefaultStorageService
+        let imageDataTransferService: DefaultStorageService
+    }
+    
+    private let dependencies: Dependencies
+    
+    // MARK: - Persistent Storage
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+    }
+
     // MARK: - Services
 
     // MARK: - UseCases
@@ -18,25 +44,36 @@ final class ChatRoomListDIContainer {
     }
     
     // MARK: - Repositories
-    private func makeRepository() -> ChatRoomListRepository {
+    func makeRepository() -> ChatRoomListRepository {
         return DefaultChatRoomListRepository()
     }
     
-    // MARK: - ViewModels
-    func makeViewModel(actions: ChatRoomListViewModelActions) -> ChatRoomListViewModel {
-        return DefaultChatRoomListViewModel(
-            useCase: self.makeChatRoomListUseCase(),
-            actions: actions
-        )
+    // ExampleMVVM에서는 보여줄수 있는 Scene의 뷰컨트롤러와 뷰모델이 존재
+    
+    // MARK: - ChatRoom List
+    func makeChatRoomListViewController(actions: ChatRoomListViewModelActions) -> ChatRoomListViewController {
+        return ChatRoomListViewController.create(with: makeChatRoomListViewModel(actions: actions))
     }
     
-    // MARK: - Create viewController
-    func createChatRoomListViewController(actions: ChatRoomListViewModelActions, coordinator: ChatRoomListCoordinator) -> ChatRoomListViewController {
-        return ChatRoomListViewController(viewModel: self.makeViewModel(actions: actions), coordinator: coordinator)
+    func makeChatRoomListViewModel(actions: ChatRoomListViewModelActions) -> ChatRoomListViewModel {
+        return DefaultChatRoomListViewModel(useCase: self.makeChatRoomListUseCase(), actions: actions)
     }
+    
+    // MARK: - Chat Room
+    
+    func makeChatRoomViewController() { }
+    
+    // func makeChatRoomViewModel() -> ChatRoomViewModel {}
+    
+    // MARK: - Create Chat Room
+    func makeCreateChatRoomViewController() { }
+    
+    // func makeCreateChatRoomViewModel() -> ChatRoomViewModel {}
     
     // MARK: - Coordinator
-    func makeChatRoomListCoordinator(navigationController: UINavigationController?, dependency: ChatRoomListCoordinatorDependency) -> ChatRoomListCoordinator {
-        return ChatRoomListCoordinator(navigationController: navigationController, dependency: dependency)
+    func makeChatRoomListCoordinator(navigationController: UINavigationController) -> ChatRoomListCoordinator {
+        return ChatRoomListCoordinator(navigationController: navigationController, dependencies: self)
     }
 }
+
+extension ChatRoomListDIContainer: ChatRoomListCoordinatorDependencies {}

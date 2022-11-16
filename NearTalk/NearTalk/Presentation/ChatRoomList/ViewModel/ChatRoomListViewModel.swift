@@ -15,9 +15,12 @@ struct ChatRoomListViewModelActions {
 }
 
 protocol ChatRoomListViewModelInput {
+    
 }
 
 protocol ChatRoomListViewModelOutput {
+    var openChatRoomDummyData: [OpenChatRoomListData] { get }
+    var dmChatRoomDummyData: [DMChatRoomListData] { get }
 }
 
 protocol ChatRoomListViewModel: ChatRoomListViewModelInput, ChatRoomListViewModelOutput {}

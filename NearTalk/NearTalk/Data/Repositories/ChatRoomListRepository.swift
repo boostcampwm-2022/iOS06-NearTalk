@@ -15,4 +15,5 @@ protocol ChatRoomListRepository {
     
 //    coreData 채팅방 목록 가져오기
 //    func fetchCoreDataChatRoomList() -> Observable<ChatRoom>
+    
 }

@@ -485,9 +485,9 @@
 		1660D26C291DE32F005F7B24 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */,
 				8330622C2924A3F1000E786E /* OnboardingUseCase.swift */,
 				6012734829221F4800E1456B /* LaunchScreenUseCase.swift */,
-				555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
