@@ -33,15 +33,22 @@ final class LaunchScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        configureView()
+        self.view.backgroundColor = .white
+        addSubviews()
+        configureConstraints()
     }
     
-    // MARK: - Helpers
-    func configureView() {
-        view.addSubview(titleLabel)
-        
-        titleLabel.snp.makeConstraints {
+    // MARK: - Configure views
+    private func addSubviews() {
+        self.view.addSubview(titleLabel)
+    }
+    
+    private func configureConstraints() {
+        configureLogoLabel()
+    }
+    
+    private func configureLogoLabel() {
+        self.titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }
@@ -52,16 +59,12 @@ import SwiftUI
 
 struct LaunchScreenViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        let mockUseCase = DefaultLaunchScreenUseCase(launchScreenRepository: DefaultLaunchScreenRepository())
-        let mockAction = LaunchScreenViewModelActions(
-            showLoginViewController: {},
-            showMainViewController: {}
-        )
-
-        return LaunchScreenViewController(
-            viewModel: DefaultLaunchScreenViewModel(useCase: mockUseCase, actions: mockAction),
-            repository: DefaultLaunchScreenRepository()
-        ).showPreview(.iPhone14Pro)
+        let diContainer: LaunchScreenDIContainer = .init()
+        let mockRepository: LaunchScreenRepository = diContainer.makeRepository()
+        let mockAction: LaunchScreenViewModelActions = .init(showLoginViewController: {}, showMainViewController: {})
+        let mockViewModel: LaunchScreenViewModel = diContainer.makeViewModel(actions: mockAction)
+        return LaunchScreenViewController(viewModel: mockViewModel, repository: mockRepository)
+            .showPreview(.iPhone14Pro)
     }
 }
 #endif

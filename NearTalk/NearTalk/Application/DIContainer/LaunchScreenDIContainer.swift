@@ -11,21 +11,23 @@ import UIKit
 /// LaunchScreenViewController에 필요한 의존성을 주입해주는 클래스
 final class LaunchScreenDIContainer {
     // MARK: - Dependencies
+    
+    // MARK: - Services
 
     // MARK: - UseCases
-    private func makeLaunchScreenUseCase() -> LaunchScreenUseCase {
-        return DefaultLaunchScreenUseCase(launchScreenRepository: DefaultLaunchScreenRepository())
+    func makeLaunchScreenUseCase() -> LaunchScreenUseCase {
+        return DefaultLaunchScreenUseCase(launchScreenRepository: self.makeRepository())
     }
     
     // MARK: - Repositories
-    private func makeRepository() -> LaunchScreenRepository {
-        return DefaultLaunchScreenRepository()
+    func makeRepository() -> LaunchScreenRepository {
+        return DefaultLaunchScreenRepository(firebaseAuthService: DefaultFirebaseAuthService())
     }
     
     // MARK: - ViewModels
-    private func makeViewModel(actions: LaunchScreenViewModelActions) -> LaunchScreenViewModel {
+    func makeViewModel(actions: LaunchScreenViewModelActions) -> LaunchScreenViewModel {
         return DefaultLaunchScreenViewModel(
-            useCase: makeLaunchScreenUseCase(),
+            useCase: self.makeLaunchScreenUseCase(),
             actions: actions
         )
     }
@@ -33,8 +35,8 @@ final class LaunchScreenDIContainer {
     // MARK: - Create viewController
     func createLaunchScreenViewController(actions: LaunchScreenViewModelActions) -> LaunchScreenViewController {
         return LaunchScreenViewController(
-            viewModel: makeViewModel(actions: actions),
-            repository: makeRepository()
+            viewModel: self.makeViewModel(actions: actions),
+            repository: self.makeRepository()
         )
     }
     
