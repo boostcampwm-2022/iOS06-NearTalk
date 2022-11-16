@@ -25,8 +25,8 @@ final class FriendsListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        addSubviews()
-        configureConstraints()
+        self.addSubviews()
+        self.configureConstraints()
     }
     
     // MARK: - Helper
@@ -46,7 +46,7 @@ final class FriendsListViewController: UIViewController {
     }
     
     private func configureTableView() {
-        tableView.snp.makeConstraints { make in
+        self.tableView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.trailing.leading.equalTo(view)
         }

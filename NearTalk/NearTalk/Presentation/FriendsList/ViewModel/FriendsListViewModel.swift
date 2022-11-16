@@ -11,7 +11,7 @@ final class FriendsListViewModel {
     var friendsListDummyData: [FriendsListModel] = []
     
     init() {
-        createDummyData()
+        self.createDummyData()
     }
     
     private func createDummyData() {
