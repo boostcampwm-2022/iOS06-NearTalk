@@ -20,10 +20,6 @@ final class DefaultLaunchScreenUseCase: LaunchScreenUseCase {
     }
     
     func verifyUser() -> Observable<Bool> {
-        Observable<Bool>.create { observer in
-            observer.onNext(true)
-            observer.onCompleted()
-            return Disposables.create()
-        }
+        self.launchScreenRepository.verifyUser()
     }
 }
