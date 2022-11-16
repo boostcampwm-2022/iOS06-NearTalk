@@ -13,6 +13,7 @@ import RxCocoa
 import Then
 
 final class OnboardingViewController: UIViewController {
+    // MARK: - UI properties
     private lazy var logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
     private lazy var profileImageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
@@ -35,8 +36,6 @@ final class OnboardingViewController: UIViewController {
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private var buttonToggle: Bool = false
-    
     private lazy var registerButton: UIButton = UIButton().then {
         $0.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
         $0.layer.cornerRadius = 5
@@ -46,17 +45,27 @@ final class OnboardingViewController: UIViewController {
         $0.setTitle("등록하기", for: .normal)
     }
     
-    @objc private func buttonClicked() {
-        self.buttonToggle.toggle()
-        self.registerButton.backgroundColor = buttonToggle ? .systemRed : .systemBlue
-    }
-    
     private lazy var scrollView = UIScrollView().then {
         $0.showsHorizontalScrollIndicator = false
         $0.delegate = self
     }
     
+    // MARK: - Properties
+    private var buttonToggle: Bool = false
     private let disposeBag: DisposeBag = DisposeBag()
+    private let viewModel: any OnboardingViewModel
+    private weak var coordinator: OnboardingCoordinator?
+    
+    // MARK: - Lifecycles
+    init(viewModel: any OnboardingViewModel, coordinator: OnboardingCoordinator) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,21 +82,9 @@ final class OnboardingViewController: UIViewController {
         self.profileImageView.layer.masksToBounds = true
         self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
     }
-    
-    private let viewModel: any OnboardingViewModel
-    private weak var coordinator: OnboardingCoordinator?
-    
-    init(viewModel: any OnboardingViewModel, coordinator: OnboardingCoordinator) {
-        self.coordinator = coordinator
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
+// MARK: - Helpers
 private extension OnboardingViewController {
     func addSubViews() {
         [logoView, profileImageView, nicknameField, messageField, registerButton].forEach {
@@ -176,11 +173,10 @@ private extension OnboardingViewController {
             self.coordinator?.presentPictureSelectViewController(self.profileImageView.rx.image.asObserver())
         }
     }
-
-    func setProfileImage(_ image: UIImage?) {
-        Task {
-            self.profileImageView.image = image
-        }
+    
+    @objc private func buttonClicked() {
+        self.buttonToggle.toggle()
+        self.registerButton.backgroundColor = buttonToggle ? .systemRed : .systemBlue
     }
 }
 
