@@ -32,6 +32,14 @@ protocol OnboardingViewModel: ViewModelType where Input == OnboardingInput, Outp
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
+    private let validateUseCase: any OnboardingValidateUseCase
+    private let saveProfileUseCase: any OnboardingSaveProfileUseCase
+    
+    init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase) {
+        self.validateUseCase = validateUseCase
+        self.saveProfileUseCase = saveProfileUseCase
+    }
+    
     func transform(_ input: OnboardingInput) -> OnboardingOutput {
         let nickNameValidity: Driver<Bool> = input.nickName
             .map { [self] text in
@@ -50,13 +58,5 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
         }
             .asDriver(onErrorJustReturn: false)
         return Output(nickNameValidity: nickNameValidity, messageValidity: messageValidity, registerEnable: registerEnable)
-    }
-    
-    private let validateUseCase: any OnboardingValidateUseCase
-    private let saveProfileUseCase: any OnboardingSaveProfileUseCase
-    
-    init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase) {
-        self.validateUseCase = validateUseCase
-        self.saveProfileUseCase = saveProfileUseCase
     }
 }
