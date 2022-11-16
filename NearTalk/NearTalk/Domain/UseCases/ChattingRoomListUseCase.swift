@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+protocol ChattingRoomListUseCase {
+    
+}
+
+final class DefaultChattingRoomListUseCase: ChattingRoomListUseCase {
+    private let chattingRoomListRepository: ChattingRoomListRepository!
+    
+    init(chattingRoomListRepository: ChattingRoomListRepository) {
+        self.chattingRoomListRepository = chattingRoomListRepository
+    }
+    
+}

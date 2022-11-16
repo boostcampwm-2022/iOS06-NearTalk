@@ -15,10 +15,17 @@ class ChattingRoomListViewController: UIViewController {
     
     private var openDataSource: UITableViewDiffableDataSource<Int, OpenChattingRoomListData>?
     private var dmDataSource: UITableViewDiffableDataSource<Int, DMChattingRoomListData>?
-    private var viewModel = ChattingRoomListViewModel()
+    private var viewModel: ChattingRoomListViewModel!
     
     private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(ChattingRoomListCell.self, forCellReuseIdentifier: ChattingRoomListCell.identifier)
+    }
+    
+    // MARK: - Lifecycle
+    static func create(with viewModel: ChattingRoomListViewModel) -> ChattingRoomListViewController {
+        let view = ChattingRoomListViewController()
+        view.viewModel = viewModel
+        return view
     }
 
     // viewDidLoad
@@ -63,8 +70,10 @@ class ChattingRoomListViewController: UIViewController {
     
     private func configureDmDatasource() {
         self.dmDataSource = UITableViewDiffableDataSource<Int, DMChattingRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChattingRoomListCell.identifier, for: indexPath) as? ChattingRoomListCell
             else { return UITableViewCell() }
+            
             cell.configure(dmData: self.viewModel.dmChattingRoomDummyData[indexPath.row])
             return cell
         })

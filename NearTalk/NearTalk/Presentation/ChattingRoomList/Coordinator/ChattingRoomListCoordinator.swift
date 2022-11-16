@@ -2,9 +2,42 @@
 //  ChattingRoomListCoordinator.swift
 //  NearTalk
 //
-//  Created by yw22 on 2022/11/11.
+//  Created by 김영욱 on 2022/11/11.
 //
 
-class ChattingRoomListCoordinator {
+import UIKit
+
+protocol ChattingRoomListCoordinatorDependency {
+    func showChatRoomViewController()
+    func showCreateChatRoomViewController()
+}
+
+class ChattingRoomListCoordinator: Coordinator {
+    var navigationController: UINavigationController?
+    var parentCoordinator: Coordinator?
+    var childCoordinators: [Coordinator] = []
+    private var launchScreenViewController: ChattingRoomListViewController?
+    
+    // MARK: - Init
+    init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil) {
+        self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
+    }
+    
+    // MARK: - Lifecycles
+    func start() {
+        let chattingRoomListViewController = ChattingRoomListViewController()
+        
+        navigationController?.pushViewController(chattingRoomListViewController, animated: true)
+    }
+    
+    // MARK: - Dependency
+    private func showChatRoomViewController() {
+        
+    }
+    
+    private func showCreateChatRoomViewController() {
+        
+    }
     
 }

@@ -9,15 +9,34 @@ import Foundation
 import RxRelay
 import RxSwift
 
-final class ChattingRoomListViewModel {
+struct ChattingRoomListViewModelActions {
+    let showChattingRoom: () -> Void
+    let showCreateChatRoom: () -> Void
+}
+
+protocol ChattingRoomListViewModelInput {
+}
+
+protocol ChattingRoomListViewModelOutput {
+}
+
+protocol ChattingRoomListViewModel: ChattingRoomListViewModelInput, ChattingRoomListViewModelOutput {}
+
+final class DefaultChattingRoomListViewModel: ChattingRoomListViewModel {
+    
+    private let chattingRoomListUseCase: ChattingRoomListUseCase
+    private let actions: ChattingRoomListViewModelActions?
     
     var openChattingRoomDummyData: [OpenChattingRoomListData] = []
     var dmChattingRoomDummyData: [DMChattingRoomListData] = []
     
-    init() {
+    init(chattingRoomListUseCase: ChattingRoomListUseCase, actions: ChattingRoomListViewModelActions? = nil) {
+        self.chattingRoomListUseCase = chattingRoomListUseCase
+        self.actions = actions
+        
         createDummyData()
     }
-    
+
     func createDummyData() {
         openChattingRoomDummyData.append(OpenChattingRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
         openChattingRoomDummyData.append(OpenChattingRoomListData(img: "", name: "Johnny Watson", description: "Reprehenderit mollit excepteur labore deserunt officia laboris eiusmod cillum eu duis", date: "오후 1:01", count: "24"))
@@ -35,6 +54,5 @@ final class ChattingRoomListViewModel {
         dmChattingRoomDummyData.append(DMChattingRoomListData(img: "", name: "dm Annette Cooper", description: "Aliqua mollit nisi incididunt id eu consequat eu cupidatat.", date: "오전 5:12"))
         dmChattingRoomDummyData.append(DMChattingRoomListData(img: "", name: "dm Arthur Bell", description: "Voluptate irure aliquip consectetur commodo ex ex.", date: "오전 9:43"))
         dmChattingRoomDummyData.append(DMChattingRoomListData(img: "", name: "dm Jane Warren", description: "Ex Lorem veniam veniam irure sunt adipisicing culpa.", date: "오전 1:10"))
-        
     }
 }

@@ -5,4 +5,8 @@
 //  Created by 김영욱 on 2022/11/15.
 //
 
-import Foundation
+import UIKit
+
+final class ChattingRoomListDIContainer {
+    
+}
