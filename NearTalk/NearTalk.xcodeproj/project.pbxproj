@@ -40,6 +40,8 @@
 		6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012734829221F4800E1456B /* LaunchScreenUseCase.swift */; };
 		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */; };
+		7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */; };
 		833062262924A3BF000E786E /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062232924A3BF000E786E /* OnboardingCoordinator.swift */; };
 		833062272924A3BF000E786E /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062252924A3BF000E786E /* OnboardingViewModel.swift */; };
 		833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062282924A3D7000E786E /* OnboardingDIContainer.swift */; };
@@ -136,6 +138,8 @@
 		60FD706B2924081000A4C29A /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		60FD706D292478AA00A4C29A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		71443E2256202E270AEB57D7 /* Pods-NearTalkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatCreationViewController.swift; sourceTree = "<group>"; };
+		7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeZoneView.swift; sourceTree = "<group>"; };
 		833062232924A3BF000E786E /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		833062252924A3BF000E786E /* OnboardingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		833062282924A3D7000E786E /* OnboardingDIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingDIContainer.swift; sourceTree = "<group>"; };
@@ -347,6 +351,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7CFC7D672923709C00A249E7 /* GroupChatCreation */,
 				555A6B2629236C28001336ED /* FriendsList */,
 				1648BA922921D7240076AC35 /* MainMap */,
 				83E7F8C72922AB750003A2B6 /* MyProfile */,
@@ -550,6 +555,23 @@
 			path = DIContainer;
 			sourceTree = "<group>";
 		};
+		7CFC7D672923709C00A249E7 /* GroupChatCreation */ = {
+			isa = PBXGroup;
+			children = (
+				7CFC7D68292370B300A249E7 /* View */,
+			);
+			path = GroupChatCreation;
+			sourceTree = "<group>";
+		};
+		7CFC7D68292370B300A249E7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */,
+				7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		833062222924A3BF000E786E /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,6 +586,8 @@
 				833062252924A3BF000E786E /* OnboardingViewModel.swift */,
 			);
 			path = ViewModel;
+      sourceTree = "<group>";
+		};
 		60FD705829238CBB00A4C29A /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -957,6 +981,7 @@
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
+				7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */,
 				8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */,
 				555A6B3129236D86001336ED /* FriendsListModel.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
@@ -979,6 +1004,8 @@
 				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
+				601273452921ED6F00E1456B /* LaunchScreenRepository.swift in Sources */,
+				7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
