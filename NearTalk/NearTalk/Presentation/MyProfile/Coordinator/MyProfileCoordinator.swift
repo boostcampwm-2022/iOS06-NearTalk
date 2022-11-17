@@ -16,14 +16,8 @@ protocol MyProfileCoordinatorDependency {
 
 final class MyProfileCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    
     weak var parentCoordinator: Coordinator?
-    
     var childCoordinators: [Coordinator] = []
-    
-    func start() {
-        showMyProfileViewController()
-    }
     
     init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, childCoordinators: [Coordinator] = []) {
         self.navigationController = navigationController
@@ -31,24 +25,28 @@ final class MyProfileCoordinator: Coordinator {
         self.childCoordinators = childCoordinators
     }
     
+    func start() {
+        showMyProfileViewController()
+    }
+    
     func showMyProfileViewController() {
-        let vc: MyProfileViewController = MyProfileViewController(
+        let viewController: MyProfileViewController = MyProfileViewController(
             coordinator: self,
             viewModel: DefaultMyProfileViewModel(
                 profileLoadUseCase: DefaultMyProfileLoadUseCase(
                     profileRepository: DefaultUserProfileRepository(),
                     uuidRepository: DefaultUserUUIDRepository())))
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     func showAppSettingViewController() {
-        let vc: AppSettingViewController = AppSettingViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        let viewController: AppSettingViewController = AppSettingViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     func showProfileSettingViewController() {
-        let vc: ProfileSettingViewController = ProfileSettingViewController(coordinator: self)
-        self.navigationController?.pushViewController(vc, animated: true)
+        let viewController: ProfileSettingViewController = ProfileSettingViewController(coordinator: self)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     private var imageReceiveHandler: Binder<UIImage?>?
@@ -118,7 +116,6 @@ extension MyProfileCoordinator: PHPickerViewControllerDelegate {
     
     @MainActor
     private func presentPHPickerViewController(_ imageSelectHandler: Binder<UIImage?>) {
-        guard let callerViewController = self.navigationController?.topViewController else { return }
         var config: PHPickerConfiguration = PHPickerConfiguration()
         config.filter = .images
         config.selectionLimit = 1
