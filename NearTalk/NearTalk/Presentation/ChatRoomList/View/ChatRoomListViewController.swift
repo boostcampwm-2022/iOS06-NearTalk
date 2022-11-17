@@ -14,16 +14,20 @@ import UIKit
 final class ChatRoomListViewController: UIViewController {
     
     // MARK: - UI properties
-    private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
+    private lazy var tableView = UITableView().then {
         $0.register(ChatRoomListCell.self, forCellReuseIdentifier: ChatRoomListCell.identifier)
     }
     
     // MARK: - Properties
-    private var openDataSource: UITableViewDiffableDataSource<Int, OpenChatRoomListData>?
-    private var dmDataSource: UITableViewDiffableDataSource<Int, DMChatRoomListData>?
+    private var openDataSource: UITableViewDiffableDataSource<Section, OpenChatRoomListData>?
+    private var dmDataSource: UITableViewDiffableDataSource<Section, DMChatRoomListData>?
     
     private var viewModel: ChatRoomListViewModel!
     private let disposeBag: DisposeBag = DisposeBag()
+    
+    enum Section {
+        case main
+    }
     
     // MARK: - Lifecycle
     // todo: - 이미지 레파지토리 추가
@@ -71,46 +75,76 @@ final class ChatRoomListViewController: UIViewController {
     }
     
     private func configureDatasource() {
+        self.openDataSource = UITableViewDiffableDataSource<Section, OpenChatRoomListData>(
+            tableView: self.tableView,
+            cellProvider: { tableView, indexPath, item in
+                
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: ChatRoomListCell.identifier,
+                    for: indexPath) as? ChatRoomListCell else {
+                    return UITableViewCell()
+                }
+                
+                cell.configure(openData: item)
+                return cell
+            })
         
-        openDataSource = UITableViewDiffableDataSource<Int, OpenChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomListCell.identifier, for: indexPath) as? ChatRoomListCell
-            else { return UITableViewCell() }
-            cell.configure(openData: model)
-            return cell
-        })
-        
-        dmDataSource = UITableViewDiffableDataSource<Int, DMChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomListCell.identifier, for: indexPath) as? ChatRoomListCell
-            else { return UITableViewCell() }
-            cell.configure(dmData: model)
-            return cell
-        })
+        self.dmDataSource = UITableViewDiffableDataSource<Section, DMChatRoomListData>(
+            tableView: tableView,
+            cellProvider: { tableView, indexPath, item in
+                
+                guard let cell = tableView.dequeueReusableCell(
+                    withIdentifier: ChatRoomListCell.identifier,
+                    for: indexPath) as? ChatRoomListCell else {
+                    return UITableViewCell()
+                }
+                
+                cell.configure(dmData: item)
+                return cell
+            })
     }
     
     // MARK: - bind
     private func bind() {
-        self.viewModel.openChatRoomData
-            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { model in
-                var snapshot = NSDiffableDataSourceSnapshot<Int, OpenChatRoomListData>()
-                snapshot.appendSections([0])
+        self.tableView.rx.itemSelected
+            .subscribe(onNext: { event in
+                self.viewModel.didSelectItem(at: event[1])
+            })
+            .disposed(by: disposeBag)
+        
+        self.viewModel.dmChatRoomData
+            .bind(onNext: { model in
+                var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
+                snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                
+                self.dmDataSource?.defaultRowAnimation = .fade
+                self.dmDataSource?.apply(snapshot, animatingDifferences: true)
+            })
+            .disposed(by: disposeBag)
+        
+        self.viewModel.openChatRoomData
+            .bind(onNext: { model in
+                var snapshot = NSDiffableDataSourceSnapshot<Section, OpenChatRoomListData>()
+                snapshot.appendSections([.main])
+                snapshot.appendItems(model)
+                self.openDataSource?.defaultRowAnimation = .fade
                 self.openDataSource?.apply(snapshot, animatingDifferences: true)
-                
             })
             .disposed(by: disposeBag)
     }
     
-    // MARK: - Helper
     @objc private func didTapCreateChatRoomButton() {
         print("채팅방 생성 이동")
     }
     
     @objc private func dmChatRoomListButtonTapped() {
+        self.tableView.dataSource = self.dmDataSource
+        self.tableView.reloadData()
     }
     
     @objc private func openChatButtonTapped() {
+        self.tableView.dataSource = self.openDataSource
+        self.tableView.reloadData()
     }
 }
 

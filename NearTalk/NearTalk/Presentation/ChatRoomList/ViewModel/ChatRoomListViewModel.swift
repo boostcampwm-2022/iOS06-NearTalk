@@ -62,6 +62,7 @@ extension DefaultChatRoomListViewModel {
     }
     
     func didSelectItem(at index: Int) {
+        print("\(index)인덱스가 선택되었습니다.")
         actions?.showChatRoom()
     }
 }

@@ -113,7 +113,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
             let cell = ChatRoomListCell(frame: .zero)
             cell.configure(openData: OpenChatRoomListData(data: ChatRoom( roomName: "Ronald Robertson", roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
-        }.previewLayout(.fixed(width: 300, height: 80))
+        }.previewLayout(.fixed(width: 400, height: 100))
     }
 }
 #endif
