@@ -44,6 +44,7 @@
 		555A6B3E29238D65001336ED /* ChatRoomListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3D29238D65001336ED /* ChatRoomListRepository.swift */; };
 		555A6B432924B9E4001336ED /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 555A6B422924B9E4001336ED /* GoogleService-Info.plist */; };
 		555A6B482924BE65001336ED /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B472924BE65001336ED /* UserProfile.swift */; };
+		556EE24E2925E6AD00EEA145 /* UserChatRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556EE24D2925E6AD00EEA145 /* UserChatRoomModel.swift */; };
 		55F090902921E3E3008F5B9D /* ChatRoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F0908F2921E3E3008F5B9D /* ChatRoomListCell.swift */; };
 		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
 		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
@@ -140,6 +141,7 @@
 		555A6B3D29238D65001336ED /* ChatRoomListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatRoomListRepository.swift; path = NearTalk/Data/Repositories/ChatRoomListRepository.swift; sourceTree = SOURCE_ROOT; };
 		555A6B422924B9E4001336ED /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		555A6B472924BE65001336ED /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		556EE24D2925E6AD00EEA145 /* UserChatRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatRoomModel.swift; sourceTree = "<group>"; };
 		55F0908F2921E3E3008F5B9D /* ChatRoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListCell.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 				60FD70692924080A00A4C29A /* ChatMessage.swift */,
 				60FD706B2924081000A4C29A /* ChatRoom.swift */,
 				555A6B472924BE65001336ED /* UserProfile.swift */,
+				556EE24D2925E6AD00EEA145 /* UserChatRoomModel.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -1042,6 +1045,7 @@
 				83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
+				556EE24E2925E6AD00EEA145 /* UserChatRoomModel.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,

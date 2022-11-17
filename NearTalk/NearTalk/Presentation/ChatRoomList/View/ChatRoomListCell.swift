@@ -111,7 +111,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
             let cell = ChatRoomListCell(frame: .zero)
-            cell.configure(openData: OpenChatRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
+            cell.configure(openData: OpenChatRoomListData(data: ChatRoom( roomName: "Ronald Robertson", roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
         }.previewLayout(.fixed(width: 300, height: 80))
     }
