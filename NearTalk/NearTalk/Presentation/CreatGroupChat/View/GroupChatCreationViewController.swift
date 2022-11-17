@@ -8,12 +8,16 @@
 import PhotosUI
 import UIKit
 
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
 
-class CreateGroupChatViewController: UIViewController {
+final class CreateGroupChatViewController: UIViewController {
     
     // MARK: - Proporties
+    private let viewModel: CreateGroupChatViewModel
+    private let disposbag: DisposeBag = DisposeBag()
     
     private enum Matric {
         static let cornerRadius: CGFloat = 20.0
@@ -70,7 +74,7 @@ class CreateGroupChatViewController: UIViewController {
     
     private lazy var rangeZoneView: RangeZoneView = RangeZoneView()
     
-    private lazy var chatButton: UIButton = UIButton().then {
+    private lazy var createChatButton: UIButton = UIButton().then {
         $0.setTitle("채팅방 생성하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
@@ -79,20 +83,52 @@ class CreateGroupChatViewController: UIViewController {
     
     // MARK: - LifeCycle
     
+    init(viewModel: CreateGroupChatViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addSubviews()
         self.configureConstraints()
+        self.binding()
     }
 }
 
 private extension CreateGroupChatViewController {
+    func binding() {
+        let input = CreateGroupChatViewModel.Input(
+            titleTextFieldDidEditEvent: titleTextField.rx.controlEvent(.editingDidEnd).asObservable(),
+            descriptionTextFieldDidEditEvent: descriptionTextField.rx.controlEvent(.editingDidEnd).asObservable(),
+            maxNumOfParticipantsPickerSelected: maxNumOfParticipantsPicker.rx.itemSelected.map { $0.component },
+            maxRangeOfRadiusSliderEvent: rangeZoneView.rangeSlider.rx.controlEvent(.editingDidBegin).asObservable(),
+            maxRangeOfRadiusSliderSelected: rangeZoneView.rangeSlider.rx.value.map { $0.exponent },
+            createChatButtonDidTapEvent: self.createChatButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel.transform(input: input, disposbag: self.disposbag)
+        
+        // TODO: - output Binding
+        
+        output.maxRangeOfRadius
+            .asDriver()
+            .drive(onNext: { [weak self] radius in
+                self?.rangeZoneView.rangeLabel.text = "\(radius)km"
+            })
+            .disposed(by: disposbag)
+    }
+    
     func addSubviews() {
         [thumnailImageView, titleTextField, descriptionTextField, pickerLabel, maxNumOfParticipantsPicker, rangeZoneLabel, rangeZoneView].forEach {
             self.stackView.addArrangedSubview($0)
         }
         
-        [stackView, chatButton].forEach {
+        [stackView, createChatButton].forEach {
             self.view.addSubview($0)
         }
     }
@@ -159,7 +195,7 @@ private extension CreateGroupChatViewController {
     }
     
     func configureButtons() {
-        self.chatButton.snp.makeConstraints {
+        self.createChatButton.snp.makeConstraints {
             $0.height.equalTo(40)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
             $0.centerX.equalToSuperview()
@@ -207,12 +243,12 @@ extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataS
     }
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct GroupChatViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: GroupChatCreationViewController()) .showPreview(.iPhone14Pro)
-    }
-}
-#endif
+//#if canImport(SwiftUI) && DEBUG
+//import SwiftUI
+//
+//struct GroupChatViewControllerPreview: PreviewProvider {
+//    static var previews: some View {
+//        UINavigationController(rootViewController: GroupChatCreationViewController()) .showPreview(.iPhone14Pro)
+//    }
+//}
+//#endif
