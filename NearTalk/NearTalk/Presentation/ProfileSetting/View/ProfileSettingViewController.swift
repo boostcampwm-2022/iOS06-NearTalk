@@ -40,6 +40,7 @@ private extension ProfileSettingViewController {
         [profileImageView, nicknameField, messageField].forEach {
             view.addSubview($0)
         }
+        view.backgroundColor = .systemBackground
     }
     
     func configureNavigationBar() {
