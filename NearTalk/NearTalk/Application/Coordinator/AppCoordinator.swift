@@ -28,23 +28,22 @@ final class AppCoordinator: Coordinator {
         guard let navigationController else {
             return
         }
-//        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
-//        let childCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
-//            navigationController: navigationController,
-//            dependency: self
-//        )
-        let childCoordinator: MyProfileCoordinator = MyProfileCoordinator(navigationController: navigationController, parentCoordinator: self)
+        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
+        let childCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
+            navigationController: navigationController,
+            dependency: self
+        )
         self.childCoordinators.append(childCoordinator)
         childCoordinator.start()
     }
 }
 
-//extension AppCoordinator: LaunchScreenCoordinatorDependency {
-//    func showMainViewController() {
-//        print(#function)
-//    }
-//    
-//    func showLoginViewController() {
-//        print(#function)
-//    }
-//}
+extension AppCoordinator: LaunchScreenCoordinatorDependency {
+    func showMainViewController() {
+        print(#function)
+    }
+
+    func showLoginViewController() {
+        print(#function)
+    }
+}

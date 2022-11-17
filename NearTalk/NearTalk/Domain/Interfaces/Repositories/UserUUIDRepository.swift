@@ -8,5 +8,5 @@
 import Foundation
 
 protocol UserUUIDRepository {
-    func loadUUID() -> String
+    func fetch() -> String
 }

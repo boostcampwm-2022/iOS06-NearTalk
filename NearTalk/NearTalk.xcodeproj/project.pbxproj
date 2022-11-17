@@ -64,6 +64,8 @@
 		8330622B2924A3E2000E786E /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8330622A2924A3E2000E786E /* UserProfile.swift */; };
 		8330622D2924A3F1000E786E /* OnboardingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8330622C2924A3F1000E786E /* OnboardingUseCase.swift */; };
 		8330622F2924A402000E786E /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8330622E2924A402000E786E /* String+Regex.swift */; };
+		8349529E2925FEAE004C5B3B /* ImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8349529D2925FEAE004C5B3B /* ImageRepository.swift */; };
+		834952A02925FEF0004C5B3B /* DefaultImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8349529F2925FEF0004C5B3B /* DefaultImageRepository.swift */; };
 		8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8367AB632922AF6300678669 /* ProfileSettingViewController.swift */; };
 		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
 		839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D5BDC2922AD1000857FDD /* LoginViewController.swift */; };
@@ -167,6 +169,8 @@
 		8330622A2924A3E2000E786E /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		8330622C2924A3F1000E786E /* OnboardingUseCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingUseCase.swift; sourceTree = "<group>"; };
 		8330622E2924A402000E786E /* String+Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
+		8349529D2925FEAE004C5B3B /* ImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepository.swift; sourceTree = "<group>"; };
+		8349529F2925FEF0004C5B3B /* DefaultImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultImageRepository.swift; sourceTree = "<group>"; };
 		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		839D5BDC2922AD1000857FDD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -520,6 +524,7 @@
 				601273462921EF2C00E1456B /* DefaultLaunchScreenRepository.swift */,
 				83D354422925414F00B9236A /* DefaultUserProfileRepository.swift */,
 				83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */,
+				8349529F2925FEF0004C5B3B /* DefaultImageRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -600,6 +605,7 @@
 				83D354402925412400B9236A /* UserProfileRepository.swift */,
 				60FD705629238B8C00A4C29A /* LaunchScreenRepository.swift */,
 				83D354472925438C00B9236A /* UserUUIDRepository.swift */,
+				8349529D2925FEAE004C5B3B /* ImageRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1056,7 +1062,9 @@
 				1653057E291E19150026B815 /* ChattingRoomListViewController.swift in Sources */,
 				1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
+				8349529E2925FEAE004C5B3B /* ImageRepository.swift in Sources */,
 				60FD706029238DD400A4C29A /* FirebaseAuthService.swift in Sources */,
+				834952A02925FEF0004C5B3B /* DefaultImageRepository.swift in Sources */,
 				555A6B3329236D98001336ED /* FriendsListCoordinator.swift in Sources */,
 				601273472921EF2C00E1456B /* DefaultLaunchScreenRepository.swift in Sources */,
 				8330622B2924A3E2000E786E /* UserProfile.swift in Sources */,

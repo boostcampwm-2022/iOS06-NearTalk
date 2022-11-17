@@ -6,9 +6,9 @@
 //
 
 import Foundation
+import RxCocoa
 import RxRelay
 import RxSwift
-import RxCocoa
 
 protocol MyProfileViewActions {
     var showAppSettingView: () -> Void { get }
@@ -41,22 +41,26 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
     func transform(_ input: MyProfileInput) -> MyProfileOutput {
         let profileObservable: Observable<UserProfile> = input.refreshObservable
             .map { _ in
-                return self.profileLoadUseCase.loadProfile()
+                return self.profileLoadUseCase.fetchProfile()
             }
         return Output(
             nickNameOutput: profileObservable
-                .map {
-                    $0.nickName
+                .compactMap {
+                    $0.username
                 }
                 .asDriver(onErrorJustReturn: ""),
             messageOutput: profileObservable
-                .map {
-                    $0.message
+                .compactMap {
+                    $0.statusMessage
                 }
                 .asDriver(onErrorJustReturn: ""),
             imageOutput: profileObservable
+                .compactMap {
+                    $0.profileImagePath
+                }
                 .map {
-                    $0.image
+                    self.profileLoadUseCase
+                        .fetchImage(path: $0)
                 }
                 .asDriver(onErrorJustReturn: nil))
     }

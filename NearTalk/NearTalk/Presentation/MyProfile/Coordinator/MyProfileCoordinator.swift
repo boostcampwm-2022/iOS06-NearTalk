@@ -35,7 +35,8 @@ final class MyProfileCoordinator: Coordinator {
             viewModel: DefaultMyProfileViewModel(
                 profileLoadUseCase: DefaultMyProfileLoadUseCase(
                     profileRepository: DefaultUserProfileRepository(),
-                    uuidRepository: DefaultUserUUIDRepository())))
+                    uuidRepository: DefaultUserUUIDRepository(),
+                    imageRepository: DefaultImageRepository())))
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     

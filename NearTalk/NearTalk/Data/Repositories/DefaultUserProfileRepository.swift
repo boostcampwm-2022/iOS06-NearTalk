@@ -8,13 +8,15 @@
 import Foundation
 
 final class DefaultUserProfileRepository: UserProfileRepository {
-    func save(_ profile: UserProfile) {
-        #if DEBUG
-        print(profile)
-        #endif
+    func save(_ profile: UserProfile) -> Bool {
+        return true
     }
     
-    func load(uuid: String) -> UserProfile {
-        return UserProfile(nickName: "JK", message: "code squard ceo", image: nil)
+    func create(userID: String, username: String, statusMessage: String, profileImage: Data?) -> Bool {
+        return true
+    }
+    
+    func fetch(uuid: String) -> UserProfile {
+        return UserProfile(userID: uuid, username: "sample", statusMessage: "sample message", profileImagePath: nil, friends: nil)
     }
 }

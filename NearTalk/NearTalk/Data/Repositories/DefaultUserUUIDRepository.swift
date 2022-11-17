@@ -8,7 +8,7 @@
 import Foundation
 
 final class DefaultUserUUIDRepository: UserUUIDRepository {
-    func loadUUID() -> String {
+    func fetch() -> String {
         return UUID().uuidString
     }
 }

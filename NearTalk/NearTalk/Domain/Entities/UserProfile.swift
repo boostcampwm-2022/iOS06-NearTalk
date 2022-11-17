@@ -7,8 +7,13 @@
 
 import Foundation
 
-struct UserProfile {
-    let nickName: String
-    let message: String
-    let image: Data?
+struct UserProfile: Codable {
+    /// 유저 UUID
+    var userID: String?
+    var username: String?
+    var statusMessage: String?
+    var profileImagePath: String?
+
+    /// 친구 UUID 목록
+    var friends: [String]?
 }

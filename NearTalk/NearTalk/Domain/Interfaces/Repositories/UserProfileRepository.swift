@@ -8,6 +8,9 @@
 import Foundation
 
 protocol UserProfileRepository {
-    func save(_ profile: UserProfile)
-    func load(uuid: String) -> UserProfile
+    @discardableResult
+    func save(_ profile: UserProfile) -> Bool
+    func fetch(uuid: String) -> UserProfile
+    @discardableResult
+    func create(userID: String, username: String, statusMessage: String, profileImage: Data?) -> Bool
 }

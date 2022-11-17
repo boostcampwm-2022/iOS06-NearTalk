@@ -19,20 +19,37 @@ final class DefaultOnboardingDIContainer {
         return DefaultOnboardingValidateUseCase()
     }
     
-    private func makeOnboardingSaveProfileUseCase(repository: any UserProfileRepository) -> OnboardingSaveProfileUseCase {
-        return DefaultOnboardingSaveProfileUseCase(repository: repository)
+    private func makeOnboardingSaveProfileUseCase(
+        profileRepository: any UserProfileRepository,
+        uuidRepository: any UserUUIDRepository,
+        imageRepository: any ImageRepository) -> OnboardingSaveProfileUseCase {
+        return DefaultOnboardingSaveProfileUseCase(
+            profileRepository: profileRepository,
+            uuidRepository: uuidRepository,
+            imageRepository: imageRepository)
     }
     
     // MARK: - Repositories
-    private func makeRepository() -> any UserProfileRepository {
+    private func makeProfileRepository() -> any UserProfileRepository {
         return DefaultUserProfileRepository()
+    }
+    
+    private func makeUserUUIDRepository() -> any UserUUIDRepository {
+        return DefaultUserUUIDRepository()
+    }
+    
+    private func makeImageRepository() -> any ImageRepository {
+        return DefaultImageRepository()
     }
     
     // MARK: - ViewModels
     func makeViewModel() -> any OnboardingViewModel {
         return DefaultOnboardingViewModel(
             validateUseCase: makeOnboardingValidateUseCase(),
-            saveProfileUseCase: makeOnboardingSaveProfileUseCase(repository: makeRepository()))
+            saveProfileUseCase: makeOnboardingSaveProfileUseCase(
+                profileRepository: self.makeProfileRepository(),
+                uuidRepository: self.makeUserUUIDRepository(),
+                imageRepository: self.makeImageRepository()))
     }
     
     // MARK: - Create viewController
