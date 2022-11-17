@@ -110,7 +110,7 @@ private extension CreateGroupChatViewController {
             createChatButtonDidTapEvent: self.createChatButton.rx.tap.asObservable()
         )
         
-        let output = viewModel.transform(input: input, disposbag: self.disposbag)
+        let output = viewModel.transform(input: input, disposeBag: self.disposbag)
         
         // TODO: - output Binding
         

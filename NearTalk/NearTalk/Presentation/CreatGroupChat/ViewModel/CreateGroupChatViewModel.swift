@@ -19,13 +19,6 @@ protocol CreateGroupChatCoordinatable: Coordinator {
     func showChatViewController()
 }
 
-protocol ViewModelable {
-    associatedtype Input
-    associatedtype Output
-    
-    func transform(input: Input, disposbag: DisposeBag) -> Output
-}
-
 final class CreateGroupChatViewModel {
     // MARK: - Proporties
     
@@ -53,19 +46,19 @@ extension CreateGroupChatViewModel: ViewModelable {
         var createChatButtonIsEnable = BehaviorRelay<Bool>(value: false)
     }
     
-    func transform(input: Input, disposbag: DisposeBag) -> Output {
+    func transform(input: Input, disposeBag: DisposeBag) -> Output {
         var output = Output()
         
         input.maxRangeOfRadiusSliderSelected
             .map({ "\(Int($0))km" })
             .bind(to: output.maxRangeOfRadius)
-            .disposed(by: disposbag)
+            .disposed(by: disposeBag)
         
         input.createChatButtonDidTapEvent
             .subscribe { [weak self] _ in
                 self?.coordinator.showChatViewController()
             }
-            .disposed(by: disposbag)
+            .disposed(by: disposeBag)
     
         return output
     }
