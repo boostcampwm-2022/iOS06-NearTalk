@@ -13,19 +13,7 @@ struct UserProfile: Codable {
     var username: String?
     var statusMessage: String?
     var profileImagePath: String?
-    
+
     /// 친구 UUID 목록
     var friends: [String]?
-}
-    
-protocol UserProfileRepository {
-    func save(_ profile: UserProfile)
-}
-
-final class DefaultUserProfileRepository: UserProfileRepository {
-    func save(_ profile: UserProfile) {
-        #if DEBUG
-        print(profile)
-        #endif
-    }
 }
