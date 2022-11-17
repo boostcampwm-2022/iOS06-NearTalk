@@ -12,16 +12,26 @@ import Then
 
 final class RangeZoneView: UIView {
     
+    // MARK: - Proporties
+    
+    var range: String? {
+        didSet {
+            self.rangeLabel.text = range
+        }
+    }
+    
     // MARK: - UI Proporties
     
     private lazy var rangeLabel = UILabel().then {
         $0.text = "1km"
     }
     
-    private lazy var rangeSlider = UISlider().then {
-        $0.maximumValue = 10
-        $0.minimumValue = 1
-        $0.value = 1
+    let rangeSlider: UISlider = UISlider().then { slider in
+        slider.minimumValue = 1.0
+        slider.maximumValue = 10.0
+        slider.value = 1.0
+        slider.isContinuous = true
+        slider.tintColor = .systemOrange
     }
     
     private lazy var minRangeLabel = UILabel().then {
