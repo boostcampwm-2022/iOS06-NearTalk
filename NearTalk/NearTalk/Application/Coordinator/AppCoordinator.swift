@@ -24,15 +24,23 @@ final class AppCoordinator: Coordinator {
         self.navigationController = navigationController
     }
 
+//    func start() {
+//        guard let navigationController else {
+//            return
+//        }
+//        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
+//        let childCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
+//            navigationController: navigationController,
+//            dependency: self
+//        )
+//        self.childCoordinators.append(childCoordinator)
+//        childCoordinator.start()
+//    }
+    
     func start() {
-        guard let navigationController else {
-            return
-        }
-        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
-        let childCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
-            navigationController: navigationController,
-            dependency: self
-        )
+        let rootTabBarDIContainer: RootTabBarDIContainer = .init()
+        let childCoordinator: RootTabBarCoordinator = rootTabBarDIContainer.makeTabBarCoordinator()
+        childCoordinator.navigationController = self.navigationController
         self.childCoordinators.append(childCoordinator)
         childCoordinator.start()
     }
