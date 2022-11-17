@@ -25,9 +25,26 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-//        let childCoordinator = TmpCoordinator()
-//        childCoordinator.parentCoordinator = self
-//        self.childCoordinators.append(childCoordinator)
-//        childCoordinator.start()
+        guard let navigationController else {
+            return
+        }
+        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
+        let childCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
+            navigationController: navigationController,
+            dependency: self
+        )
+        childCoordinator.parentCoordinator = self
+        self.childCoordinators.append(childCoordinator)
+        childCoordinator.start()
+    }
+}
+
+extension AppCoordinator: LaunchScreenCoordinatorDependency {
+    func showMainViewController() {
+        print(#function)
+    }
+    
+    func showLoginViewController() {
+        print(#function)
     }
 }

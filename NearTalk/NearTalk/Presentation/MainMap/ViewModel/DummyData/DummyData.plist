@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>chatRoomAnnotations</key>
+	<array>
+		<dict>
+			<key>roomType</key>
+			<integer>0</integer>
+			<key>latitude</key>
+			<real>37.3695</real>
+			<key>longitude</key>
+			<real>127.1155</real>
+		</dict>
+		<dict>
+			<key>roomType</key>
+			<integer>0</integer>
+			<key>latitude</key>
+			<real>37.35985</real>
+			<key>longitude</key>
+			<real>127.10725</real>
+		</dict>
+		<dict>
+			<key>roomType</key>
+			<integer>0</integer>
+			<key>latitude</key>
+			<real>37.35955</real>
+			<key>longitude</key>
+			<real>127.10595</real>
+		</dict>
+		<dict>
+			<key>roomType</key>
+			<integer>1</integer>
+			<key>latitude</key>
+			<real>37.35995</real>
+			<key>longitude</key>
+			<real>127.1065</real>
+		</dict>
+		<dict>
+			<key>roomType</key>
+			<integer>1</integer>
+			<key>latitude</key>
+			<real>37.35915</real>
+			<key>longitude</key>
+			<real>127.10615</real>
+		</dict>
+	</array>
+	<key>centerLatitude</key>
+	<real>37.3589</real>
+	<key>centerLongitude</key>
+	<real>127.1051</real>
+	<key>latitudeDelta</key>
+	<real>0.0001</real>
+	<key>longitudeDelta</key>
+	<real>0.0002</real>
+</dict>
+</plist>
