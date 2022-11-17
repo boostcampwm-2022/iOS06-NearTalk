@@ -30,6 +30,9 @@ type_name:
 
 identifier_name:
   min_length: 2
+  
+file_length:
+  warning: 500
 
 # 보고 유형 (xcode, json, csv, codeclimate, checkstyle, junit, html, emoji, sonarqube, markdown, github-actions-logging)
 reporter: "xcode"
