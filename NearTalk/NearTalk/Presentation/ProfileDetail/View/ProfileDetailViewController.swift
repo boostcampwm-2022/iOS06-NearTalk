@@ -7,9 +7,15 @@
 
 import UIKit
 
+import RxCocoa
+import RxSwift
+
 class ProfileDetailViewController: UIViewController {
     
     // MARK: - Proporties
+    
+    private let viewModel: ProfileDetailViewModel?
+    private let disposeBag: DisposeBag = DisposeBag()
     
     private enum Matric {
         static let nameLabelFontSize: CGFloat = 24.0
@@ -51,14 +57,14 @@ class ProfileDetailViewController: UIViewController {
         $0.text = "상태메세지"
     }
     
-    private lazy var chatButton: UIButton  = UIButton().then {
+    private lazy var startChatButton: UIButton  = UIButton().then {
         $0.setTitle("채팅 하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
     }
     
-    private lazy var deleteButton: UIButton = UIButton().then {
+    private lazy var deleteFriendButton: UIButton = UIButton().then {
         $0.setTitle("친구 삭제하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
@@ -67,6 +73,15 @@ class ProfileDetailViewController: UIViewController {
     
     // MARK: - LifeCycle
     
+    init(viewModel: ProfileDetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -74,6 +89,8 @@ class ProfileDetailViewController: UIViewController {
         self.configureStackViews()
         self.configureImageView()
         self.configureButtons()
+        
+        self.binding()
     }
 }
 
@@ -83,7 +100,7 @@ private extension ProfileDetailViewController {
             self.profileStackView.addArrangedSubview($0)
         }
         
-        [chatButton, deleteButton].forEach {
+        [startChatButton, deleteFriendButton].forEach {
             self.buttonStackView.addArrangedSubview($0)
         }
         
@@ -111,13 +128,29 @@ private extension ProfileDetailViewController {
     }
     
     func configureButtons() {
-        self.chatButton.snp.makeConstraints {
+        self.startChatButton.snp.makeConstraints {
             $0.height.equalTo(Matric.buttonHeight)
         }
         
-        self.deleteButton.snp.makeConstraints {
+        self.deleteFriendButton.snp.makeConstraints {
             $0.height.equalTo(Matric.buttonHeight)
         }
+    }
+    
+    func binding() {
+        let input = ProfileDetailViewModel.Input(
+            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
+            startChatButtonDidTapEvent: self.startChatButton.rx.tap.asObservable(),
+            deleteFriendButtonDidTapEvent: self.deleteFriendButton.rx.tap.asObservable()
+        )
+        
+        let output = viewModel?.transform(
+            input: input,
+            disposeBag: self.disposeBag
+        )
+        
+        self.nameLabel.text = output?.username
+        self.stateLabel.text = output?.statusMessage
     }
 }
 
