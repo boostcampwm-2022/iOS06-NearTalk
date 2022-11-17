@@ -66,7 +66,10 @@
 		60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD70612923927C00A4C29A /* NonceGenerator.swift */; };
 		60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD70692924080A00A4C29A /* ChatMessage.swift */; };
 		60FD706C2924081000A4C29A /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD706B2924081000A4C29A /* ChatRoom.swift */; };
-
+		6DE03F1B0276551D74A1973F /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 669BC2CE3140A6018985A85C /* Pods_NearTalk.framework */; };
+		7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */; };
+		7CE8063B2925312100D828FF /* ProfileDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */; };
+		7CE8063D29253A3800D828FF /* ProfileDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */; };
 		60FD706E292478AA00A4C29A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60FD706D292478AA00A4C29A /* GoogleService-Info.plist */; };
 		7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */; };
 		7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */; };
@@ -96,9 +99,8 @@
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
-		B9525B8D9DE33F100C07D7DB /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54A11B9541C7EC85AFC89F5B /* Pods_NearTalk.framework */; };
-		C43CD29D63FEEB6C518AA259 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29F8AD6D74327BEAEF2D1152 /* Pods_NearTalk_NearTalkUITests.framework */; };
-		D0B0E6D5C6FF81EB8A0CD29E /* Pods_NearTalkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B752D970385CF87698C2C44D /* Pods_NearTalkTests.framework */; };
+		85F00C7806E9A2F717CE9E0C /* Pods_NearTalkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EABB1BB2FF82C0A36F4FF34E /* Pods_NearTalkTests.framework */; };
+		AFF87665A842E1F4C692D215 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45AAD1676FFD00A1CAF12FF4 /* Pods_NearTalk_NearTalkUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +121,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0F509BDD7E7AA65EB29A6290 /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
 		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
 		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -150,9 +153,9 @@
 		1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		258D93481B53C391D3868B92 /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
-		29F8AD6D74327BEAEF2D1152 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		54A11B9541C7EC85AFC89F5B /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2658E94CB865AC324D0B1766 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
+		45AAD1676FFD00A1CAF12FF4 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		469CC9126B9437399CE72A1E /* Pods-NearTalkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		555A6B2A29236D51001336ED /* FriendsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListCell.swift; sourceTree = "<group>"; };
 		555A6B2C29236D61001336ED /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		555A6B2E29236D73001336ED /* FriendsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListViewModel.swift; sourceTree = "<group>"; };
@@ -185,6 +188,11 @@
 		60FD70612923927C00A4C29A /* NonceGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonceGenerator.swift; sourceTree = "<group>"; };
 		60FD70692924080A00A4C29A /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		60FD706B2924081000A4C29A /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
+		669BC2CE3140A6018985A85C /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C6684AA2924BAA300A5E10A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
+		7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailUseCase.swift; sourceTree = "<group>"; };
+		7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailCoordinator.swift; sourceTree = "<group>"; };
 		71443E2256202E270AEB57D7 /* Pods-NearTalkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7CFC7D69292370DB00A249E7 /* GroupChatCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatCreationViewController.swift; sourceTree = "<group>"; };
 		7CFC7D6B2923710200A249E7 /* RangeZoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RangeZoneView.swift; sourceTree = "<group>"; };
@@ -211,11 +219,10 @@
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
-		85BD57F5257CCAFCCB7EFC56 /* Pods-NearTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.release.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.release.xcconfig"; sourceTree = "<group>"; };
-		B4B892AE1A70FC9CC5C60358 /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
-		B752D970385CF87698C2C44D /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D1B1D3A12187AE8583E09403 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		D7E43F02595768A6829FBAC1 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
+		8912BE3F757AE5876136CB3D /* Pods-NearTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.release.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.release.xcconfig"; sourceTree = "<group>"; };
+		8D5BFA99BD4D9322EE444709 /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
+		B05F47B5C6F1EF0A8AC12A3E /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		EABB1BB2FF82C0A36F4FF34E /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,7 +230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9525B8D9DE33F100C07D7DB /* Pods_NearTalk.framework in Frameworks */,
+				6DE03F1B0276551D74A1973F /* Pods_NearTalk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D0B0E6D5C6FF81EB8A0CD29E /* Pods_NearTalkTests.framework in Frameworks */,
+				85F00C7806E9A2F717CE9E0C /* Pods_NearTalkTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,23 +246,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C43CD29D63FEEB6C518AA259 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */,
+				AFF87665A842E1F4C692D215 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00FA1673AE80BB041D336B73 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				54A11B9541C7EC85AFC89F5B /* Pods_NearTalk.framework */,
-				29F8AD6D74327BEAEF2D1152 /* Pods_NearTalk_NearTalkUITests.framework */,
-				B752D970385CF87698C2C44D /* Pods_NearTalkTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		1648BA922921D7240076AC35 /* MainMap */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,13 +369,6 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
-		1653058A291E1A660026B815 /* MessageCell */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = MessageCell;
-			sourceTree = "<group>";
-		};
 		1660D21B291DDB37005F7B24 = {
 			isa = PBXGroup;
 			children = (
@@ -466,6 +456,7 @@
 				83E7BBC32922AFED007C390A /* AppSetting */,
 				8367AB612922AF6300678669 /* ProfileSetting */,
 				839D5BDA2922AD1000857FDD /* Login */,
+				16530579291E189D0026B815 /* ChattingRoomList */,
 				1653058A291E1A660026B815 /* MessageCell */,
 				16530579291E189D0026B815 /* ChatRoomList */,
 				6012733B2921D2E400E1456B /* LaucnScreen */,
@@ -560,6 +551,7 @@
 				555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */,
 				8330622C2924A3F1000E786E /* OnboardingUseCase.swift */,
 				6012734829221F4800E1456B /* LaunchScreenUseCase.swift */,
+				7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */,
 				83D3543E29253A5C00B9236A /* MyProfileLoadUseCase.swift */,
 			);
 			path = UseCases;
@@ -689,6 +681,22 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
+		7C6684AC2924BC7E00A5E10A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		7C6684AF2924C00A00A5E10A /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		7CFC7D672923709C00A249E7 /* GroupChatCreation */ = {
 			isa = PBXGroup;
 			children = (
@@ -709,6 +717,8 @@
 		7CFC7D6D2923748E00A249E7 /* ProfileDetail */ = {
 			isa = PBXGroup;
 			children = (
+				7C6684AF2924C00A00A5E10A /* Coordinator */,
+				7C6684AC2924BC7E00A5E10A /* ViewModel */,
 				7CFC7D6E2923749C00A249E7 /* View */,
 			);
 			path = ProfileDetail;
@@ -839,15 +849,25 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		99F52190ADDD18EB3686D3A2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				669BC2CE3140A6018985A85C /* Pods_NearTalk.framework */,
+				45AAD1676FFD00A1CAF12FF4 /* Pods_NearTalk_NearTalkUITests.framework */,
+				EABB1BB2FF82C0A36F4FF34E /* Pods_NearTalkTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EF9BC89A864970D54CE8E69D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B4B892AE1A70FC9CC5C60358 /* Pods-NearTalk.debug.xcconfig */,
-				85BD57F5257CCAFCCB7EFC56 /* Pods-NearTalk.release.xcconfig */,
-				D1B1D3A12187AE8583E09403 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */,
-				D7E43F02595768A6829FBAC1 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */,
-				71443E2256202E270AEB57D7 /* Pods-NearTalkTests.debug.xcconfig */,
-				258D93481B53C391D3868B92 /* Pods-NearTalkTests.release.xcconfig */,
+				0F509BDD7E7AA65EB29A6290 /* Pods-NearTalk.debug.xcconfig */,
+				8912BE3F757AE5876136CB3D /* Pods-NearTalk.release.xcconfig */,
+				B05F47B5C6F1EF0A8AC12A3E /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */,
+				2658E94CB865AC324D0B1766 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */,
+				469CC9126B9437399CE72A1E /* Pods-NearTalkTests.debug.xcconfig */,
+				8D5BFA99BD4D9322EE444709 /* Pods-NearTalkTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -859,12 +879,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */;
 			buildPhases = (
-				36951B444002FE644665335F /* [CP] Check Pods Manifest.lock */,
+				33643A181065F589D06117A6 /* [CP] Check Pods Manifest.lock */,
 				1660D270291DEE01005F7B24 /* SwiftLint Script */,
 				1660D220291DDB37005F7B24 /* Sources */,
 				1660D221291DDB37005F7B24 /* Frameworks */,
 				1660D222291DDB37005F7B24 /* Resources */,
-				A2E0F8F16F88F8AA281677DD /* [CP] Embed Pods Frameworks */,
+				5C2F184F6A75CAD54CA19F53 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -879,7 +899,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D254291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkTests" */;
 			buildPhases = (
-				31D273E3AE4EC07CB37DE7E0 /* [CP] Check Pods Manifest.lock */,
+				FF91209ABE8108C778B6333C /* [CP] Check Pods Manifest.lock */,
 				1660D239291DDB3A005F7B24 /* Sources */,
 				1660D23A291DDB3A005F7B24 /* Frameworks */,
 				1660D23B291DDB3A005F7B24 /* Resources */,
@@ -898,11 +918,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D257291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkUITests" */;
 			buildPhases = (
-				D9F8CAA073DA4B4D35EA16F2 /* [CP] Check Pods Manifest.lock */,
+				9F822D725DDA0E701A277171 /* [CP] Check Pods Manifest.lock */,
 				1660D243291DDB3A005F7B24 /* Sources */,
 				1660D244291DDB3A005F7B24 /* Frameworks */,
 				1660D245291DDB3A005F7B24 /* Resources */,
-				E4D680950B9D0A909BDF538A /* [CP] Embed Pods Frameworks */,
+				F9C284C85DD47A3DA0B762CE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1006,29 +1026,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		31D273E3AE4EC07CB37DE7E0 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NearTalkTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		36951B444002FE644665335F /* [CP] Check Pods Manifest.lock */ = {
+		33643A181065F589D06117A6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1050,7 +1048,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A2E0F8F16F88F8AA281677DD /* [CP] Embed Pods Frameworks */ = {
+		5C2F184F6A75CAD54CA19F53 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1067,7 +1065,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D9F8CAA073DA4B4D35EA16F2 /* [CP] Check Pods Manifest.lock */ = {
+		9F822D725DDA0E701A277171 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1089,7 +1087,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E4D680950B9D0A909BDF538A /* [CP] Embed Pods Frameworks */ = {
+		F9C284C85DD47A3DA0B762CE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1104,6 +1102,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF91209ABE8108C778B6333C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NearTalkTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1168,8 +1188,11 @@
 				83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */,
 				6008FC9F2925DBE30044F017 /* UserChatRoomModel.swift in Sources */,
 				1648BAAF292387020076AC35 /* GroupChatRoomAnnotationView.swift in Sources */,
+				7CE8063D29253A3800D828FF /* ProfileDetailCoordinator.swift in Sources */,
+				7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */,
 				60FD705E29238CBB00A4C29A /* FireStoreService.swift in Sources */,
 				16530574291E17A50026B815 /* DeviceType.swift in Sources */,
+				7CE8063B2925312100D828FF /* ProfileDetailUseCase.swift in Sources */,
 				60FD705729238B8C00A4C29A /* LaunchScreenRepository.swift in Sources */,
 				1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */,
 				16530580291E19250026B815 /* ChatRoomListViewModel.swift in Sources */,
@@ -1351,7 +1374,7 @@
 		};
 		1660D252291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4B892AE1A70FC9CC5C60358 /* Pods-NearTalk.debug.xcconfig */;
+			baseConfigurationReference = 0F509BDD7E7AA65EB29A6290 /* Pods-NearTalk.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1383,7 +1406,7 @@
 		};
 		1660D253291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 85BD57F5257CCAFCCB7EFC56 /* Pods-NearTalk.release.xcconfig */;
+			baseConfigurationReference = 8912BE3F757AE5876136CB3D /* Pods-NearTalk.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1415,7 +1438,7 @@
 		};
 		1660D255291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 71443E2256202E270AEB57D7 /* Pods-NearTalkTests.debug.xcconfig */;
+			baseConfigurationReference = 469CC9126B9437399CE72A1E /* Pods-NearTalkTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1435,7 +1458,7 @@
 		};
 		1660D256291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 258D93481B53C391D3868B92 /* Pods-NearTalkTests.release.xcconfig */;
+			baseConfigurationReference = 8D5BFA99BD4D9322EE444709 /* Pods-NearTalkTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1455,7 +1478,7 @@
 		};
 		1660D258291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1B1D3A12187AE8583E09403 /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */;
+			baseConfigurationReference = B05F47B5C6F1EF0A8AC12A3E /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1473,7 +1496,7 @@
 		};
 		1660D259291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D7E43F02595768A6829FBAC1 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */;
+			baseConfigurationReference = 2658E94CB865AC324D0B1766 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
