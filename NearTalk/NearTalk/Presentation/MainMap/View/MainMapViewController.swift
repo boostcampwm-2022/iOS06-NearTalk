@@ -221,12 +221,6 @@ extension MainMapViewController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print(view, type(of: view))
-        
-        if let tmp = view as? _MKUserLocationView {
-            print(0, tmp)
-        }
-        
         let bottomSheetViewController = BottomSheetViewController()
         
         present(bottomSheetViewController, animated: true, completion: nil)
