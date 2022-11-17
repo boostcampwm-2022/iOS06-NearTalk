@@ -6,48 +6,71 @@
 //
 
 import RxCocoa
+import RxGesture
+import RxSwift
 import SnapKit
 import Then
 import UIKit
 
 final class ProfileSettingViewController: UIViewController {
-    private let profileImageView = UIImageView().then {
+    // MARK: - UI properties
+    private let profileImageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
     }
 
-    private let nicknameField = UITextField().then {
+    private let nicknameField: UITextField = UITextField().then {
         $0.placeholder = "닉네임"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let messageField = UITextField().then {
+    private let messageField: UITextField = UITextField().then {
         $0.placeholder = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
+    
+    // MARK: - Properties
+    private weak var coordinator: MyProfileCoordinator?
+    private let disposeBag: DisposeBag = DisposeBag()
 
+    // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
-        configureConstraint()
+        self.addSubViews()
+        self.configureNavigationBar()
+        self.configureView()
+        self.configureConstraint()
+        self.bindToProfileImage()
+    }
+    
+    init(coordinator: MyProfileCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
+// MARK: - Helpers
 private extension ProfileSettingViewController {
-    func configureUI() {
-        configureNavigationBar()
+    func addSubViews() {
         [profileImageView, nicknameField, messageField].forEach {
             view.addSubview($0)
         }
     }
+    func configureView() {
+        self.view.backgroundColor = .systemBackground
+    }
     
     func configureNavigationBar() {
-        navigationController?.navigationBar.backgroundColor = .systemGray5
-        navigationController?.navigationBar.isTranslucent = false
-        navigationItem.title = "프로필 설정"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
+        self.navigationController?.navigationBar.backgroundColor = .systemGray5
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationItem.title = "프로필 설정"
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
     }
     
     func configureConstraint() {
@@ -66,16 +89,16 @@ private extension ProfileSettingViewController {
             make.top.equalTo(nicknameField.snp.bottom).offset(10)
         }
     }
-}
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-// swiftlint:disable: type_name
-struct ProfileSettingViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: ProfileSettingViewController()).showPreview(.iPhone14Pro)
-        UINavigationController(rootViewController: ProfileSettingViewController()).showPreview(.iPhoneSE3)
+    
+    func bindToProfileImage() {
+        self.profileImageView.rx
+            .tapGesture()
+            .asObservable()
+            .bind(onNext: { gesture in
+                if gesture.state == .ended {
+                    self.coordinator?.showPHPickerViewController(self.profileImageView.rx.image)
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
-#endif

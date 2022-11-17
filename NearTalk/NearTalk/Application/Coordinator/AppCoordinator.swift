@@ -33,7 +33,6 @@ final class AppCoordinator: Coordinator {
             navigationController: navigationController,
             dependency: self
         )
-        childCoordinator.parentCoordinator = self
         self.childCoordinators.append(childCoordinator)
         childCoordinator.start()
     }
@@ -43,7 +42,7 @@ extension AppCoordinator: LaunchScreenCoordinatorDependency {
     func showMainViewController() {
         print(#function)
     }
-    
+
     func showLoginViewController() {
         print(#function)
     }
