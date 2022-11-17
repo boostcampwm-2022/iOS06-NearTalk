@@ -17,6 +17,7 @@ final class ChatRoomListViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(ChatRoomListCell.self, forCellReuseIdentifier: ChatRoomListCell.identifier)
     }
+    
     // MARK: - Properties
     private var openDataSource: UITableViewDiffableDataSource<Int, OpenChatRoomListData>?
     private var dmDataSource: UITableViewDiffableDataSource<Int, DMChatRoomListData>?
@@ -31,7 +32,7 @@ final class ChatRoomListViewController: UIViewController {
         view.viewModel = viewModel
         return view
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -71,19 +72,14 @@ final class ChatRoomListViewController: UIViewController {
     
     private func configureDatasource() {
         
-        self.openDataSource = UITableViewDiffableDataSource<Int, OpenChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
-            
+        openDataSource = UITableViewDiffableDataSource<Int, OpenChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomListCell.identifier, for: indexPath) as? ChatRoomListCell
-            else {
-                print("살려주세요")
-                return UITableViewCell()
-            }
-            print(model)
+            else { return UITableViewCell() }
             cell.configure(openData: model)
             return cell
         })
         
-        self.dmDataSource = UITableViewDiffableDataSource<Int, DMChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
+        dmDataSource = UITableViewDiffableDataSource<Int, DMChatRoomListData>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRoomListCell.identifier, for: indexPath) as? ChatRoomListCell
             else { return UITableViewCell() }
             cell.configure(dmData: model)
@@ -94,12 +90,14 @@ final class ChatRoomListViewController: UIViewController {
     // MARK: - bind
     private func bind() {
         self.viewModel.openChatRoomData
+            .observe(on: MainScheduler.asyncInstance)
             .subscribe(onNext: { model in
                 var snapshot = NSDiffableDataSourceSnapshot<Int, OpenChatRoomListData>()
                 snapshot.appendSections([0])
                 snapshot.appendItems(model)
-                print(model)
-                self.openDataSource?.apply(snapshot)
+                
+                self.openDataSource?.apply(snapshot, animatingDifferences: true)
+                
             })
             .disposed(by: disposeBag)
     }
