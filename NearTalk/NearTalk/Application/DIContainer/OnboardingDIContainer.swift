@@ -19,8 +19,8 @@ final class DefaultOnboardingDIContainer {
         return DefaultOnboardingValidateUseCase()
     }
     
-    private func makeOnboardingSaveProfileUseCase(respository: any UserProfileRepository) -> OnboardingSaveProfileUseCase {
-        return DefaultOnboardingSaveProfileUseCase(repository: respository)
+    private func makeOnboardingSaveProfileUseCase(repository: any UserProfileRepository) -> OnboardingSaveProfileUseCase {
+        return DefaultOnboardingSaveProfileUseCase(repository: repository)
     }
     
     // MARK: - Repositories
@@ -32,7 +32,7 @@ final class DefaultOnboardingDIContainer {
     func makeViewModel() -> any OnboardingViewModel {
         return DefaultOnboardingViewModel(
             validateUseCase: makeOnboardingValidateUseCase(),
-            saveProfileUseCase: makeOnboardingSaveProfileUseCase(respository: makeRepository()))
+            saveProfileUseCase: makeOnboardingSaveProfileUseCase(repository: makeRepository()))
     }
     
     // MARK: - Create viewController
