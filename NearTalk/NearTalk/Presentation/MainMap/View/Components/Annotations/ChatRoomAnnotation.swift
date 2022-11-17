@@ -8,7 +8,7 @@
 import MapKit
 
 final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
-    enum RoomType: Int, Decodable {
+    enum RoomType: Int, Decodable, CaseIterable {
         case group
         case directMessage
     }

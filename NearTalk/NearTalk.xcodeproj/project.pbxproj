@@ -15,6 +15,8 @@
 		1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */; };
 		1648BAB3292389920076AC35 /* ChatRoomClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */; };
 		1648BAB6292391940076AC35 /* DummyData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1648BAB5292391940076AC35 /* DummyData.plist */; };
+		1648BABC2925CDDE0076AC35 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */; };
+		1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */; };
 		16530574291E17A50026B815 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530573291E17A40026B815 /* DeviceType.swift */; };
 		16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530575291E17F70026B815 /* UIViewController+Preview.swift */; };
 		16530578291E18560026B815 /* UIViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530577291E18560026B815 /* UIViewPreview.swift */; };
@@ -114,6 +116,8 @@
 		1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DmChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomClusterAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB5292391940076AC35 /* DummyData.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DummyData.plist; sourceTree = "<group>"; };
+		1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTableViewCell.swift; sourceTree = "<group>"; };
 		16530573291E17A40026B815 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		16530575291E17F70026B815 /* UIViewController+Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Preview.swift"; sourceTree = "<group>"; };
 		16530577291E18560026B815 /* UIViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewPreview.swift; sourceTree = "<group>"; };
@@ -274,10 +278,8 @@
 		1648BAA5292379890076AC35 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				1648BAAC292385CD0076AC35 /* ChatRoomAnnotation.swift */,
-				1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */,
-				1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */,
-				1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */,
+				1648BAB92925CD8C0076AC35 /* Annotations */,
+				1648BABA2925CD9F0076AC35 /* BottomSheet */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -288,6 +290,34 @@
 				1648BAB5292391940076AC35 /* DummyData.plist */,
 			);
 			path = DummyData;
+			sourceTree = "<group>";
+		};
+		1648BAB92925CD8C0076AC35 /* Annotations */ = {
+			isa = PBXGroup;
+			children = (
+				1648BAAC292385CD0076AC35 /* ChatRoomAnnotation.swift */,
+				1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */,
+				1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */,
+				1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */,
+			);
+			path = Annotations;
+			sourceTree = "<group>";
+		};
+		1648BABA2925CD9F0076AC35 /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				1648BAC3292624DF0076AC35 /* BottomSheetTableViewCell */,
+				1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */,
+			);
+			path = BottomSheet;
+			sourceTree = "<group>";
+		};
+		1648BAC3292624DF0076AC35 /* BottomSheetTableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */,
+			);
+			path = BottomSheetTableViewCell;
 			sourceTree = "<group>";
 		};
 		16530579291E189D0026B815 /* ChattingRoomList */ = {
@@ -1081,6 +1111,7 @@
 				83D35446292541B500B9236A /* MyProfileViewModel.swift in Sources */,
 				557F0A3D292364D400D24A38 /* OpenChattingRoomListModel.swift in Sources */,
 				605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */,
+				1648BABC2925CDDE0076AC35 /* BottomSheetViewController.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */,
 				6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */,
@@ -1102,6 +1133,7 @@
 				555A6B3129236D86001336ED /* FriendsListModel.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
+				1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */,
 				8330622F2924A402000E786E /* String+Regex.swift in Sources */,
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
 				833062262924A3BF000E786E /* OnboardingCoordinator.swift in Sources */,
