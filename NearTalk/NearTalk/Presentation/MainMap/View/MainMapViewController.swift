@@ -22,27 +22,27 @@ final class MainMapViewController: UIViewController {
     // private let naverLocation = CLLocation(latitude: 37.3589, longitude: 127.1051)
     
     // MARK: - UI Components
-    private var mapView = MKMapView().then {
+    private lazy var mapView = MKMapView().then {
         $0.showsUserLocation = true
         $0.setUserTrackingMode(.follow, animated: true)
     }
     
-    private let moveToCurrentLocationButton: UIButton = UIButton().then {
+    private lazy var moveToCurrentLocationButton: UIButton = UIButton().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         $0.tintColor = .systemBlue
         $0.addTarget(
-            MainMapViewController.self,
-            action: #selector(moveToCurrentLocation),
+            self,
+            action: #selector(self.moveToCurrentLocation),
             for: .touchUpInside
         )
     }
     
-    private let createChatRoomButton: UIButton = UIButton().then {
+    private lazy var createChatRoomButton: UIButton = UIButton().then {
         $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
         $0.tintColor = .systemBlue
         $0.addTarget(
-            MainMapViewController.self,
-            action: #selector(createChatRoom),
+            self,
+            action: #selector(self.createChatRoom),
             for: .touchUpInside
         )
     }
@@ -55,7 +55,13 @@ final class MainMapViewController: UIViewController {
         configureConstraints()
         configureDelegates()
         registerAnnotationViewClass()
+        // 디버깅 용
         loadDataForMapView()
+        
+        if let sheetController = self.presentationController as? UISheetPresentationController {
+            sheetController.detents = [.medium(), .large()]
+            sheetController.prefersGrabberVisible = true
+        }
     }
     
     // MARK: - Methods
@@ -93,7 +99,7 @@ final class MainMapViewController: UIViewController {
     }
     
     private func loadDataForMapView() {
-        // 디버깅용
+        // 디버깅 용
         struct ChatRoomData: Decodable {
             let chatRoomAnnotations: [ChatRoomAnnotation]
 
@@ -103,9 +109,19 @@ final class MainMapViewController: UIViewController {
             let longitudeDelta: CLLocationDegrees
 
             var region: MKCoordinateRegion {
-                let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
-                let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
-                return MKCoordinateRegion(center: center, span: span)
+                let center = CLLocationCoordinate2D(
+                    latitude: centerLatitude,
+                    longitude: centerLongitude
+                )
+                let span = MKCoordinateSpan(
+                    latitudeDelta: latitudeDelta,
+                    longitudeDelta: longitudeDelta
+                )
+                
+                return MKCoordinateRegion(
+                    center: center,
+                    span: span
+                )
             }
         }
         
@@ -126,10 +142,19 @@ final class MainMapViewController: UIViewController {
     
     private func registerAnnotationViewClass() {
         // Single: Open or Dm
-        self.mapView.register(GroupChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        self.mapView.register(DmChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        self.mapView.register(
+            GroupChatRoomAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier
+        )
+        self.mapView.register(
+            DmChatRoomAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier
+        )
         // Clustering
-        self.mapView.register(ChatRoomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
+        self.mapView.register(
+            ChatRoomClusterAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier
+        )
     }
     
     @objc
@@ -183,10 +208,22 @@ extension MainMapViewController: MKMapViewDelegate {
         
         switch chatRoomAnnotation.roomType {
         case .group:
-            return GroupChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+            return GroupChatRoomAnnotationView(
+                annotation: chatRoomAnnotation,
+                reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier
+            )
         case .directMessage:
-            return DmChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
+            return DmChatRoomAnnotationView(
+                annotation: chatRoomAnnotation,
+                reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier
+            )
         }
+    }
+
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        let bottomSheetViewController = BottomSheetViewController()
+        
+        present(bottomSheetViewController, animated: true, completion: nil)
     }
 }
 

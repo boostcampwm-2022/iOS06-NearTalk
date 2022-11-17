@@ -45,12 +45,4 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
             .bind(to: self.isUserAuthenticated)
             .disposed(by: self.disposeBag)
     }
-    
-    // MARK: - UI properties
-    
-    // MARK: - Properties
-    
-    // MARK: - Lifecycles
-    
-    // MARK: - Helpers
 }
