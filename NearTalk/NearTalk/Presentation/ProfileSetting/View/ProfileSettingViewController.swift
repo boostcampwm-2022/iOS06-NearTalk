@@ -6,6 +6,8 @@
 //
 
 import RxCocoa
+import RxGesture
+import RxSwift
 import SnapKit
 import Then
 import UIKit
@@ -26,12 +28,26 @@ final class ProfileSettingViewController: UIViewController {
         $0.placeholder = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
+    
+    private weak var coordinator: MyProfileCoordinator?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
-        configureConstraint()
+        self.configureUI()
+        self.configureConstraint()
+        self.bindToProfileImage()
     }
+    
+    init(coordinator: MyProfileCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private let disposeBag: DisposeBag = DisposeBag()
 }
 
 private extension ProfileSettingViewController {
@@ -67,16 +83,16 @@ private extension ProfileSettingViewController {
             make.top.equalTo(nicknameField.snp.bottom).offset(10)
         }
     }
-}
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-// swiftlint:disable: type_name
-struct ProfileSettingViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: ProfileSettingViewController()).showPreview(.iPhone14Pro)
-        UINavigationController(rootViewController: ProfileSettingViewController()).showPreview(.iPhoneSE3)
+    
+    func bindToProfileImage() {
+        self.profileImageView.rx
+            .tapGesture()
+            .asObservable()
+            .bind(onNext: { gesture in
+                if gesture.state == .ended {
+                    self.coordinator?.showPHPickerViewController(self.profileImageView.rx.image)
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
-#endif
