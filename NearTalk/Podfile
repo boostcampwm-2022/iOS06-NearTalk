@@ -15,6 +15,7 @@ target 'NearTalk' do
   # Firebase
   pod 'FirebaseAuth', '~> 10.0.0'
   pod 'FirebaseFirestore', '~> 10.0.0'
+  pod 'FirebaseFirestoreSwift', '~> 10.0.0'
   pod 'FirebaseMessaging', '~> 10.0.0'
   pod 'FirebaseStorage', '~> 10.0.0'
   pod 'FirebaseDynamicLinks', '~> 10.0.0'
