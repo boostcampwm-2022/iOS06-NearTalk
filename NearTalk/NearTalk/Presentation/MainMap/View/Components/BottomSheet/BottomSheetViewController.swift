@@ -4,8 +4,8 @@
 //
 //  Created by lymchgmk on 2022/11/17.
 //
+//
 
-import Foundation
 import SnapKit
 import UIKit
 
@@ -13,20 +13,23 @@ final class BottomSheetViewController: PassThroughView {
     // MARK: Constants
     enum Mode {
         case tip
+        case half
         case full
     }
     
     private enum Const {
         static let duration = 0.5
         static let cornerRadius = 12.0
-        static let barViewTopSpacing = 5.0
+        static let barViewTopSpacing = 4.0
         static let barViewSize = CGSize(width: UIScreen.main.bounds.width * 0.2, height: 5.0)
         static let bottomSheetRatio: (Mode) -> Double = { mode in
             switch mode {
             case .tip:
-                return 0.8 // 위에서 부터의 값 (밑으로 갈수록 값이 커짐)
+                return 0.85
+            case .half:
+                return 0.5
             case .full:
-                return 0.2
+                return 0.1
             }
         }
 
@@ -53,9 +56,7 @@ final class BottomSheetViewController: PassThroughView {
     var mode: Mode = .tip {
         didSet {
             switch self.mode {
-            case .tip:
-                break
-            case .full:
+            case .tip, .half, .full:
                 break
             }
             
@@ -113,12 +114,12 @@ final class BottomSheetViewController: PassThroughView {
         let minY = self.bottomSheetView.frame.minY
         let offset = translationY + minY
     
-        if Const.bottomSheetYPosition(.full)...Const.bottomSheetYPosition(.tip) ~= offset {
+        if (Const.bottomSheetYPosition(.full)...Const.bottomSheetYPosition(.tip)).contains(offset) {
             self.updateConstraint(offset: offset)
             recognizer.setTranslation(.zero, in: self)
         }
         
-        UIView.animate (
+        UIView.animate(
             withDuration: 0,
             delay: 0,
             options: .curveEaseOut,
@@ -135,8 +136,12 @@ final class BottomSheetViewController: PassThroughView {
             delay: 0,
             options: .allowUserInteraction,
             animations: {
-                // velocity를 이용하여 위로 스와이프인지, 아래로 스와이프인지 확인
-                self.mode = recognizer.velocity(in: self).y >= 0 ? Mode.tip : .full
+                let velocity = recognizer.velocity(in: self).y
+                if velocity >= 0 {
+                    self.mode = self.mode == Mode.full ? Mode.half : Mode.tip
+                } else {
+                    self.mode = self.mode == Mode.tip ? Mode.half : Mode.full
+                }
             },
             completion: nil
         )
@@ -144,8 +149,10 @@ final class BottomSheetViewController: PassThroughView {
     
     private func updateConstraint(offset: Double) {
         self.bottomSheetView.snp.remakeConstraints {
-            $0.left.right.bottom.equalToSuperview()
             $0.top.equalToSuperview().inset(offset)
+            $0.left.equalToSuperview()
+            $0.right.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
 }
