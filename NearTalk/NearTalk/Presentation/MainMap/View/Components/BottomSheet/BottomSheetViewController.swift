@@ -46,8 +46,8 @@ final class BottomSheetViewController: UIViewController {
         
         self.chatRoomsTableView.snp.makeConstraints {
             $0.top.equalTo(self.roomTypeSegmentedControl.snp.bottom).offset(20)
-            $0.leading.equalToSuperview().offset(40)
-            $0.trailing.equalToSuperview().offset(-40)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
             $0.bottom.equalToSuperview().offset(-20)
         }
     }

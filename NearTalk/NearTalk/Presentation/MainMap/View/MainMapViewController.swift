@@ -47,11 +47,6 @@ final class MainMapViewController: UIViewController {
         )
     }
     
-//    private lazy var bottomSheetView: BottomSheetViewController = BottomSheetViewController().then {
-//        $0.bottomSheetColor = .lightGray
-//        $0.barViewColor = .darkGray
-//    }
-    
     // MARK: - LifeCycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,8 +70,6 @@ final class MainMapViewController: UIViewController {
         
         self.mapView.addSubview(self.moveToCurrentLocationButton)
         self.mapView.addSubview(self.createChatRoomButton)
-        
-        // self.mapView.addSubview(self.bottomSheetView)
     }
     
     private func configureConstraints() {
@@ -98,10 +91,6 @@ final class MainMapViewController: UIViewController {
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }
-        
-//        self.bottomSheetView.snp.makeConstraints {
-//            $0.edges.equalToSuperview()
-//        }
     }
     
     private func configureDelegates() {
@@ -230,8 +219,14 @@ extension MainMapViewController: MKMapViewDelegate {
             )
         }
     }
-    // Bottom sheet 보여주는 메서드
+
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print(view, type(of: view))
+        
+        if let tmp = view as? _MKUserLocationView {
+            print(0, tmp)
+        }
+        
         let bottomSheetViewController = BottomSheetViewController()
         
         present(bottomSheetViewController, animated: true, completion: nil)
