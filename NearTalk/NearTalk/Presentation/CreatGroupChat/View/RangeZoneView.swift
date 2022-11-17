@@ -14,11 +14,11 @@ final class RangeZoneView: UIView {
     
     // MARK: - UI Proporties
     
-    private lazy var rangeLabel = UILabel().then {
+    lazy var rangeLabel = UILabel().then {
         $0.text = "1km"
     }
     
-    private lazy var rangeSlider = UISlider().then {
+    lazy var rangeSlider = UISlider().then {
         $0.maximumValue = 10
         $0.minimumValue = 1
         $0.value = 1
