@@ -47,10 +47,10 @@ final class MainMapViewController: UIViewController {
         )
     }
     
-    private lazy var bottomSheetView: BottomSheetViewController = BottomSheetViewController().then {
-        $0.bottomSheetColor = .lightGray
-        $0.barViewColor = .darkGray
-    }
+//    private lazy var bottomSheetView: BottomSheetViewController = BottomSheetViewController().then {
+//        $0.bottomSheetColor = .lightGray
+//        $0.barViewColor = .darkGray
+//    }
     
     // MARK: - LifeCycles
     override func viewDidLoad() {
@@ -62,6 +62,11 @@ final class MainMapViewController: UIViewController {
         registerAnnotationViewClass()
         // 디버깅 용
         loadDataForMapView()
+        
+        if let sheetController = self.presentationController as? UISheetPresentationController {
+            sheetController.detents = [.medium(), .large()]
+            sheetController.prefersGrabberVisible = true
+        }
     }
     
     // MARK: - Methods
@@ -71,7 +76,7 @@ final class MainMapViewController: UIViewController {
         self.mapView.addSubview(self.moveToCurrentLocationButton)
         self.mapView.addSubview(self.createChatRoomButton)
         
-        self.mapView.addSubview(self.bottomSheetView)
+        // self.mapView.addSubview(self.bottomSheetView)
     }
     
     private func configureConstraints() {
@@ -94,9 +99,9 @@ final class MainMapViewController: UIViewController {
             $0.height.equalTo(40)
         }
         
-        self.bottomSheetView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
+//        self.bottomSheetView.snp.makeConstraints {
+//            $0.edges.equalToSuperview()
+//        }
     }
     
     private func configureDelegates() {
@@ -199,6 +204,12 @@ extension MainMapViewController: MKMapViewDelegate {
         case .directMessage:
             return DmChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
         }
+    }
+    // Bottom sheet 보여주는 메서드
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        let bottomSheetViewController = BottomSheetViewController()
+        
+        present(bottomSheetViewController, animated: true, completion: nil)
     }
 }
 
