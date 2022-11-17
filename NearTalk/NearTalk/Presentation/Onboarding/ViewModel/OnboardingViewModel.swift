@@ -28,9 +28,14 @@ protocol ViewModelType {
 
 protocol OnboardingViewModel: ViewModelType where Input == OnboardingInput, Output == OnboardingOutput {
     init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase)
+    func saveProfile(nickName: String, message: String, image: Data?) -> Single<Bool>
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
+    func saveProfile(nickName: String, message: String, image: Data?) -> Single<Bool> {
+        return Single.just(self.saveProfileUseCase.saveProfile(nickName, message, image: image))
+    }
+    
     private let validateUseCase: any OnboardingValidateUseCase
     private let saveProfileUseCase: any OnboardingSaveProfileUseCase
     
