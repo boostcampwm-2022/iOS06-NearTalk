@@ -22,29 +22,34 @@ final class MainMapViewController: UIViewController {
     // private let naverLocation = CLLocation(latitude: 37.3589, longitude: 127.1051)
     
     // MARK: - UI Components
-    private var mapView = MKMapView().then {
+    private lazy var mapView = MKMapView().then {
         $0.showsUserLocation = true
         $0.setUserTrackingMode(.follow, animated: true)
     }
     
-    private let moveToCurrentLocationButton: UIButton = UIButton().then {
+    private lazy var moveToCurrentLocationButton: UIButton = UIButton().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         $0.tintColor = .systemBlue
         $0.addTarget(
-            MainMapViewController.self,
-            action: #selector(moveToCurrentLocation),
+            self,
+            action: #selector(self.moveToCurrentLocation),
             for: .touchUpInside
         )
     }
     
-    private let createChatRoomButton: UIButton = UIButton().then {
+    private lazy var createChatRoomButton: UIButton = UIButton().then {
         $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
         $0.tintColor = .systemBlue
         $0.addTarget(
-            MainMapViewController.self,
-            action: #selector(createChatRoom),
+            self,
+            action: #selector(self.createChatRoom),
             for: .touchUpInside
         )
+    }
+    
+    private lazy var bottomSheetView: BottomSheetViewController = BottomSheetViewController().then {
+        $0.bottomSheetColor = .lightGray
+        $0.barViewColor = .darkGray
     }
     
     // MARK: - LifeCycles
@@ -55,6 +60,7 @@ final class MainMapViewController: UIViewController {
         configureConstraints()
         configureDelegates()
         registerAnnotationViewClass()
+        // 디버깅 용
         loadDataForMapView()
     }
     
@@ -64,6 +70,8 @@ final class MainMapViewController: UIViewController {
         
         self.mapView.addSubview(self.moveToCurrentLocationButton)
         self.mapView.addSubview(self.createChatRoomButton)
+        
+        self.mapView.addSubview(self.bottomSheetView)
     }
     
     private func configureConstraints() {
@@ -85,6 +93,10 @@ final class MainMapViewController: UIViewController {
             $0.width.equalTo(40)
             $0.height.equalTo(40)
         }
+        
+        self.bottomSheetView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
     
     private func configureDelegates() {
@@ -93,7 +105,7 @@ final class MainMapViewController: UIViewController {
     }
     
     private func loadDataForMapView() {
-        // 디버깅용
+        // 디버깅 용
         struct ChatRoomData: Decodable {
             let chatRoomAnnotations: [ChatRoomAnnotation]
 
