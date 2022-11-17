@@ -17,11 +17,12 @@ struct ChatRoomListViewModelActions {
 protocol ChatRoomListViewModelInput {
     func didCreateChatRoom()
     func didSelectItem(at index: Int)
+    func load()
 }
 
 protocol ChatRoomListViewModelOutput {
-    var openChatRoomData: PublishRelay<[OpenChatRoomListData]> { get }
-    var dmChatRoomData: PublishRelay<[DMChatRoomListData]> { get }
+    var openChatRoomData: BehaviorRelay<[OpenChatRoomListData]> { get }
+    var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> { get }
 }
 
 protocol ChatRoomListViewModel: ChatRoomListViewModelInput, ChatRoomListViewModelOutput {}
@@ -33,8 +34,8 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     private let disposeBag: DisposeBag = DisposeBag()
 
     // MARK: - Output
-    var openChatRoomData: PublishRelay<[OpenChatRoomListData]> = PublishRelay<[OpenChatRoomListData]>()
-    var dmChatRoomData: PublishRelay<[DMChatRoomListData]> = PublishRelay<[DMChatRoomListData]>()
+    var openChatRoomData: BehaviorRelay<[OpenChatRoomListData]> = BehaviorRelay<[OpenChatRoomListData]>(value: [])
+    var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
     
     init(useCase: ChatRoomListUseCase, actions: ChatRoomListViewModelActions? = nil) {
         self.chatRoomListUseCase = useCase
