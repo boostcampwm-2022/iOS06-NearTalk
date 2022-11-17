@@ -16,7 +16,7 @@ final class ChatRoomListViewController: UIViewController {
     // MARK: - UI properties
     private lazy var tableView = UITableView().then {
         $0.register(ChatRoomListCell.self, forCellReuseIdentifier: ChatRoomListCell.identifier)
-    }
+    } 
     
     // MARK: - Properties
     private var openDataSource: UITableViewDiffableDataSource<Section, OpenChatRoomListData>?

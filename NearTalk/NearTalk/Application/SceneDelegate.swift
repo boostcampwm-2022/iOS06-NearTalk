@@ -20,11 +20,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene)
         
-        let navigationController = UINavigationController()
-        window?.rootViewController = navigationController
+        let xxxDIContainer: XXXDIContainer = XXXDIContainer()
+        let diContainer: ChatRoomListDIContainer = xxxDIContainer.makeChatRoomListDIContainer()
+        let mockAction: ChatRoomListViewModelActions = .init(showChatRoom: {}, showCreateChatRoom: {})
+        let mockViewModel: ChatRoomListViewModel = diContainer.makeChatRoomListViewModel(actions: mockAction)
+        let viewController: ChatRoomListViewController = ChatRoomListViewController.create(with: mockViewModel)
         
-        appCoordinator = AppCoordinator(navigationController: navigationController)
-        appCoordinator?.start()
+        
+        let navigationController = UINavigationController()
+        window?.rootViewController = UINavigationController(rootViewController: viewController)
+        
+//        appCoordinator = AppCoordinator(navigationController: navigationController)
+//        appCoordinator?.start()
         
         window?.makeKeyAndVisible()
     }
