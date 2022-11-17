@@ -21,7 +21,7 @@ protocol ChatRoomListViewModelInput {
 }
 
 protocol ChatRoomListViewModelOutput {
-    var openChatRoomData: BehaviorRelay<[OpenChatRoomListData]> { get }
+    var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> { get }
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> { get }
 }
 
@@ -34,7 +34,7 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     private let disposeBag: DisposeBag = DisposeBag()
 
     // MARK: - Output
-    var openChatRoomData: BehaviorRelay<[OpenChatRoomListData]> = BehaviorRelay<[OpenChatRoomListData]>(value: [])
+    var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> = BehaviorRelay<[GroupChatRoomListData]>(value: [])
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
     
     init(useCase: ChatRoomListUseCase, actions: ChatRoomListViewModelActions? = nil) {
@@ -45,8 +45,8 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     }
     
     func load() {
-        self.chatRoomListUseCase.getOpenChatList()
-            .bind(to: openChatRoomData)
+        self.chatRoomListUseCase.getGroupChatList()
+            .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
         
         self.chatRoomListUseCase.getDMChatList()

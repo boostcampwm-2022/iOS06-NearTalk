@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OpenChatRoomListData: Hashable {
+struct GroupChatRoomListData: Hashable {
     var img: String?
     var name: String?
     var description: String?

@@ -9,10 +9,10 @@ import Foundation
 import RxSwift
 
 protocol ChatRoomListUseCase {
-    //    func getOpenChatListCoreData() -> Observable<[OpenChatRoomListData]>
+    //    func getGroupChatListCoreData() -> Observable<[GroupChatRoomListData]>
     //    func getDataOfDMChatCoreData() -> Observable<[DMChatRoomListData]>
     
-        func getOpenChatList() -> Observable<[OpenChatRoomListData]>
+        func getGroupChatList() -> Observable<[GroupChatRoomListData]>
         func getDMChatList() -> Observable<[DMChatRoomListData]>
 }
 
@@ -30,11 +30,11 @@ final class DefaultChatRoomListUseCase: ChatRoomListUseCase {
         self.userChatRoomModel = self.chatRoomListRepository.fetchUserChatRoomModel()
     }
     
-    func getOpenChatList() -> Observable<[OpenChatRoomListData]> {
+    func getGroupChatList() -> Observable<[GroupChatRoomListData]> {
         return self.chatRoom
             .asObservable()
-            .map { $0.filter { $0.roomType == "open" } }
-            .map { $0.map { OpenChatRoomListData(data: $0) } }
+            .map { $0.filter { $0.roomType == "group" } }
+            .map { $0.map { GroupChatRoomListData(data: $0) } }
     }
     
     func getDMChatList() -> Observable<[DMChatRoomListData]> {

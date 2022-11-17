@@ -63,11 +63,11 @@ class ChatRoomListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(openData: OpenChatRoomListData) {
-        self.name.text = openData.name
-        self.userDescription.text = openData.description
-        self.date.text = openData.date
-        self.count.text = openData.count
+    func configure(groupData: GroupChatRoomListData) {
+        self.name.text = groupData.name
+        self.userDescription.text = groupData.description
+        self.date.text = groupData.date
+        self.count.text = groupData.count
     }
     
     func configure(dmData: DMChatRoomListData) {
@@ -125,7 +125,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
             let cell = ChatRoomListCell(frame: .zero)
-            cell.configure(openData: OpenChatRoomListData(data: ChatRoom(userList: ["1", "2", "3", "4", "5", "6"],
+            cell.configure(groupData: GroupChatRoomListData(data: ChatRoom(userList: ["1", "2", "3", "4", "5", "6"],
                                                                          roomName: "Ronald Robertson",
                                                                          roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
