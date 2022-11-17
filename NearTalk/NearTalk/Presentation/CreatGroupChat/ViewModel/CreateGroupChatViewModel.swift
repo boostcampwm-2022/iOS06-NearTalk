@@ -44,20 +44,20 @@ extension CreateGroupChatViewModel: ViewModelable {
         let titleTextFieldDidEditEvent: Observable<Void>
         let descriptionTextFieldDidEditEvent: Observable<Void>
         let maxNumOfParticipantsPickerSelected: Observable<Int>
-        let maxRangeOfRadiusSliderEvent: Observable<Void>
-        let maxRangeOfRadiusSliderSelected: Observable<Int>
+        let maxRangeOfRadiusSliderSelected: Observable<Float>
         let createChatButtonDidTapEvent: Observable<Void>
     }
     
     struct Output {
-        var maxRangeOfRadius = BehaviorRelay<Int>(value: 1)
+        var maxRangeOfRadius = BehaviorRelay<String>(value: "1km")
         var createChatButtonIsEnable = BehaviorRelay<Bool>(value: false)
     }
     
     func transform(input: Input, disposbag: DisposeBag) -> Output {
-        let output = Output()
+        var output = Output()
         
         input.maxRangeOfRadiusSliderSelected
+            .map({ "\(Int($0))km" })
             .bind(to: output.maxRangeOfRadius)
             .disposed(by: disposbag)
         

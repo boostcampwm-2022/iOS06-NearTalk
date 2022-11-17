@@ -106,8 +106,7 @@ private extension CreateGroupChatViewController {
             titleTextFieldDidEditEvent: titleTextField.rx.controlEvent(.editingDidEnd).asObservable(),
             descriptionTextFieldDidEditEvent: descriptionTextField.rx.controlEvent(.editingDidEnd).asObservable(),
             maxNumOfParticipantsPickerSelected: maxNumOfParticipantsPicker.rx.itemSelected.map { $0.component },
-            maxRangeOfRadiusSliderEvent: rangeZoneView.rangeSlider.rx.controlEvent(.editingDidBegin).asObservable(),
-            maxRangeOfRadiusSliderSelected: rangeZoneView.rangeSlider.rx.value.map { $0.exponent },
+            maxRangeOfRadiusSliderSelected: rangeZoneView.rangeSlider.rx.value.asObservable(),
             createChatButtonDidTapEvent: self.createChatButton.rx.tap.asObservable()
         )
         
@@ -117,8 +116,8 @@ private extension CreateGroupChatViewController {
         
         output.maxRangeOfRadius
             .asDriver()
-            .drive(onNext: { [weak self] radius in
-                self?.rangeZoneView.rangeLabel.text = "\(radius)km"
+            .drive(onNext: { [weak self] newRange in
+                self?.rangeZoneView.range = newRange
             })
             .disposed(by: disposbag)
     }
