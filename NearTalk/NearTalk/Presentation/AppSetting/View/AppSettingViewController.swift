@@ -49,6 +49,7 @@ private extension AppSettingViewController {
         navigationItem.title = "앱 설정"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
         view.addSubview(tableView)
+        view.backgroundColor = .systemBackground
     }
     
     func configureConstraint() {

@@ -28,15 +28,31 @@ final class DefaultOnboardingValidateUseCase: OnboardingValidateUseCase {
 }
 
 final class DefaultOnboardingSaveProfileUseCase: OnboardingSaveProfileUseCase {
-    private let repository: any UserProfileRepository
-    
-    init(repository: any UserProfileRepository) {
-        self.repository = repository
+    private let profileRepository: any UserProfileRepository
+    private let uuidRepository: any UserUUIDRepository
+    private let imageRepository: any ImageRepository
+
+    init(profileRepository: any UserProfileRepository,
+         uuidRepository: any UserUUIDRepository,
+         imageRepository: any ImageRepository) {
+        self.profileRepository = profileRepository
+        self.uuidRepository = uuidRepository
+        self.imageRepository = imageRepository
     }
     
     func saveProfile(_ nickName: String, _ message: String, image: Data?) -> Bool {
-        self.repository.save(UserProfile(nickName: nickName, message: message, image: image))
-        return true
+        let path: String?
+        if let image = image {
+            path = self.imageRepository.save(image: image)
+        } else {
+            path = nil
+        }
+        return self.profileRepository.save(UserProfile(
+            userID: self.uuidRepository.fetch(),
+            username: nickName,
+            statusMessage: message,
+            profileImagePath: path,
+            friends: nil))
     }
 }
 
