@@ -27,7 +27,6 @@ final class ChatRoomListCoordinator {
     
     // MARK: - Lifecycles
     func start() {
-        // 여기서 행동에 대한 강력한 참조를 유지하므로 이 흐름은 강력한 참조가 될 필요가 없다.
         let actions: ChatRoomListViewModelActions = .init(
             showChatRoom: self.showChatRoom,
             showCreateChatRoom: self.showCreateChatRoom

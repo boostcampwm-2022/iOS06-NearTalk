@@ -9,5 +9,5 @@ import Foundation
 
 struct UserChatRoomModel: Codable {
     var userID: String?
-    var chatRoomID: String?
+    var chatRoomID: [String]?
 }

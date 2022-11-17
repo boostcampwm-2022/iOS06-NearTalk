@@ -20,7 +20,9 @@ class ChatRoomListCell: UITableViewCell {
         $0.image = UIImage(systemName: "photo")
     }
     
-    private let name = UILabel().then {
+    private lazy var name = UILabel().then {
+        $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        $0.sizeToFit()
         $0.font = UIFont(name: "text", size: 18)
     }
     
@@ -34,7 +36,18 @@ class ChatRoomListCell: UITableViewCell {
     }
     
     private let count = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14)
+        $0.textColor = .gray
+        $0.font = UIFont.systemFont(ofSize: 12)
+        
+    }
+    
+    private lazy var stackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.alignment = .center
+        $0.spacing = 4
+        $0.addArrangedSubview(self.name)
+        $0.addArrangedSubview(self.count)
     }
     
     // MARK: - Lifecycles
@@ -50,10 +63,11 @@ class ChatRoomListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(openData: OpenChatRoomListData) {
-        self.name.text = openData.name
-        self.userDescription.text = openData.description
-        self.date.text = openData.date
+    func configure(groupData: GroupChatRoomListData) {
+        self.name.text = groupData.name
+        self.userDescription.text = groupData.description
+        self.date.text = groupData.date
+        self.count.text = groupData.count
     }
     
     func configure(dmData: DMChatRoomListData) {
@@ -64,10 +78,10 @@ class ChatRoomListCell: UITableViewCell {
     
     // MARK: - Configure views
     private func addSubviews() {
-        self.contentView.addSubview(img)
-        self.contentView.addSubview(name)
-        self.contentView.addSubview(userDescription)
-        self.contentView.addSubview(date)
+        self.contentView.addSubview(self.img)
+        self.contentView.addSubview(self.stackView)
+        self.contentView.addSubview(self.userDescription)
+        self.contentView.addSubview(self.date)
     }
     
     private func configureConstraints() {
@@ -77,10 +91,10 @@ class ChatRoomListCell: UITableViewCell {
             make.width.height.equalTo(60)
         }
         
-        name.snp.makeConstraints { make in
+        stackView.snp.makeConstraints { make in
             make.top.equalTo(self.contentView).offset(16)
             make.leading.equalTo(self.img.snp.trailing).offset(16)
-            make.trailing.equalTo(self.contentView).offset(-16)
+            make.trailing.equalTo(self.contentView).offset(-12)
             make.height.equalTo(20)
         }
         
@@ -111,9 +125,11 @@ struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         UIViewPreview {
             let cell = ChatRoomListCell(frame: .zero)
-            cell.configure(openData: OpenChatRoomListData(img: "", name: "Ronald Robertson", description: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.", date: "오후 2:30", count: "12"))
+            cell.configure(groupData: GroupChatRoomListData(data: ChatRoom(userList: ["1", "2", "3", "4", "5", "6"],
+                                                                         roomName: "Ronald Robertson",
+                                                                         roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
-        }.previewLayout(.fixed(width: 300, height: 80))
+        }.previewLayout(.fixed(width: 400, height: 100))
     }
 }
 #endif

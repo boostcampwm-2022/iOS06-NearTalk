@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct ChatRoom: Codable {
     var roomID: String?
     var userList: [String]?
