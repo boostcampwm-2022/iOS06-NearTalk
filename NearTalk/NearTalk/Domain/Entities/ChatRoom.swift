@@ -14,6 +14,7 @@ struct ChatRoom: Codable {
     var roomType: String?
     var roomName: String?
     var roomDescription: String?
+    var location: NCLocation?
     var accessibleRadius: Double?
     var recentMessageID: String?
     var maxNumberOfParticipants: Int?

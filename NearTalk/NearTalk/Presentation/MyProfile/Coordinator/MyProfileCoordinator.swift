@@ -1,65 +1,59 @@
 //
-//  OnboardingCoordinator.swift
+//  MyProfileCoordinator.swift
 //  NearTalk
 //
-//  Created by Preston Kim on 2022/11/15.
+//  Created by Preston Kim on 2022/11/16.
 //
 
-import Foundation
 import PhotosUI
+import RxCocoa
 import RxSwift
 import UIKit
 
-protocol OnboardingCoordinatorDependency {
-    func makeOnboardingViewModel() -> any OnboardingViewModel
+protocol MyProfileCoordinatorDependency {
+    func makeMyProfileViewController() -> MyProfileViewController
 }
 
-final class DefaultOnboardingCoordinatorDependency: OnboardingCoordinatorDependency {
-    func makeOnboardingViewModel() -> any OnboardingViewModel {
-        return DefaultOnboardingViewModel(
-            validateUseCase: DefaultOnboardingValidateUseCase(),
-            saveProfileUseCase: DefaultOnboardingSaveProfileUseCase(
-                profileRepository: DefaultUserProfileRepository(),
-                uuidRepository: DefaultUserUUIDRepository(),
-                imageRepository: DefaultImageRepository()))
-    }
-}
-
-final class OnboardingCoordinator: Coordinator {
-    private let dependency: any OnboardingCoordinatorDependency
+final class MyProfileCoordinator: Coordinator {
     var navigationController: UINavigationController?
+    weak var parentCoordinator: Coordinator?
+    var childCoordinators: [Coordinator] = []
     
-    var parentCoordinator: Coordinator?
-    
-    var childCoordinators: [Coordinator]
-    
-    init(navigationController: UINavigationController,
-         parentCoordinator: Coordinator? = nil,
-         dependency: any OnboardingCoordinatorDependency) {
+    init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, childCoordinators: [Coordinator] = []) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
-        self.childCoordinators = []
-        self.dependency = dependency
+        self.childCoordinators = childCoordinators
     }
     
     func start() {
-        showOnboardingViewController()
+        showMyProfileViewController()
     }
     
-    func showOnboardingViewController() {
-        self.navigationController?.pushViewController(
-            OnboardingViewController(viewModel: dependency.makeOnboardingViewModel(),
-                                     coordinator: self), animated: true)
+    func showMyProfileViewController() {
+        let viewController: MyProfileViewController = MyProfileViewController(
+            coordinator: self,
+            viewModel: DefaultMyProfileViewModel(
+                profileLoadUseCase: DefaultMyProfileLoadUseCase(
+                    profileRepository: DefaultUserProfileRepository(),
+                    uuidRepository: DefaultUserUUIDRepository(),
+                    imageRepository: DefaultImageRepository())))
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func finish() {
-        
+    func showAppSettingViewController() {
+        let viewController: AppSettingViewController = AppSettingViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func showProfileSettingViewController() {
+        let viewController: ProfileSettingViewController = ProfileSettingViewController(coordinator: self)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     private var imageReceiveHandler: Binder<UIImage?>?
 }
 
-extension OnboardingCoordinator: PHPickerViewControllerDelegate {
+extension MyProfileCoordinator: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         guard let itemProvider = results.first?.itemProvider else {
