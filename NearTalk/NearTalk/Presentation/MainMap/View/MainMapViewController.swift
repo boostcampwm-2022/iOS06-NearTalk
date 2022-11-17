@@ -120,9 +120,19 @@ final class MainMapViewController: UIViewController {
             let longitudeDelta: CLLocationDegrees
 
             var region: MKCoordinateRegion {
-                let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
-                let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
-                return MKCoordinateRegion(center: center, span: span)
+                let center = CLLocationCoordinate2D(
+                    latitude: centerLatitude,
+                    longitude: centerLongitude
+                )
+                let span = MKCoordinateSpan(
+                    latitudeDelta: latitudeDelta,
+                    longitudeDelta: longitudeDelta
+                )
+                
+                return MKCoordinateRegion(
+                    center: center,
+                    span: span
+                )
             }
         }
         
@@ -143,10 +153,19 @@ final class MainMapViewController: UIViewController {
     
     private func registerAnnotationViewClass() {
         // Single: Open or Dm
-        self.mapView.register(GroupChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        self.mapView.register(DmChatRoomAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        self.mapView.register(
+            GroupChatRoomAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier
+        )
+        self.mapView.register(
+            DmChatRoomAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier
+        )
         // Clustering
-        self.mapView.register(ChatRoomClusterAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier)
+        self.mapView.register(
+            ChatRoomClusterAnnotationView.self,
+            forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier
+        )
     }
     
     @objc
@@ -200,9 +219,15 @@ extension MainMapViewController: MKMapViewDelegate {
         
         switch chatRoomAnnotation.roomType {
         case .group:
-            return GroupChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+            return GroupChatRoomAnnotationView(
+                annotation: chatRoomAnnotation,
+                reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier
+            )
         case .directMessage:
-            return DmChatRoomAnnotationView(annotation: chatRoomAnnotation, reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
+            return DmChatRoomAnnotationView(
+                annotation: chatRoomAnnotation,
+                reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier
+            )
         }
     }
     // Bottom sheet 보여주는 메서드
