@@ -73,13 +73,12 @@ final class OnboardingViewController: UIViewController {
         self.configureConstraints()
         self.bindToViewModel()
         self.bindProfileTap()
+        self.bindRegisterButton()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.profileImageView.clipsToBounds = true
-        self.profileImageView.layer.masksToBounds = true
-        self.profileImageView.layer.cornerRadius = self.profileImageView.frame.height / 2
+        self.profileImageView.makeRounded()
     }
 }
 
@@ -159,14 +158,45 @@ private extension OnboardingViewController {
     }
     
     func bindProfileTap() {
-        tapGesture.addTarget(self, action: #selector(touchProfileImageView(sender:)))
-        self.profileImageView.addGestureRecognizer(tapGesture)
+        self.profileImageView.rx
+            .tapGesture()
+            .bind(onNext: { (gesture) in
+                if gesture.state == .ended {
+                    self.coordinator?.showPHPickerViewController(self.profileImageView.rx.image)
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
     
-    @objc func touchProfileImageView(sender: UITapGestureRecognizer) {
-        if sender.state == .ended {
-            self.coordinator?.presentPictureSelectViewController(self.profileImageView.rx.image.asObserver())
-        }
+    func bindRegisterButton() {
+        self.registerButton.rx
+            .tap
+            .bind(onNext: {
+                self.registerProfile()
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    func registerProfile() {
+        let imageData: Data? = self.profileImageView.image?.pngData() ?? self.profileImageView.image?.jpegData(compressionQuality: 0.9)
+        
+        let resultSingle: Single<Bool> = self.viewModel.saveProfile(
+            nickName: self.nicknameField.text ?? "",
+            message: self.messageField.text ?? "",
+            image: imageData)
+        resultSingle.asObservable()
+            .bind(onNext: { success in
+                if success {
+                    #if DEBUG
+                    print("Success to save profile")
+                    #endif
+                } else {
+                    #if DEBUG
+                    print("Failed to save profile")
+                    #endif
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
     
     @objc private func buttonClicked() {
