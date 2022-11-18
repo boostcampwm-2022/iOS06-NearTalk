@@ -29,16 +29,17 @@ final class RootTabBarDIContainer {
     
     // MARK: - Create viewController
     func createTabBarController() -> RootTabBarController {
-        let myProfileDIContainer: MyProfileDIContainer = .init()
-        
         let chatRoomListRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService())
         let chatRoomListUseCase: ChatRoomListUseCase = DefaultChatRoomListUseCase(chatRoomListRepository: chatRoomListRepository)
+        
+        let myProfileDIContainer: MyProfileDIContainer = .init()
+        let myProfileVC: MyProfileViewController = .init(coordinator: myProfileDIContainer.makeMyProfileCoordinator(), viewModel: myProfileDIContainer.makeViewModel())
         
         let dependency: RootTabBarControllerDependency = .init(
             mapViewController: MainMapViewController(),
             chatRoomListViewController: ChatRoomListViewController.create(with: DefaultChatRoomListViewModel(useCase: chatRoomListUseCase)),
             friendListViewController: FriendsListViewController(),
-            myProfileViewController: myProfileDIContainer.createMyProfileViewController()// 코디네이터를 인자로 받는다. 왜죠?
+            myProfileViewController: myProfileVC
         )
         return RootTabBarController(viewModel: makeViewModel(), dependency: dependency)
     }
