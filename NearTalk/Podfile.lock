@@ -635,6 +635,11 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseFirestoreSwift (10.0.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseCoreExtension (~> 10.0)
+    - FirebaseFirestore (~> 10.0)
+    - FirebaseSharedSwift (~> 10.0)
   - FirebaseInstallations (10.2.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
@@ -649,6 +654,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseSharedSwift (10.2.0)
   - FirebaseStorage (10.0.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -759,6 +765,7 @@ DEPENDENCIES:
   - FirebaseDatabase (~> 10.0.0)
   - FirebaseDynamicLinks (~> 10.0.0)
   - FirebaseFirestore (~> 10.0.0)
+  - FirebaseFirestoreSwift (~> 10.0.0)
   - FirebaseMessaging (~> 10.0.0)
   - FirebaseStorage (~> 10.0.0)
   - Kingfisher (~> 7.4.1)
@@ -781,8 +788,10 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseDynamicLinks
     - FirebaseFirestore
+    - FirebaseFirestoreSwift
     - FirebaseInstallations
     - FirebaseMessaging
+    - FirebaseSharedSwift
     - FirebaseStorage
     - GoogleDataTransport
     - GoogleUtilities
@@ -813,8 +822,10 @@ SPEC CHECKSUMS:
   FirebaseDatabase: b210f8a811d6eb80dc565d9570e8486af06e331b
   FirebaseDynamicLinks: 37dcd9f082b9c5ea9eb5826e82aef58bbd6fd5c1
   FirebaseFirestore: 5007583f3db2129de8e87f18ee63f4c86f07e7a3
+  FirebaseFirestoreSwift: a67b697245c5f6e721612fc86e1f26384c90ddcf
   FirebaseInstallations: 004915af170935e3a583faefd5f8bc851afc220f
   FirebaseMessaging: 8916bf5edb1dbfac74665a181e4d1ab3a78a08a2
+  FirebaseSharedSwift: a160b39d4ce77be922b3d6ff009099c7294e36e5
   FirebaseStorage: 8b0b0630e11b9f3e4a479a26cfccb70ec790ec50
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
@@ -833,6 +844,6 @@ SPEC CHECKSUMS:
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: b84fc62ace557593fcaa3eca13f1f98cbcd19efc
+PODFILE CHECKSUM: 28ab0c4f4f9813ea09c865faecaf97ff72451e3d
 
 COCOAPODS: 1.11.3
