@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		11CEAF2DC602CF4DA26718F2 /* Pods_NearTalkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BF42334F4F7D2213AD2E129 /* Pods_NearTalkTests.framework */; };
 		1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA962921D73E0076AC35 /* MainMapViewModel.swift */; };
 		1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA982921D7480076AC35 /* MainMapCoordinator.swift */; };
 		1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA9A2921D7570076AC35 /* MainMapViewController.swift */; };
@@ -35,7 +34,6 @@
 		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
-		2454477106161200C1B6793C /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C346CBD47432E4A03600609C /* Pods_NearTalk_NearTalkUITests.framework */; };
 		555A6B2B29236D51001336ED /* FriendsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendsListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendsViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendsListViewModel.swift */; };
@@ -63,46 +61,48 @@
 		603EDDB12926C87700BEE65C /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDB02926C87700BEE65C /* RootTabBarController.swift */; };
 		603EDDB32926C89000BEE65C /* RootTabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDB22926C89000BEE65C /* RootTabBarViewModel.swift */; };
 		603EDDB62926C89C00BEE65C /* RootTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDB52926C89C00BEE65C /* RootTabBarCoordinator.swift */; };
+		603FD0BD2928C23600687ED4 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 603FD0BC2928C23600687ED4 /* README.md */; };
+		603FD3622928D40300687ED4 /* .FirebaseDatabaseBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD33D2928D40300687ED4 /* .FirebaseDatabaseBinary.version */; };
+		603FD3632928D40300687ED4 /* nanopb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD33E2928D40300687ED4 /* nanopb.xcframework */; };
+		603FD3642928D40300687ED4 /* FirebaseDynamicLinks.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD33F2928D40300687ED4 /* FirebaseDynamicLinks.xcframework */; };
+		603FD3652928D40300687ED4 /* FirebaseMessaging.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3402928D40300687ED4 /* FirebaseMessaging.xcframework */; };
+		603FD3662928D40300687ED4 /* FirebaseFirestore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3412928D40300687ED4 /* FirebaseFirestore.xcframework */; };
+		603FD3672928D40300687ED4 /* gRPC-Core.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3422928D40300687ED4 /* gRPC-Core.xcframework */; };
+		603FD3682928D40300687ED4 /* GoogleAppMeasurementIdentitySupport.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3432928D40300687ED4 /* GoogleAppMeasurementIdentitySupport.xcframework */; };
+		603FD3692928D40300687ED4 /* .FirebaseAuthBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD3442928D40300687ED4 /* .FirebaseAuthBinary.version */; };
+		603FD36A2928D40300687ED4 /* .FirebaseDynamicLinksBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD3452928D40300687ED4 /* .FirebaseDynamicLinksBinary.version */; };
+		603FD36B2928D40300687ED4 /* FirebaseAnalytics.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3462928D40300687ED4 /* FirebaseAnalytics.xcframework */; };
+		603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD3472928D40300687ED4 /* .FirebaseStorageBinary.version */; };
+		603FD36D2928D40300687ED4 /* FirebaseAnalyticsSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3482928D40300687ED4 /* FirebaseAnalyticsSwift.xcframework */; };
+		603FD36E2928D40300687ED4 /* FirebaseDatabase.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3492928D40300687ED4 /* FirebaseDatabase.xcframework */; };
+		603FD36F2928D40300687ED4 /* .FirebaseFirestoreBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD34A2928D40300687ED4 /* .FirebaseFirestoreBinary.version */; };
+		603FD3702928D40300687ED4 /* Libuv-gRPC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD34B2928D40300687ED4 /* Libuv-gRPC.xcframework */; };
+		603FD3712928D40300687ED4 /* leveldb-library.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD34C2928D40300687ED4 /* leveldb-library.xcframework */; };
+		603FD3722928D40300687ED4 /* FirebaseStorage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD34D2928D40300687ED4 /* FirebaseStorage.xcframework */; };
+		603FD3732928D40300687ED4 /* FirebaseInstallations.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD34E2928D40300687ED4 /* FirebaseInstallations.xcframework */; };
+		603FD3742928D40300687ED4 /* FBLPromises.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD34F2928D40300687ED4 /* FBLPromises.xcframework */; };
+		603FD3752928D40300687ED4 /* FirebaseDatabaseSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3502928D40300687ED4 /* FirebaseDatabaseSwift.xcframework */; };
+		603FD3762928D40300687ED4 /* .FirebaseMessagingBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD3512928D40300687ED4 /* .FirebaseMessagingBinary.version */; };
+		603FD3772928D40300687ED4 /* FirebaseCoreExtension.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3522928D40300687ED4 /* FirebaseCoreExtension.xcframework */; };
+		603FD3782928D40300687ED4 /* FirebaseAuthInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3532928D40300687ED4 /* FirebaseAuthInterop.xcframework */; };
+		603FD3792928D40300687ED4 /* FirebaseCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3542928D40300687ED4 /* FirebaseCore.xcframework */; };
+		603FD37A2928D40300687ED4 /* gRPC-C++.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3552928D40300687ED4 /* gRPC-C++.xcframework */; };
+		603FD37B2928D40300687ED4 /* BoringSSL-GRPC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3562928D40300687ED4 /* BoringSSL-GRPC.xcframework */; };
+		603FD37C2928D40300687ED4 /* FirebaseAppCheckInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3572928D40300687ED4 /* FirebaseAppCheckInterop.xcframework */; };
+		603FD37D2928D40300687ED4 /* FirebaseCoreInternal.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3582928D40300687ED4 /* FirebaseCoreInternal.xcframework */; };
+		603FD37E2928D40300687ED4 /* GoogleDataTransport.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3592928D40300687ED4 /* GoogleDataTransport.xcframework */; };
+		603FD37F2928D40300687ED4 /* FirebaseAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD35A2928D40300687ED4 /* FirebaseAuth.xcframework */; };
+		603FD3802928D40300687ED4 /* FirebaseSharedSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD35B2928D40300687ED4 /* FirebaseSharedSwift.xcframework */; };
+		603FD3812928D40300687ED4 /* .FirebaseAnalyticsBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD35C2928D40300687ED4 /* .FirebaseAnalyticsBinary.version */; };
+		603FD3822928D40300687ED4 /* GoogleAppMeasurement.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD35D2928D40300687ED4 /* GoogleAppMeasurement.xcframework */; };
+		603FD3832928D40300687ED4 /* FirebaseFirestoreSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD35E2928D40300687ED4 /* FirebaseFirestoreSwift.xcframework */; };
+		603FD3842928D40300687ED4 /* GTMSessionFetcher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD35F2928D40300687ED4 /* GTMSessionFetcher.xcframework */; };
+		603FD3852928D40300687ED4 /* abseil.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3602928D40300687ED4 /* abseil.xcframework */; };
+		603FD3862928D40300687ED4 /* GoogleUtilities.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD3612928D40300687ED4 /* GoogleUtilities.xcframework */; };
 		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
 		6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */; };
-		6073A3D62928B26500D51CFD /* .FirebaseDatabaseBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3B12928B26500D51CFD /* .FirebaseDatabaseBinary.version */; };
-		6073A3D72928B26500D51CFD /* nanopb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3B22928B26500D51CFD /* nanopb.xcframework */; };
-		6073A3D82928B26500D51CFD /* FirebaseDynamicLinks.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3B32928B26500D51CFD /* FirebaseDynamicLinks.xcframework */; };
-		6073A3D92928B26500D51CFD /* FirebaseMessaging.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3B42928B26500D51CFD /* FirebaseMessaging.xcframework */; };
-		6073A3DA2928B26500D51CFD /* FirebaseFirestore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3B52928B26500D51CFD /* FirebaseFirestore.xcframework */; };
-		6073A3DB2928B26500D51CFD /* gRPC-Core.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3B62928B26500D51CFD /* gRPC-Core.xcframework */; };
-		6073A3DC2928B26500D51CFD /* GoogleAppMeasurementIdentitySupport.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3B72928B26500D51CFD /* GoogleAppMeasurementIdentitySupport.xcframework */; };
-		6073A3DD2928B26500D51CFD /* .FirebaseAuthBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3B82928B26500D51CFD /* .FirebaseAuthBinary.version */; };
-		6073A3DE2928B26500D51CFD /* .FirebaseDynamicLinksBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3B92928B26500D51CFD /* .FirebaseDynamicLinksBinary.version */; };
-		6073A3DF2928B26500D51CFD /* FirebaseAnalytics.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3BA2928B26500D51CFD /* FirebaseAnalytics.xcframework */; };
-		6073A3E02928B26500D51CFD /* .FirebaseStorageBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3BB2928B26500D51CFD /* .FirebaseStorageBinary.version */; };
-		6073A3E12928B26500D51CFD /* FirebaseAnalyticsSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3BC2928B26500D51CFD /* FirebaseAnalyticsSwift.xcframework */; };
-		6073A3E22928B26500D51CFD /* FirebaseDatabase.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3BD2928B26500D51CFD /* FirebaseDatabase.xcframework */; };
-		6073A3E32928B26500D51CFD /* .FirebaseFirestoreBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3BE2928B26500D51CFD /* .FirebaseFirestoreBinary.version */; };
-		6073A3E42928B26500D51CFD /* Libuv-gRPC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3BF2928B26500D51CFD /* Libuv-gRPC.xcframework */; };
-		6073A3E52928B26500D51CFD /* leveldb-library.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C02928B26500D51CFD /* leveldb-library.xcframework */; };
-		6073A3E62928B26500D51CFD /* FirebaseStorage.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C12928B26500D51CFD /* FirebaseStorage.xcframework */; };
-		6073A3E72928B26500D51CFD /* FirebaseInstallations.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C22928B26500D51CFD /* FirebaseInstallations.xcframework */; };
-		6073A3E82928B26500D51CFD /* FBLPromises.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C32928B26500D51CFD /* FBLPromises.xcframework */; };
-		6073A3E92928B26500D51CFD /* FirebaseDatabaseSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C42928B26500D51CFD /* FirebaseDatabaseSwift.xcframework */; };
-		6073A3EA2928B26500D51CFD /* .FirebaseMessagingBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3C52928B26500D51CFD /* .FirebaseMessagingBinary.version */; };
-		6073A3EB2928B26500D51CFD /* FirebaseCoreExtension.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C62928B26500D51CFD /* FirebaseCoreExtension.xcframework */; };
-		6073A3EC2928B26500D51CFD /* FirebaseAuthInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C72928B26500D51CFD /* FirebaseAuthInterop.xcframework */; };
-		6073A3ED2928B26500D51CFD /* FirebaseCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C82928B26500D51CFD /* FirebaseCore.xcframework */; };
-		6073A3EE2928B26500D51CFD /* gRPC-C++.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3C92928B26500D51CFD /* gRPC-C++.xcframework */; };
-		6073A3EF2928B26500D51CFD /* BoringSSL-GRPC.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3CA2928B26500D51CFD /* BoringSSL-GRPC.xcframework */; };
-		6073A3F02928B26500D51CFD /* FirebaseAppCheckInterop.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3CB2928B26500D51CFD /* FirebaseAppCheckInterop.xcframework */; };
-		6073A3F12928B26500D51CFD /* FirebaseCoreInternal.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3CC2928B26500D51CFD /* FirebaseCoreInternal.xcframework */; };
-		6073A3F22928B26500D51CFD /* GoogleDataTransport.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3CD2928B26500D51CFD /* GoogleDataTransport.xcframework */; };
-		6073A3F32928B26500D51CFD /* FirebaseAuth.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3CE2928B26500D51CFD /* FirebaseAuth.xcframework */; };
-		6073A3F42928B26500D51CFD /* FirebaseSharedSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3CF2928B26500D51CFD /* FirebaseSharedSwift.xcframework */; };
-		6073A3F52928B26500D51CFD /* .FirebaseAnalyticsBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 6073A3D02928B26500D51CFD /* .FirebaseAnalyticsBinary.version */; };
-		6073A3F62928B26500D51CFD /* GoogleAppMeasurement.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3D12928B26500D51CFD /* GoogleAppMeasurement.xcframework */; };
-		6073A3F72928B26500D51CFD /* FirebaseFirestoreSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3D22928B26500D51CFD /* FirebaseFirestoreSwift.xcframework */; };
-		6073A3F82928B26500D51CFD /* GTMSessionFetcher.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3D32928B26500D51CFD /* GTMSessionFetcher.xcframework */; };
-		6073A3F92928B26500D51CFD /* abseil.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3D42928B26500D51CFD /* abseil.xcframework */; };
-		6073A3FA2928B26500D51CFD /* GoogleUtilities.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073A3D52928B26500D51CFD /* GoogleUtilities.xcframework */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
+		60DCAAF42928B9610087A63D /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60DCAAF32928B9610087A63D /* Cartfile */; };
 		60FD705729238B8C00A4C29A /* LaunchScreenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705629238B8C00A4C29A /* LaunchScreenRepository.swift */; };
 		60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705929238CBB00A4C29A /* StorageService.swift */; };
 		60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */; };
@@ -143,7 +143,9 @@
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
-		A2DB93C3650009C1EC954ABA /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1011E2D6F501A9AEC4C5AB1C /* Pods_NearTalk.framework */; };
+		ABE23BA58600143EABD9B180 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4585BFB6386FB019591AD279 /* Pods_NearTalk_NearTalkUITests.framework */; };
+		BC01D262369F1C224E653163 /* Pods_NearTalkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AC46AE5352F041440185296 /* Pods_NearTalkTests.framework */; };
+		E94C56C0CBA5EAE3D34EB00E /* Pods_NearTalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A70F85702CFE5252B66D8E11 /* Pods_NearTalk.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,9 +165,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		603FD2872928CD4700687ED4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		035F107CC02D1FCCC304BD97 /* Pods-NearTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.release.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.release.xcconfig"; sourceTree = "<group>"; };
-		1011E2D6F501A9AEC4C5AB1C /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		134D31C935BE6C4AE9082C41 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
 		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
 		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
 		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -197,9 +211,11 @@
 		1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		39C0F5E86464D47A488A59D4 /* Pods-NearTalkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.debug.xcconfig"; sourceTree = "<group>"; };
-		3BF42334F4F7D2213AD2E129 /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D0B34825A295FA01D4CE0DC /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
+		2AD5F9573726FF9E3E36FC3F /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		2F584861D6A9409CFD0076AF /* Pods-NearTalkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3AC46AE5352F041440185296 /* Pods_NearTalkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BDD85385ADBE469FA3E4B6B /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
+		4585BFB6386FB019591AD279 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		555A6B2A29236D51001336ED /* FriendsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListCell.swift; sourceTree = "<group>"; };
 		555A6B2C29236D61001336ED /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		555A6B2E29236D73001336ED /* FriendsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListViewModel.swift; sourceTree = "<group>"; };
@@ -213,7 +229,6 @@
 		555A6B422924B9E4001336ED /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		555A6B472924BE65001336ED /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		556EE2502926402000EEA145 /* ChatRoomListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatRoomListCell.swift; sourceTree = "<group>"; };
-		5C80CFC428048EDF13DBBFCC /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6008FC9C2925DBCF0044F017 /* NCLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCLocation.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
@@ -228,46 +243,49 @@
 		603EDDB02926C87700BEE65C /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
 		603EDDB22926C89000BEE65C /* RootTabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarViewModel.swift; sourceTree = "<group>"; };
 		603EDDB52926C89C00BEE65C /* RootTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarCoordinator.swift; sourceTree = "<group>"; };
+		603FD0BC2928C23600687ED4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		603FD33D2928D40300687ED4 /* .FirebaseDatabaseBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseDatabaseBinary.version; sourceTree = "<group>"; };
+		603FD33E2928D40300687ED4 /* nanopb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = nanopb.xcframework; sourceTree = "<group>"; };
+		603FD33F2928D40300687ED4 /* FirebaseDynamicLinks.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDynamicLinks.xcframework; sourceTree = "<group>"; };
+		603FD3402928D40300687ED4 /* FirebaseMessaging.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseMessaging.xcframework; sourceTree = "<group>"; };
+		603FD3412928D40300687ED4 /* FirebaseFirestore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseFirestore.xcframework; sourceTree = "<group>"; };
+		603FD3422928D40300687ED4 /* gRPC-Core.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "gRPC-Core.xcframework"; sourceTree = "<group>"; };
+		603FD3432928D40300687ED4 /* GoogleAppMeasurementIdentitySupport.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleAppMeasurementIdentitySupport.xcframework; sourceTree = "<group>"; };
+		603FD3442928D40300687ED4 /* .FirebaseAuthBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseAuthBinary.version; sourceTree = "<group>"; };
+		603FD3452928D40300687ED4 /* .FirebaseDynamicLinksBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseDynamicLinksBinary.version; sourceTree = "<group>"; };
+		603FD3462928D40300687ED4 /* FirebaseAnalytics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAnalytics.xcframework; sourceTree = "<group>"; };
+		603FD3472928D40300687ED4 /* .FirebaseStorageBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseStorageBinary.version; sourceTree = "<group>"; };
+		603FD3482928D40300687ED4 /* FirebaseAnalyticsSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAnalyticsSwift.xcframework; sourceTree = "<group>"; };
+		603FD3492928D40300687ED4 /* FirebaseDatabase.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDatabase.xcframework; sourceTree = "<group>"; };
+		603FD34A2928D40300687ED4 /* .FirebaseFirestoreBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseFirestoreBinary.version; sourceTree = "<group>"; };
+		603FD34B2928D40300687ED4 /* Libuv-gRPC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "Libuv-gRPC.xcframework"; sourceTree = "<group>"; };
+		603FD34C2928D40300687ED4 /* leveldb-library.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "leveldb-library.xcframework"; sourceTree = "<group>"; };
+		603FD34D2928D40300687ED4 /* FirebaseStorage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseStorage.xcframework; sourceTree = "<group>"; };
+		603FD34E2928D40300687ED4 /* FirebaseInstallations.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseInstallations.xcframework; sourceTree = "<group>"; };
+		603FD34F2928D40300687ED4 /* FBLPromises.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FBLPromises.xcframework; sourceTree = "<group>"; };
+		603FD3502928D40300687ED4 /* FirebaseDatabaseSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDatabaseSwift.xcframework; sourceTree = "<group>"; };
+		603FD3512928D40300687ED4 /* .FirebaseMessagingBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseMessagingBinary.version; sourceTree = "<group>"; };
+		603FD3522928D40300687ED4 /* FirebaseCoreExtension.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseCoreExtension.xcframework; sourceTree = "<group>"; };
+		603FD3532928D40300687ED4 /* FirebaseAuthInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAuthInterop.xcframework; sourceTree = "<group>"; };
+		603FD3542928D40300687ED4 /* FirebaseCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseCore.xcframework; sourceTree = "<group>"; };
+		603FD3552928D40300687ED4 /* gRPC-C++.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "gRPC-C++.xcframework"; sourceTree = "<group>"; };
+		603FD3562928D40300687ED4 /* BoringSSL-GRPC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BoringSSL-GRPC.xcframework"; sourceTree = "<group>"; };
+		603FD3572928D40300687ED4 /* FirebaseAppCheckInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAppCheckInterop.xcframework; sourceTree = "<group>"; };
+		603FD3582928D40300687ED4 /* FirebaseCoreInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseCoreInternal.xcframework; sourceTree = "<group>"; };
+		603FD3592928D40300687ED4 /* GoogleDataTransport.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleDataTransport.xcframework; sourceTree = "<group>"; };
+		603FD35A2928D40300687ED4 /* FirebaseAuth.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAuth.xcframework; sourceTree = "<group>"; };
+		603FD35B2928D40300687ED4 /* FirebaseSharedSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseSharedSwift.xcframework; sourceTree = "<group>"; };
+		603FD35C2928D40300687ED4 /* .FirebaseAnalyticsBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseAnalyticsBinary.version; sourceTree = "<group>"; };
+		603FD35D2928D40300687ED4 /* GoogleAppMeasurement.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleAppMeasurement.xcframework; sourceTree = "<group>"; };
+		603FD35E2928D40300687ED4 /* FirebaseFirestoreSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseFirestoreSwift.xcframework; sourceTree = "<group>"; };
+		603FD35F2928D40300687ED4 /* GTMSessionFetcher.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GTMSessionFetcher.xcframework; sourceTree = "<group>"; };
+		603FD3602928D40300687ED4 /* abseil.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = abseil.xcframework; sourceTree = "<group>"; };
+		603FD3612928D40300687ED4 /* GoogleUtilities.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleUtilities.xcframework; sourceTree = "<group>"; };
 		605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenDIContainer.swift; sourceTree = "<group>"; };
 		6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Dictionary.swift"; sourceTree = "<group>"; };
-		6073A3B12928B26500D51CFD /* .FirebaseDatabaseBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseDatabaseBinary.version; sourceTree = "<group>"; };
-		6073A3B22928B26500D51CFD /* nanopb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = nanopb.xcframework; sourceTree = "<group>"; };
-		6073A3B32928B26500D51CFD /* FirebaseDynamicLinks.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDynamicLinks.xcframework; sourceTree = "<group>"; };
-		6073A3B42928B26500D51CFD /* FirebaseMessaging.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseMessaging.xcframework; sourceTree = "<group>"; };
-		6073A3B52928B26500D51CFD /* FirebaseFirestore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseFirestore.xcframework; sourceTree = "<group>"; };
-		6073A3B62928B26500D51CFD /* gRPC-Core.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "gRPC-Core.xcframework"; sourceTree = "<group>"; };
-		6073A3B72928B26500D51CFD /* GoogleAppMeasurementIdentitySupport.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleAppMeasurementIdentitySupport.xcframework; sourceTree = "<group>"; };
-		6073A3B82928B26500D51CFD /* .FirebaseAuthBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseAuthBinary.version; sourceTree = "<group>"; };
-		6073A3B92928B26500D51CFD /* .FirebaseDynamicLinksBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseDynamicLinksBinary.version; sourceTree = "<group>"; };
-		6073A3BA2928B26500D51CFD /* FirebaseAnalytics.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAnalytics.xcframework; sourceTree = "<group>"; };
-		6073A3BB2928B26500D51CFD /* .FirebaseStorageBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseStorageBinary.version; sourceTree = "<group>"; };
-		6073A3BC2928B26500D51CFD /* FirebaseAnalyticsSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAnalyticsSwift.xcframework; sourceTree = "<group>"; };
-		6073A3BD2928B26500D51CFD /* FirebaseDatabase.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDatabase.xcframework; sourceTree = "<group>"; };
-		6073A3BE2928B26500D51CFD /* .FirebaseFirestoreBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseFirestoreBinary.version; sourceTree = "<group>"; };
-		6073A3BF2928B26500D51CFD /* Libuv-gRPC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "Libuv-gRPC.xcframework"; sourceTree = "<group>"; };
-		6073A3C02928B26500D51CFD /* leveldb-library.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "leveldb-library.xcframework"; sourceTree = "<group>"; };
-		6073A3C12928B26500D51CFD /* FirebaseStorage.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseStorage.xcframework; sourceTree = "<group>"; };
-		6073A3C22928B26500D51CFD /* FirebaseInstallations.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseInstallations.xcframework; sourceTree = "<group>"; };
-		6073A3C32928B26500D51CFD /* FBLPromises.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FBLPromises.xcframework; sourceTree = "<group>"; };
-		6073A3C42928B26500D51CFD /* FirebaseDatabaseSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDatabaseSwift.xcframework; sourceTree = "<group>"; };
-		6073A3C52928B26500D51CFD /* .FirebaseMessagingBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseMessagingBinary.version; sourceTree = "<group>"; };
-		6073A3C62928B26500D51CFD /* FirebaseCoreExtension.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseCoreExtension.xcframework; sourceTree = "<group>"; };
-		6073A3C72928B26500D51CFD /* FirebaseAuthInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAuthInterop.xcframework; sourceTree = "<group>"; };
-		6073A3C82928B26500D51CFD /* FirebaseCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseCore.xcframework; sourceTree = "<group>"; };
-		6073A3C92928B26500D51CFD /* gRPC-C++.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "gRPC-C++.xcframework"; sourceTree = "<group>"; };
-		6073A3CA2928B26500D51CFD /* BoringSSL-GRPC.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = "BoringSSL-GRPC.xcframework"; sourceTree = "<group>"; };
-		6073A3CB2928B26500D51CFD /* FirebaseAppCheckInterop.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAppCheckInterop.xcframework; sourceTree = "<group>"; };
-		6073A3CC2928B26500D51CFD /* FirebaseCoreInternal.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseCoreInternal.xcframework; sourceTree = "<group>"; };
-		6073A3CD2928B26500D51CFD /* GoogleDataTransport.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleDataTransport.xcframework; sourceTree = "<group>"; };
-		6073A3CE2928B26500D51CFD /* FirebaseAuth.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseAuth.xcframework; sourceTree = "<group>"; };
-		6073A3CF2928B26500D51CFD /* FirebaseSharedSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseSharedSwift.xcframework; sourceTree = "<group>"; };
-		6073A3D02928B26500D51CFD /* .FirebaseAnalyticsBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseAnalyticsBinary.version; sourceTree = "<group>"; };
-		6073A3D12928B26500D51CFD /* GoogleAppMeasurement.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleAppMeasurement.xcframework; sourceTree = "<group>"; };
-		6073A3D22928B26500D51CFD /* FirebaseFirestoreSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseFirestoreSwift.xcframework; sourceTree = "<group>"; };
-		6073A3D32928B26500D51CFD /* GTMSessionFetcher.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GTMSessionFetcher.xcframework; sourceTree = "<group>"; };
-		6073A3D42928B26500D51CFD /* abseil.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = abseil.xcframework; sourceTree = "<group>"; };
-		6073A3D52928B26500D51CFD /* GoogleUtilities.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = GoogleUtilities.xcframework; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
+		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		60FB1DA9A810C61099D92942 /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		60FD705629238B8C00A4C29A /* LaunchScreenRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchScreenRepository.swift; sourceTree = "<group>"; };
 		60FD705929238CBB00A4C29A /* StorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealTimeDatabaseService.swift; sourceTree = "<group>"; };
@@ -276,7 +294,6 @@
 		60FD70612923927C00A4C29A /* NonceGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonceGenerator.swift; sourceTree = "<group>"; };
 		60FD70692924080A00A4C29A /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		60FD706B2924081000A4C29A /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
-		68C82F0ABBB03CD6666A2707 /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
 		7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailUseCase.swift; sourceTree = "<group>"; };
 		7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailCoordinator.swift; sourceTree = "<group>"; };
@@ -308,8 +325,8 @@
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
-		C346CBD47432E4A03600609C /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F74FC1625ECC30A18280D665 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk-NearTalkUITests.release.xcconfig"; path = "Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests.release.xcconfig"; sourceTree = "<group>"; };
+		872DEF391E985F7B068F9816 /* Pods-NearTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.release.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.release.xcconfig"; sourceTree = "<group>"; };
+		A70F85702CFE5252B66D8E11 /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,37 +334,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6073A3DA2928B26500D51CFD /* FirebaseFirestore.xcframework in Frameworks */,
-				6073A3EB2928B26500D51CFD /* FirebaseCoreExtension.xcframework in Frameworks */,
-				6073A3F82928B26500D51CFD /* GTMSessionFetcher.xcframework in Frameworks */,
-				6073A3E92928B26500D51CFD /* FirebaseDatabaseSwift.xcframework in Frameworks */,
-				6073A3D82928B26500D51CFD /* FirebaseDynamicLinks.xcframework in Frameworks */,
-				6073A3EF2928B26500D51CFD /* BoringSSL-GRPC.xcframework in Frameworks */,
-				6073A3F02928B26500D51CFD /* FirebaseAppCheckInterop.xcframework in Frameworks */,
-				6073A3DC2928B26500D51CFD /* GoogleAppMeasurementIdentitySupport.xcframework in Frameworks */,
-				6073A3DB2928B26500D51CFD /* gRPC-Core.xcframework in Frameworks */,
-				6073A3E72928B26500D51CFD /* FirebaseInstallations.xcframework in Frameworks */,
-				6073A3F12928B26500D51CFD /* FirebaseCoreInternal.xcframework in Frameworks */,
-				6073A3F62928B26500D51CFD /* GoogleAppMeasurement.xcframework in Frameworks */,
-				6073A3DF2928B26500D51CFD /* FirebaseAnalytics.xcframework in Frameworks */,
-				6073A3EE2928B26500D51CFD /* gRPC-C++.xcframework in Frameworks */,
-				6073A3F42928B26500D51CFD /* FirebaseSharedSwift.xcframework in Frameworks */,
-				6073A3ED2928B26500D51CFD /* FirebaseCore.xcframework in Frameworks */,
-				6073A3E12928B26500D51CFD /* FirebaseAnalyticsSwift.xcframework in Frameworks */,
-				6073A3E82928B26500D51CFD /* FBLPromises.xcframework in Frameworks */,
-				6073A3F32928B26500D51CFD /* FirebaseAuth.xcframework in Frameworks */,
-				6073A3D72928B26500D51CFD /* nanopb.xcframework in Frameworks */,
-				6073A3EC2928B26500D51CFD /* FirebaseAuthInterop.xcframework in Frameworks */,
-				6073A3F22928B26500D51CFD /* GoogleDataTransport.xcframework in Frameworks */,
-				6073A3D92928B26500D51CFD /* FirebaseMessaging.xcframework in Frameworks */,
-				6073A3E22928B26500D51CFD /* FirebaseDatabase.xcframework in Frameworks */,
-				6073A3FA2928B26500D51CFD /* GoogleUtilities.xcframework in Frameworks */,
-				6073A3E52928B26500D51CFD /* leveldb-library.xcframework in Frameworks */,
-				6073A3E42928B26500D51CFD /* Libuv-gRPC.xcframework in Frameworks */,
-				6073A3F72928B26500D51CFD /* FirebaseFirestoreSwift.xcframework in Frameworks */,
-				6073A3E62928B26500D51CFD /* FirebaseStorage.xcframework in Frameworks */,
-				6073A3F92928B26500D51CFD /* abseil.xcframework in Frameworks */,
-				A2DB93C3650009C1EC954ABA /* Pods_NearTalk.framework in Frameworks */,
+				603FD3662928D40300687ED4 /* FirebaseFirestore.xcframework in Frameworks */,
+				603FD3772928D40300687ED4 /* FirebaseCoreExtension.xcframework in Frameworks */,
+				603FD3842928D40300687ED4 /* GTMSessionFetcher.xcframework in Frameworks */,
+				603FD3752928D40300687ED4 /* FirebaseDatabaseSwift.xcframework in Frameworks */,
+				603FD3642928D40300687ED4 /* FirebaseDynamicLinks.xcframework in Frameworks */,
+				603FD37B2928D40300687ED4 /* BoringSSL-GRPC.xcframework in Frameworks */,
+				603FD37C2928D40300687ED4 /* FirebaseAppCheckInterop.xcframework in Frameworks */,
+				603FD3682928D40300687ED4 /* GoogleAppMeasurementIdentitySupport.xcframework in Frameworks */,
+				603FD3672928D40300687ED4 /* gRPC-Core.xcframework in Frameworks */,
+				603FD3732928D40300687ED4 /* FirebaseInstallations.xcframework in Frameworks */,
+				603FD37D2928D40300687ED4 /* FirebaseCoreInternal.xcframework in Frameworks */,
+				603FD3822928D40300687ED4 /* GoogleAppMeasurement.xcframework in Frameworks */,
+				E94C56C0CBA5EAE3D34EB00E /* Pods_NearTalk.framework in Frameworks */,
+				603FD36B2928D40300687ED4 /* FirebaseAnalytics.xcframework in Frameworks */,
+				603FD37A2928D40300687ED4 /* gRPC-C++.xcframework in Frameworks */,
+				603FD3802928D40300687ED4 /* FirebaseSharedSwift.xcframework in Frameworks */,
+				603FD3792928D40300687ED4 /* FirebaseCore.xcframework in Frameworks */,
+				603FD36D2928D40300687ED4 /* FirebaseAnalyticsSwift.xcframework in Frameworks */,
+				603FD3742928D40300687ED4 /* FBLPromises.xcframework in Frameworks */,
+				603FD37F2928D40300687ED4 /* FirebaseAuth.xcframework in Frameworks */,
+				603FD3632928D40300687ED4 /* nanopb.xcframework in Frameworks */,
+				603FD3782928D40300687ED4 /* FirebaseAuthInterop.xcframework in Frameworks */,
+				603FD37E2928D40300687ED4 /* GoogleDataTransport.xcframework in Frameworks */,
+				603FD3652928D40300687ED4 /* FirebaseMessaging.xcframework in Frameworks */,
+				603FD36E2928D40300687ED4 /* FirebaseDatabase.xcframework in Frameworks */,
+				603FD3862928D40300687ED4 /* GoogleUtilities.xcframework in Frameworks */,
+				603FD3712928D40300687ED4 /* leveldb-library.xcframework in Frameworks */,
+				603FD3702928D40300687ED4 /* Libuv-gRPC.xcframework in Frameworks */,
+				603FD3832928D40300687ED4 /* FirebaseFirestoreSwift.xcframework in Frameworks */,
+				603FD3722928D40300687ED4 /* FirebaseStorage.xcframework in Frameworks */,
+				603FD3852928D40300687ED4 /* abseil.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,7 +372,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11CEAF2DC602CF4DA26718F2 /* Pods_NearTalkTests.framework in Frameworks */,
+				BC01D262369F1C224E653163 /* Pods_NearTalkTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,23 +380,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2454477106161200C1B6793C /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */,
+				ABE23BA58600143EABD9B180 /* Pods_NearTalk_NearTalkUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1267E4504C292F18827820BE /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				1011E2D6F501A9AEC4C5AB1C /* Pods_NearTalk.framework */,
-				C346CBD47432E4A03600609C /* Pods_NearTalk_NearTalkUITests.framework */,
-				3BF42334F4F7D2213AD2E129 /* Pods_NearTalkTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		1648BA922921D7240076AC35 /* MainMap */ = {
 			isa = PBXGroup;
 			children = (
@@ -499,14 +506,16 @@
 		1660D21B291DDB37005F7B24 = {
 			isa = PBXGroup;
 			children = (
+				603FD0BC2928C23600687ED4 /* README.md */,
 				1660D279291E09CE005F7B24 /* .swiftlint.yml */,
-				6073A3AF2928B26500D51CFD /* Carthage */,
+				60DCAAF32928B9610087A63D /* Cartfile */,
+				603FD33C2928D40300687ED4 /* Build */,
 				1660D226291DDB37005F7B24 /* NearTalk */,
 				1660D240291DDB3A005F7B24 /* NearTalkTests */,
 				1660D24A291DDB3A005F7B24 /* NearTalkUITests */,
 				1660D225291DDB37005F7B24 /* Products */,
 				EF9BC89A864970D54CE8E69D /* Pods */,
-				1267E4504C292F18827820BE /* Frameworks */,
+				85A8838D008DE3BEF9830429 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -823,6 +832,51 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		603FD33C2928D40300687ED4 /* Build */ = {
+			isa = PBXGroup;
+			children = (
+				603FD33D2928D40300687ED4 /* .FirebaseDatabaseBinary.version */,
+				603FD33E2928D40300687ED4 /* nanopb.xcframework */,
+				603FD33F2928D40300687ED4 /* FirebaseDynamicLinks.xcframework */,
+				603FD3402928D40300687ED4 /* FirebaseMessaging.xcframework */,
+				603FD3412928D40300687ED4 /* FirebaseFirestore.xcframework */,
+				603FD3422928D40300687ED4 /* gRPC-Core.xcframework */,
+				603FD3432928D40300687ED4 /* GoogleAppMeasurementIdentitySupport.xcframework */,
+				603FD3442928D40300687ED4 /* .FirebaseAuthBinary.version */,
+				603FD3452928D40300687ED4 /* .FirebaseDynamicLinksBinary.version */,
+				603FD3462928D40300687ED4 /* FirebaseAnalytics.xcframework */,
+				603FD3472928D40300687ED4 /* .FirebaseStorageBinary.version */,
+				603FD3482928D40300687ED4 /* FirebaseAnalyticsSwift.xcframework */,
+				603FD3492928D40300687ED4 /* FirebaseDatabase.xcframework */,
+				603FD34A2928D40300687ED4 /* .FirebaseFirestoreBinary.version */,
+				603FD34B2928D40300687ED4 /* Libuv-gRPC.xcframework */,
+				603FD34C2928D40300687ED4 /* leveldb-library.xcframework */,
+				603FD34D2928D40300687ED4 /* FirebaseStorage.xcframework */,
+				603FD34E2928D40300687ED4 /* FirebaseInstallations.xcframework */,
+				603FD34F2928D40300687ED4 /* FBLPromises.xcframework */,
+				603FD3502928D40300687ED4 /* FirebaseDatabaseSwift.xcframework */,
+				603FD3512928D40300687ED4 /* .FirebaseMessagingBinary.version */,
+				603FD3522928D40300687ED4 /* FirebaseCoreExtension.xcframework */,
+				603FD3532928D40300687ED4 /* FirebaseAuthInterop.xcframework */,
+				603FD3542928D40300687ED4 /* FirebaseCore.xcframework */,
+				603FD3552928D40300687ED4 /* gRPC-C++.xcframework */,
+				603FD3562928D40300687ED4 /* BoringSSL-GRPC.xcframework */,
+				603FD3572928D40300687ED4 /* FirebaseAppCheckInterop.xcframework */,
+				603FD3582928D40300687ED4 /* FirebaseCoreInternal.xcframework */,
+				603FD3592928D40300687ED4 /* GoogleDataTransport.xcframework */,
+				603FD35A2928D40300687ED4 /* FirebaseAuth.xcframework */,
+				603FD35B2928D40300687ED4 /* FirebaseSharedSwift.xcframework */,
+				603FD35C2928D40300687ED4 /* .FirebaseAnalyticsBinary.version */,
+				603FD35D2928D40300687ED4 /* GoogleAppMeasurement.xcframework */,
+				603FD35E2928D40300687ED4 /* FirebaseFirestoreSwift.xcframework */,
+				603FD35F2928D40300687ED4 /* GTMSessionFetcher.xcframework */,
+				603FD3602928D40300687ED4 /* abseil.xcframework */,
+				603FD3612928D40300687ED4 /* GoogleUtilities.xcframework */,
+			);
+			name = Build;
+			path = Carthage/Build;
+			sourceTree = "<group>";
+		};
 		605715A42920AA0A004A0904 /* DIContainer */ = {
 			isa = PBXGroup;
 			children = (
@@ -833,58 +887,6 @@
 				603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */,
 			);
 			path = DIContainer;
-			sourceTree = "<group>";
-		};
-		6073A3AF2928B26500D51CFD /* Carthage */ = {
-			isa = PBXGroup;
-			children = (
-				6073A3B02928B26500D51CFD /* Build */,
-			);
-			path = Carthage;
-			sourceTree = "<group>";
-		};
-		6073A3B02928B26500D51CFD /* Build */ = {
-			isa = PBXGroup;
-			children = (
-				6073A3B12928B26500D51CFD /* .FirebaseDatabaseBinary.version */,
-				6073A3B22928B26500D51CFD /* nanopb.xcframework */,
-				6073A3B32928B26500D51CFD /* FirebaseDynamicLinks.xcframework */,
-				6073A3B42928B26500D51CFD /* FirebaseMessaging.xcframework */,
-				6073A3B52928B26500D51CFD /* FirebaseFirestore.xcframework */,
-				6073A3B62928B26500D51CFD /* gRPC-Core.xcframework */,
-				6073A3B72928B26500D51CFD /* GoogleAppMeasurementIdentitySupport.xcframework */,
-				6073A3B82928B26500D51CFD /* .FirebaseAuthBinary.version */,
-				6073A3B92928B26500D51CFD /* .FirebaseDynamicLinksBinary.version */,
-				6073A3BA2928B26500D51CFD /* FirebaseAnalytics.xcframework */,
-				6073A3BB2928B26500D51CFD /* .FirebaseStorageBinary.version */,
-				6073A3BC2928B26500D51CFD /* FirebaseAnalyticsSwift.xcframework */,
-				6073A3BD2928B26500D51CFD /* FirebaseDatabase.xcframework */,
-				6073A3BE2928B26500D51CFD /* .FirebaseFirestoreBinary.version */,
-				6073A3BF2928B26500D51CFD /* Libuv-gRPC.xcframework */,
-				6073A3C02928B26500D51CFD /* leveldb-library.xcframework */,
-				6073A3C12928B26500D51CFD /* FirebaseStorage.xcframework */,
-				6073A3C22928B26500D51CFD /* FirebaseInstallations.xcframework */,
-				6073A3C32928B26500D51CFD /* FBLPromises.xcframework */,
-				6073A3C42928B26500D51CFD /* FirebaseDatabaseSwift.xcframework */,
-				6073A3C52928B26500D51CFD /* .FirebaseMessagingBinary.version */,
-				6073A3C62928B26500D51CFD /* FirebaseCoreExtension.xcframework */,
-				6073A3C72928B26500D51CFD /* FirebaseAuthInterop.xcframework */,
-				6073A3C82928B26500D51CFD /* FirebaseCore.xcframework */,
-				6073A3C92928B26500D51CFD /* gRPC-C++.xcframework */,
-				6073A3CA2928B26500D51CFD /* BoringSSL-GRPC.xcframework */,
-				6073A3CB2928B26500D51CFD /* FirebaseAppCheckInterop.xcframework */,
-				6073A3CC2928B26500D51CFD /* FirebaseCoreInternal.xcframework */,
-				6073A3CD2928B26500D51CFD /* GoogleDataTransport.xcframework */,
-				6073A3CE2928B26500D51CFD /* FirebaseAuth.xcframework */,
-				6073A3CF2928B26500D51CFD /* FirebaseSharedSwift.xcframework */,
-				6073A3D02928B26500D51CFD /* .FirebaseAnalyticsBinary.version */,
-				6073A3D12928B26500D51CFD /* GoogleAppMeasurement.xcframework */,
-				6073A3D22928B26500D51CFD /* FirebaseFirestoreSwift.xcframework */,
-				6073A3D32928B26500D51CFD /* GTMSessionFetcher.xcframework */,
-				6073A3D42928B26500D51CFD /* abseil.xcframework */,
-				6073A3D52928B26500D51CFD /* GoogleUtilities.xcframework */,
-			);
-			path = Build;
 			sourceTree = "<group>";
 		};
 		60FD705829238CBB00A4C29A /* Network */ = {
@@ -1085,15 +1087,25 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		85A8838D008DE3BEF9830429 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A70F85702CFE5252B66D8E11 /* Pods_NearTalk.framework */,
+				4585BFB6386FB019591AD279 /* Pods_NearTalk_NearTalkUITests.framework */,
+				3AC46AE5352F041440185296 /* Pods_NearTalkTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EF9BC89A864970D54CE8E69D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				68C82F0ABBB03CD6666A2707 /* Pods-NearTalk.debug.xcconfig */,
-				035F107CC02D1FCCC304BD97 /* Pods-NearTalk.release.xcconfig */,
-				5C80CFC428048EDF13DBBFCC /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */,
-				F74FC1625ECC30A18280D665 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */,
-				39C0F5E86464D47A488A59D4 /* Pods-NearTalkTests.debug.xcconfig */,
-				4D0B34825A295FA01D4CE0DC /* Pods-NearTalkTests.release.xcconfig */,
+				60FB1DA9A810C61099D92942 /* Pods-NearTalk.debug.xcconfig */,
+				872DEF391E985F7B068F9816 /* Pods-NearTalk.release.xcconfig */,
+				2AD5F9573726FF9E3E36FC3F /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */,
+				134D31C935BE6C4AE9082C41 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */,
+				2F584861D6A9409CFD0076AF /* Pods-NearTalkTests.debug.xcconfig */,
+				3BDD85385ADBE469FA3E4B6B /* Pods-NearTalkTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1105,12 +1117,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */;
 			buildPhases = (
-				ACEEED787BD923135AA5D123 /* [CP] Check Pods Manifest.lock */,
+				ED3B21A8C256062DAB6C66A5 /* [CP] Check Pods Manifest.lock */,
 				1660D270291DEE01005F7B24 /* SwiftLint Script */,
 				1660D220291DDB37005F7B24 /* Sources */,
 				1660D221291DDB37005F7B24 /* Frameworks */,
 				1660D222291DDB37005F7B24 /* Resources */,
-				E6DC63BEBD073C12CB57EB48 /* [CP] Embed Pods Frameworks */,
+				0E9F437659E0735D29541E68 /* [CP] Embed Pods Frameworks */,
+				603FD2872928CD4700687ED4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1125,7 +1138,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D254291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkTests" */;
 			buildPhases = (
-				2927333E4278AA57E9C0E9E5 /* [CP] Check Pods Manifest.lock */,
+				4A69792F33A02899B248C7EE /* [CP] Check Pods Manifest.lock */,
 				1660D239291DDB3A005F7B24 /* Sources */,
 				1660D23A291DDB3A005F7B24 /* Frameworks */,
 				1660D23B291DDB3A005F7B24 /* Resources */,
@@ -1144,11 +1157,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D257291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalkUITests" */;
 			buildPhases = (
-				6F45F516F6C5700570775BCD /* [CP] Check Pods Manifest.lock */,
+				F24926D52355CFDDCFD8DEFB /* [CP] Check Pods Manifest.lock */,
 				1660D243291DDB3A005F7B24 /* Sources */,
 				1660D244291DDB3A005F7B24 /* Frameworks */,
 				1660D245291DDB3A005F7B24 /* Resources */,
-				893FF047738173C164086A0E /* [CP] Embed Pods Frameworks */,
+				A6814EA7C3497AA10D59E677 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1208,18 +1221,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6073A3EA2928B26500D51CFD /* .FirebaseMessagingBinary.version in Resources */,
-				6073A3E02928B26500D51CFD /* .FirebaseStorageBinary.version in Resources */,
+				603FD3762928D40300687ED4 /* .FirebaseMessagingBinary.version in Resources */,
 				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
-				6073A3DE2928B26500D51CFD /* .FirebaseDynamicLinksBinary.version in Resources */,
-				6073A3F52928B26500D51CFD /* .FirebaseAnalyticsBinary.version in Resources */,
+				603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */,
+				60DCAAF42928B9610087A63D /* Cartfile in Resources */,
 				1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */,
-				6073A3D62928B26500D51CFD /* .FirebaseDatabaseBinary.version in Resources */,
 				555A6B432924B9E4001336ED /* GoogleService-Info.plist in Resources */,
-				6073A3E32928B26500D51CFD /* .FirebaseFirestoreBinary.version in Resources */,
+				603FD36F2928D40300687ED4 /* .FirebaseFirestoreBinary.version in Resources */,
+				603FD36A2928D40300687ED4 /* .FirebaseDynamicLinksBinary.version in Resources */,
+				603FD3812928D40300687ED4 /* .FirebaseAnalyticsBinary.version in Resources */,
 				1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */,
+				603FD3692928D40300687ED4 /* .FirebaseAuthBinary.version in Resources */,
+				603FD3622928D40300687ED4 /* .FirebaseDatabaseBinary.version in Resources */,
 				1648BAB6292391940076AC35 /* DummyData.plist in Resources */,
-				6073A3DD2928B26500D51CFD /* .FirebaseAuthBinary.version in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1240,6 +1254,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0E9F437659E0735D29541E68 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		1660D270291DEE01005F7B24 /* SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -1259,7 +1290,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
-		2927333E4278AA57E9C0E9E5 /* [CP] Check Pods Manifest.lock */ = {
+		4A69792F33A02899B248C7EE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1281,29 +1312,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6F45F516F6C5700570775BCD /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NearTalk-NearTalkUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		893FF047738173C164086A0E /* [CP] Embed Pods Frameworks */ = {
+		A6814EA7C3497AA10D59E677 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1320,7 +1329,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk-NearTalkUITests/Pods-NearTalk-NearTalkUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ACEEED787BD923135AA5D123 /* [CP] Check Pods Manifest.lock */ = {
+		ED3B21A8C256062DAB6C66A5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1342,21 +1351,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E6DC63BEBD073C12CB57EB48 /* [CP] Embed Pods Frameworks */ = {
+		F24926D52355CFDDCFD8DEFB /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NearTalk-NearTalkUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NearTalk/Pods-NearTalk-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1411,6 +1425,7 @@
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
+				603FD0BD2928C23600687ED4 /* README.md in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				83D354412925412400B9236A /* UserProfileRepository.swift in Sources */,
@@ -1618,13 +1633,19 @@
 		};
 		1660D252291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 68C82F0ABBB03CD6666A2707 /* Pods-NearTalk.debug.xcconfig */;
+			baseConfigurationReference = 60FB1DA9A810C61099D92942 /* Pods-NearTalk.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 92NGUT4BRA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1648,19 +1669,26 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		1660D253291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 035F107CC02D1FCCC304BD97 /* Pods-NearTalk.release.xcconfig */;
+			baseConfigurationReference = 872DEF391E985F7B068F9816 /* Pods-NearTalk.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 92NGUT4BRA;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/watchOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1684,13 +1712,14 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+				SYSTEM_FRAMEWORK_SEARCH_PATHS = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 		1660D255291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39C0F5E86464D47A488A59D4 /* Pods-NearTalkTests.debug.xcconfig */;
+			baseConfigurationReference = 2F584861D6A9409CFD0076AF /* Pods-NearTalkTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1710,7 +1739,7 @@
 		};
 		1660D256291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4D0B34825A295FA01D4CE0DC /* Pods-NearTalkTests.release.xcconfig */;
+			baseConfigurationReference = 3BDD85385ADBE469FA3E4B6B /* Pods-NearTalkTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1730,7 +1759,7 @@
 		};
 		1660D258291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5C80CFC428048EDF13DBBFCC /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */;
+			baseConfigurationReference = 2AD5F9573726FF9E3E36FC3F /* Pods-NearTalk-NearTalkUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -1748,7 +1777,7 @@
 		};
 		1660D259291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F74FC1625ECC30A18280D665 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */;
+			baseConfigurationReference = 134D31C935BE6C4AE9082C41 /* Pods-NearTalk-NearTalkUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
