@@ -8,8 +8,9 @@
 import Foundation
 import RxSwift
 
+#warning("지워야하는 파일")
 protocol LaunchScreenUseCase {
-    func verifyUser() -> Observable<Bool>
+    func verifyUser() -> Completable
 }
 
 final class DefaultLaunchScreenUseCase: LaunchScreenUseCase {
@@ -19,7 +20,7 @@ final class DefaultLaunchScreenUseCase: LaunchScreenUseCase {
         self.launchScreenRepository = launchScreenRepository
     }
     
-    func verifyUser() -> Observable<Bool> {
+    func verifyUser() -> Completable {
         self.launchScreenRepository.verifyUser()
     }
 }

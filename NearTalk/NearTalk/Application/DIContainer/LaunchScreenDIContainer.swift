@@ -13,31 +13,25 @@ final class LaunchScreenDIContainer {
     // MARK: - Dependencies
     
     // MARK: - Services
-
+    func makeAuthService() -> FirebaseAuthService {
+        return DefaultFirebaseAuthService()
+    }
+    
     // MARK: - UseCases
-    func makeLaunchScreenUseCase() -> LaunchScreenUseCase {
-        return DefaultLaunchScreenUseCase(launchScreenRepository: self.makeRepository())
+    func makeLoginUseCase() -> LoginUseCase {
+        return DefaultLoginUseCase(authService: makeAuthService())
     }
     
     // MARK: - Repositories
-    func makeRepository() -> LaunchScreenRepository {
-        return DefaultLaunchScreenRepository(firebaseAuthService: DefaultFirebaseAuthService())
-    }
     
     // MARK: - ViewModels
     func makeViewModel(actions: LaunchScreenViewModelActions) -> LaunchScreenViewModel {
-        return DefaultLaunchScreenViewModel(
-            useCase: self.makeLaunchScreenUseCase(),
-            actions: actions
-        )
+        return DefaultLaunchScreenViewModel(useCase: self.makeLoginUseCase(), actions: actions)
     }
     
     // MARK: - Create viewController
     func createLaunchScreenViewController(actions: LaunchScreenViewModelActions) -> LaunchScreenViewController {
-        return LaunchScreenViewController(
-            viewModel: self.makeViewModel(actions: actions),
-            repository: self.makeRepository()
-        )
+        return LaunchScreenViewController(viewModel: self.makeViewModel(actions: actions))
     }
     
     // MARK: - Coordinator

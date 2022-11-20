@@ -10,7 +10,7 @@ import FirebaseFirestore
 import Foundation
 import RxSwift
 
-protocol FireStoreService {
+protocol FireStoreServiceLegacy {
     // 사용자 프로필
     func getMyProfile() -> Single<UserProfile?>
     func getUserProfile(userID: String) -> Single<UserProfile?>
@@ -33,7 +33,7 @@ protocol FireStoreService {
 }
 
 /// FireStore에 데이터 읽기/쓰기를 관리하는 서비스
-final class DefaultFireStoreService: FireStoreService {
+final class DefaultFireStoreServiceLegacy: FireStoreServiceLegacy {
     private let db: Firestore
     
     init() {
@@ -44,18 +44,18 @@ final class DefaultFireStoreService: FireStoreService {
     private func getUserProfile(email: String) -> Single<UserProfile?> {
         Single<UserProfile?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("email", isEqualTo: email)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let dictionary: [String: Any] = snapshot?.documents.first?.data(),
                       let profile: UserProfile = try? UserProfile.decode(dictionary: dictionary) else {
-                    single(.failure(FirebaseStoreError.failedToFetchProfile))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchProfile))
                     return
                 }
                 single(.success(profile))
@@ -69,18 +69,18 @@ final class DefaultFireStoreService: FireStoreService {
         Single<UserProfile?>.create { [weak self] single in
             guard let self,
                   let email = userProfile.email else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("email", isEqualTo: email)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first,
                       var currentUserProfile: UserProfile = try? UserProfile.decode(dictionary: document.data()) else {
-                    single(.failure(FirebaseStoreError.failedToFetchProfile))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchProfile))
                     return
                 }
                 currentUserProfile = userProfile
@@ -102,17 +102,17 @@ final class DefaultFireStoreService: FireStoreService {
     private func fetchChatRoomList(roomIDs: [String]) -> Single<[ChatRoom]?> {
         Single<[ChatRoom]?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.chatRoom.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.chatRoom.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("roomID", in: roomIDs)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let documents: [QueryDocumentSnapshot] = snapshot?.documents else {
-                    single(.failure(FirebaseStoreError.failedToFetchChatRoom))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchChatRoom))
                     return
                 }
                 let roomList: [ChatRoom] = documents.compactMap {
@@ -127,17 +127,17 @@ final class DefaultFireStoreService: FireStoreService {
 }
 
 // MARK: - 친구
-extension DefaultFireStoreService {
+extension DefaultFireStoreServiceLegacy {
     func addFriend(friendID: String) -> Single<[UserProfile]?> {
         self.getMyProfile()
             .flatMap { [weak self] profile -> Single<UserProfile?> in
                 guard let self,
                       var updatedProfile = profile else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 if let isContained = updatedProfile.friends?.contains(friendID),
                    isContained {
-                    return .error(FirebaseStoreError.alreadyExists)
+                    return .error(FirebaseStoreErrorLegacy.alreadyExists)
                 }
                 updatedProfile.friends?.append(friendID)
                 return self.updateMyUserProfile(updatedProfile)
@@ -146,7 +146,7 @@ extension DefaultFireStoreService {
                 guard let self,
                       let profile,
                       let friendIDs = profile.friends  else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 return self.getUserProfileList(userIDs: friendIDs)
             }
@@ -157,11 +157,11 @@ extension DefaultFireStoreService {
             .flatMap { [weak self] profile -> Single<UserProfile?> in
                 guard let self,
                       var updatedProfile = profile else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 if let isContained = updatedProfile.friends?.contains(friendID),
                    !isContained {
-                    return .error(FirebaseStoreError.invalidFriend)
+                    return .error(FirebaseStoreErrorLegacy.invalidFriend)
                 }
                 updatedProfile.friends = updatedProfile.friends?.filter({ $0 != friendID })
                 return self.updateMyUserProfile(updatedProfile)
@@ -170,7 +170,7 @@ extension DefaultFireStoreService {
                 guard let self,
                       let profile,
                       let friendIDs = profile.friends  else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 return self.getUserProfileList(userIDs: friendIDs)
             }
@@ -178,40 +178,35 @@ extension DefaultFireStoreService {
 }
 
 // MARK: - 사용자 데이터
-extension DefaultFireStoreService {
+extension DefaultFireStoreServiceLegacy {
     func getMyProfile() -> Single<UserProfile?> {
-        Single<String?>.create { single in
+        Single<String>.create { single in
             guard let currentUser: FirebaseAuth.User = Auth.auth().currentUser,
                   let email: String = currentUser.email else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             single(.success(email))
             return Disposables.create()
         }
-        .flatMap { [weak self] email in
-            guard let self, let email else {
-                return .error(FirebaseStoreError.failedToFetchProfile)
-            }
-            return self.getUserProfile(email: email)
-        }
+        .flatMap { self.getUserProfile(email: $0) }
     }
     
     func getUserProfile(userID: String) -> Single<UserProfile?> {
         Single<UserProfile?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("userID", isEqualTo: userID)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let dictionary: [String: Any] = snapshot?.documents.first?.data(),
                       let profile: UserProfile = try? UserProfile.decode(dictionary: dictionary) else {
-                    single(.failure(FirebaseStoreError.failedToFetchProfile))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchProfile))
                     return
                 }
                 single(.success(profile))
@@ -224,17 +219,17 @@ extension DefaultFireStoreService {
     func getUserProfileList(userIDs: [String]) -> Single<[UserProfile]?> {
         Single<[UserProfile]?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("userID", in: userIDs)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let documents: [QueryDocumentSnapshot] = snapshot?.documents else {
-                    single(.failure(FirebaseStoreError.failedToFetchProfile))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchProfile))
                     return
                 }
                 let profileList: [UserProfile] = documents.compactMap {
@@ -250,12 +245,12 @@ extension DefaultFireStoreService {
     func createUserProfile(_ userProfile: UserProfile) -> Single<UserProfile?> {
         Single<UserProfile?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.failedToCreateProfile))
+                single(.failure(FirebaseStoreErrorLegacy.failedToCreateProfile))
                 return Disposables.create()
             }
             
             do {
-                try self.db.collection(FirebaseServiceType.FireStore.users.rawValue).document()
+                try self.db.collection(FirebaseKey.FireStore.users.rawValue).document()
                     .setData(userProfile.encode()) { err in
                         if let err {
                             single(.failure(err))
@@ -277,7 +272,7 @@ extension DefaultFireStoreService {
             .flatMap { [weak self] profile -> Single<UserProfile?> in
                 guard let self,
                       let email = profile?.email else {
-                    return .error(FirebaseStoreError.failedToUpdateProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToUpdateProfile)
                 }
                 var newProfile = userProfile
                 newProfile.email = email
@@ -291,17 +286,17 @@ extension DefaultFireStoreService {
             guard let self,
                   let currentUser: FirebaseAuth.User = Auth.auth().currentUser,
                   let email = currentUser.email else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("email", isEqualTo: email)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first else {
-                    single(.failure(FirebaseStoreError.failedToFetchProfile))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchProfile))
                     return
                 }
                 
@@ -321,17 +316,17 @@ extension DefaultFireStoreService {
 }
 
 // MARK: - 채팅방
-extension DefaultFireStoreService {
+extension DefaultFireStoreServiceLegacy {
     func enterChatRoom(_ chatRoomID: String) -> Single<Bool> {
         self.getMyProfile()
             .flatMap { [weak self] profile in
                 guard let self,
                       var profile else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 if let alreadyExist = profile.chatRooms?.contains(chatRoomID),
                    alreadyExist {
-                    return .error(FirebaseStoreError.alreadyExists)
+                    return .error(FirebaseStoreErrorLegacy.alreadyExists)
                 }
                 profile.chatRooms?.append(chatRoomID)
                 return self.updateUserProfile(profile)
@@ -344,11 +339,11 @@ extension DefaultFireStoreService {
             .flatMap { [weak self] profile in
                 guard let self,
                       var profile else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 if let alreadyExist = profile.chatRooms?.contains(chatRoomID),
                    !alreadyExist {
-                    return .error(FirebaseStoreError.alreadyExists)
+                    return .error(FirebaseStoreErrorLegacy.alreadyExists)
                 }
                 profile.chatRooms = profile.chatRooms?.filter({ $0 != chatRoomID })
                 return self.updateUserProfile(profile)
@@ -362,7 +357,7 @@ extension DefaultFireStoreService {
                 guard let self,
                       let profile,
                       let rooms = profile.chatRooms else {
-                    return .error(FirebaseStoreError.failedToFetchProfile)
+                    return .error(FirebaseStoreErrorLegacy.failedToFetchProfile)
                 }
                 return self.fetchChatRoomList(roomIDs: rooms)
             }
@@ -371,23 +366,23 @@ extension DefaultFireStoreService {
     func fetchChatRoom(roomID: String) -> Single<ChatRoom?> {
         Single<ChatRoom?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.invalidUser))
+                single(.failure(FirebaseStoreErrorLegacy.invalidUser))
                 return Disposables.create()
             }
             
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.chatRoom.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.chatRoom.rawValue)
             let query: FirebaseFirestore.Query = docRef.whereField("roomID", isEqualTo: roomID)
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first else {
-                    single(.failure(FirebaseStoreError.failedToFetchChatRoom))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchChatRoom))
                     return
                 }
                 if let room: ChatRoom = try? ChatRoom.decode(dictionary: document.data()) {
                     single(.success(room))
                 } else {
-                    single(.failure(FirebaseStoreError.failedToFetchChatRoom))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchChatRoom))
                 }
             }
             
@@ -398,12 +393,12 @@ extension DefaultFireStoreService {
     func createChatRoom(room: ChatRoom) -> Single<ChatRoom?> {
         Single<ChatRoom?>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.failedToCreateChatRoom))
+                single(.failure(FirebaseStoreErrorLegacy.failedToCreateChatRoom))
                 return Disposables.create()
             }
             
             do {
-                try self.db.collection(FirebaseServiceType.FireStore.chatRoom.rawValue).document()
+                try self.db.collection(FirebaseKey.FireStore.chatRoom.rawValue).document()
                     .setData(room.encode()) { err in
                         if let err {
                             single(.failure(err))
@@ -424,7 +419,7 @@ extension DefaultFireStoreService {
             guard let self else {
                 return Disposables.create()
             }
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseServiceType.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             let query: FirebaseFirestore.Query = docRef
                 .whereField("latitude", isGreaterThan: southWest.latitude)
                 .whereField("latitude", isLessThan: northEast.latitude)
@@ -434,7 +429,7 @@ extension DefaultFireStoreService {
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let documents: [QueryDocumentSnapshot] = snapshot?.documents else {
-                    single(.failure(FirebaseStoreError.failedToFetchChatRoom))
+                    single(.failure(FirebaseStoreErrorLegacy.failedToFetchChatRoom))
                     return
                 }
                 let chatRooms: [ChatRoom] = documents.compactMap {
@@ -448,7 +443,7 @@ extension DefaultFireStoreService {
     }
 }
 
-enum FirebaseStoreError: Error {
+enum FirebaseStoreErrorLegacy: Error {
     case invalidUser
     case alreadyExists
     case invalidFriend

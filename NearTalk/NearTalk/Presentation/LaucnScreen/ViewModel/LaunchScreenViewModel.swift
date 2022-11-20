@@ -10,12 +10,12 @@ import RxCocoa
 import RxSwift
 
 struct LaunchScreenViewModelActions {
-    let showLoginViewController: () -> Void
-    let showMainViewController: () -> Void
+    var showLoginViewController: (() -> Void)?
+    var showMainViewController: (() -> Void)?
 }
 
 protocol LaunchScreenViewModelInput {
-    
+    func checkIsAuthenticated()
 }
 
 protocol LaunchScreenViewModelOutput {
@@ -27,22 +27,51 @@ protocol LaunchScreenViewModel: LaunchScreenViewModelInput, LaunchScreenViewMode
 }
 
 final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
-    private let useCase: LaunchScreenUseCase
+    private let useCase: LoginUseCase
     private let actions: LaunchScreenViewModelActions
 
     let isUserAuthenticated: PublishSubject<Bool>
     private let disposeBag: DisposeBag
     
-    init(useCase: LaunchScreenUseCase, actions: LaunchScreenViewModelActions) {
+    init(useCase: LoginUseCase, actions: LaunchScreenViewModelActions) {
         self.useCase = useCase
         self.actions = actions
         self.isUserAuthenticated = PublishSubject<Bool>()
         self.disposeBag = DisposeBag()
+        self.bindAuthResult()
     }
     
     func checkIsAuthenticated() {
         self.useCase.verifyUser()
-            .bind(to: self.isUserAuthenticated)
+            .subscribe(
+                onCompleted: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    self.isUserAuthenticated.onNext(true)
+                },
+                onError: { [weak self] error in
+                    guard let self else {
+                        return
+                    }
+                    print(error)
+                    self.isUserAuthenticated.onNext(false)
+                }
+            )
             .disposed(by: self.disposeBag)
+    }
+    
+    func bindAuthResult() {
+        self.isUserAuthenticated
+            .subscribe { [weak self] isAuthenticated in
+                guard let self else {
+                    return
+                }
+                if isAuthenticated {
+                    self.actions.showMainViewController?()
+                } else {
+                    self.actions.showLoginViewController?()
+                }
+            }.disposed(by: disposeBag)
     }
 }

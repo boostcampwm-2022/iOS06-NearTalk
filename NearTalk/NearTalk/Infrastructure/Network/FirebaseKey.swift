@@ -5,9 +5,10 @@
 //  Created by 고병학 on 2022/11/17.
 //
 
+import FirebaseFirestore
 import Foundation
 
-enum FirebaseServiceType {
+enum FirebaseKey {
 
     enum FireStore: String {
         case users

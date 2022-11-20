@@ -12,9 +12,12 @@ final class RootTabBarCoordinator: Coordinator {
     var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
     
+    init(navigationController: UINavigationController?) {
+        self.navigationController = navigationController
+    }
+    
     func start() {
-        let diContainer: RootTabBarDIContainer = .init()
-        let viewcontroller: RootTabBarController = diContainer.createTabBarController()
+        let viewcontroller: RootTabBarController = RootTabBarDIContainer().createTabBarController()
         self.navigationController?.pushViewController(viewcontroller, animated: false)
     }
     

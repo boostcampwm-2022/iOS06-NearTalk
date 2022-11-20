@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct ChatMessage: Codable {
-    var messageID: String?
+struct ChatMessage: BaseEntity {
+    var uuid: String?
     var chatRoomID: String?
     var senderID: String?
     var text: String?
