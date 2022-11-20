@@ -7,7 +7,6 @@
 
 import FirebaseAuth
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 import Foundation
 import RxSwift
 
@@ -54,7 +53,8 @@ final class DefaultFireStoreService: FireStoreService {
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
-                      let profile = try? snapshot?.documents.first?.data(as: UserProfile.self) else {
+                      let dictionary: [String: Any] = snapshot?.documents.first?.data(),
+                      let profile: UserProfile = try? UserProfile.decode(dictionary: dictionary) else {
                     single(.failure(FirebaseStoreError.failedToFetchProfile))
                     return
                 }
@@ -79,14 +79,14 @@ final class DefaultFireStoreService: FireStoreService {
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first,
-                      var currentUserProfile: UserProfile = try? document.data(as: UserProfile.self)  else {
+                      var currentUserProfile: UserProfile = try? UserProfile.decode(dictionary: document.data()) else {
                     single(.failure(FirebaseStoreError.failedToFetchProfile))
                     return
                 }
                 currentUserProfile = userProfile
                 currentUserProfile.email = email // 이메일은 수정할 수 없음 (유저 고유값)
                 
-                try? document.reference.setData(from: currentUserProfile) { error in
+                try? document.reference.setData(currentUserProfile.encode()) { error in
                     if let error {
                         single(.failure(error))
                     } else {
@@ -115,7 +115,9 @@ final class DefaultFireStoreService: FireStoreService {
                     single(.failure(FirebaseStoreError.failedToFetchChatRoom))
                     return
                 }
-                let roomList: [ChatRoom] = documents.compactMap({ try? $0.data(as: ChatRoom.self) })
+                let roomList: [ChatRoom] = documents.compactMap {
+                    try? ChatRoom.decode(dictionary: $0.data())
+                }
                 single(.success(roomList))
             }
             
@@ -207,7 +209,8 @@ extension DefaultFireStoreService {
             
             query.getDocuments { snapshot, error in
                 guard error == nil,
-                      let profile = try? snapshot?.documents.first?.data(as: UserProfile.self) else {
+                      let dictionary: [String: Any] = snapshot?.documents.first?.data(),
+                      let profile: UserProfile = try? UserProfile.decode(dictionary: dictionary) else {
                     single(.failure(FirebaseStoreError.failedToFetchProfile))
                     return
                 }
@@ -234,7 +237,9 @@ extension DefaultFireStoreService {
                     single(.failure(FirebaseStoreError.failedToFetchProfile))
                     return
                 }
-                let profileList: [UserProfile] = documents.compactMap({ try? $0.data(as: UserProfile.self) })
+                let profileList: [UserProfile] = documents.compactMap {
+                    try? UserProfile.decode(dictionary: $0.data())
+                }
                 single(.success(profileList))
             }
             
@@ -251,7 +256,7 @@ extension DefaultFireStoreService {
             
             do {
                 try self.db.collection(FirebaseServiceType.FireStore.users.rawValue).document()
-                    .setData(from: userProfile) { err in
+                    .setData(userProfile.encode()) { err in
                         if let err {
                             single(.failure(err))
                         } else {
@@ -379,7 +384,7 @@ extension DefaultFireStoreService {
                     single(.failure(FirebaseStoreError.failedToFetchChatRoom))
                     return
                 }
-                if let room: ChatRoom = try? document.data(as: ChatRoom.self) {
+                if let room: ChatRoom = try? ChatRoom.decode(dictionary: document.data()) {
                     single(.success(room))
                 } else {
                     single(.failure(FirebaseStoreError.failedToFetchChatRoom))
@@ -399,7 +404,7 @@ extension DefaultFireStoreService {
             
             do {
                 try self.db.collection(FirebaseServiceType.FireStore.chatRoom.rawValue).document()
-                    .setData(from: room) { err in
+                    .setData(room.encode()) { err in
                         if let err {
                             single(.failure(err))
                         } else {
@@ -432,7 +437,9 @@ extension DefaultFireStoreService {
                     single(.failure(FirebaseStoreError.failedToFetchChatRoom))
                     return
                 }
-                let chatRooms: [ChatRoom] = documents.compactMap({ try? $0.data(as: ChatRoom.self) })
+                let chatRooms: [ChatRoom] = documents.compactMap {
+                    try? ChatRoom.decode(dictionary: $0.data())
+                }
                 single(.success(chatRooms))
             }
 
