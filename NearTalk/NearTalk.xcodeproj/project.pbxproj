@@ -146,6 +146,7 @@
 		83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3544B2925623600B9236A /* UIImageView+Rounded.swift */; };
 		83D5ECC3292B714500AD1781 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC2292B714500AD1781 /* AuthRepository.swift */; };
 		83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */; };
+		83D5ECC7292B74FA00AD1781 /* DropOutUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */; };
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
@@ -335,6 +336,7 @@
 		83D3544B2925623600B9236A /* UIImageView+Rounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Rounded.swift"; sourceTree = "<group>"; };
 		83D5ECC2292B714500AD1781 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
 		83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAuthRepository.swift; sourceTree = "<group>"; };
+		83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropOutUseCase.swift; sourceTree = "<group>"; };
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -707,6 +709,7 @@
 				603FD394292A1E7000687ED4 /* LoginUseCase.swift */,
 				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
+				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1435,6 +1438,7 @@
 				6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */,
 				603FD39C292B4F4A00687ED4 /* LogoutUseCase.swift in Sources */,
 				8330622B2924A3E2000E786E /* (null) in Sources */,
+				83D5ECC7292B74FA00AD1781 /* DropOutUseCase.swift in Sources */,
 				8330622D2924A3F1000E786E /* OnboardingUseCase.swift in Sources */,
 				83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */,
 				603EDDA72926C4B300BEE65C /* TabBarUseCase.swift in Sources */,
