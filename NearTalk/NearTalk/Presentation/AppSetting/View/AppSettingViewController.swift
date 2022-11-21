@@ -86,13 +86,3 @@ enum AppSettingItem: String, Hashable & Sendable & CaseIterable {
     case developerInfo = "개발자 정보"
     case alarmOnOff = "알람 on/off"
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct AppSettingViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: AppSettingViewController()).showPreview(.iPhoneSE3)
-    }
-}
-#endif
