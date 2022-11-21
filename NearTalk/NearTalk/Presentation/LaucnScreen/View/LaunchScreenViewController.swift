@@ -18,17 +18,19 @@ final class LaunchScreenViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: LaunchScreenViewModel
-    private let repository: LaunchScreenRepository
     
     // MARK: - Lifecycles
-    init(viewModel: LaunchScreenViewModel, repository: LaunchScreenRepository) {
+    init(viewModel: LaunchScreenViewModel) {
         self.viewModel = viewModel
-        self.repository = repository
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print(Self.self, #function)
     }
     
     override func viewDidLoad() {
@@ -38,6 +40,11 @@ final class LaunchScreenViewController: UIViewController {
         configureConstraints()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.checkIsAuthenticated()
+    }
+
     // MARK: - Configure views
     private func addSubviews() {
         self.view.addSubview(titleLabel)
@@ -60,11 +67,8 @@ import SwiftUI
 struct LaunchScreenViewControllerPreview: PreviewProvider {
     static var previews: some View {
         let diContainer: LaunchScreenDIContainer = .init()
-        let mockRepository: LaunchScreenRepository = diContainer.makeRepository()
-        let mockAction: LaunchScreenViewModelActions = .init(showLoginViewController: {}, showMainViewController: {})
-        let mockViewModel: LaunchScreenViewModel = diContainer.makeViewModel(actions: mockAction)
-        return LaunchScreenViewController(viewModel: mockViewModel, repository: mockRepository)
-            .showPreview(.iPhone14Pro)
+        let vc: LaunchScreenViewController = diContainer.createLaunchScreenViewController(actions: LaunchScreenViewModelActions(showLoginViewController: {}, showMainViewController: {}))
+        return vc.showPreview(.iPhone14Pro)
     }
 }
 #endif
