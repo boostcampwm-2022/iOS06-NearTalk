@@ -74,6 +74,7 @@ class ChatRoomListCell: UITableViewCell {
         self.name.text = dmData.name
         self.userDescription.text = dmData.description
         self.date.text = dmData.date
+        self.count.text = nil
     }
     
     // MARK: - Configure views

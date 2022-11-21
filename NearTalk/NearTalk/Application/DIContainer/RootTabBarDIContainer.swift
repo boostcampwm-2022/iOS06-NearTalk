@@ -37,11 +37,27 @@ final class RootTabBarDIContainer {
         
         let dependency: RootTabBarControllerDependency = .init(
             mapViewController: MainMapViewController(),
-            chatRoomListViewController: ChatRoomListViewController.create(with: DefaultChatRoomListViewModel(useCase: chatRoomListUseCase)),
+            chatRoomListViewController: makeChatRoomListDIContainer().makeChatRoomListViewController(actions: ChatRoomListViewModelActions(showChatRoom: {}, showCreateChatRoom: {})),
             friendListViewController: FriendsListViewController(),
             myProfileViewController: myProfileVC
         )
         return RootTabBarController(viewModel: makeViewModel(), dependency: dependency)
+    }
+    
+    // MARK: - 필요한 데이터를 가저올 네트워크 통신
+    lazy var apiDataStorageService: DefaultStorageService = {
+        // api -> Data 변환
+        return DefaultStorageService()
+    }()
+    
+    lazy var imageDataStorageService: DefaultStorageService = {
+        // api -> Data 변환
+        return DefaultStorageService()
+    }()
+    
+    func makeChatRoomListDIContainer() -> ChatRoomListDIContainer {
+        let dependencies = ChatRoomListDIContainer.Dependencies(apiDataTransferService: apiDataStorageService, imageDataTransferService: imageDataStorageService)
+        return ChatRoomListDIContainer(dependencies: dependencies)
     }
     
     // MARK: - Coordinator

@@ -154,12 +154,15 @@ private extension ProfileDetailViewController {
     }
 }
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct ProfileDetailViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        UINavigationController(rootViewController: ProfileDetailViewController()) .showPreview(.iPhone14Pro)
-//    }
-//}
-//#endif
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct ProfileDetailViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        let coordinator = ProfileDetailCoordinator()
+        let usecase = ProfileDetailUseCase()
+        let viewModel = ProfileDetailViewModel(profileDetailUseCase: usecase, profileDetailCoordinator: coordinator)
+        UINavigationController(rootViewController: ProfileDetailViewController(viewModel: viewModel)).showPreview(.iPhone14Pro)
+    }
+}
+#endif

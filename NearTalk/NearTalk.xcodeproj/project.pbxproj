@@ -61,7 +61,6 @@
 		603EDDB12926C87700BEE65C /* RootTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDB02926C87700BEE65C /* RootTabBarController.swift */; };
 		603EDDB32926C89000BEE65C /* RootTabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDB22926C89000BEE65C /* RootTabBarViewModel.swift */; };
 		603EDDB62926C89C00BEE65C /* RootTabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDB52926C89C00BEE65C /* RootTabBarCoordinator.swift */; };
-		603FD0BD2928C23600687ED4 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 603FD0BC2928C23600687ED4 /* README.md */; };
 		603FD3622928D40300687ED4 /* .FirebaseDatabaseBinary.version in Resources */ = {isa = PBXBuildFile; fileRef = 603FD33D2928D40300687ED4 /* .FirebaseDatabaseBinary.version */; };
 		603FD3632928D40300687ED4 /* nanopb.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD33E2928D40300687ED4 /* nanopb.xcframework */; };
 		603FD3642928D40300687ED4 /* FirebaseDynamicLinks.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 603FD33F2928D40300687ED4 /* FirebaseDynamicLinks.xcframework */; };
@@ -243,7 +242,6 @@
 		603EDDB02926C87700BEE65C /* RootTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarController.swift; sourceTree = "<group>"; };
 		603EDDB22926C89000BEE65C /* RootTabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarViewModel.swift; sourceTree = "<group>"; };
 		603EDDB52926C89C00BEE65C /* RootTabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarCoordinator.swift; sourceTree = "<group>"; };
-		603FD0BC2928C23600687ED4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		603FD33D2928D40300687ED4 /* .FirebaseDatabaseBinary.version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .FirebaseDatabaseBinary.version; sourceTree = "<group>"; };
 		603FD33E2928D40300687ED4 /* nanopb.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = nanopb.xcframework; sourceTree = "<group>"; };
 		603FD33F2928D40300687ED4 /* FirebaseDynamicLinks.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FirebaseDynamicLinks.xcframework; sourceTree = "<group>"; };
@@ -506,7 +504,6 @@
 		1660D21B291DDB37005F7B24 = {
 			isa = PBXGroup;
 			children = (
-				603FD0BC2928C23600687ED4 /* README.md */,
 				1660D279291E09CE005F7B24 /* .swiftlint.yml */,
 				60DCAAF32928B9610087A63D /* Cartfile */,
 				603FD33C2928D40300687ED4 /* Build */,
@@ -1425,7 +1422,6 @@
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
-				603FD0BD2928C23600687ED4 /* README.md in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				83D354412925412400B9236A /* UserProfileRepository.swift in Sources */,
