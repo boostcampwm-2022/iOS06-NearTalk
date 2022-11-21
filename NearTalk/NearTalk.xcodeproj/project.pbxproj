@@ -145,6 +145,8 @@
 		83D3544A292543DC00B9236A /* DefaultUserUUIDRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */; };
 		83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3544B2925623600B9236A /* UIImageView+Rounded.swift */; };
 		83D5ECBC292B5BB700AD1781 /* UpdateProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */; };
+		83D5ECBF292B5CE600AD1781 /* ProfileSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECBE292B5CE600AD1781 /* ProfileSettingViewModel.swift */; };
+		83D5ECC1292B622500AD1781 /* ValidateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */; };
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
@@ -333,6 +335,8 @@
 		83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserUUIDRepository.swift; sourceTree = "<group>"; };
 		83D3544B2925623600B9236A /* UIImageView+Rounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Rounded.swift"; sourceTree = "<group>"; };
 		83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileUseCase.swift; sourceTree = "<group>"; };
+		83D5ECBE292B5CE600AD1781 /* ProfileSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewModel.swift; sourceTree = "<group>"; };
+		83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateUseCase.swift; sourceTree = "<group>"; };
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -706,6 +710,7 @@
 				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
 				83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */,
+				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1022,6 +1027,7 @@
 		8367AB612922AF6300678669 /* ProfileSetting */ = {
 			isa = PBXGroup;
 			children = (
+				83D5ECBD292B5CDA00AD1781 /* ViewModel */,
 				8367AB622922AF6300678669 /* View */,
 			);
 			path = ProfileSetting;
@@ -1081,6 +1087,14 @@
 			isa = PBXGroup;
 			children = (
 				83D35445292541B500B9236A /* MyProfileViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		83D5ECBD292B5CDA00AD1781 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				83D5ECBE292B5CE600AD1781 /* ProfileSettingViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1420,6 +1434,7 @@
 				1653057E291E19150026B815 /* ChatRoomListViewController.swift in Sources */,
 				603EDDA92926C51100BEE65C /* TabBarRepository.swift in Sources */,
 				555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */,
+				83D5ECC1292B622500AD1781 /* ValidateUseCase.swift in Sources */,
 				555A6B3A29238C9B001336ED /* ChatRoomListUseCase.swift in Sources */,
 				1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
@@ -1432,6 +1447,7 @@
 				6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */,
 				603FD39C292B4F4A00687ED4 /* LogoutUseCase.swift in Sources */,
 				8330622B2924A3E2000E786E /* (null) in Sources */,
+				83D5ECBF292B5CE600AD1781 /* ProfileSettingViewModel.swift in Sources */,
 				8330622D2924A3F1000E786E /* OnboardingUseCase.swift in Sources */,
 				83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */,
 				603EDDA72926C4B300BEE65C /* TabBarUseCase.swift in Sources */,
