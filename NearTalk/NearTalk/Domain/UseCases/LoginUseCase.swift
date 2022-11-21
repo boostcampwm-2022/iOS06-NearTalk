@@ -9,9 +9,7 @@ import Foundation
 import RxSwift
 
 protocol LoginUseCase {
-    func verifyUser() -> Completable
     func login(token idTokenString: String, nonce: String) -> Completable
-    func logout() -> Completable
 }
 
 final class DefaultLoginUseCase: LoginUseCase {
@@ -21,15 +19,7 @@ final class DefaultLoginUseCase: LoginUseCase {
         self.authService = authService
     }
     
-    func verifyUser() -> Completable {
-        self.authService.verifyUser()
-    }
-    
     func login(token idTokenString: String, nonce: String) -> Completable {
         self.authService.loginWithApple(token: idTokenString, nonce: nonce)
-    }
-    
-    func logout() -> Completable {
-        self.authService.logout()
     }
 }

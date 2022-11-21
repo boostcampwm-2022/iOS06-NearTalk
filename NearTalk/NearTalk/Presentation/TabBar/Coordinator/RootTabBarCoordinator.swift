@@ -10,7 +10,6 @@ import UIKit
 final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator] = []
     
     init(navigationController: UINavigationController?) {
         self.navigationController = navigationController
@@ -18,7 +17,7 @@ final class RootTabBarCoordinator: Coordinator {
     
     func start() {
         let viewcontroller: RootTabBarController = RootTabBarDIContainer().createTabBarController()
-        self.navigationController?.pushViewController(viewcontroller, animated: false)
+        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        self.navigationController?.popToRootViewController(animated: false)
     }
-    
 }

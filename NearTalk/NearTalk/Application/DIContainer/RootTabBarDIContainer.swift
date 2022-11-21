@@ -28,6 +28,10 @@ final class RootTabBarDIContainer {
         return DefaultRootTabBarViewModel()
     }
     
+#warning("mapViewController DI Container 필요")
+#warning("chatRoomListViewController DI Container 필요")
+#warning("friendListViewController DI Container 필요")
+#warning("myProfileViewController DI Container 필요")
     // MARK: - Create viewController
     func createTabBarController() -> RootTabBarController {
         let chatRoomListRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService())

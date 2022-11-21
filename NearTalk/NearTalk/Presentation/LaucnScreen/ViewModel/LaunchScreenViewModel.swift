@@ -27,13 +27,13 @@ protocol LaunchScreenViewModel: LaunchScreenViewModelInput, LaunchScreenViewMode
 }
 
 final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
-    private let useCase: LoginUseCase
+    private let useCase: VerifyUserUseCase
     private let actions: LaunchScreenViewModelActions
 
     let isUserAuthenticated: PublishSubject<Bool>
     private let disposeBag: DisposeBag
     
-    init(useCase: LoginUseCase, actions: LaunchScreenViewModelActions) {
+    init(useCase: VerifyUserUseCase, actions: LaunchScreenViewModelActions) {
         self.useCase = useCase
         self.actions = actions
         self.isUserAuthenticated = PublishSubject<Bool>()

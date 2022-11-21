@@ -22,7 +22,6 @@ protocol FirestoreService {
     
     /// 객체 리스트 불러오기
     func fetchList<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<[T]>
-
 }
 
 final class DefaultFirestoreService: FirestoreService {

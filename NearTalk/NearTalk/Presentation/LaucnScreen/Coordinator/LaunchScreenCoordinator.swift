@@ -15,7 +15,6 @@ protocol LaunchScreenCoordinatorDependency {
 final class LaunchScreenCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator] = []
     private let diContainer: LaunchScreenDIContainer = .init()
     private var dependency: LaunchScreenCoordinatorDependency?
     private var launchScreenViewController: LaunchScreenViewController?
@@ -23,11 +22,9 @@ final class LaunchScreenCoordinator: Coordinator {
     // MARK: - Init
     init(
         navigationController: UINavigationController? = nil,
-        parentCoordinator: Coordinator? = nil,
         dependency: LaunchScreenCoordinatorDependency
     ) {
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
         self.dependency = dependency
     }
     
