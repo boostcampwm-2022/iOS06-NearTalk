@@ -147,6 +147,8 @@
 		83D5ECBC292B5BB700AD1781 /* UpdateProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */; };
 		83D5ECBF292B5CE600AD1781 /* ProfileSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECBE292B5CE600AD1781 /* ProfileSettingViewModel.swift */; };
 		83D5ECC1292B622500AD1781 /* ValidateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */; };
+		83D5ECC9292BA7C400AD1781 /* UploadImageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */; };
+		83D5ECCB292BB64700AD1781 /* CreateProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECCA292BB64700AD1781 /* CreateProfileUseCase.swift */; };
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
@@ -337,6 +339,8 @@
 		83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileUseCase.swift; sourceTree = "<group>"; };
 		83D5ECBE292B5CE600AD1781 /* ProfileSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewModel.swift; sourceTree = "<group>"; };
 		83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateUseCase.swift; sourceTree = "<group>"; };
+		83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageUseCase.swift; sourceTree = "<group>"; };
+		83D5ECCA292BB64700AD1781 /* CreateProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileUseCase.swift; sourceTree = "<group>"; };
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -711,6 +715,8 @@
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
 				83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */,
 				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
+				83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */,
+				83D5ECCA292BB64700AD1781 /* CreateProfileUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1461,6 +1467,7 @@
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */,
 				83D5ECBC292B5BB700AD1781 /* UpdateProfileUseCase.swift in Sources */,
+				83D5ECC9292BA7C400AD1781 /* UploadImageUseCase.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
 				83D3543A29252F1A00B9236A /* MyProfileDIContainer.swift in Sources */,
@@ -1492,6 +1499,7 @@
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
 				555A6B3E29238D65001336ED /* ChatRoomListRepository.swift in Sources */,
 				833062262924A3BF000E786E /* OnboardingCoordinator.swift in Sources */,
+				83D5ECCB292BB64700AD1781 /* CreateProfileUseCase.swift in Sources */,
 				83D354432925414F00B9236A /* DefaultUserProfileRepository.swift in Sources */,
 				1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */,
 				603FD388292914EB00687ED4 /* FirestoreService.swift in Sources */,
