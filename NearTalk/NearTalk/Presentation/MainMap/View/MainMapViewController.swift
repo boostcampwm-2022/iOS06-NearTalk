@@ -11,9 +11,12 @@ import SnapKit
 import Then
 import UIKit
 
-final class MainMapViewController: UIViewController {
+final class MainMapViewController: UIViewController, StoryboardInstantiable {
     
     // MARK: - Properties
+    private var viewModel: MainMapViewModel!
+    private var repository: MainMapRepository?
+    
     private let locationManager = CLLocationManager().then {
         $0.desiredAccuracy = kCLLocationAccuracyBest
     }
@@ -47,7 +50,15 @@ final class MainMapViewController: UIViewController {
         )
     }
     
-    // MARK: - LifeCycles
+    // MARK: - LifeCycle
+    static func create(with viewModel: MainMapViewModel, repository: MainMapRepository? = nil) -> MainMapViewController {
+        let mainMapVC = MainMapViewController.instantiateViewController()
+        mainMapVC.viewModel = viewModel
+        mainMapVC.repository = repository
+        
+        return mainMapVC
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

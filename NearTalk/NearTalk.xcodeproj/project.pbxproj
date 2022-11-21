@@ -34,6 +34,12 @@
 		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
+		16988839292A8AED00CEC7B9 /* MainMapRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988838292A8AED00CEC7B9 /* MainMapRepository.swift */; };
+		1698883B292A8CB500CEC7B9 /* MainMapDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698883A292A8CB500CEC7B9 /* MainMapDIContainer.swift */; };
+		1698883D292B040300CEC7B9 /* StoryboardInstantiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698883C292B040300CEC7B9 /* StoryboardInstantiable.swift */; };
+		16988844292B0F1100CEC7B9 /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988843292B0F1100CEC7B9 /* Alertable.swift */; };
+		16988848292B788600CEC7B9 /* MainMapUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988847292B788600CEC7B9 /* MainMapUseCase.swift */; };
+		1698884A292BAB2900CEC7B9 /* DefaultMainMapRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988849292BAB2900CEC7B9 /* DefaultMainMapRepository.swift */; };
 		555A6B2B29236D51001336ED /* FriendsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendsListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendsViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendsListViewModel.swift */; };
@@ -139,6 +145,12 @@
 		1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		16988838292A8AED00CEC7B9 /* MainMapRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapRepository.swift; sourceTree = "<group>"; };
+		1698883A292A8CB500CEC7B9 /* MainMapDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapDIContainer.swift; sourceTree = "<group>"; };
+		1698883C292B040300CEC7B9 /* StoryboardInstantiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardInstantiable.swift; sourceTree = "<group>"; };
+		16988843292B0F1100CEC7B9 /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
+		16988847292B788600CEC7B9 /* MainMapUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapUseCase.swift; sourceTree = "<group>"; };
+		16988849292BAB2900CEC7B9 /* DefaultMainMapRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMainMapRepository.swift; sourceTree = "<group>"; };
 		258D93481B53C391D3868B92 /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
 		29F8AD6D74327BEAEF2D1152 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		54A11B9541C7EC85AFC89F5B /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -452,6 +464,7 @@
 				1653058A291E1A660026B815 /* MessageCell */,
 				16530579291E189D0026B815 /* ChattingRoomList */,
 				6012733B2921D2E400E1456B /* LaucnScreen */,
+				1698883E292B0E2C00CEC7B9 /* Utils */,
 				1660D22B291DDB38005F7B24 /* ViewController.swift */,
 				1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */,
 			);
@@ -542,6 +555,7 @@
 				8330622C2924A3F1000E786E /* OnboardingUseCase.swift */,
 				6012734829221F4800E1456B /* LaunchScreenUseCase.swift */,
 				83D3543E29253A5C00B9236A /* MyProfileLoadUseCase.swift */,
+				16988847292B788600CEC7B9 /* MainMapUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -561,8 +575,34 @@
 				83D354422925414F00B9236A /* DefaultUserProfileRepository.swift */,
 				83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */,
 				8349529F2925FEF0004C5B3B /* DefaultImageRepository.swift */,
+				16988849292BAB2900CEC7B9 /* DefaultMainMapRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		1698883E292B0E2C00CEC7B9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				16988840292B0E4100CEC7B9 /* Protocols */,
+				1698883F292B0E3B00CEC7B9 /* Extensions */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		1698883F292B0E3B00CEC7B9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		16988840292B0E4100CEC7B9 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				1698883C292B040300CEC7B9 /* StoryboardInstantiable.swift */,
+				16988843292B0F1100CEC7B9 /* Alertable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		555A6B2629236C28001336ED /* FriendsList */ = {
@@ -642,6 +682,7 @@
 				60FD705629238B8C00A4C29A /* LaunchScreenRepository.swift */,
 				83D354472925438C00B9236A /* UserUUIDRepository.swift */,
 				8349529D2925FEAE004C5B3B /* ImageRepository.swift */,
+				16988838292A8AED00CEC7B9 /* MainMapRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -652,6 +693,7 @@
 				833062282924A3D7000E786E /* OnboardingDIContainer.swift */,
 				605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */,
 				83D3543929252F1A00B9236A /* MyProfileDIContainer.swift */,
+				1698883A292A8CB500CEC7B9 /* MainMapDIContainer.swift */,
 			);
 			path = DIContainer;
 			sourceTree = "<group>";
@@ -1112,6 +1154,7 @@
 				557F0A3D292364D400D24A38 /* OpenChattingRoomListModel.swift in Sources */,
 				605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */,
 				1648BABC2925CDDE0076AC35 /* BottomSheetViewController.swift in Sources */,
+				1698884A292BAB2900CEC7B9 /* DefaultMainMapRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */,
 				6012734929221F4800E1456B /* LaunchScreenUseCase.swift in Sources */,
@@ -1121,11 +1164,13 @@
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
 				83D3544A292543DC00B9236A /* DefaultUserUUIDRepository.swift in Sources */,
 				55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */,
+				1698883B292A8CB500CEC7B9 /* MainMapDIContainer.swift in Sources */,
 				1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */,
 				83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				16530582291E19350026B815 /* ChattingRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
+				16988844292B0F1100CEC7B9 /* Alertable.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				83D354412925412400B9236A /* UserProfileRepository.swift in Sources */,
 				7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */,
@@ -1134,6 +1179,7 @@
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
 				1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */,
+				16988839292A8AED00CEC7B9 /* MainMapRepository.swift in Sources */,
 				8330622F2924A402000E786E /* String+Regex.swift in Sources */,
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
 				833062262924A3BF000E786E /* OnboardingCoordinator.swift in Sources */,
@@ -1156,7 +1202,9 @@
 				833062272924A3BF000E786E /* OnboardingViewModel.swift in Sources */,
 				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
 				83D3543D29252F5B00B9236A /* MyProfileCoordinator.swift in Sources */,
+				16988848292B788600CEC7B9 /* MainMapUseCase.swift in Sources */,
 				83D354482925438C00B9236A /* UserUUIDRepository.swift in Sources */,
+				1698883D292B040300CEC7B9 /* StoryboardInstantiable.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
 				83D3543F29253A5C00B9236A /* MyProfileLoadUseCase.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
