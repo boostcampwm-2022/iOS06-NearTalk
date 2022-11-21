@@ -13,30 +13,24 @@ import UIKit
 
 final class OnboardingViewController: UIViewController {
     // MARK: - UI properties
-    private lazy var logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
-    private lazy var profileImageView: UIImageView = UIImageView().then {
+    private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
+    private let profileImageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
     }
-    
-    private let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer().then {
-        $0.numberOfTouchesRequired = 1
-        $0.numberOfTapsRequired = 1
-    }
 
-    private lazy var nicknameField: UITextField = UITextField().then {
+    private let nicknameField: UITextField = UITextField().then {
         $0.placeholder = "닉네임"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private lazy var messageField: UITextField = UITextField().then {
+    private let messageField: UITextField = UITextField().then {
         $0.placeholder = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private lazy var registerButton: UIButton = UIButton().then {
-        $0.addTarget(self, action: #selector(buttonClicked), for: .touchUpInside)
+    private let registerButton: UIButton = UIButton().then {
         $0.layer.cornerRadius = 5
         $0.setTitleColor(.white, for: .normal)
         $0.backgroundColor = .systemBlue
@@ -53,11 +47,9 @@ final class OnboardingViewController: UIViewController {
     private var buttonToggle: Bool = false
     private let disposeBag: DisposeBag = DisposeBag()
     private let viewModel: any OnboardingViewModel
-    private weak var coordinator: OnboardingCoordinator?
     
     // MARK: - Lifecycles
-    init(viewModel: any OnboardingViewModel, coordinator: OnboardingCoordinator) {
-        self.coordinator = coordinator
+    init(viewModel: any OnboardingViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,8 +64,6 @@ final class OnboardingViewController: UIViewController {
         self.addSubViews()
         self.configureConstraints()
         self.bindToViewModel()
-        self.bindProfileTap()
-        self.bindRegisterButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -147,22 +137,37 @@ private extension OnboardingViewController {
     }
     
     func bindToViewModel() {
-        let nickName = nicknameField.rx.text.orEmpty.asObservable()
-        let message = messageField.rx.text.orEmpty.asObservable()
-        let input = OnboardingInput(nickName: nickName, message: message)
-        let output = viewModel.transform(input)
-        
-        output.registerEnable
-            .drive(registerButton.rx.isEnabled)
-            .disposed(by: disposeBag)
+        self.bindNickNameField()
+        self.bindMessageFeild()
+        self.bindProfileTap()
+        self.bindRegisterButton()
+    }
+    
+    func bindNickNameField() {
+        self.nicknameField.rx.value
+            .orEmpty
+            .bind(onNext: { [weak self] text in
+                self?.viewModel.editNickName(text)
+                
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    func bindMessageFeild() {
+        self.messageField.rx.value
+            .orEmpty
+            .bind(onNext: { [weak self] text in
+                self?.viewModel.editStatusMessage(text)
+            })
+            .disposed(by: self.disposeBag)
     }
     
     func bindProfileTap() {
         self.profileImageView.rx
             .tapGesture()
-            .bind(onNext: { (gesture) in
+            .bind(onNext: { [weak self] gesture in
                 if gesture.state == .ended {
-                    self.coordinator?.showPHPickerViewController(self.profileImageView.rx.image)
+                    self?.viewModel.editImage()
                 }
             })
             .disposed(by: self.disposeBag)
@@ -171,37 +176,10 @@ private extension OnboardingViewController {
     func bindRegisterButton() {
         self.registerButton.rx
             .tap
-            .bind(onNext: {
-                self.registerProfile()
+            .bind(onNext: { [weak self] in
+                self?.viewModel.register()
             })
             .disposed(by: self.disposeBag)
-    }
-    
-    func registerProfile() {
-        let imageData: Data? = self.profileImageView.image?.pngData() ?? self.profileImageView.image?.jpegData(compressionQuality: 0.9)
-        
-        let resultSingle: Single<Bool> = self.viewModel.saveProfile(
-            nickName: self.nicknameField.text ?? "",
-            message: self.messageField.text ?? "",
-            image: imageData)
-        resultSingle.asObservable()
-            .bind(onNext: { success in
-                if success {
-                    #if DEBUG
-                    print("Success to save profile")
-                    #endif
-                } else {
-                    #if DEBUG
-                    print("Failed to save profile")
-                    #endif
-                }
-            })
-            .disposed(by: self.disposeBag)
-    }
-    
-    @objc private func buttonClicked() {
-        self.buttonToggle.toggle()
-        self.registerButton.backgroundColor = buttonToggle ? .systemRed : .systemBlue
     }
 }
 

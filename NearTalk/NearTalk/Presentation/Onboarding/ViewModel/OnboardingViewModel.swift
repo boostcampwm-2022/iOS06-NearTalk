@@ -107,5 +107,14 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
         self.uploadImageUseCase = uploadImageUseCase
         self.createProfileUseCase = createProfileUseCase
         self.action = action
+        self.bind()
+    }
+    
+    private func bind() {
+        Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
+            $0 && $1
+        }
+        .bind(to: self.registerEnable)
+        .disposed(by: self.disposeBag)
     }
 }
