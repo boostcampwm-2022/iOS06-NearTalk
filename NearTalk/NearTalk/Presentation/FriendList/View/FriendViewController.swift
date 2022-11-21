@@ -10,18 +10,29 @@ import SnapKit
 import Then
 import UIKit
 
-final class FriendsListViewController: UIViewController {
+final class FriendListViewController: UIViewController {
     // MARK: - UI properties
     private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
-        $0.register(FriendsListCell.self, forCellReuseIdentifier: FriendsListCell.identifier)
+        $0.register(FriendListCell.self, forCellReuseIdentifier: FriendListCell.identifier)
     }
     
     // MARK: - Properties
+    private let disposeBag: DisposeBag = DisposeBag()
+    private var viewModel: FriendListViewModel!
     
-    private var dataSource: UITableViewDiffableDataSource<Int, FriendsListModel>?
-    private var viewModel = FriendsListViewModel()
+    private var dataSource: UITableViewDiffableDataSource<Int, Friend>?
+    
+    enum Section {
+        case main
+    }
     
     // MARK: - Lifecycles
+    static func create(with viewModel: FriendListViewModel) -> FriendListViewController {
+        let view = FriendListViewController()
+        view.viewModel = viewModel
+        return view
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -60,24 +71,12 @@ final class FriendsListViewController: UIViewController {
     // 데이터소스 세팅
     private func configureDatasource() {
 
-        self.dataSource = UITableViewDiffableDataSource<Int, FriendsListModel>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: FriendsListCell.identifier, for: indexPath) as? FriendsListCell
+        self.dataSource = UITableViewDiffableDataSource<Int, Friend>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: FriendListCell.identifier, for: indexPath) as? FriendListCell
             else { return UITableViewCell() }
-            
-            cell.configure(model: self.viewModel.friendsListDummyData[indexPath.row])
             
             return cell
         })
-        
-        self.dataSource?.defaultRowAnimation = .fade
-        self.tableView.dataSource = self.dataSource
-        
-        // 빈 snapshot
-        var snapshot = NSDiffableDataSourceSnapshot<Int, FriendsListModel>()
-        snapshot.appendSections([0])
-        snapshot.appendItems(viewModel.friendsListDummyData)
-        self.dataSource?.apply(snapshot)
-        
     }
     
     @objc private func didTapCreateChatRoomButton() {
@@ -91,7 +90,7 @@ import SwiftUI
 
 struct FriendsListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        UINavigationController(rootViewController: FriendsListViewController()).showPreview(.iPhone14Pro)
+        UINavigationController(rootViewController: FriendListViewController()).showPreview(.iPhone14Pro)
     }
 }
 #endif

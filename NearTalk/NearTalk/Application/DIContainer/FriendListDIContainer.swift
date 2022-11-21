@@ -1,5 +1,5 @@
 //
-//  FreindListDIContainer.swift
+//  FriendListDIContainer.swift
 //  NearTalk
 //
 //  Created by 김영욱 on 2022/11/21.
@@ -7,31 +7,12 @@
 
 import UIKit
 
-// ChatRoomListDIContainer가 필요한 DIContainer
-final class XXDIContainer {
-    // MARK: - 필요한 데이터를 가저올 네트워크 통신
-    lazy var apiDataStorageService: DefaultStorageService = {
-        // api -> Data 변환
-        return DefaultStorageService()
-    }()
-    
-    lazy var imageDataStorageService: DefaultStorageService = {
-        // api -> Data 변환
-        return DefaultStorageService()
-    }()
-    
-    func makeChatRoomListDIContainer() -> ChatRoomListDIContainer {
-        let dependencies = ChatRoomListDIContainer.Dependencies(apiDataTransferService: apiDataStorageService, imageDataTransferService: imageDataStorageService)
-        return ChatRoomListDIContainer(dependencies: dependencies)
-    }
-}
-
-final class FreindListDIContainer {
+final class FriendListDIContainer {
     
     // MARK: - Dependencies
     struct Dependencies {
-        let apiDataTransferService: DefaultStorageService
-        let imageDataTransferService: DefaultStorageService
+        let firestoreService: FirestoreService
+        let firebaseAuthService: FirebaseAuthService
     }
     
     private let dependencies: Dependencies
@@ -40,26 +21,50 @@ final class FreindListDIContainer {
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
-
+    
     // MARK: - Services
-
+    
     // MARK: - UseCases
-    func makeFreindListUseCase() -> ChatRoomListUseCase {
-        return DefaultChatRoomListUseCase(chatRoomListRepository: self.makeRepository())
+    func makeFetchFriendListUseCase() -> FetchFriendListUseCase {
+        return DefaultFetchFriendListUseCase(profileRepository: self.makeRepository())
+    }
+    
+    func makeProfileDetailUseCaseAble() -> ProfileDetailUseCaseAble {
+        return ProfileDetailUseCase()
     }
     
     // MARK: - Repositories
-    func makeRepository() -> ChatRoomListRepository {
-        return DefaultChatRoomListRepository(dataTransferService: dependencies.apiDataTransferService)
+    func makeRepository() -> ProfileRepository {
+        return DefaultProfileRepository(firestoreService: dependencies.firestoreService, firebaseAuthService: dependencies.firebaseAuthService)
     }
     
-    // ExampleMVVM에서는 보여줄수 있는 Scene의 뷰컨트롤러와 뷰모델이 존재
-
+    // MARK: - Friend Lsit
+    func makeFriendListViewController(actions: FriendListViewModelActions) -> FriendListViewController {
+        return FriendListViewController.create(with: self.makeFriendListViewModel(actions: actions))
+    }
+    
+    func makeFriendListViewModel(actions: FriendListViewModelActions) -> FriendListViewModel {
+        return DefaultFriendListViewModel(useCase: self.makeFetchFriendListUseCase(), actions: actions)
+    }
+    
+    // MARK: - Profile Detail
+//    func makeProfileDetailViewController() -> ProfileDetailViewController {
+//        return ProfileDetailViewController(viewModel: makeProfileDetailViewModel())
+//    }
+//
+//    func makeProfileDetailViewModel() -> ProfileDetailViewModel {
+//        return ProfileDetailViewModel(profileDetailUseCase: self.makeProfileDetailUseCaseAble(), profileDetailCoordinator: self.makeProfileDetailCoordinator(makeFriendListCoordinator))
+//    }
     
     // MARK: - Coordinator
-    func makeChatRoomListCoordinator(navigationController: UINavigationController) -> ChatRoomListCoordinator {
-        return ChatRoomListCoordinator(navigationController: navigationController, dependencies: self)
+    func makeFriendListCoordinator(navigationController: UINavigationController) -> FriendListCoordinator {
+        return FriendListCoordinator(navigationController: navigationController, dependencies: self)
     }
+    
+//    func makeProfileDetailDIContainer() -> ProfileDetailDIContainer {
+//        let dependencies = ProfileDetailDIContainer.Dependencies()
+//        return ProfileDetailDICOntainer(dependencies: dependencies)
+//    }
 }
 
-extension ChatRoomListDIContainer: ChatRoomListCoordinatorDependencies {}
+extension FriendListDIContainer: FriendListCoordinatorDependencies {}

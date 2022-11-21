@@ -17,7 +17,6 @@ struct ChatRoomListViewModelActions {
 protocol ChatRoomListViewModelInput {
     func didCreateChatRoom()
     func didSelectItem(at index: Int)
-    func load()
 }
 
 protocol ChatRoomListViewModelOutput {
@@ -41,10 +40,6 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        load()
-    }
-    
-    func load() {
         self.chatRoomListUseCase.getGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
@@ -53,6 +48,7 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
     }
+    
 }
 
 // MARK: - Input

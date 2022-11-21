@@ -10,7 +10,7 @@ import UIKit
 struct RootTabBarControllerDependency {
     let mapViewController: MainMapViewController
     let chatRoomListViewController: ChatRoomListViewController
-    let friendListViewController: FriendsListViewController
+    let friendListViewController: FriendListViewController
     let myProfileViewController: MyProfileViewController
 }
 

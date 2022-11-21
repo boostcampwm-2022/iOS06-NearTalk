@@ -43,7 +43,7 @@ final class RootTabBarDIContainer {
         let dependency: RootTabBarControllerDependency = .init(
             mapViewController: MainMapViewController(),
             chatRoomListViewController: ChatRoomListViewController.create(with: DefaultChatRoomListViewModel(useCase: chatRoomListUseCase)),
-            friendListViewController: FriendsListViewController(),
+            friendListViewController: FriendListViewController(),
             myProfileViewController: myProfileVC
         )
         return RootTabBarController(viewModel: makeViewModel(), dependency: dependency)

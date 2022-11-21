@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class FriendsListCell: UITableViewCell {
+final class FriendListCell: UITableViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     
@@ -42,9 +42,9 @@ final class FriendsListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(model: FriendsListModel) {
-        self.name.text = model.name
-        self.userDescription.text = model.description
+    func configure(model: Friend) {
+        self.name.text = model.username
+        self.userDescription.text = model.statusMessage
     }
  
     private func addSubviews() {

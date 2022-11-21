@@ -9,31 +9,28 @@ import Foundation
 import RxSwift
 
 protocol FetchFriendListUseCase {
-    func getFriendListData() -> Observable<[FriendInfo]>
+    func getFriendsData() -> Observable<[Friend]>
 }
 
 final class DefaultFetchFriendListUseCase: FetchFriendListUseCase {
 
     private let disposeBag = DisposeBag()
-    private let userUUIDRepository: UserUUIDRepository!
-    private let userProfileRepository: UserProfileRepository!
-    private let fireStoreService: FireStoreService!
-    private let userProfile: Single<UserProfile?>
+    private let profileRepository: ProfileRepository!
+    private let frends: Single<[UserProfile]>
     
-    init(userUUIDRepository: UserUUIDRepository, userProfileRepository: UserProfileRepository, fireStoreService: FireStoreService) {
-        self.userUUIDRepository = userUUIDRepository
-        self.userProfileRepository = userProfileRepository
-        
-        self.userProfile = fireStoreService.getMyProfile()
+    init(profileRepository: ProfileRepository) {
+        self.profileRepository = profileRepository
+        self.frends = profileRepository.fetchFriendsProfile()
     }
 
-    func getFriendListData() -> Observable<[FriendInfo]> {
-        self.userProfile
+    func getFriendsData() -> Observable<[Friend]> {
+        return self.frends
             .asObservable()
-            .subscribe(onNext: { profile in
-                profile?.chatRooms
-            })
-            .disposed(by: disposeBag)
+            .map {
+                $0.map { Friend(userID: $0.uuid,
+                               username: $0.username,
+                               statusMessage: $0.statusMessage,
+                               profileImagePath: $0.profileImagePath) }
+            }
     }
-    
 }
