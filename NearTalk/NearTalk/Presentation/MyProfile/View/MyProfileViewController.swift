@@ -6,6 +6,7 @@
 //
 
 import RxCocoa
+import RxSwift
 import SnapKit
 import Then
 import UIKit
@@ -25,19 +26,19 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         $0.axis = .vertical
     }
     
-    private let nicknameField = UITextField().then {
+    private let nicknameLabel = UILabel().then {
         $0.textAlignment = .natural
-        $0.placeholder = "닉네임"
+        $0.text = "닉네임"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let messageField = UITextField().then {
+    private let messageLabel = UILabel().then {
         $0.textAlignment = .natural
-        $0.placeholder = "상태 메세지"
+        $0.text = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 30)
     }
     
-    private let tableView = UITableView()
+    private let tableView: UITableView = UITableView()
     
     private lazy var dataSource: UITableViewDiffableDataSource<MyProfileSection, MyProfileItem> = {
         UITableViewDiffableDataSource<MyProfileSection, MyProfileItem>(tableView: self.tableView) { _, _, item in
@@ -53,40 +54,68 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         }
     }()
     
+    private weak var coordinator: MyProfileCoordinator?
+    
+    private let viewModel: any MyProfileViewModel
+    private let disposeBag: DisposeBag = DisposeBag()
+    private let viewWillAppearTrigger: PublishRelay<Void> = PublishRelay<Void>()
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
-        configureConstraint()
-        initDataSource()
-        setTableView()
+        self.configureUI()
+        self.configureConstraint()
+        self.initDataSource()
+        self.setTableView()
+        self.bindViewWillAppearTrigger()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.tableView.layer.cornerRadius = 5.0
-        self.tableView.layer.masksToBounds = true
-        self.tableView.clipsToBounds = true
+        self.profileImageView.makeRounded()
+        configureTableView()
         super.viewWillAppear(animated)
+        self.viewWillAppearTrigger.accept(())
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        profileImageView.clipsToBounds = true
-        profileImageView.layer.masksToBounds = true
-        profileImageView.layer.cornerRadius = profileImageView.frame.height / 2
+    init(coordinator: MyProfileCoordinator, viewModel: any MyProfileViewModel) {
+        self.coordinator = coordinator
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let menu = self.dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        
+        switch menu {
+        case .profileSetting:
+            self.coordinator?.showProfileSettingViewController()
+        case .appSetting:
+            self.coordinator?.showAppSettingViewController()
+        }
     }
 }
 
 private extension MyProfileViewController {
     func configureUI() {
         configureNavigationBar()
-        
+        view.backgroundColor = .systemBackground
         view.addSubview(myProfileView)
         view.addSubview(tableView)
         
         myProfileView.addSubview(profileImageView)
         myProfileView.addSubview(fieldStack)
-        fieldStack.addArrangedSubview(nicknameField)
-        fieldStack.addArrangedSubview(messageField)
+        fieldStack.addArrangedSubview(nicknameLabel)
+        fieldStack.addArrangedSubview(messageLabel)
+    }
+    
+    func configureTableView() {
+        self.tableView.layer.cornerRadius = 5.0
+        self.tableView.layer.masksToBounds = true
+        self.tableView.clipsToBounds = true
     }
     
     func configureConstraint() {
@@ -131,6 +160,27 @@ private extension MyProfileViewController {
         snapshot.appendItems(MyProfileItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
     }
+    
+    func bindViewWillAppearTrigger() {
+        let input = MyProfileInput(refreshObservable: self.viewWillAppearTrigger)
+        let output = self.viewModel.transform(input)
+        output.nickNameOutput
+            .drive(self.nicknameLabel.rx.text)
+            .disposed(by: self.disposeBag)
+        output.messageOutput
+            .drive(self.messageLabel.rx.text)
+            .disposed(by: self.disposeBag)
+        output.imageOutput
+            .map { data in
+                if let data = data {
+                    return UIImage(data: data)
+                } else {
+                    return Optional<UIImage>(nil)
+                }
+            }
+            .drive(self.profileImageView.rx.image)
+            .disposed(by: self.disposeBag)
+    }
 }
 
 enum MyProfileSection: Hashable & Sendable {
@@ -141,15 +191,3 @@ enum MyProfileItem: String, Hashable & Sendable & CaseIterable {
     case profileSetting = "프로필 수정"
     case appSetting = "앱 설정"
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-// swiftlint:disable: type_name
-struct MyProfileViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: MyProfileViewController()).showPreview(.iPhone14Pro)
-        UINavigationController(rootViewController: MyProfileViewController()).showPreview(.iPhoneSE3)
-    }
-}
-#endif

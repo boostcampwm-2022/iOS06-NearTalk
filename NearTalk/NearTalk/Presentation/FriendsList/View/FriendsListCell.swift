@@ -11,7 +11,7 @@ import UIKit
 
 final class FriendsListCell: UITableViewCell {
     
-    static let identifier = String(describing: ChattingRoomListCell.self)
+    static let identifier = String(describing: ChatRoomListCell.self)
     
     // MARK: - UI properties
     private let img = UIImageView().then {
