@@ -15,44 +15,31 @@ protocol LaunchScreenCoordinatorDependency {
 final class LaunchScreenCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator] = []
     private let diContainer: LaunchScreenDIContainer = .init()
-    private let dependency: LaunchScreenCoordinatorDependency
+    private var dependency: LaunchScreenCoordinatorDependency?
     private var launchScreenViewController: LaunchScreenViewController?
     
     // MARK: - Init
     init(
         navigationController: UINavigationController? = nil,
-        parentCoordinator: Coordinator? = nil,
         dependency: LaunchScreenCoordinatorDependency
     ) {
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
         self.dependency = dependency
+    }
+    
+    deinit {
+        print(Self.self, #function)
     }
     
     // MARK: - Lifecycles
     func start() {
         let actions: LaunchScreenViewModelActions = .init(
-            showLoginViewController: self.showLoginViewController,
-            showMainViewController: self.showMainViewController
+            showLoginViewController: dependency?.showLoginViewController,
+            showMainViewController: dependency?.showMainViewController
         )
         let viewController: LaunchScreenViewController = self.diContainer.createLaunchScreenViewController(actions: actions)
         self.launchScreenViewController = viewController
         self.navigationController?.pushViewController(viewController, animated: false)
-    }
-    
-    private func close() {
-        self.navigationController?.popViewController(animated: false)
-        self.launchScreenViewController = nil
-    }
-    
-    // MARK: - Dependency
-    private func showLoginViewController() {
-        self.dependency.showLoginViewController()
-    }
-    
-    private func showMainViewController() {
-        self.dependency.showMainViewController()
     }
 }

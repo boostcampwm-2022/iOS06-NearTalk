@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct UserProfile: Codable {
+struct UserProfile: BaseEntity {
     /// 유저 UUID
-    var userID: String?
+    var uuid: String?
     var username: String?
     var email: String?
     var statusMessage: String?

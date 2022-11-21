@@ -68,10 +68,10 @@ final class ChatRoomListViewController: UIViewController {
     private func configureNavigation() {
         let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(dmChatRoomListButtonTapped))
         let groupChatButton: UIBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: #selector(groupChatButtonTapped))
-        let creatGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
+        let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
         
         self.navigationItem.leftBarButtonItems = [dmChatButton, groupChatButton]
-        self.navigationItem.rightBarButtonItem = creatGroupChatButton
+        self.navigationItem.rightBarButtonItem = createGroupChatButton
     }
     
     private func configureDatasource() {

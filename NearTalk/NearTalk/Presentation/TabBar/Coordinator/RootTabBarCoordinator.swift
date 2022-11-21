@@ -10,12 +10,14 @@ import UIKit
 final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator] = []
     
-    func start() {
-        let diContainer: RootTabBarDIContainer = .init()
-        let viewcontroller: RootTabBarController = diContainer.createTabBarController()
-        self.navigationController?.pushViewController(viewcontroller, animated: false)
+    init(navigationController: UINavigationController?) {
+        self.navigationController = navigationController
     }
     
+    func start() {
+        let viewcontroller: RootTabBarController = RootTabBarDIContainer().createTabBarController()
+        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        self.navigationController?.popToRootViewController(animated: false)
+    }
 }
