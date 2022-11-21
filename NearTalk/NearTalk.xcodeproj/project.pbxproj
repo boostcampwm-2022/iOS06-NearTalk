@@ -144,6 +144,8 @@
 		83D354482925438C00B9236A /* UserUUIDRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D354472925438C00B9236A /* UserUUIDRepository.swift */; };
 		83D3544A292543DC00B9236A /* DefaultUserUUIDRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */; };
 		83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3544B2925623600B9236A /* UIImageView+Rounded.swift */; };
+		83D5ECC3292B714500AD1781 /* AuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC2292B714500AD1781 /* AuthRepository.swift */; };
+		83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */; };
 		83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83E7F8CA2922AB750003A2B6 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */; };
@@ -331,6 +333,8 @@
 		83D354472925438C00B9236A /* UserUUIDRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserUUIDRepository.swift; sourceTree = "<group>"; };
 		83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserUUIDRepository.swift; sourceTree = "<group>"; };
 		83D3544B2925623600B9236A /* UIImageView+Rounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Rounded.swift"; sourceTree = "<group>"; };
+		83D5ECC2292B714500AD1781 /* AuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRepository.swift; sourceTree = "<group>"; };
+		83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAuthRepository.swift; sourceTree = "<group>"; };
 		83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingTableViewCell.swift; sourceTree = "<group>"; };
 		83E7BBC62922AFED007C390A /* AppSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingViewController.swift; sourceTree = "<group>"; };
 		83E7F8C92922AB750003A2B6 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
@@ -724,6 +728,7 @@
 				8349529F2925FEF0004C5B3B /* DefaultImageRepository.swift */,
 				603EDDAA2926C52200BEE65C /* DefaultTabBarRepository.swift */,
 				603FD39229296B8500687ED4 /* DefaultProfileRepository.swift */,
+				83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -807,6 +812,7 @@
 				8349529D2925FEAE004C5B3B /* ImageRepository.swift */,
 				603EDDA82926C51100BEE65C /* TabBarRepository.swift */,
 				603FD38F29296AA300687ED4 /* ProfileRepository.swift */,
+				83D5ECC2292B714500AD1781 /* AuthRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -1487,7 +1493,9 @@
 				16530580291E19250026B815 /* ChatRoomListViewModel.swift in Sources */,
 				603FD39329296B8500687ED4 /* DefaultProfileRepository.swift in Sources */,
 				60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */,
+				83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */,
 				60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */,
+				83D5ECC3292B714500AD1781 /* AuthRepository.swift in Sources */,
 				555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
 				603EDDB62926C89C00BEE65C /* RootTabBarCoordinator.swift in Sources */,
