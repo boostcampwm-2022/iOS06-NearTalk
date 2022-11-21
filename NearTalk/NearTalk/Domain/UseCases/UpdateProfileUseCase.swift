@@ -9,7 +9,7 @@ import RxSwift
 
 protocol UpdateProfileUseCase {
     init(repository: any ProfileRepository)
-    func execute(profile: UserProfile) -> Single<UserProfile>
+    func execute(profile: UserProfile) -> Completable
 }
 
 final class DefaultUpdateProfileUseCase: UpdateProfileUseCase {
@@ -19,7 +19,7 @@ final class DefaultUpdateProfileUseCase: UpdateProfileUseCase {
         self.repository = repository
     }
     
-    func execute(profile: UserProfile) -> RxSwift.Single<UserProfile> {
-        return self.repository.updateMyProfile(profile)
+    func execute(profile: UserProfile) -> Completable {
+        return self.repository.updateMyProfile(profile).asCompletable()
     }
 }

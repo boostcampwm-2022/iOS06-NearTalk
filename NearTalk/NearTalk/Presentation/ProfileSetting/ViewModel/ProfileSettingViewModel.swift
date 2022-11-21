@@ -10,12 +10,12 @@ import RxCocoa
 
 protocol ProfileSettingViewModelAction {
     var presentImagePicker: () -> Single<Data?> { get }
+    var presentRegisterResult: () -> Void { get }
 }
 
 protocol ProfileSettingInput {
     var nickName: Observable<String> { get }
     var message: Observable<String> { get }
-    var register: Observable<Void> { get }
 }
 
 protocol ProfileSettingOutput {
@@ -28,10 +28,12 @@ protocol ProfileSettingViewModel {
     init(updateProfileUseCase: any UpdateProfileUseCase,
          validateNickNameUseCase: any ValidateTextUseCase,
          validateStatusMessageUseCase: any ValidateTextUseCase,
-         action: any ProfileSettingViewModelAction)
+         action: any ProfileSettingViewModelAction,
+         profile: UserProfile)
     func transform(_ input: ProfileSettingInput) -> ProfileSettingOutput
     func injectProfile(_ profile: UserProfile)
     func editImage() -> Single<Data?>
+    func register(nickName: String, message: String, image: Data?)
 }
 
 final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
@@ -44,7 +46,8 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     init(updateProfileUseCase: any UpdateProfileUseCase,
          validateNickNameUseCase: any ValidateTextUseCase,
          validateStatusMessageUseCase: any ValidateTextUseCase,
-         action: any ProfileSettingViewModelAction) {
+         action: any ProfileSettingViewModelAction,
+         profile: UserProfile) {
         self.updateProfileUseCase = updateProfileUseCase
         self.validateNickNameUseCase = validateNickNameUseCase
         self.validateStatusMessageUseCase = validateStatusMessageUseCase
@@ -54,8 +57,6 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     struct Input: ProfileSettingInput {
         let nickName: Observable<String>
         let message: Observable<String>
-        let register: Observable<Void>
-        let imageEdit: Observable<Void>
     }
     
     struct Output: ProfileSettingOutput {
@@ -99,5 +100,10 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     }
     
     func injectProfile(_ profile: UserProfile) {
+    }
+    
+    func register(nickName: String, message: String, image: Data?) {
+        let newProfile: UserProfile = UserProfile()
+        self.updateProfileUseCase.execute(profile: <#T##UserProfile#>)
     }
 }
