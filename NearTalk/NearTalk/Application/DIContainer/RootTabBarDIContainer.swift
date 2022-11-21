@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class RootTabBarDIContainer {
     // MARK: - Dependencies
@@ -27,6 +28,10 @@ final class RootTabBarDIContainer {
         return DefaultRootTabBarViewModel()
     }
     
+#warning("mapViewController DI Container 필요")
+#warning("chatRoomListViewController DI Container 필요")
+#warning("friendListViewController DI Container 필요")
+#warning("myProfileViewController DI Container 필요")
     // MARK: - Create viewController
     func createTabBarController() -> RootTabBarController {
         let chatRoomListRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService())
@@ -45,7 +50,7 @@ final class RootTabBarDIContainer {
     }
     
     // MARK: - Coordinator
-    func makeTabBarCoordinator() -> RootTabBarCoordinator {
-        return RootTabBarCoordinator()
+    func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator {
+        return RootTabBarCoordinator(navigationController: navigationController)
     }
 }
