@@ -29,10 +29,6 @@ final class FriendListDIContainer {
         return DefaultFetchFriendListUseCase(profileRepository: self.makeRepository())
     }
     
-    func makeProfileDetailUseCaseAble() -> ProfileDetailUseCaseAble {
-        return ProfileDetailUseCase()
-    }
-    
     // MARK: - Repositories
     func makeRepository() -> ProfileRepository {
         return DefaultProfileRepository(firestoreService: dependencies.firestoreService, firebaseAuthService: dependencies.firebaseAuthService)
@@ -67,4 +63,11 @@ final class FriendListDIContainer {
 //    }
 }
 
-extension FriendListDIContainer: FriendListCoordinatorDependencies {}
+extension FriendListDIContainer: FriendListCoordinatorDependencies {
+    func makeProfileDetailViewController(userID: String) -> ProfileDetailViewController {
+        let diContainer: ProfileDetailDIContainer = ProfileDetailDIContainer()
+
+        let viewController: ProfileDetailViewController = diContainer.createProfileDetailViewController(userID: userID, actions: ProfileDetailViewModelActions())
+        return viewController
+    }
+}
