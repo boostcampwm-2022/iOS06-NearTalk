@@ -20,7 +20,7 @@ final class FriendListViewController: UIViewController {
     private let disposeBag: DisposeBag = DisposeBag()
     private var viewModel: FriendListViewModel!
     
-    private var dataSource: UITableViewDiffableDataSource<Int, Friend>?
+    private var dataSource: UITableViewDiffableDataSource<Section, Friend>?
     
     enum Section {
         case main
@@ -50,6 +50,7 @@ final class FriendListViewController: UIViewController {
         self.configureTableView()
         self.configureNavigation()
         self.configureDatasource()
+        self.bind()
     }
     
     private func configureView() {
@@ -70,13 +71,24 @@ final class FriendListViewController: UIViewController {
     
     // 데이터소스 세팅
     private func configureDatasource() {
-
-        self.dataSource = UITableViewDiffableDataSource<Int, Friend>(tableView: self.tableView, cellProvider: { tableView, indexPath, _ in
+        self.dataSource = UITableViewDiffableDataSource<Section, Friend>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: FriendListCell.identifier, for: indexPath) as? FriendListCell
             else { return UITableViewCell() }
-            
+            cell.configure(model: model)
             return cell
         })
+    }
+    
+    private func bind() {
+        self.viewModel.friendsData
+            .bind(onNext: { [weak self] model in
+                var snapshot = NSDiffableDataSourceSnapshot<Section, Friend>()
+                snapshot.appendSections([.main])
+                snapshot.appendItems(model)
+                self?.dataSource?.defaultRowAnimation = .fade
+                self?.dataSource?.apply(snapshot, animatingDifferences: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc private func didTapCreateChatRoomButton() {
@@ -90,7 +102,17 @@ import SwiftUI
 
 struct FriendsListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        UINavigationController(rootViewController: FriendListViewController()).showPreview(.iPhone14Pro)
+        lazy var firestoreService: DefaultFirestoreService = {
+            return DefaultFirestoreService()
+        }()
+        lazy var firebaseAuthService: DefaultFirebaseAuthService = {
+            return DefaultFirebaseAuthService()
+        }()
+        let dependencies = FriendListDIContainer.Dependencies(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
+        let diContainer = FriendListDIContainer(dependencies: dependencies)
+        let actions = FriendListViewModelActions(showDetailFriend: {})
+        let viewController = diContainer.makeFriendListViewController(actions: actions)
+        return UINavigationController(rootViewController: viewController).showPreview(.iPhone14Pro)
     }
 }
 #endif

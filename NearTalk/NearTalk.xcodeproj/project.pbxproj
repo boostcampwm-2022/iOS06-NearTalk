@@ -700,12 +700,12 @@
 			isa = PBXGroup;
 			children = (
 				555A6B3929238C9B001336ED /* FetchChatRoomUseCase.swift */,
+				5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */,
 				8330622C2924A3F1000E786E /* OnboardingUseCase.swift */,
 				7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */,
 				7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */,
 				83D3543E29253A5C00B9236A /* MyProfileLoadUseCase.swift */,
 				603EDDA62926C4B300BEE65C /* TabBarUseCase.swift */,
-				5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */,
 				603FD394292A1E7000687ED4 /* LoginUseCase.swift */,
 				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
