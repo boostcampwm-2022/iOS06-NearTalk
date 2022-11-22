@@ -10,5 +10,5 @@ import RxSwift
 
 protocol ImageRepository {
     func fetch(path: String) -> Single<Data?>
-    func save(image: Data) -> Single<String?>
+    func save(image: Data) -> Single<String>
 }

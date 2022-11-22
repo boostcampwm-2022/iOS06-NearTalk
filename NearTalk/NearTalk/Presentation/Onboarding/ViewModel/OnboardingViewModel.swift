@@ -26,9 +26,9 @@ protocol OnboardingOutput {
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
 protocol OnboardingViewModelAction {
-    func presentImagePicker() -> Single<Data?>
-    func finish()
-    func presentRegisterFailure()
+    var presentImagePicker: (() -> Single<Data?>)? { get }
+    var showMainViewController: (() -> Void)? { get }
+    var presentRegisterFailure: (() -> Void)? { get }
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
@@ -45,7 +45,10 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     }
     
     func editImage() {
-        let imagePickSingle: Single<Data?> = self.action.presentImagePicker()
+        guard let presentImagePicker = self.action.presentImagePicker else {
+            return
+        }
+        let imagePickSingle: Single<Data?> = presentImagePicker()
         imagePickSingle.subscribe(onSuccess: { [weak self] image in
             self?.image.accept(image)
         })
@@ -58,7 +61,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
                 .subscribe(onSuccess: { [weak self] imagePath in
                     self?.registerProfile(imagePath: imagePath)
                 }, onFailure: { [weak self] _ in
-                    self?.action.presentRegisterFailure()
+                    self?.action.presentRegisterFailure?()
                 })
                 .disposed(by: self.disposeBag)
         } else {
@@ -75,9 +78,9 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
             profileImagePath: imagePath)
         self.createProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
-                self?.action.finish()
+                self?.action.showMainViewController?()
             }, onError: { [weak self] _ in
-                self?.action.presentRegisterFailure()
+                self?.action.presentRegisterFailure?()
             })
             .disposed(by: self.disposeBag)
     }
