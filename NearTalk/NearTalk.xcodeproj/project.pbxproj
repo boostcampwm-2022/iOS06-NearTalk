@@ -109,6 +109,7 @@
 		6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
 		60DCAAF42928B9610087A63D /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60DCAAF32928B9610087A63D /* Cartfile */; };
+		60E749DC292C88F40048F877 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E749DB292C88F40048F877 /* AuthService.swift */; };
 		60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705929238CBB00A4C29A /* StorageService.swift */; };
 		60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */; };
 		60FD706029238DD400A4C29A /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */; };
@@ -299,6 +300,7 @@
 		6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Dictionary.swift"; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
 		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		60E749DB292C88F40048F877 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		60FB1DA9A810C61099D92942 /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		60FD705929238CBB00A4C29A /* StorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealTimeDatabaseService.swift; sourceTree = "<group>"; };
@@ -936,6 +938,7 @@
 				60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */,
 				603EDD6229261A2000BEE65C /* FirebaseKey.swift */,
 				603FD389292928D000687ED4 /* FirebaseQueryKey.swift */,
+				60E749DB292C88F40048F877 /* AuthService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1516,6 +1519,7 @@
 				83D3543F29253A5C00B9236A /* MyProfileLoadUseCase.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
 				7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */,
+				60E749DC292C88F40048F877 /* AuthService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
