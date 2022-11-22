@@ -48,7 +48,7 @@ final class DefaultOnboardingSaveProfileUseCase: OnboardingSaveProfileUseCase {
             path = nil
         }
         return self.profileRepository.save(UserProfile(
-            userID: self.uuidRepository.fetch(),
+            uuid: self.uuidRepository.fetch(),
             username: nickName,
             statusMessage: message,
             profileImagePath: path,

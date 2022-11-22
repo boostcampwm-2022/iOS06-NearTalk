@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 final class RootTabBarDIContainer {
     // MARK: - Dependencies
@@ -27,41 +28,29 @@ final class RootTabBarDIContainer {
         return DefaultRootTabBarViewModel()
     }
     
+#warning("mapViewController DI Container 필요")
+#warning("chatRoomListViewController DI Container 필요")
+#warning("friendListViewController DI Container 필요")
+#warning("myProfileViewController DI Container 필요")
     // MARK: - Create viewController
     func createTabBarController() -> RootTabBarController {
         let chatRoomListRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService())
-        let chatRoomListUseCase: ChatRoomListUseCase = DefaultChatRoomListUseCase(chatRoomListRepository: chatRoomListRepository)
+        let chatRoomListUseCase: FetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRoomListRepository: chatRoomListRepository)
         
         let myProfileDIContainer: MyProfileDIContainer = .init()
         let myProfileVC: MyProfileViewController = .init(coordinator: myProfileDIContainer.makeMyProfileCoordinator(), viewModel: myProfileDIContainer.makeViewModel())
         
         let dependency: RootTabBarControllerDependency = .init(
             mapViewController: MainMapViewController(),
-            chatRoomListViewController: makeChatRoomListDIContainer().makeChatRoomListViewController(actions: ChatRoomListViewModelActions(showChatRoom: {}, showCreateChatRoom: {})),
-            friendListViewController: FriendsListViewController(),
+            chatRoomListViewController: ChatRoomListViewController.create(with: DefaultChatRoomListViewModel(useCase: chatRoomListUseCase)),
+            friendListViewController: FriendListViewController(),
             myProfileViewController: myProfileVC
         )
         return RootTabBarController(viewModel: makeViewModel(), dependency: dependency)
     }
     
-    // MARK: - 필요한 데이터를 가저올 네트워크 통신
-    lazy var apiDataStorageService: DefaultStorageService = {
-        // api -> Data 변환
-        return DefaultStorageService()
-    }()
-    
-    lazy var imageDataStorageService: DefaultStorageService = {
-        // api -> Data 변환
-        return DefaultStorageService()
-    }()
-    
-    func makeChatRoomListDIContainer() -> ChatRoomListDIContainer {
-        let dependencies = ChatRoomListDIContainer.Dependencies(apiDataTransferService: apiDataStorageService, imageDataTransferService: imageDataStorageService)
-        return ChatRoomListDIContainer(dependencies: dependencies)
-    }
-    
     // MARK: - Coordinator
-    func makeTabBarCoordinator() -> RootTabBarCoordinator {
-        return RootTabBarCoordinator()
+    func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator {
+        return RootTabBarCoordinator(navigationController: navigationController)
     }
 }

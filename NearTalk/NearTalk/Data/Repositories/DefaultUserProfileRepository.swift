@@ -17,6 +17,6 @@ final class DefaultUserProfileRepository: UserProfileRepository {
     }
     
     func fetch(uuid: String) -> UserProfile {
-        return UserProfile(userID: uuid, username: "sample", statusMessage: "sample message", profileImagePath: nil, friends: nil)
+        return UserProfile(uuid: uuid, username: "sample", statusMessage: "sample message", profileImagePath: nil, friends: nil)
     }
 }

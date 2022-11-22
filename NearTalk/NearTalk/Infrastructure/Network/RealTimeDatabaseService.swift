@@ -30,13 +30,13 @@ extension DefaultRealTimeDatabaseService {
         Single<Bool>.create { [weak self] single in
             guard let self,
                   let roomID: String = message.chatRoomID,
-                  let messageID: String = message.messageID
+                  let messageID: String = message.uuid
             else { return Disposables.create() }
             
             self.ref
-                .child(FirebaseServiceType.RealtimeDB.chatRooms.rawValue)
+                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
                 .child(roomID)
-                .child(FirebaseServiceType.RealtimeDB.chatMessages.rawValue)
+                .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(messageID)
                 .setValue(message)
             
@@ -53,7 +53,7 @@ extension DefaultRealTimeDatabaseService {
             }
             
             self.chatRoomHandler = self.ref
-                .child(FirebaseServiceType.RealtimeDB.chatRooms.rawValue)
+                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
                 .child(chatRoomID)
                 .observe(.value) { snapshot in
                     guard let value = snapshot.value as? [[String: Any]] else {

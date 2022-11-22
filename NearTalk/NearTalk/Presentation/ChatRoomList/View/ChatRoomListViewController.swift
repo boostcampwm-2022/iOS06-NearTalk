@@ -68,10 +68,10 @@ final class ChatRoomListViewController: UIViewController {
     private func configureNavigation() {
         let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: #selector(dmChatRoomListButtonTapped))
         let groupChatButton: UIBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: #selector(groupChatButtonTapped))
-        let creatGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
+        let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
         
         self.navigationItem.leftBarButtonItems = [dmChatButton, groupChatButton]
-        self.navigationItem.rightBarButtonItem = creatGroupChatButton
+        self.navigationItem.rightBarButtonItem = createGroupChatButton
     }
     
     private func configureDatasource() {
@@ -113,22 +113,22 @@ final class ChatRoomListViewController: UIViewController {
             .disposed(by: disposeBag)
         
         self.viewModel.dmChatRoomData
-            .bind(onNext: { model in
+            .bind(onNext: { [weak self] model in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self.dmDataSource?.defaultRowAnimation = .fade
-                self.dmDataSource?.apply(snapshot, animatingDifferences: true)
+                self?.dmDataSource?.defaultRowAnimation = .fade
+                self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
         self.viewModel.groupChatRoomData
-            .bind(onNext: { model in
+            .bind(onNext: { [weak self] model in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self.groupDataSource?.defaultRowAnimation = .fade
-                self.groupDataSource?.apply(snapshot, animatingDifferences: true)
+                self?.groupDataSource?.defaultRowAnimation = .fade
+                self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
     }
