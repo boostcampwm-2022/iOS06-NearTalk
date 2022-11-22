@@ -17,7 +17,6 @@ struct ChatRoomListViewModelActions {
 protocol ChatRoomListViewModelInput {
     func didCreateChatRoom()
     func didSelectItem(at index: Int)
-    func load()
 }
 
 protocol ChatRoomListViewModelOutput {
@@ -29,7 +28,7 @@ protocol ChatRoomListViewModel: ChatRoomListViewModelInput, ChatRoomListViewMode
 
 final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
 
-    private let chatRoomListUseCase: ChatRoomListUseCase
+    private let chatRoomListUseCase: FetchChatRoomUseCase
     private let actions: ChatRoomListViewModelActions?
     private let disposeBag: DisposeBag = DisposeBag()
 
@@ -37,14 +36,10 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> = BehaviorRelay<[GroupChatRoomListData]>(value: [])
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
     
-    init(useCase: ChatRoomListUseCase, actions: ChatRoomListViewModelActions? = nil) {
+    init(useCase: FetchChatRoomUseCase, actions: ChatRoomListViewModelActions? = nil) {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        load()
-    }
-    
-    func load() {
         self.chatRoomListUseCase.getGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
@@ -53,6 +48,7 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
     }
+    
 }
 
 // MARK: - Input

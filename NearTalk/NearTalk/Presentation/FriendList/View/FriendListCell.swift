@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class FriendsListCell: UITableViewCell {
+final class FriendListCell: UITableViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     
@@ -42,9 +42,9 @@ final class FriendsListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(model: FriendsListModel) {
-        self.name.text = model.name
-        self.userDescription.text = model.description
+    func configure(model: Friend) {
+        self.name.text = model.username
+        self.userDescription.text = model.statusMessage
     }
  
     private func addSubviews() {
@@ -54,10 +54,10 @@ final class FriendsListCell: UITableViewCell {
     }
     
     private func configureConstraints() {
-        configureImg()
-        configureName()
-        configureuserDescription()
-        configurContentView()
+        self.configureImg()
+        self.configureName()
+        self.configureUserDescription()
+        self.configureContentView()
     }
     
     private func configureImg() {
@@ -78,7 +78,7 @@ final class FriendsListCell: UITableViewCell {
         }
     }
     
-    private func configureuserDescription() {
+    private func configureUserDescription() {
         self.userDescription.snp.makeConstraints { make in
             make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.contentView).offset(-16)
@@ -87,7 +87,7 @@ final class FriendsListCell: UITableViewCell {
         }
     }
     
-    private func configurContentView() {
+    private func configureContentView() {
         self.contentView.layer.borderColor = UIColor.gray.cgColor
         self.contentView.layer.borderWidth = 0.5
     }
