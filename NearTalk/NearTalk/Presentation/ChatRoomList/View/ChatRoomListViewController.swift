@@ -113,22 +113,22 @@ final class ChatRoomListViewController: UIViewController {
             .disposed(by: disposeBag)
         
         self.viewModel.dmChatRoomData
-            .bind(onNext: { model in
+            .bind(onNext: { [weak self] model in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self.dmDataSource?.defaultRowAnimation = .fade
-                self.dmDataSource?.apply(snapshot, animatingDifferences: true)
+                self?.dmDataSource?.defaultRowAnimation = .fade
+                self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
         self.viewModel.groupChatRoomData
-            .bind(onNext: { model in
+            .bind(onNext: { [weak self] model in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self.groupDataSource?.defaultRowAnimation = .fade
-                self.groupDataSource?.apply(snapshot, animatingDifferences: true)
+                self?.groupDataSource?.defaultRowAnimation = .fade
+                self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
     }

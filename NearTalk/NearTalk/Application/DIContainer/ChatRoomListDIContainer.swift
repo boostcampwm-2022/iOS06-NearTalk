@@ -44,8 +44,8 @@ final class ChatRoomListDIContainer {
     // MARK: - Services
 
     // MARK: - UseCases
-    func makeChatRoomListUseCase() -> ChatRoomListUseCase {
-        return DefaultChatRoomListUseCase(chatRoomListRepository: self.makeRepository())
+    func makeChatRoomListUseCase() -> FetchChatRoomUseCase {
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: self.makeRepository())
     }
     
     // MARK: - Repositories
