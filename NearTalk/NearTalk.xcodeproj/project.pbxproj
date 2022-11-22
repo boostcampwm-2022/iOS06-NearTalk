@@ -43,7 +43,7 @@
 		555A6B3329236D98001336ED /* FriendListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3229236D98001336ED /* FriendListCoordinator.swift */; };
 		555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */; };
 		555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3729238C69001336ED /* ChatRoomList.swift */; };
-		555A6B3A29238C9B001336ED /* ChatRoomListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */; };
+		555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3929238C9B001336ED /* FetchChatRoomUseCase.swift */; };
 		555A6B3C29238D26001336ED /* DefaultChatRoomListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3B29238D26001336ED /* DefaultChatRoomListRepository.swift */; };
 		555A6B3E29238D65001336ED /* ChatRoomListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3D29238D65001336ED /* ChatRoomListRepository.swift */; };
 		555A6B432924B9E4001336ED /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 555A6B422924B9E4001336ED /* GoogleService-Info.plist */; };
@@ -231,7 +231,7 @@
 		555A6B3229236D98001336ED /* FriendListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCoordinator.swift; sourceTree = "<group>"; };
 		555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListDIContainer.swift; sourceTree = "<group>"; };
 		555A6B3729238C69001336ED /* ChatRoomList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomList.swift; sourceTree = "<group>"; };
-		555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListUseCase.swift; sourceTree = "<group>"; };
+		555A6B3929238C9B001336ED /* FetchChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatRoomUseCase.swift; sourceTree = "<group>"; };
 		555A6B3B29238D26001336ED /* DefaultChatRoomListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChatRoomListRepository.swift; sourceTree = "<group>"; };
 		555A6B3D29238D65001336ED /* ChatRoomListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatRoomListRepository.swift; path = NearTalk/Data/Repositories/ChatRoomListRepository.swift; sourceTree = SOURCE_ROOT; };
 		555A6B422924B9E4001336ED /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -699,7 +699,7 @@
 		1660D26C291DE32F005F7B24 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
-				555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */,
+				555A6B3929238C9B001336ED /* FetchChatRoomUseCase.swift */,
 				8330622C2924A3F1000E786E /* OnboardingUseCase.swift */,
 				7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */,
 				7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */,
@@ -1423,7 +1423,7 @@
 				1653057E291E19150026B815 /* ChatRoomListViewController.swift in Sources */,
 				603EDDA92926C51100BEE65C /* TabBarRepository.swift in Sources */,
 				555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */,
-				555A6B3A29238C9B001336ED /* ChatRoomListUseCase.swift in Sources */,
+				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
 				1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
 				555A6B482924BE65001336ED /* UserProfile.swift in Sources */,

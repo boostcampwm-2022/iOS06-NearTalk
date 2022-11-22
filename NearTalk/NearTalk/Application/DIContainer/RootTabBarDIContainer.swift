@@ -35,7 +35,7 @@ final class RootTabBarDIContainer {
     // MARK: - Create viewController
     func createTabBarController() -> RootTabBarController {
         let chatRoomListRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService())
-        let chatRoomListUseCase: ChatRoomListUseCase = DefaultChatRoomListUseCase(chatRoomListRepository: chatRoomListRepository)
+        let chatRoomListUseCase: FetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRoomListRepository: chatRoomListRepository)
         
         let myProfileDIContainer: MyProfileDIContainer = .init()
         let myProfileVC: MyProfileViewController = .init(coordinator: myProfileDIContainer.makeMyProfileCoordinator(), viewModel: myProfileDIContainer.makeViewModel())
