@@ -3,7 +3,7 @@ disabled_rules: # 실행에서 제외할 룰 식별자들
   - trailing_whitespace
 
 opt_in_rules: # 일부 룰은 옵트 인 형태로 제공
-  - indentation_width
+#  - indentation_width
   - sorted_imports
   - conditional_returns_on_newline
 
@@ -26,12 +26,13 @@ function_body_length:
   warning: 100
 
 type_name:
-  min_length:
-    error: 2
+  min_length: 2
 
 identifier_name:
-  min_length:
-    error: 2
-    
+  min_length: 2
+  
+file_length:
+  warning: 500
+
 # 보고 유형 (xcode, json, csv, codeclimate, checkstyle, junit, html, emoji, sonarqube, markdown, github-actions-logging)
 reporter: "xcode"

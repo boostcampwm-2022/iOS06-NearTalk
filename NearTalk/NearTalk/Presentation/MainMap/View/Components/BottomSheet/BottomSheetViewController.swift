@@ -79,3 +79,14 @@ extension BottomSheetViewController: UITableViewDataSource {
         return cell
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct BottomSheetViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        return BottomSheetViewController()
+            .showPreview(.iPhone14Pro)
+    }
+}
+#endif

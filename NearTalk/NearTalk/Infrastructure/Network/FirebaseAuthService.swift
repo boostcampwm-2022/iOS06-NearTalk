@@ -10,26 +10,44 @@ import Foundation
 import RxSwift
 
 protocol FirebaseAuthService {
-    func verifyUser() -> Observable<Bool>
-    func loginWithApple(token idTokenString: String, nonce: String) -> Observable<Bool>
+    func verifyUser() -> Completable
+    func fetchCurrentUserEmail() -> Single<String>
+    func loginWithApple(token idTokenString: String, nonce: String) -> Completable
+    func logout() -> Completable
+    func deleteCurrentUser() -> Completable
 }
 
 final class DefaultFirebaseAuthService: FirebaseAuthService {
     
-    func verifyUser() -> Observable<Bool> {
-        Observable<Bool>.create { observer in
+    /// 유저 로그인 확인
+    func verifyUser() -> Completable {
+        Completable.create { completable in
             if Auth.auth().currentUser != nil {
-                observer.onNext(true)
+                completable(.completed)
             } else {
-                observer.onNext(false)
+                completable(.error(FirebaseAuthError.nilUser))
             }
-            observer.onCompleted()
             return Disposables.create()
         }
     }
     
-    func loginWithApple(token idTokenString: String, nonce: String) -> Observable<Bool> {
-        Observable<Bool>.create { observer in
+    /// 현재 유저의 이메일 주소 가져오기
+    func fetchCurrentUserEmail() -> Single<String> {
+        Single<String>.create { single in
+            guard let currentUser: FirebaseAuth.User = Auth.auth().currentUser,
+                  let email: String = currentUser.email else {
+                single(.failure(FirebaseAuthError.nilUser))
+                return Disposables.create()
+            }
+            single(.success(email))
+            return Disposables.create()
+        }
+    }
+    
+    /// 유저 로그인
+    /// 로그인 한 적 없는 유저는 자동으로 회원가입 된다.
+    func loginWithApple(token idTokenString: String, nonce: String) -> Completable {
+        Completable.create { completable in
             let credential: OAuthCredential = OAuthProvider.credential(
                 withProviderID: "apple.com",
                 idToken: idTokenString,
@@ -37,14 +55,48 @@ final class DefaultFirebaseAuthService: FirebaseAuthService {
             )
             Auth.auth().signIn(with: credential) { (authResult, error) in
                 if let error {
-                    observer.onError(error)
+                    completable(.error(error))
                     return
                 }
-                print("isNewUser: \(String(describing: authResult?.additionalUserInfo?.isNewUser))")
-                observer.onNext(true)
-                observer.onCompleted()
+
+                guard (authResult?.user) != nil else {
+                    completable(.error(FirebaseAuthError.nilUser))
+                    return
+                }
+                completable(.completed)
             }
             return Disposables.create()
         }
     }
+    
+    /// 로그아웃
+    func logout() -> Completable {
+        Completable.create { completable in
+            do {
+                try Auth.auth().signOut()
+                completable(.completed)
+            } catch let error {
+                completable(.error(error))
+            }
+            return Disposables.create()
+        }
+    }
+    
+    /// 탈퇴
+    func deleteCurrentUser() -> Completable {
+        Completable.create { completable in
+            Auth.auth().currentUser?.delete { error in
+                if let error {
+                    completable(.error(error))
+                    return
+                }
+                completable(.completed)
+            }
+            return Disposables.create()
+        }
+    }
+}
+
+enum FirebaseAuthError: Error {
+    case nilUser
 }

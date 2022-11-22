@@ -85,8 +85,8 @@ final class MainMapViewController: UIViewController, StoryboardInstantiable {
     
     private func configureConstraints() {
         self.mapView.snp.makeConstraints {
-            $0.width.equalTo(self.view)
-            $0.height.equalTo(self.view)
+            $0.top.equalToSuperview()
+            $0.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         self.moveToCurrentLocationButton.snp.makeConstraints {
@@ -202,7 +202,7 @@ private extension MKMapView {
         self.setCameraBoundary(cameraBoundary, animated: true)
     }
     
-    private func setCameraZoomRange(minDistance: CLLocationDistance = 1000, maxDistance: CLLocationDistance = 10000) {
+    private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 10000) {
         let zoomRange = MKMapView.CameraZoomRange(
             minCenterCoordinateDistance: minDistance,
             maxCenterCoordinateDistance: maxDistance
