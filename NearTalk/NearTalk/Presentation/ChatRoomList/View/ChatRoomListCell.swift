@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-class ChatRoomListCell: UITableViewCell {
+class ChatRoomListCell: UICollectionViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     
@@ -26,33 +26,46 @@ class ChatRoomListCell: UITableViewCell {
         $0.font = UIFont(name: "text", size: 18)
     }
     
-    private let userDescription = UILabel().then {
+    private let count = UILabel().then {
+        $0.textColor = .gray
+        $0.font = UIFont.systemFont(ofSize: 12)
+    }
+    
+    private let recentMessage = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14)
         $0.numberOfLines = 2
     }
     
     private let date = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14)
+        $0.font = UIFont.systemFont(ofSize: 10)
     }
     
-    private let count = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 12)
-        
+    private let unreadMessageCount = UILabel().then {
+        $0.font = UIFont.systemFont(ofSize: 16)
     }
     
     private lazy var stackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fill
         $0.alignment = .center
-        $0.spacing = 4
+        $0.spacing = 8
         $0.addArrangedSubview(self.name)
         $0.addArrangedSubview(self.count)
     }
     
+    private lazy var stackView2 = UIStackView().then {
+        $0.axis = .vertical
+        $0.distribution = .fill
+        $0.alignment = .leading
+        $0.spacing = 4
+        $0.addArrangedSubview(self.stackView)
+        $0.addArrangedSubview(self.recentMessage)
+    }
+    
     // MARK: - Lifecycles
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         addSubviews()
         configureConstraints()
@@ -65,14 +78,14 @@ class ChatRoomListCell: UITableViewCell {
     
     func configure(groupData: GroupChatRoomListData) {
         self.name.text = groupData.name
-        self.userDescription.text = groupData.description
+        self.recentMessage.text = groupData.description
         self.date.text = groupData.date
         self.count.text = groupData.count
     }
     
     func configure(dmData: DMChatRoomListData) {
         self.name.text = dmData.name
-        self.userDescription.text = dmData.description
+        self.recentMessage.text = dmData.description
         self.date.text = dmData.date
         self.count.text = nil
     }
@@ -80,30 +93,22 @@ class ChatRoomListCell: UITableViewCell {
     // MARK: - Configure views
     private func addSubviews() {
         self.contentView.addSubview(self.img)
-        self.contentView.addSubview(self.stackView)
-        self.contentView.addSubview(self.userDescription)
+        self.contentView.addSubview(self.stackView2)
         self.contentView.addSubview(self.date)
     }
     
     private func configureConstraints() {
         img.snp.makeConstraints { make in
-            make.top.leading.equalTo(self.contentView).offset(16)
-            make.bottom.equalTo(self.contentView).offset(-16)
+            make.leading.equalTo(self.contentView).offset(16)
+            make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView).offset(16)
+        stackView2.snp.makeConstraints { make in
             make.leading.equalTo(self.img.snp.trailing).offset(16)
-            make.trailing.equalTo(self.contentView).offset(-12)
-            make.height.equalTo(20)
-        }
-        
-        userDescription.snp.makeConstraints { make in
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
-            make.trailing.equalTo(self.contentView).offset(-16)
-            make.bottom.equalTo(self.contentView).offset(-16)
-            make.height.equalTo(40)
+            make.trailing.equalTo(self.contentView).offset(-48)
+            make.centerY.equalTo(self.contentView)
+            
         }
         
         date.snp.makeConstraints { make in
@@ -130,7 +135,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
                                                                          roomName: "Ronald Robertson",
                                                                          roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
-        }.previewLayout(.fixed(width: 400, height: 100))
+        }.previewLayout(.fixed(width: 393, height: 393 * 0.2))
     }
 }
 #endif

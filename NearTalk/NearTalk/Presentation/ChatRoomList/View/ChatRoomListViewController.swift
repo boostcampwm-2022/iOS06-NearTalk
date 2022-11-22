@@ -14,13 +14,13 @@ import UIKit
 final class ChatRoomListViewController: UIViewController {
     
     // MARK: - UI properties
-    private lazy var tableView = UITableView().then {
-        $0.register(ChatRoomListCell.self, forCellReuseIdentifier: ChatRoomListCell.identifier)
+    private lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.register(ChatRoomListCell.self, forCellWithReuseIdentifier: ChatRoomListCell.identifier)
     }
     
     // MARK: - Properties
-    private var groupDataSource: UITableViewDiffableDataSource<Section, GroupChatRoomListData>?
-    private var dmDataSource: UITableViewDiffableDataSource<Section, DMChatRoomListData>?
+    private var groupDataSource: UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>?
+    private var dmDataSource: UICollectionViewDiffableDataSource<Section, DMChatRoomListData>?
     
     private var viewModel: ChatRoomListViewModel!
     private let disposeBag: DisposeBag = DisposeBag()
@@ -50,11 +50,11 @@ final class ChatRoomListViewController: UIViewController {
     
     // MARK: - Configure views
     func addSubviews() {
-        self.view.addSubview(tableView)
+        self.view.addSubview(collectionView)
     }
     
     func configureConstraints() {
-        tableView.snp.makeConstraints { make in
+        collectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.bottom.trailing.leading.equalTo(view)
         }
@@ -62,7 +62,6 @@ final class ChatRoomListViewController: UIViewController {
     
     private func configureView() {
         view.backgroundColor = .systemBackground
-        view.addSubview(tableView)
     }
     
     private func configureNavigation() {
@@ -75,38 +74,33 @@ final class ChatRoomListViewController: UIViewController {
     }
     
     private func configureDatasource() {
-        self.groupDataSource = UITableViewDiffableDataSource<Section, GroupChatRoomListData>(
-            tableView: self.tableView,
-            cellProvider: { tableView, indexPath, item in
-                
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: ChatRoomListCell.identifier,
-                    for: indexPath) as? ChatRoomListCell else {
-                    return UITableViewCell()
-                }
-                
-                cell.configure(groupData: item)
-                return cell
-            })
         
-        self.dmDataSource = UITableViewDiffableDataSource<Section, DMChatRoomListData>(
-            tableView: tableView,
-            cellProvider: { tableView, indexPath, item in
-                
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: ChatRoomListCell.identifier,
-                    for: indexPath) as? ChatRoomListCell else {
-                    return UITableViewCell()
-                }
-                
-                cell.configure(dmData: item)
-                return cell
-            })
+        self.groupDataSource = UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ChatRoomListCell.identifier,
+                for: indexPath) as? ChatRoomListCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.configure(groupData: itemIdentifier)
+            return cell
+        })
+        
+        self.dmDataSource = UICollectionViewDiffableDataSource<Section, DMChatRoomListData>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ChatRoomListCell.identifier,
+                for: indexPath) as? ChatRoomListCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.configure(dmData: itemIdentifier)
+            return cell
+        })
     }
     
     // MARK: - bind
     private func bind() {
-        self.tableView.rx.itemSelected
+        self.collectionView.rx.itemSelected
             .subscribe(onNext: { event in
                 self.viewModel.didSelectItem(at: event[1])
             })
@@ -117,7 +111,6 @@ final class ChatRoomListViewController: UIViewController {
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self?.dmDataSource?.defaultRowAnimation = .fade
                 self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
@@ -127,10 +120,25 @@ final class ChatRoomListViewController: UIViewController {
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self?.groupDataSource?.defaultRowAnimation = .fade
                 self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func createBasicListLayout() -> UICollectionViewLayout {
+        let itemHeight = self.view.frame.width * 0.20
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .absolute(itemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
     
     @objc private func didTapCreateChatRoomButton() {
@@ -138,13 +146,13 @@ final class ChatRoomListViewController: UIViewController {
     }
     
     @objc private func dmChatRoomListButtonTapped() {
-        self.tableView.dataSource = self.dmDataSource
-        self.tableView.reloadData()
+        self.collectionView.dataSource = self.dmDataSource
+        self.collectionView.reloadData()
     }
     
     @objc private func groupChatButtonTapped() {
-        self.tableView.dataSource = self.groupDataSource
-        self.tableView.reloadData()
+        self.collectionView.dataSource = self.groupDataSource
+        self.collectionView.reloadData()
     }
 }
 
