@@ -129,7 +129,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
                                                                          roomName: "Ronald Robertson",
                                                                          roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
-        }.previewLayout(.fixed(width: 400, height: 100))
+        }.previewLayout(.fixed(width: 393, height: 100))
     }
 }
 #endif

@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class FriendListCell: UITableViewCell {
+final class FriendListCell: UICollectionViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     
@@ -22,19 +22,28 @@ final class FriendListCell: UITableViewCell {
     
     private let name = UILabel().then {
         $0.font = UIFont(name: "text", size: 18)
+        $0.numberOfLines = 1
     }
     
     private let userDescription = UILabel().then {
         $0.font = UIFont.systemFont(ofSize: 14)
-        $0.numberOfLines = 2
+        $0.numberOfLines = 1
+    }
+    
+    private lazy var stactView = UIStackView().then {
+        $0.axis = .vertical
+        $0.distribution = .fillEqually
+        $0.spacing = 4
+        $0.addArrangedSubview(self.name)
+        $0.addArrangedSubview(self.userDescription)
     }
     
     // MARK: - Lifecycles
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         self.addSubviews()
         self.configureConstraints()
-        
     }
     
     // MARK: - Helper
@@ -49,47 +58,49 @@ final class FriendListCell: UITableViewCell {
  
     private func addSubviews() {
         self.contentView.addSubview(img)
-        self.contentView.addSubview(name)
-        self.contentView.addSubview(userDescription)
+        self.contentView.addSubview(stactView)
     }
     
     private func configureConstraints() {
         self.configureImg()
-        self.configureName()
-        self.configureUserDescription()
         self.configureContentView()
     }
     
     private func configureImg() {
         self.img.snp.makeConstraints { make in
-            make.top.leading.equalTo(self.contentView).offset(16)
-            make.bottom.equalTo(self.contentView).offset(-16)
+            make.leading.equalTo(self.contentView).offset(16)
+            make.centerY.equalTo(self.contentView)
             make.width.equalTo(60)
             make.height.equalTo(60)
         }
-    }
-    
-    private func configureName() {
-        self.name.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView).offset(16)
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
+        
+        self.stactView.snp.makeConstraints { make in
+            make.leading.equalTo(self.img.snp.trailing).offset(8)
             make.trailing.equalTo(self.contentView).offset(-16)
-            make.height.equalTo(20)
+            make.centerY.equalTo(self.contentView)
         }
     }
-    
-    private func configureUserDescription() {
-        self.userDescription.snp.makeConstraints { make in
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
-            make.trailing.equalTo(self.contentView).offset(-16)
-            make.bottom.equalTo(self.contentView).offset(-16)
-            make.height.equalTo(40)
-        }
-    }
-    
+
     private func configureContentView() {
         self.contentView.layer.borderColor = UIColor.gray.cgColor
         self.contentView.layer.borderWidth = 0.5
     }
     
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct FriendListCellPreview: PreviewProvider {
+    static var previews: some View {
+        let width: CGFloat = 393
+        let height: CGFloat = width * 0.20
+        
+        UIViewPreview {
+            let cell = FriendListCell(frame: .zero)
+            cell.configure(model: Friend(userID: "1234", username: "라이언", statusMessage: "NSCollectionLayoutItem을 이용합니다. Collection View의 가장 기본 컴포넌트입니다. Item은 크기, 개별 content의 size, space, arragnge를 어떻게 할지에 대한 blueprint입니다", profileImagePath: ""))
+            return cell
+        }.previewLayout(.fixed(width: width, height: height))
+    }
+}
+#endif
