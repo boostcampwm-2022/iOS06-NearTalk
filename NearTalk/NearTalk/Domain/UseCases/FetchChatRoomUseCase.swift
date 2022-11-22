@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-protocol ChatRoomListUseCase {
+protocol FetchChatRoomUseCase {
     //    func getGroupChatListCoreData() -> Observable<[GroupChatRoomListData]>
     //    func getDataOfDMChatCoreData() -> Observable<[DMChatRoomListData]>
     
@@ -16,7 +16,7 @@ protocol ChatRoomListUseCase {
         func getDMChatList() -> Observable<[DMChatRoomListData]>
 }
 
-final class DefaultChatRoomListUseCase: ChatRoomListUseCase {
+final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
 
     private let disposeBag = DisposeBag()
     private let chatRoomListRepository: ChatRoomListRepository!
