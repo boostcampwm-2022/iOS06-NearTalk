@@ -12,7 +12,7 @@ final class FriendListDIContainer {
     // MARK: - Dependencies
     struct Dependencies {
         let firestoreService: FirestoreService
-        let firebaseAuthService: FirebaseAuthService
+        let firebaseAuthService: AuthService
     }
     
     private let dependencies: Dependencies
