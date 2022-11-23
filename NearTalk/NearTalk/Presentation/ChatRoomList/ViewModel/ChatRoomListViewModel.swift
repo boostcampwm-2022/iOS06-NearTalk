@@ -53,11 +53,6 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
             .disposed(by: self.disposeBag)
         
     }
-    
-    // 안 읽은 메세지 개수 확인
-    
-    // 코어데이터 저장
-    // 캐쉬 비교
 }
 
 // MARK: - Input

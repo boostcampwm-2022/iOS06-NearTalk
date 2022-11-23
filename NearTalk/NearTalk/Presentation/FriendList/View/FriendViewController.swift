@@ -66,7 +66,7 @@ final class FriendListViewController: UIViewController {
     
     private func configureNavigation() {
         self.navigationItem.title = "친구 목록"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
     }
     
     // 데이터소스 세팅
@@ -89,9 +89,15 @@ final class FriendListViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        self.tableView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
+        self.collectionView.rx.itemSelected
+            .subscribe(onNext: { [weak self] event in
+                self?.viewModel.didSelectItem(at: event[1])
+            })
+            .disposed(by: disposeBag)
+        
+        self.navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                self?.viewModel.addFriend()
             })
             .disposed(by: disposeBag)
     }
@@ -111,11 +117,7 @@ final class FriendListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-    
-    @objc private func didTapCreateChatRoomButton() {
-        print("친구 추가 이동")
-    }
-    
+
 }
 
 #if canImport(SwiftUI) && DEBUG
@@ -123,17 +125,12 @@ import SwiftUI
 
 struct FriendsListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        lazy var firestoreService: DefaultFirestoreService = {
-            return DefaultFirestoreService()
-        }()
-        lazy var firebaseAuthService: DefaultFirebaseAuthService = {
-            return DefaultFirebaseAuthService()
-        }()
-        let dependencies = FriendListDIContainer.Dependencies(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
+        let navigation = UINavigationController()
+        let dependencies = FriendListDIContainer.Dependencies(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())
         let diContainer = FriendListDIContainer(dependencies: dependencies)
-        let actions = FriendListViewModelActions(showDetailFriend: {_ in })
-        let viewController = diContainer.makeFriendListViewController(actions: actions)
-        return UINavigationController(rootViewController: viewController).showPreview(.iPhone14Pro)
+        let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
+        coordinator.start()
+        return navigation.showPreview(.iPhone14Pro)
     }
 }
 #endif

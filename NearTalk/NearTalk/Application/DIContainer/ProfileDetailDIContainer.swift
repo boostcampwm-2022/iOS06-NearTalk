@@ -7,19 +7,21 @@
 
 import UIKit
 
-protocol ProfileDetailCoordinatorDependency {
-    func makeProfileDetailViewController(actions: ProfileDetailViewModelActions) -> ProfileDetailViewController
-}
-
 final class ProfileDetailDIContainer {
     // MARK: - Dependencies
+    
+    private let userID: String
+    
+    init(userID: String) {
+        self.userID = userID
+    }
     
     // MARK: - Services
     func makeFirestoreService() -> FirestoreService {
         return DefaultFirestoreService()
     }
     
-    func makefirebaseAuthService() -> FirebaseAuthService {
+    func makefirebaseAuthService() -> AuthService {
         return DefaultFirebaseAuthService()
     }
     
@@ -29,7 +31,13 @@ final class ProfileDetailDIContainer {
     }
     
     func makeUploadChatRoomInfoUseCase() -> UploadChatRoomInfoUseCase {
-        return DefaultUploadChatRoomInfoUseCase()
+        let mediaRepository = DefaultMediaRepository(storageService: DefaultStorageService())
+        let chatRoomRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService(),
+                                                               profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()),
+                                                               databaseService: DefaultRealTimeDatabaseService(),
+                                                               firestoreService: DefaultFirestoreService())
+        
+        return DefaultUploadChatRoomInfoUseCase(mediaRepository: mediaRepository, chatRoomRepository: chatRoomRepository)
     }
     
     func makeRemoveFriendUseCase() -> RemoveFriendUseCase {
@@ -45,12 +53,10 @@ final class ProfileDetailDIContainer {
     
     // MARK: - ViewModels
     func makeProfileDetailViewModel(
-        userID: String,
         actions: ProfileDetailViewModelActions
     ) -> any ProfileDetailViewModelable {
-        
         return ProfileDetailViewModel(
-            userID: userID,
+            userID: self.userID,
             fetchProfileUseCase: self.makeFetchProfileUseCase(),
             uploadChatRoomInfoUseCase: self.makeUploadChatRoomInfoUseCase(),
             removeFriendUseCase: self.makeRemoveFriendUseCase(),
@@ -58,23 +64,18 @@ final class ProfileDetailDIContainer {
     }
     
     // MARK: - Create viewController
-    func createProfileDetailViewController(
-        userID: String,
+    func makeProfileDetailViewController(
         actions: ProfileDetailViewModelActions
     ) -> ProfileDetailViewController {
         return ProfileDetailViewController.create(with: self.makeProfileDetailViewModel(
-            userID: userID,
             actions: actions
         ))
     }
     
     // MARK: - Coordinator
-    func makeProfileDetailCoordinator(
-        navigationController: UINavigationController,
-        dependency: ProfileDetailCoordinatorDependency
-    ) -> ProfileDetailCoordinator {
-        return ProfileDetailCoordinator(
-            navigationController: navigationController,
-            dependency: dependency)
+    func makeProfileDetailCoordinator(navigationController: UINavigationController) -> ProfileDetailCoordinator {
+        return ProfileDetailCoordinator(navigationController: navigationController, dependency: self)
     }
 }
+
+extension ProfileDetailDIContainer: ProfileDetailCoordinatorDependency {}

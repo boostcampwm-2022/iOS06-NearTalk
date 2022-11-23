@@ -89,11 +89,12 @@ class ProfileDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = .systemBackground
+        
         self.addSubviews()
         self.configureStackViews()
         self.configureImageView()
         self.configureButtons()
-        
         self.binding()
     }
 }
@@ -175,11 +176,12 @@ private extension ProfileDetailViewController {
 import SwiftUI
 
 struct ProfileDetailViewControllerPreview: PreviewProvider {
-static var previews: some View {
-    let diContainer: ProfileDetailDIContainer = ProfileDetailDIContainer()
-
-    let vc: ProfileDetailViewController = diContainer.createProfileDetailViewController(userID: "userID", actions: ProfileDetailViewModelActions())
-    return vc.showPreview(.iPhone12Pro)
-}
+    static var previews: some View {
+        let navigation = UINavigationController()
+        let diContainer = ProfileDetailDIContainer(userID: "1234")
+        let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigation)
+        coordinator.start()
+        return navigation.showPreview(.iPhone14Pro)
+    }
 }
 #endif

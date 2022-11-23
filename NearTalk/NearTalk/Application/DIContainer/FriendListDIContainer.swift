@@ -43,31 +43,15 @@ final class FriendListDIContainer {
         return DefaultFriendListViewModel(useCase: self.makeFetchFriendListUseCase(), actions: actions)
     }
     
-    // MARK: - Profile Detail
-//    func makeProfileDetailViewController() -> ProfileDetailViewController {
-//        return ProfileDetailViewController(viewModel: makeProfileDetailViewModel())
-//    }
-//
-//    func makeProfileDetailViewModel() -> ProfileDetailViewModel {
-//        return ProfileDetailViewModel(profileDetailUseCase: self.makeProfileDetailUseCaseAble(), profileDetailCoordinator: self.makeProfileDetailCoordinator(makeFriendListCoordinator))
-//    }
-    
     // MARK: - Coordinator
     func makeFriendListCoordinator(navigationController: UINavigationController) -> FriendListCoordinator {
         return FriendListCoordinator(navigationController: navigationController, dependencies: self)
     }
     
-//    func makeProfileDetailDIContainer() -> ProfileDetailDIContainer {
-//        let dependencies = ProfileDetailDIContainer.Dependencies()
-//        return ProfileDetailDICOntainer(dependencies: dependencies)
-//    }
-}
-
-extension FriendListDIContainer: FriendListCoordinatorDependencies {
-    func makeProfileDetailViewController(userID: String) -> ProfileDetailViewController {
-        let diContainer: ProfileDetailDIContainer = ProfileDetailDIContainer()
-
-        let viewController: ProfileDetailViewController = diContainer.createProfileDetailViewController(userID: userID, actions: ProfileDetailViewModelActions())
-        return viewController
+    // MARK: - DI Container
+    func makeProfileDetailDIContainer(userID: String) -> ProfileDetailDIContainer {
+        return ProfileDetailDIContainer(userID: userID)
     }
 }
+
+extension FriendListDIContainer: FriendListCoordinatorDependencies { }
