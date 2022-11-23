@@ -88,6 +88,12 @@ final class FriendListViewController: UIViewController {
                 self?.dataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
+        
+        self.tableView.rx.itemSelected
+            .subscribe(onNext: { event in
+                self.viewModel.didSelectItem(at: event[1])
+            })
+            .disposed(by: disposeBag)
     }
     
     private func createBasicListLayout() -> UICollectionViewLayout {
@@ -125,7 +131,7 @@ struct FriendsListViewControllerPreview: PreviewProvider {
         }()
         let dependencies = FriendListDIContainer.Dependencies(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
         let diContainer = FriendListDIContainer(dependencies: dependencies)
-        let actions = FriendListViewModelActions(showDetailFriend: {})
+        let actions = FriendListViewModelActions(showDetailFriend: {_ in })
         let viewController = diContainer.makeFriendListViewController(actions: actions)
         return UINavigationController(rootViewController: viewController).showPreview(.iPhone14Pro)
     }

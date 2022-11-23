@@ -14,7 +14,7 @@ class ProfileDetailViewController: UIViewController {
     
     // MARK: - Proporties
     
-    private let viewModel: ProfileDetailViewModel?
+    private var viewModel: ProfileDetailViewModelable!
     private let disposeBag: DisposeBag = DisposeBag()
     
     private enum Matric {
@@ -53,7 +53,7 @@ class ProfileDetailViewController: UIViewController {
         $0.font = .systemFont(ofSize: Matric.nameLabelFontSize, weight: .bold)
     }
     
-    private lazy var stateLabel: UILabel = UILabel().then {
+    private lazy var statusMessage: UILabel = UILabel().then {
         $0.text = "상태메세지"
     }
     
@@ -63,7 +63,7 @@ class ProfileDetailViewController: UIViewController {
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
     }
-    
+
     private lazy var deleteFriendButton: UIButton = UIButton().then {
         $0.setTitle("친구 삭제하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
@@ -72,9 +72,13 @@ class ProfileDetailViewController: UIViewController {
     }
     
     // MARK: - LifeCycle
+    static func create(with viewModel: any ProfileDetailViewModelable) -> ProfileDetailViewController {
+        let view = ProfileDetailViewController()
+        view.viewModel = viewModel
+        return view
+    }
     
-    init(viewModel: ProfileDetailViewModel) {
-        self.viewModel = viewModel
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -96,7 +100,7 @@ class ProfileDetailViewController: UIViewController {
 
 private extension ProfileDetailViewController {
     func addSubviews() {
-        [thumnailImageView, nameLabel, stateLabel].forEach {
+        [thumnailImageView, nameLabel, statusMessage].forEach {
             self.profileStackView.addArrangedSubview($0)
         }
         
@@ -138,28 +142,44 @@ private extension ProfileDetailViewController {
     }
     
     func binding() {
-        let input = ProfileDetailViewModel.Input(
-            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
-            startChatButtonDidTapEvent: self.startChatButton.rx.tap.asObservable(),
-            deleteFriendButtonDidTapEvent: self.deleteFriendButton.rx.tap.asObservable()
-        )
+        self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            .map({_ in})
+            .bind(to: viewModel.viewWillAppearEvent)
+            .disposed(by: disposeBag)
         
-        let output = viewModel?.transform(
-            input: input,
-            disposeBag: self.disposeBag
-        )
+        self.startChatButton.rx.tap
+            .bind(to: viewModel.startChatButtonDidTapEvent)
+            .disposed(by: disposeBag)
         
-        self.nameLabel.text = output?.username
-        self.stateLabel.text = output?.statusMessage
+        self.deleteFriendButton.rx.tap
+            .bind(to: viewModel.deleteFriendButtonDidTapEvent)
+            .disposed(by: disposeBag)
+                    
+        self.viewModel?.userName
+            .asDriver()
+            .drive(onNext: { name in
+                self.nameLabel.text = name
+            })
+            .disposed(by: disposeBag)
+        
+        self.viewModel?.statusMessage
+            .asDriver()
+            .drive(onNext: { statusMessage in
+                self.statusMessage.text = statusMessage
+            })
+            .disposed(by: disposeBag)
     }
 }
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct ProfileDetailViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        UINavigationController(rootViewController: ProfileDetailViewController()) .showPreview(.iPhone14Pro)
-//    }
-//}
-//#endif
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct ProfileDetailViewControllerPreview: PreviewProvider {
+static var previews: some View {
+    let diContainer: ProfileDetailDIContainer = ProfileDetailDIContainer()
+
+    let vc: ProfileDetailViewController = diContainer.createProfileDetailViewController(userID: "userID", actions: ProfileDetailViewModelActions())
+    return vc.showPreview(.iPhone12Pro)
+}
+}
+#endif

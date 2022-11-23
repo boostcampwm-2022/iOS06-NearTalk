@@ -11,7 +11,7 @@ import UIKit
 
 protocol FriendListCoordinatorDependencies {
     func makeFriendListViewController(actions: FriendListViewModelActions) -> FriendListViewController
-//    func makeProfileDetailViewController()
+    func makeProfileDetailViewController(userID: String) -> ProfileDetailViewController
 }
 
 final class FriendListCoordinator {
@@ -37,9 +37,9 @@ final class FriendListCoordinator {
     }
 
     // MARK: - Dependency
-    private func showDetailFriend() {
-//         let viewController = dependencies.makeProfileDetailViewController(actions: actions)
-//         navigationController?.pushViewController(viewController, animated: true)
+    private func showDetailFriend(userID: String) {
+        let viewController = dependencies.makeProfileDetailViewController(userID: userID)
+        self.navigationController?.pushViewController(viewController, animated: false)
     }
     
 }
