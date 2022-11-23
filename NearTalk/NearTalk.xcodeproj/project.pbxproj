@@ -117,6 +117,12 @@
 		60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD70612923927C00A4C29A /* NonceGenerator.swift */; };
 		60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD70692924080A00A4C29A /* ChatMessage.swift */; };
 		60FD706C2924081000A4C29A /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD706B2924081000A4C29A /* ChatRoom.swift */; };
+		7C254DAB292DB246004D4CEC /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DAA292DB246004D4CEC /* ChatViewController.swift */; };
+		7C254DAD292DB263004D4CEC /* ChatCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DAC292DB263004D4CEC /* ChatCollectionViewCell.swift */; };
+		7C254DAF292DC853004D4CEC /* chatInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DAE292DC853004D4CEC /* chatInputAccessoryView.swift */; };
+		7C254DB1292DDA88004D4CEC /* ChatDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */; };
+		7C254DB3292DDAAF004D4CEC /* ChatCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */; };
+		7C254DB5292DDABF004D4CEC /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */; };
 		7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */; };
 		7CE8063B2925312100D828FF /* ProfileDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */; };
 		7CE8063D29253A3800D828FF /* ProfileDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */; };
@@ -310,6 +316,12 @@
 		60FD70612923927C00A4C29A /* NonceGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonceGenerator.swift; sourceTree = "<group>"; };
 		60FD70692924080A00A4C29A /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		60FD706B2924081000A4C29A /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
+		7C254DAA292DB246004D4CEC /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		7C254DAC292DB263004D4CEC /* ChatCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C254DAE292DC853004D4CEC /* chatInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatInputAccessoryView.swift; sourceTree = "<group>"; };
+		7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDIContainer.swift; sourceTree = "<group>"; };
+		7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCoordinator.swift; sourceTree = "<group>"; };
+		7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
 		7CE8063A2925312100D828FF /* ProfileDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailUseCase.swift; sourceTree = "<group>"; };
 		7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailCoordinator.swift; sourceTree = "<group>"; };
@@ -603,6 +615,7 @@
 		1660D25C291DDD88005F7B24 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7C254DA6292DB205004D4CEC /* Chat */,
 				603EDDAC2926C84E00BEE65C /* TabBar */,
 				7CFC7D6D2923748E00A249E7 /* ProfileDetail */,
 				7CFC7D672923709C00A249E7 /* CreatGroupChat */,
@@ -944,6 +957,43 @@
 				603FD389292928D000687ED4 /* FirebaseQueryKey.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		7C254DA6292DB205004D4CEC /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				7C254DA9292DB22B004D4CEC /* Coordinator */,
+				7C254DA8292DB21E004D4CEC /* ViewModel */,
+				7C254DA7292DB217004D4CEC /* View */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		7C254DA7292DB217004D4CEC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7C254DAA292DB246004D4CEC /* ChatViewController.swift */,
+				7C254DAC292DB263004D4CEC /* ChatCollectionViewCell.swift */,
+				7C254DAE292DC853004D4CEC /* chatInputAccessoryView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7C254DA8292DB21E004D4CEC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		7C254DA9292DB22B004D4CEC /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */,
+				7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		7C6684AC2924BC7E00A5E10A /* ViewModel */ = {
@@ -1437,12 +1487,14 @@
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
 				555A6B482924BE65001336ED /* UserProfile.swift in Sources */,
 				8349529E2925FEAE004C5B3B /* ImageRepository.swift in Sources */,
+				7C254DB3292DDAAF004D4CEC /* ChatCoordinator.swift in Sources */,
 				60FD706029238DD400A4C29A /* FirebaseAuthService.swift in Sources */,
 				834952A02925FEF0004C5B3B /* DefaultImageRepository.swift in Sources */,
 				555A6B3329236D98001336ED /* FriendListCoordinator.swift in Sources */,
 				6008FC9D2925DBCF0044F017 /* NCLocation.swift in Sources */,
 				6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */,
 				603FD39C292B4F4A00687ED4 /* LogoutUseCase.swift in Sources */,
+				7C254DAB292DB246004D4CEC /* ChatViewController.swift in Sources */,
 				8330622B2924A3E2000E786E /* (null) in Sources */,
 				83D5ECC7292B74FA00AD1781 /* DropOutUseCase.swift in Sources */,
 				8330622D2924A3F1000E786E /* OnboardingUseCase.swift in Sources */,
@@ -1466,18 +1518,21 @@
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
 				603EDDA52926C43500BEE65C /* RootTabBarDIContainer.swift in Sources */,
 				555A6B3C29238D26001336ED /* DefaultChatRoomListRepository.swift in Sources */,
+				7C254DB5292DDABF004D4CEC /* ChatViewModel.swift in Sources */,
 				83D3544A292543DC00B9236A /* DefaultUserUUIDRepository.swift in Sources */,
 				1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */,
 				7CE80643292552BA00D828FF /* CreateGroupChatViewModel.swift in Sources */,
 				83E7BBC72922AFED007C390A /* AppSettingTableViewCell.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
+				7C254DB1292DDA88004D4CEC /* ChatDIContainer.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				603FD395292A1E7000687ED4 /* LoginUseCase.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				83D354412925412400B9236A /* UserProfileRepository.swift in Sources */,
 				7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */,
+				7C254DAD292DB263004D4CEC /* ChatCollectionViewCell.swift in Sources */,
 				8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
@@ -1508,7 +1563,7 @@
 				83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */,
 				60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */,
 				83D5ECC3292B714500AD1781 /* AuthRepository.swift in Sources */,
-				555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */,
+				555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
 				603EDDB62926C89C00BEE65C /* RootTabBarCoordinator.swift in Sources */,
 				7CFC7D70292374BD00A249E7 /* ProfileDetailViewController.swift in Sources */,
@@ -1523,6 +1578,7 @@
 				556EE2512926402000EEA145 /* ChatRoomListCell.swift in Sources */,
 				83D3543F29253A5C00B9236A /* MyProfileLoadUseCase.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
+				7C254DAF292DC853004D4CEC /* chatInputAccessoryView.swift in Sources */,
 				7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
