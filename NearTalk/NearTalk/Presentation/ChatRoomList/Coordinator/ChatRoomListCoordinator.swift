@@ -13,8 +13,9 @@ protocol ChatRoomListCoordinatorDependencies {
     func makeCreateChatRoomViewController()
 }
 
-final class ChatRoomListCoordinator {
-    private weak var navigationController: UINavigationController?
+final class ChatRoomListCoordinator: Coordinator {
+    weak var navigationController: UINavigationController?
+    var parentCoordinator: Coordinator?
     private let dependencies: ChatRoomListCoordinatorDependencies
 
     private weak var chatRoomListViewController: ChatRoomListViewController?
