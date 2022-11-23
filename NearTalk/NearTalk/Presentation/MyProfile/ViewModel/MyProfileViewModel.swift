@@ -63,6 +63,8 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
                 self?.message.accept(profile.statusMessage)
                 self?.downloadImage(path: profile.profileImagePath)
                 self?.profile = profile
+            }, onFailure: {
+                print("fetch profile error: \($0)")
             })
             .disposed(by: self.disposeBag)
     }

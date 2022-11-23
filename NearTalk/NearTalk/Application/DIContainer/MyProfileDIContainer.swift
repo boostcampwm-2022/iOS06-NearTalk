@@ -43,7 +43,7 @@ final class MyProfileDIContainer {
     // MARK: - Dependencies
     struct Dependency {
         let fireStoreService: any FirestoreService
-        let firebaseAuthService: any FirebaseAuthService
+        let firebaseAuthService: any AuthService
         let storageService: any StorageService
     }
     
@@ -57,13 +57,20 @@ final class MyProfileDIContainer {
     
     // MARK: - Repositories
     func makeProfileRepository() -> any ProfileRepository {
+//        return DummyProfileRepository()
         return DefaultProfileRepository(
             firestoreService: self.dependency.fireStoreService,
             firebaseAuthService: self.dependency.firebaseAuthService)
     }
     
     func makeImageRepository() -> any ImageRepository {
+//        return DummyImageRepository()
         return DefaultImageRepository(imageService: self.dependency.storageService)
+    }
+    
+    func makeAuthRepository() -> any AuthRepository {
+//        return DummyAuthRepository()
+        return DefaultAuthRepository(authService: self.dependency.firebaseAuthService)
     }
     
     // MARK: - DIContainers

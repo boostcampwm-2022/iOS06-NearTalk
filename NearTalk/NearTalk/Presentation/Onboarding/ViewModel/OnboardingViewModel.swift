@@ -73,7 +73,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
         let newProfile: UserProfile = UserProfile(
             uuid: UUID().uuidString,
             username: self.nickName,
-            email: self.email,
+            email: nil,
             statusMessage: self.message,
             profileImagePath: imagePath)
         self.createProfileUseCase.execute(profile: newProfile)
@@ -99,20 +99,17 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     
     private var nickName: String = ""
     private var message: String = ""
-    private let email: String?
     
     init(validateNickNameUseCase: any ValidateTextUseCase,
          validateStatusMessageUseCase: any ValidateTextUseCase,
          uploadImageUseCase: any UploadImageUseCase,
          createProfileUseCase: any CreateProfileUseCase,
-         action: any OnboardingViewModelAction,
-         email: String?) {
+         action: any OnboardingViewModelAction) {
         self.validateNickNameUseCase = validateNickNameUseCase
         self.validateStatusMessageUseCase = validateStatusMessageUseCase
         self.uploadImageUseCase = uploadImageUseCase
         self.createProfileUseCase = createProfileUseCase
         self.action = action
-        self.email = email
         self.bind()
     }
     

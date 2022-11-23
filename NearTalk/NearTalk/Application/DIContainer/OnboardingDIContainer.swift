@@ -17,8 +17,8 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
     struct Depenency {
         let imageRepository: any ImageRepository
         let profileRepository: any ProfileRepository
+        let authRepository: any AuthRepository
         let showMainViewController: (() -> Void)?
-        let email: String?
     }
     
     func showMainViewController() {
@@ -39,7 +39,7 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
     }
     
     private func makeCreateProfileUseCase() -> any CreateProfileUseCase {
-        return DefaultCreateProfileUseCase(profileRepository: self.dependency.profileRepository)
+        return DefaultCreateProfileUseCase(profileRepository: self.dependency.profileRepository, authRepository: self.dependency.authRepository)
     }
     
     // MARK: - Create viewController
@@ -49,8 +49,7 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
             validateStatusMessageUseCase: self.makeValidateStatusMessageUseCase(),
             uploadImageUseCase: self.makeUploadImageUseCase(),
             createProfileUseCase: self.makeCreateProfileUseCase(),
-            action: action,
-            email: self.dependency.email)
+            action: action)
         return OnboardingViewController(viewModel: viewModel)
     }
     
