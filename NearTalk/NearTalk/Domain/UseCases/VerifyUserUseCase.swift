@@ -13,9 +13,9 @@ protocol VerifyUserUseCase {
 }
 
 final class DefaultVerifyUserUseCase: VerifyUserUseCase {
-    private let authService: FirebaseAuthService
+    private let authService: AuthService
     
-    init(authService: FirebaseAuthService) {
+    init(authService: AuthService) {
         self.authService = authService
     }
     

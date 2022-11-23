@@ -5,22 +5,16 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
-
 final class LoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
     }
-    
     private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
-
     private let loginButton = ASAuthorizationAppleIDButton(type: .default, style: .black).then {
         $0.cornerRadius = 5
     }
-    
     private let firebaseAuthService: DefaultFirebaseAuthService = DefaultFirebaseAuthService()
-    
     private let disposeBag: DisposeBag = DisposeBag()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -49,9 +43,9 @@ final class LoginViewController: UIViewController, ASAuthorizationControllerDele
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
-                #if DEBUG
+#if DEBUG
                 print("Faile to fetch id token")
-                #endif
+#endif
                 return
             }
             print(appleIDCredential.email)
@@ -72,18 +66,16 @@ final class LoginViewController: UIViewController, ASAuthorizationControllerDele
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        #if DEBUG
+#if DEBUG
         print("apple authorization error: \(error)")
-        #endif
+#endif
     }
 }
-
 private extension LoginViewController {
     func configureUI() {
         view.addSubview(logoView)
         view.addSubview(loginButton)
     }
-    
     func configureConstraint() {
         self.logoView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(30)
@@ -97,11 +89,12 @@ private extension LoginViewController {
             make.height.equalTo(loginButton.snp.width).multipliedBy(0.1)
         }
     }
-
+    
     func bindToLoginButton() {
         let appleIDProvider: ASAuthorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
         let request: ASAuthorizationAppleIDRequest = appleIDProvider.createRequest()
         request.requestedScopes = [.email, .fullName]
+//        request.nonce = NonceGenerator.randomNonceString()
         
         let authorizationController: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [request])
         authorizationController.delegate = self
@@ -109,4 +102,3 @@ private extension LoginViewController {
         authorizationController.performRequests()
     }
 }
-

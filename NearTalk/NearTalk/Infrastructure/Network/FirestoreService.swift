@@ -18,7 +18,7 @@ protocol FirestoreService {
     /// 객체 수정
     func update<T: BaseEntity>(updatedData: T, dataKey: FirebaseKey.FireStore) -> Single<T>
     /// 객체 삭제
-    func delete<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore ) -> Completable
+    func delete<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore) -> Completable
     
     /// 객체 리스트 불러오기
     func fetchList<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<[T]>
