@@ -63,11 +63,11 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
 // MARK: - Input
 extension DefaultChatRoomListViewModel {
     func didDMChatRoomList() {
-        actions?.showDMChatRoomList
+        actions?.showDMChatRoomList()
     }
     
     func didGroupChatRoomList() {
-        actions?.showGroupChatRoomList
+        actions?.showGroupChatRoomList()
     }
     
     // 체팅방 생성 클릭시 이동

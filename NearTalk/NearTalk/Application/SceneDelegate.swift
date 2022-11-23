@@ -23,9 +23,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationController = UINavigationController()
         window?.rootViewController = navigationController
         
-        appCoordinator = AppCoordinator(navigationController: navigationController)
-        appCoordinator?.start()
-        
+        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
+        let coordinator = diContainer.makeChatRoomListCoordinator(navigationController: navigationController)
+        coordinator.start()
+//        appCoordinator = AppCoordinator(navigationController: navigationController)
+//        appCoordinator?.start()
+//
         window?.makeKeyAndVisible()
     }
 

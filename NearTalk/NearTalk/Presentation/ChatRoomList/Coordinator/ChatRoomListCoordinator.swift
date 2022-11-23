@@ -17,7 +17,7 @@ final class ChatRoomListCoordinator {
     private weak var navigationController: UINavigationController?
     private let dependencies: ChatRoomListCoordinatorDependencies
 
-    private weak var chatRoomListViewController: ChatRoomListViewController?
+    private(set) weak var chatRoomListViewController: ChatRoomListViewController?
     
     // MARK: - Init
     init(navigationController: UINavigationController, dependencies: ChatRoomListCoordinatorDependencies) {
@@ -42,11 +42,19 @@ final class ChatRoomListCoordinator {
     
     // MARK: - Actions
     private func showDMChatRoomList() {
+        guard let chatRoomListViewController = chatRoomListViewController
+        else { return }
         
+        chatRoomListViewController.dmCollectionView.isHidden = false
+        chatRoomListViewController.groupCollectionView.isHidden = true
     }
     
     private func showGroupChatRoomList() {
-        
+        guard let chatRoomListViewController = chatRoomListViewController
+        else { return }
+
+        chatRoomListViewController.dmCollectionView.isHidden = true
+        chatRoomListViewController.groupCollectionView.isHidden = false
     }
 
     private func showChatRoom() {
