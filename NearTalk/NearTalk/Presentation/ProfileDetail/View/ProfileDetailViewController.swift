@@ -14,7 +14,7 @@ class ProfileDetailViewController: UIViewController {
     
     // MARK: - Proporties
     
-    private var viewModel: (any ProfileDetailViewModelable)!
+    private var viewModel: ProfileDetailViewModelable!
     private let disposeBag: DisposeBag = DisposeBag()
     
     private enum Matric {
@@ -61,15 +61,9 @@ class ProfileDetailViewController: UIViewController {
         $0.setTitle("채팅 하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
-        $0.addTarget(self, action: #selector(hey), for: .touchDown)
         $0.backgroundColor = .systemOrange
     }
-    
-    @objc
-    func hey() {
-        print("hey")
-    }
-    
+
     private lazy var deleteFriendButton: UIButton = UIButton().then {
         $0.setTitle("친구 삭제하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
@@ -90,10 +84,6 @@ class ProfileDetailViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        print("viewWillAppear")
     }
     
     override func viewDidLoad() {
@@ -152,16 +142,19 @@ private extension ProfileDetailViewController {
     }
     
     func binding() {
-//        let input = ProfileDetailViewModel.Input(
-//            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
-//            startChatButtonDidTapEvent: self.startChatButton.rx.tap.asObservable(),
-//            deleteFriendButtonDidTapEvent: self.deleteFriendButton.rx.tap.asObservable()
-//        )
+        self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            .map({_ in})
+            .bind(to: viewModel.viewWillAppearEvent)
+            .disposed(by: disposeBag)
         
         self.startChatButton.rx.tap
             .bind(to: viewModel.startChatButtonDidTapEvent)
             .disposed(by: disposeBag)
         
+        self.deleteFriendButton.rx.tap
+            .bind(to: viewModel.deleteFriendButtonDidTapEvent)
+            .disposed(by: disposeBag)
+                    
         self.viewModel?.userName
             .asDriver()
             .drive(onNext: { name in

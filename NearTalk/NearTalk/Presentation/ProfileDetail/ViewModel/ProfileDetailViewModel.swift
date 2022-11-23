@@ -16,7 +16,7 @@ struct ProfileDetailViewModelActions {
 }
 
 protocol ProfileDetailViewModelInput {
-    var viewWillAppearEvent: Observable<Void>? { get set }
+    var viewWillAppearEvent: PublishRelay<Void> { get set }
     var startChatButtonDidTapEvent: PublishRelay<Void> { get set }
     var deleteFriendButtonDidTapEvent: PublishRelay<Void> { get set }
 }
@@ -31,13 +31,6 @@ protocol ProfileDetailViewModelable: ProfileDetailViewModelInput, ProfileDetailV
     
 }
 
-//protocol ProfileDetailViewModelable {
-//    associatedtype Input
-//    associatedtype Output
-//
-//    func transform(input: Input) -> Output
-//}
-
 final class ProfileDetailViewModel: ProfileDetailViewModelable {
     var userName: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
     
@@ -45,7 +38,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     
     var profileImageURL: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
     
-    var viewWillAppearEvent: Observable<Void>?
+    var viewWillAppearEvent = PublishRelay<Void>()
     
     var startChatButtonDidTapEvent = PublishRelay<Void>()
     
@@ -85,13 +78,11 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
 //    }
     
     func bind() {
-        viewWillAppearEvent?
+        viewWillAppearEvent
             .subscribe(onNext: { [weak self] in
-                print(">>>>>>>>>")
                 guard let self else {
                     return
                 }
-                print("mmmm--<<<<<<")
                 self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
                     .subscribe(onSuccess: { info in
                         self.userName.accept(info.username ?? "Unkown")
@@ -114,7 +105,6 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                 guard let self else {
                     return
                 }
-
                 self.removeFriendUseCase.removeFriend(with: self.userID)
                     .subscribe { event in
                         switch event {
