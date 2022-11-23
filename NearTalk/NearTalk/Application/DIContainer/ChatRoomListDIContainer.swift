@@ -82,6 +82,11 @@ final class ChatRoomListDIContainer {
     func makeChatRoomListCoordinator(navigationController: UINavigationController) -> ChatRoomListCoordinator {
         return ChatRoomListCoordinator(navigationController: navigationController, dependencies: self)
     }
+    
+    // MARK: - DIContainer
+    func makeChatDIContainer() -> ChatDIContainer {
+        return ChatDIContainer()
+    }
 }
 
 extension ChatRoomListDIContainer: ChatRoomListCoordinatorDependencies {}

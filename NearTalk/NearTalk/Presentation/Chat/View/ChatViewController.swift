@@ -9,17 +9,17 @@ import UIKit
 
 class ChatViewController: UIViewController {
     
-    private let collectionView: UICollectionView = UICollectionView().then { _ in
-        
-    }
-    
-    private let textField: UITextField = UITextField().then { teatField in
-        teatField.backgroundColor = .yellow
-    }
+//    private let collectionView: UICollectionView = UICollectionView().then { _ in
+//
+//    }
+//
+//    private let textField: UITextField = UITextField().then { teatField in
+//        teatField.backgroundColor = .yellow
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.view.backgroundColor = .yellow
     }
     
     func addSubviews() {

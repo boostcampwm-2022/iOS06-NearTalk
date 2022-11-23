@@ -971,6 +971,7 @@
 				603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */,
 				5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */,
 				7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */,
+				7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */,
 			);
 			path = DIContainer;
 			sourceTree = "<group>";
@@ -1020,7 +1021,6 @@
 		7C254DA9292DB22B004D4CEC /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */,
 				7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */,
 			);
 			path = Coordinator;
