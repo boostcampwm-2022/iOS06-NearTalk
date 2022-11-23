@@ -46,15 +46,7 @@ final class LoginViewController: UIViewController, ASAuthorizationControllerDele
 #endif
                 return
             }
-            
-            self.authRepository.login(token: idTokenString)
-                .subscribe(onCompleted: {
-                    print("success")
-                    self.coordinator?.finish()
-                }, onError: {
-                    print("failed: \($0)")
-                })
-                .disposed(by: disposeBag)
+            self.firebaseLogin(idToken: idTokenString)
         default:
             break
         }
@@ -94,6 +86,17 @@ private extension LoginViewController {
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
+    }
+    
+    func firebaseLogin(idToken: String) {
+        self.authRepository.login(token: idToken)
+            .subscribe(onCompleted: {
+                print("success")
+                self.coordinator?.finish()
+            }, onError: {
+                print("failed: \($0)")
+            })
+            .disposed(by: disposeBag)
     }
     
     func bindToLoginButton() {

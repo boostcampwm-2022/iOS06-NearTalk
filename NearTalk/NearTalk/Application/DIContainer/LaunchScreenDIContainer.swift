@@ -18,8 +18,8 @@ final class LaunchScreenDIContainer {
     
     // MARK: - UseCases
     func makeVerifyUserUseCase() -> VerifyUserUseCase {
-//        return DummyVerifyUseCase()
-        return DefaultVerifyUserUseCase(authService: makeAuthService())
+        return DummyVerifyUseCase()
+//        return DefaultVerifyUserUseCase(authService: makeAuthService())
     }
     
     // MARK: - Repositories
