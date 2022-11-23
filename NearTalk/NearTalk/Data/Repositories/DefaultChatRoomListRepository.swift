@@ -10,15 +10,81 @@ import RxSwift
 
 final class DefaultChatRoomListRepository {
     
-    private let dataTransferService: StorageService
+    private let dataTransferService: any StorageService
+    private let databaseService: any RealTimeDatabaseService
+    private let firestoreService: any FirestoreService
+    private let profileRepository: any ProfileRepository
     private(set) var dummyData: ChatRoomDummyData = ChatRoomDummyData()
     
-    init(dataTransferService: StorageService) {
+    init(
+        dataTransferService: any StorageService,
+        profileRepository: any ProfileRepository,
+        databaseService: any RealTimeDatabaseService,
+        firestoreService: any FirestoreService
+    ) {
         self.dataTransferService = dataTransferService
+        self.profileRepository = profileRepository
+        self.databaseService = databaseService
+        self.firestoreService = firestoreService
     }
 }
 
 extension DefaultChatRoomListRepository: ChatRoomListRepository {
+    func createChatRoom(_ chatRoom: ChatRoom) -> Completable {
+        Single.zip(
+            self.firestoreService.create(data: chatRoom, dataKey: .chatRoom),
+            self.databaseService.createChatRoom(chatRoom)
+        ).asCompletable()
+    }
+    
+    func fetchChatRoomListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {
+        let queryList: [FirebaseQueryDTO] = [
+            .init(key: "latitude", value: southWest.latitude, queryKey: .isGreaterThan),
+            .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan),
+            .init(key: "longitude", value: southWest.latitude, queryKey: .isGreaterThan),
+            .init(key: "longitude", value: northEast.latitude, queryKey: .isLessThan)
+        ]
+        return self.firestoreService.fetchList(dataKey: .chatRoom, queryList: queryList)
+    }
+    
+    func fetchUserChatRoomUUIDList() -> Single<[String]> {
+        self.profileRepository
+            .fetchMyProfile()
+            .flatMap { [weak self] (profile: UserProfile) in
+                guard let self,
+                      let uuid: String = profile.uuid else {
+                    throw ChatRoomListRepositoryError.failedToFetch
+                }
+                return self.databaseService.fetchUserChatRoomTicketList(uuid)
+            }
+            .asObservable()
+            .map { (tickets: [UserChatRoomTicket]) in
+                return tickets.compactMap({ $0.roomID })
+            }.asSingle()
+    }
+    
+    func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom> {
+        self.databaseService.fetchChatRoomInfo(chatRoomID)
+    }
+    
+    func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom> {
+        self.databaseService.observeChatRoomInfo(chatRoomID)
+    }
+    
+    func fetchUserChatRoomTickets() -> Single<[UserChatRoomTicket]> {
+        self.profileRepository.fetchMyProfile()
+            .flatMap { [weak self] (profile: UserProfile) in
+                guard let self,
+                      let uuid: String = profile.uuid else {
+                    throw ChatRoomListRepositoryError.failedToFetch
+                }
+                return self.databaseService.fetchUserChatRoomTicketList(uuid)
+            }
+    }
+    
+    func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable {
+        self.databaseService.updateUserChatRoomTicket(ticket)
+    }
     
     func fetchChatRoomList() -> Observable<[ChatRoom]> {
         return Observable<[ChatRoom]>.create { observer in
@@ -60,4 +126,9 @@ struct ChatRoomDummyData {
         
         userChatRoomData.append(UserChatRoomModel(userID: "s001", chatRoomID: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]))
     }
+}
+
+enum ChatRoomListRepositoryError: Error {
+    case failedToFetch
+    case failedToCrate
 }

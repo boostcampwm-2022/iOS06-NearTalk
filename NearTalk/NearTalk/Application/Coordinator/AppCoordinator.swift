@@ -38,12 +38,15 @@ final class AppCoordinator: Coordinator {
 extension AppCoordinator: LaunchScreenCoordinatorDependency {
     func showMainViewController() {
         self.navigationController?.popViewController(animated: false)
-        let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer()
-            .makeTabBarCoordinator(navigationController: self.navigationController)
+        guard let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer()
+            .makeTabBarCoordinator(navigationController: self.navigationController) else {
+            return
+        }
         rootTabBarCoordinator.start()
     }
     
     func showLoginViewController() {
-        print(Self.self, #function)
+        self.navigationController?.viewControllers.insert(LoginViewController(), at: 0)
+        self.navigationController?.popViewController(animated: false)
     }
 }

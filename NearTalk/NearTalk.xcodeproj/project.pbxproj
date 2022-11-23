@@ -49,6 +49,12 @@
 		555A6B432924B9E4001336ED /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 555A6B422924B9E4001336ED /* GoogleService-Info.plist */; };
 		555A6B482924BE65001336ED /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B472924BE65001336ED /* UserProfile.swift */; };
 		556EE2512926402000EEA145 /* ChatRoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556EE2502926402000EEA145 /* ChatRoomListCell.swift */; };
+		6001DA88292D47320062EAD0 /* UserChatRoomTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */; };
+		6001DA8A292D5F270062EAD0 /* ChatMessageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA89292D5F270062EAD0 /* ChatMessageRepository.swift */; };
+		6001DA8C292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */; };
+		6001DA8E292DBF400062EAD0 /* MediaRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA8D292DBF400062EAD0 /* MediaRepository.swift */; };
+		6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA8F292DBF770062EAD0 /* DefaultMediaRepository.swift */; };
+		6001DA92292DC86A0062EAD0 /* DefaultChatMessageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA91292DC86A0062EAD0 /* DefaultChatMessageRepository.swift */; };
 		6008FC9D2925DBCF0044F017 /* NCLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6008FC9C2925DBCF0044F017 /* NCLocation.swift */; };
 		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
 		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
@@ -111,6 +117,7 @@
 		6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
 		60DCAAF42928B9610087A63D /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60DCAAF32928B9610087A63D /* Cartfile */; };
+		60E749DC292C88F40048F877 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E749DB292C88F40048F877 /* AuthService.swift */; };
 		60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705929238CBB00A4C29A /* StorageService.swift */; };
 		60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */; };
 		60FD706029238DD400A4C29A /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */; };
@@ -240,6 +247,13 @@
 		555A6B422924B9E4001336ED /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		555A6B472924BE65001336ED /* UserProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		556EE2502926402000EEA145 /* ChatRoomListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatRoomListCell.swift; sourceTree = "<group>"; };
+		6001DA86292CB70B0062EAD0 /* NearTalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NearTalk.entitlements; sourceTree = "<group>"; };
+		6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatRoomTicket.swift; sourceTree = "<group>"; };
+		6001DA89292D5F270062EAD0 /* ChatMessageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRepository.swift; sourceTree = "<group>"; };
+		6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadChatRoomInfoUseCase.swift; sourceTree = "<group>"; };
+		6001DA8D292DBF400062EAD0 /* MediaRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaRepository.swift; sourceTree = "<group>"; };
+		6001DA8F292DBF770062EAD0 /* DefaultMediaRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMediaRepository.swift; sourceTree = "<group>"; };
+		6001DA91292DC86A0062EAD0 /* DefaultChatMessageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChatMessageRepository.swift; sourceTree = "<group>"; };
 		6008FC9C2925DBCF0044F017 /* NCLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCLocation.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
@@ -303,6 +317,7 @@
 		6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Dictionary.swift"; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
 		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
+		60E749DB292C88F40048F877 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		60FB1DA9A810C61099D92942 /* Pods-NearTalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.debug.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.debug.xcconfig"; sourceTree = "<group>"; };
 		60FD705929238CBB00A4C29A /* StorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealTimeDatabaseService.swift; sourceTree = "<group>"; };
@@ -551,11 +566,12 @@
 		1660D226291DDB37005F7B24 /* NearTalk */ = {
 			isa = PBXGroup;
 			children = (
+				6001DA86292CB70B0062EAD0 /* NearTalk.entitlements */,
 				1660D25A291DDD73005F7B24 /* Application */,
 				1660D25F291DDE16005F7B24 /* Resource */,
-				1660D25D291DDD9C005F7B24 /* Data */,
-				1660D25B291DDD7D005F7B24 /* Domain */,
 				1660D25C291DDD88005F7B24 /* Presentation */,
+				1660D25B291DDD7D005F7B24 /* Domain */,
+				1660D25D291DDD9C005F7B24 /* Data */,
 				1660D25E291DDDAA005F7B24 /* Infrastructure */,
 			);
 			path = NearTalk;
@@ -698,6 +714,7 @@
 				603EDDA22926C01D00BEE65C /* UserChatModel.swift */,
 				5506CDDE292B50D10002F328 /* Friend.swift */,
 				603FD38D2929301200687ED4 /* BaseEntity.swift */,
+				6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -716,6 +733,7 @@
 				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
 				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
+				6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -738,6 +756,8 @@
 				603EDDAA2926C52200BEE65C /* DefaultTabBarRepository.swift */,
 				603FD39229296B8500687ED4 /* DefaultProfileRepository.swift */,
 				83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */,
+				6001DA8F292DBF770062EAD0 /* DefaultMediaRepository.swift */,
+				6001DA91292DC86A0062EAD0 /* DefaultChatMessageRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -815,12 +835,14 @@
 			isa = PBXGroup;
 			children = (
 				555A6B3D29238D65001336ED /* ChatRoomListRepository.swift */,
+				6001DA89292D5F270062EAD0 /* ChatMessageRepository.swift */,
 				83D354402925412400B9236A /* UserProfileRepository.swift */,
 				83D354472925438C00B9236A /* UserUUIDRepository.swift */,
 				8349529D2925FEAE004C5B3B /* ImageRepository.swift */,
 				603EDDA82926C51100BEE65C /* TabBarRepository.swift */,
 				603FD38F29296AA300687ED4 /* ProfileRepository.swift */,
 				83D5ECC2292B714500AD1781 /* AuthRepository.swift */,
+				6001DA8D292DBF400062EAD0 /* MediaRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -942,6 +964,7 @@
 				60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */,
 				603EDD6229261A2000BEE65C /* FirebaseKey.swift */,
 				603FD389292928D000687ED4 /* FirebaseQueryKey.swift */,
+				60E749DB292C88F40048F877 /* AuthService.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -1433,6 +1456,7 @@
 				603EDDA92926C51100BEE65C /* TabBarRepository.swift in Sources */,
 				555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */,
 				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
+				6001DA8E292DBF400062EAD0 /* MediaRepository.swift in Sources */,
 				1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */,
 				1660D22C291DDB38005F7B24 /* ViewController.swift in Sources */,
 				555A6B482924BE65001336ED /* UserProfile.swift in Sources */,
@@ -1456,6 +1480,7 @@
 				603EDDB12926C87700BEE65C /* RootTabBarController.swift in Sources */,
 				603EDDA32926C01D00BEE65C /* UserChatModel.swift in Sources */,
 				5506CDDF292B50D10002F328 /* Friend.swift in Sources */,
+				6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
@@ -1478,12 +1503,15 @@
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				83D354412925412400B9236A /* UserProfileRepository.swift in Sources */,
 				7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */,
+				6001DA92292DC86A0062EAD0 /* DefaultChatMessageRepository.swift in Sources */,
 				8367AB642922AF6300678669 /* ProfileSettingViewController.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
 				7CE806412925528F00D828FF /* CreateGroupChatUseCase.swift in Sources */,
 				1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */,
 				8330622F2924A402000E786E /* String+Regex.swift in Sources */,
+				6001DA8C292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift in Sources */,
+				6001DA8A292D5F270062EAD0 /* ChatMessageRepository.swift in Sources */,
 				603FD38A292928D000687ED4 /* FirebaseQueryKey.swift in Sources */,
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
 				555A6B3E29238D65001336ED /* ChatRoomListRepository.swift in Sources */,
@@ -1517,6 +1545,7 @@
 				839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */,
 				603EDDB32926C89000BEE65C /* RootTabBarViewModel.swift in Sources */,
 				603EDDAB2926C52200BEE65C /* DefaultTabBarRepository.swift in Sources */,
+				6001DA88292D47320062EAD0 /* UserChatRoomTicket.swift in Sources */,
 				83D3543D29252F5B00B9236A /* MyProfileCoordinator.swift in Sources */,
 				83D354482925438C00B9236A /* UserUUIDRepository.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
@@ -1524,6 +1553,7 @@
 				83D3543F29253A5C00B9236A /* MyProfileLoadUseCase.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
 				7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */,
+				60E749DC292C88F40048F877 /* AuthService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1691,6 +1721,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 92NGUT4BRA;
@@ -1702,6 +1734,9 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location GPS 권한 요청입니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1716,8 +1751,9 @@
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Boostcamp.iOS.i5S.NearTalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1734,6 +1770,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 92NGUT4BRA;
@@ -1745,6 +1783,9 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location GPS 권한 요청입니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1759,8 +1800,9 @@
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Boostcamp.iOS.i5S.NearTalk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
