@@ -10,7 +10,8 @@ import RxSwift
 
 protocol LoginCoordinatorDependency {
 //    var showMainViewController: (() -> Void) { get }
-    var showOnboardingView: ((String?) -> Void) { get }
+    var showOnboardingView: (() -> Void) { get }
+    var authRepository: any AuthRepository { get }
 }
 
 final class LoginCoordinator: Coordinator {
@@ -21,7 +22,9 @@ final class LoginCoordinator: Coordinator {
     
     func start() {
         self.navigationController?.popViewController(animated: false)
-        let loginViewController: LoginViewController = LoginViewController(coordinator: self)
+        let loginViewController: LoginViewController = LoginViewController(
+            coordinator: self,
+            authRepository: self.dependency.authRepository)
         self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     
@@ -31,7 +34,7 @@ final class LoginCoordinator: Coordinator {
         self.dependency = dependency
     }
     
-    func finish(email: String?) {
-        self.dependency.showOnboardingView(email)
+    func finish() {
+        self.dependency.showOnboardingView()
     }
 }

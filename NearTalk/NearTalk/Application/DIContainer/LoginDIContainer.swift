@@ -9,15 +9,23 @@ import Foundation
 import UIKit
 
 final class DefaultLoginCoordinatorDependency: LoginCoordinatorDependency {
-    let showOnboardingView: ((String?) -> Void)
+    let authRepository: any AuthRepository
+    let showOnboardingView: (() -> Void)
     
-    init(showOnboardingView: @escaping (String?) -> Void) {
+    init(showOnboardingView: @escaping () -> Void, authRepository: any AuthRepository) {
         self.showOnboardingView = showOnboardingView
+        self.authRepository = authRepository
     }
 }
 
 final class LoginDIContainer {
-    func makeLoginCoordinatorDependency(showOnboardingView: @escaping (String?) -> Void) -> any LoginCoordinatorDependency {
-        return DefaultLoginCoordinatorDependency(showOnboardingView: showOnboardingView)
+    private let authRepository: any AuthRepository
+    
+    init(authRepository: any AuthRepository) {
+        self.authRepository = authRepository
+    }
+    
+    func makeLoginCoordinatorDependency(showOnboardingView: @escaping () -> Void) -> any LoginCoordinatorDependency {
+        return DefaultLoginCoordinatorDependency(showOnboardingView: showOnboardingView, authRepository: self.authRepository)
     }
 }
