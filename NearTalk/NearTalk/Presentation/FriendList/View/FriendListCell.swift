@@ -5,6 +5,7 @@
 //  Created by 김영욱 on 2022/11/15.
 //
 
+import Kingfisher
 import SnapKit
 import Then
 import UIKit
@@ -12,6 +13,7 @@ import UIKit
 final class FriendListCell: UICollectionViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
+    private var viewModel: FriendListViewModel?
     
     // MARK: - UI properties
     private let img = UIImageView().then {
@@ -54,8 +56,23 @@ final class FriendListCell: UICollectionViewCell {
     func configure(model: Friend) {
         self.name.text = model.username
         self.userDescription.text = model.statusMessage
+        self.imageLoad(path: model.profileImagePath)
     }
- 
+    
+    func imageLoad(path: String?) {
+        guard let path = path,
+              let url = URL(string: path)
+        else {
+            img.image = UIImage(systemName: "photo")
+            return
+        }
+        
+        img.kf.setImage(with: URL(string: "주소: \(url)"))
+        if img.image == nil {
+            img.image = UIImage(systemName: "photo")
+        }
+    }
+    
     private func addSubviews() {
         self.contentView.addSubview(img)
         self.contentView.addSubview(stactView)
@@ -63,7 +80,6 @@ final class FriendListCell: UICollectionViewCell {
     
     private func configureConstraints() {
         self.configureImg()
-        self.configureContentView()
     }
     
     private func configureImg() {
@@ -80,12 +96,6 @@ final class FriendListCell: UICollectionViewCell {
             make.centerY.equalTo(self.contentView)
         }
     }
-
-    private func configureContentView() {
-        self.contentView.layer.borderColor = UIColor.gray.cgColor
-        self.contentView.layer.borderWidth = 0.5
-    }
-    
 }
 
 #if canImport(SwiftUI) && DEBUG
@@ -95,6 +105,18 @@ struct FriendListCellPreview: PreviewProvider {
     static var previews: some View {
         let width: CGFloat = 393
         let height: CGFloat = width * 0.20
+        
+        //        let viewModel: FriendListViewModel = DefaultFriendListViewModel(
+        //            fetchFriendListUseCase: DefaultFetchFriendListUseCase(
+        //                profileRepository: DefaultProfileRepository(
+        //                    firestoreService: DefaultFirestoreService(),
+        //                    firebaseAuthService: DefaultFirebaseAuthService()
+        //                )
+        //            ),
+        //            imageUseCase: DefaultImageUseCase(
+        //                imageRepository: DefaultImageRepository()
+        //            )
+        //        )
         
         UIViewPreview {
             let cell = FriendListCell(frame: .zero)

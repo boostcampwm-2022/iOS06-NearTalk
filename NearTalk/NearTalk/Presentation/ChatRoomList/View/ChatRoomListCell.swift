@@ -69,18 +69,18 @@ class ChatRoomListCell: UICollectionViewCell {
         
         addSubviews()
         configureConstraints()
-        configureContentView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(groupData: GroupChatRoomListData) {
         self.name.text = groupData.name
         self.recentMessage.text = groupData.description
         self.date.text = groupData.date
         self.count.text = groupData.count
+        self.imageLoad(path: groupData.img)
     }
     
     func configure(dmData: DMChatRoomListData) {
@@ -88,6 +88,7 @@ class ChatRoomListCell: UICollectionViewCell {
         self.recentMessage.text = dmData.description
         self.date.text = dmData.date
         self.count.text = nil
+        self.imageLoad(path: dmData.img)
     }
     
     // MARK: - Configure views
@@ -116,9 +117,18 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
-    private func configureContentView() {
-//        self.contentView.layer.borderColor = UIColor.gray.cgColor
-//        self.contentView.layer.borderWidth = 0.5
+    func imageLoad(path: String?) {
+        guard let path = path,
+              let url = URL(string: path)
+        else {
+            img.image = UIImage(systemName: "photo")
+            return
+        }
+        
+        img.kf.setImage(with: URL(string: "주소: \(url)"))
+        if img.image == nil {
+            img.image = UIImage(systemName: "photo")
+        }
     }
     
 }

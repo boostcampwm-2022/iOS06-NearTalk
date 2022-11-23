@@ -40,7 +40,7 @@ final class FriendListDIContainer {
     }
     
     func makeFriendListViewModel(actions: FriendListViewModelActions) -> FriendListViewModel {
-        return DefaultFriendListViewModel(useCase: self.makeFetchFriendListUseCase(), actions: actions)
+        return DefaultFriendListViewModel(fetchFriendListUseCase: self.makeFetchFriendListUseCase(), imageUseCase: DefaultImageUseCase(imageRepository: DefaultImageRepository()), actions: actions)
     }
     
     // MARK: - Coordinator
