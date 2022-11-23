@@ -7,25 +7,6 @@
 
 import UIKit
 
-// ChatRoomListDIContainer가 필요한 DIContainer
-final class XXXDIContainer {
-    // MARK: - 필요한 데이터를 가저올 네트워크 통신
-    lazy var apiDataStorageService: DefaultStorageService = {
-        // api -> Data 변환
-        return DefaultStorageService()
-    }()
-    
-    lazy var imageDataStorageService: DefaultStorageService = {
-        // api -> Data 변환
-        return DefaultStorageService()
-    }()
-    
-    func makeChatRoomListDIContainer() -> ChatRoomListDIContainer {
-        let dependencies = ChatRoomListDIContainer.Dependencies(apiDataTransferService: apiDataStorageService, imageDataTransferService: imageDataStorageService)
-        return ChatRoomListDIContainer(dependencies: dependencies)
-    }
-}
-
 final class ChatRoomListDIContainer {
     
     // MARK: - Dependencies
