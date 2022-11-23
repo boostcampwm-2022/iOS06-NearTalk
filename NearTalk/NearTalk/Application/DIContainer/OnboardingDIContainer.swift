@@ -19,6 +19,7 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
         let imageRepository: any ImageRepository
         let profileRepository: any ProfileRepository
         let showMainViewController: (() -> Void)?
+        let email: String?
     }
     
     func showMainViewController() {
@@ -49,7 +50,8 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
             validateStatusMessageUseCase: self.makeValidateStatusMessageUseCase(),
             uploadImageUseCase: self.makeUploadImageUseCase(),
             createProfileUseCase: self.makeCreateProfileUseCase(),
-            action: action)
+            action: action,
+            email: self.dependency.email)
         return OnboardingViewController(viewModel: viewModel)
     }
     

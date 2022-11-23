@@ -6,6 +6,7 @@
 //
 
 import RxCocoa
+import RxGesture
 import RxSwift
 import SnapKit
 import Then
@@ -174,6 +175,9 @@ private extension OnboardingViewController {
     }
     
     func bindRegisterButton() {
+        self.viewModel.registerEnable
+            .bind(to: self.registerButton.rx.isEnabled)
+            .disposed(by: self.disposeBag)
         self.registerButton.rx
             .tap
             .bind(onNext: { [weak self] in
@@ -188,18 +192,3 @@ extension OnboardingViewController: UIScrollViewDelegate {
         scrollView.contentOffset.x = 0
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-// swiftlint:disable: type_name
-struct OnbardViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        let diContainer: DefaultOnboardingDIContainer = DefaultOnboardingDIContainer()
-        let navController: UINavigationController = UINavigationController()
-        let coordinator: OnboardingCoordinator = diContainer.makeOnboardingCoordinator(navigationController: navController, dependency: diContainer.makeOnboardingCoordinatorDependency())
-        coordinator.start()
-        return navController.showPreview(.iPhoneSE3)
-    }
-}
-#endif
