@@ -18,4 +18,5 @@ struct ChatRoom: BaseEntity {
     var accessibleRadius: Double?
     var recentMessageID: String?
     var maxNumberOfParticipants: Int?
+    var messageCount: Int?
 }
