@@ -54,29 +54,26 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         }
     }()
     
-    private weak var coordinator: MyProfileCoordinator?
-    
     private let viewModel: any MyProfileViewModel
     private let disposeBag: DisposeBag = DisposeBag()
-    private let viewWillAppearTrigger: PublishRelay<Void> = PublishRelay<Void>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureUI()
         self.configureConstraint()
         self.initDataSource()
         self.setTableView()
-        self.bindViewWillAppearTrigger()
+        self.bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.profileImageView.makeRounded()
         configureTableView()
         super.viewWillAppear(animated)
-        self.viewWillAppearTrigger.accept(())
+        self.viewModel.viewWillAppear()
     }
     
-    init(coordinator: MyProfileCoordinator, viewModel: any MyProfileViewModel) {
-        self.coordinator = coordinator
+    init(viewModel: any MyProfileViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -92,9 +89,13 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         
         switch menu {
         case .profileSetting:
-            self.coordinator?.showProfileSettingViewController()
+            self.viewModel.moveToProfileSettingView(
+                necessaryProfileComponent: .init(
+                    nickName: self.nicknameLabel.text,
+                    message: self.messageLabel.text,
+                    image: self.profileImageView.image?.pngData() ?? self.profileImageView.image?.jpegData(compressionQuality: 1.0)))
         case .appSetting:
-            self.coordinator?.showAppSettingViewController()
+            self.viewModel.moveToAppSettingView()
         }
     }
 }
@@ -161,24 +162,21 @@ private extension MyProfileViewController {
         self.dataSource.apply(snapshot)
     }
     
-    func bindViewWillAppearTrigger() {
-        let input = MyProfileInput(refreshObservable: self.viewWillAppearTrigger)
-        let output = self.viewModel.transform(input)
-        output.nickNameOutput
-            .drive(self.nicknameLabel.rx.text)
+    func bindViewModel() {
+        self.viewModel.nickName
+            .subscribe(self.nicknameLabel.rx.text)
             .disposed(by: self.disposeBag)
-        output.messageOutput
-            .drive(self.messageLabel.rx.text)
+        self.viewModel.message
+            .subscribe(self.messageLabel.rx.text)
             .disposed(by: self.disposeBag)
-        output.imageOutput
-            .map { data in
-                if let data = data {
-                    return UIImage(data: data)
-                } else {
-                    return Optional<UIImage>(nil)
-                }
+        self.viewModel.image
+            .compactMap {
+                $0
             }
-            .drive(self.profileImageView.rx.image)
+            .map {
+                UIImage(data: $0)
+            }
+            .subscribe(self.profileImageView.rx.image)
             .disposed(by: self.disposeBag)
     }
 }
