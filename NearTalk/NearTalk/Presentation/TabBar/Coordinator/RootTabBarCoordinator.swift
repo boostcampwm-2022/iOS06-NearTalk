@@ -7,6 +7,13 @@
 
 import UIKit
 
+struct RootTabBarCoordinatorDependency {
+    let mainMapCoordinator: MainMapCoordinator
+    let chatRoomListCoordinator: ChatRoomListCoordinator
+    let friendListCoordinator: FriendListCoordinator
+    let myProfileCoordinator: MyProfileCoordinator
+}
+
 final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var tabBarViewController: UITabBarController?

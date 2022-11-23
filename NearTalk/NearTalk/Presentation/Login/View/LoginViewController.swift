@@ -5,8 +5,10 @@ import RxSwift
 import SnapKit
 import Then
 import UIKit
-
-final class LoginViewController: UIViewController {
+final class LoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
     private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
     private let loginButton = ASAuthorizationAppleIDButton(type: .default, style: .black).then {
         $0.cornerRadius = 5
