@@ -10,7 +10,8 @@ import Foundation
 import RxSwift
 
 protocol StorageService {
-    func uploadImage(data: Data, fileName: String) -> Single<String>
+    /// Firebase storage에 저장하고 저장된 path(URL x)를 반환한다.
+    func uploadData(data: Data, fileName: String, dataType: FirebaseKey.Storage) -> Single<String>
     func downloadURL(for path: String) -> Single<URL>
 }
 
@@ -26,20 +27,20 @@ final class DefaultStorageService: StorageService {
 // MARK: - 이미지
 extension DefaultStorageService {
     /// Firebase storage에 저장하고 저장된 path를 반환한다.
-    func uploadImage(data: Data, fileName: String) -> Single<String> {
+    func uploadData(data: Data, fileName: String, dataType: FirebaseKey.Storage) -> Single<String> {
         Single<String>.create { [weak self] single in
             guard let self else {
                 single(.failure(StorageError.failedToUpload))
                 return Disposables.create()
             }
             
-            self.storage.child("images/\(fileName)").putData(data, metadata: nil, completion: { _, error in
+            self.storage.child("\(dataType.rawValue)/\(fileName)").putData(data, metadata: nil, completion: { _, error in
                 guard error == nil else {
                     single(.failure(StorageError.failedToUpload))
                     return
                 }
                 
-                self.storage.child("images/\(fileName)").downloadURL(completion: { url, _ in
+                self.storage.child("\(dataType.rawValue)/\(fileName)").downloadURL(completion: { url, _ in
                     guard let url = url else {
                         single(.failure(StorageError.failedToGetDownloadUrl))
                         return

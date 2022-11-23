@@ -30,8 +30,8 @@ final class ChatRoomListDIContainer {
     
     // MARK: - Dependencies
     struct Dependencies {
-        let apiDataTransferService: DefaultStorageService
-        let imageDataTransferService: DefaultStorageService
+        let apiDataTransferService: StorageService
+        let imageDataTransferService: StorageService
     }
     
     private let dependencies: Dependencies
@@ -42,15 +42,39 @@ final class ChatRoomListDIContainer {
     }
 
     // MARK: - Services
+    func makeFirestoreService() -> FirestoreService {
+        return DefaultFirestoreService()
+    }
+    
+    func makeDatabaseService() -> RealTimeDatabaseService {
+        return DefaultRealTimeDatabaseService()
+    }
+    
+    func makeAuthService() -> AuthService {
+        return DefaultFirebaseAuthService()
+    }
+    
+    // MARK: - Repository
+    func makeProfileRepository() -> ProfileRepository {
+        return DefaultProfileRepository(
+            firestoreService: makeFirestoreService(),
+            firebaseAuthService: makeAuthService()
+        )
+    }
 
     // MARK: - UseCases
-    func makeChatRoomListUseCase() -> ChatRoomListUseCase {
-        return DefaultChatRoomListUseCase(chatRoomListRepository: self.makeRepository())
+    func makeChatRoomListUseCase() -> FetchChatRoomUseCase {
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: self.makeRepository())
     }
     
     // MARK: - Repositories
     func makeRepository() -> ChatRoomListRepository {
-        return DefaultChatRoomListRepository(dataTransferService: dependencies.apiDataTransferService)
+        return DefaultChatRoomListRepository(
+            dataTransferService: dependencies.apiDataTransferService,
+            profileRepository: makeProfileRepository(),
+            databaseService: makeDatabaseService(),
+            firestoreService: makeFirestoreService()
+        )
     }
     
     // ExampleMVVM에서는 보여줄수 있는 Scene의 뷰컨트롤러와 뷰모델이 존재

@@ -9,27 +9,37 @@ import FirebaseAuth
 import Foundation
 import RxSwift
 
-protocol FirebaseAuthService {
-    func verifyUser() -> Observable<Bool>
-    func loginWithApple(token idTokenString: String, nonce: String) -> Observable<FirebaseAuth.User>
-    func logout() -> Observable<Bool>
-    func deleteCurrentUser() -> Observable<Bool>
-}
-
-final class DefaultFirebaseAuthService: FirebaseAuthService {
+final class DefaultFirebaseAuthService: AuthService {
     
     /// 유저 로그인 확인
-    func verifyUser() -> Observable<Bool> {
-        return Single<Bool>.create { observer in
-            observer(.success(Auth.auth().currentUser != nil))
+    func verifyUser() -> Completable {
+        Completable.create { completable in
+            if Auth.auth().currentUser != nil {
+                completable(.completed)
+            } else {
+                completable(.error(FirebaseAuthError.nilUser))
+            }
             return Disposables.create()
-        }.asObservable()
+        }
+    }
+    
+    /// 현재 유저의 이메일 주소 가져오기
+    func fetchCurrentUserEmail() -> Single<String> {
+        Single<String>.create { single in
+            guard let currentUser: FirebaseAuth.User = Auth.auth().currentUser,
+                  let email: String = currentUser.email else {
+                single(.failure(FirebaseAuthError.nilUser))
+                return Disposables.create()
+            }
+            single(.success(email))
+            return Disposables.create()
+        }
     }
     
     /// 유저 로그인
     /// 로그인 한 적 없는 유저는 자동으로 회원가입 된다.
-    func loginWithApple(token idTokenString: String, nonce: String) -> Observable<FirebaseAuth.User> {
-        Observable<FirebaseAuth.User>.create { observer in
+    func loginWithApple(token idTokenString: String, nonce: String) -> Completable {
+        Completable.create { completable in
             let credential: OAuthCredential = OAuthProvider.credential(
                 withProviderID: "apple.com",
                 idToken: idTokenString,
@@ -37,48 +47,42 @@ final class DefaultFirebaseAuthService: FirebaseAuthService {
             )
             Auth.auth().signIn(with: credential) { (authResult, error) in
                 if let error {
-                    observer.onError(error)
+                    completable(.error(error))
                     return
                 }
 
-                guard let user = authResult?.user else {
-                    observer.onError(FirebaseAuthError.nilUser)
+                guard (authResult?.user) != nil else {
+                    completable(.error(FirebaseAuthError.nilUser))
                     return
                 }
-                
-                observer.onNext(user)
-                observer.onCompleted()
+                completable(.completed)
             }
             return Disposables.create()
         }
     }
     
     /// 로그아웃
-    func logout() -> Observable<Bool> {
-        Observable<Bool>.create { observer in
+    func logout() -> Completable {
+        Completable.create { completable in
             do {
                 try Auth.auth().signOut()
-                observer.onNext(true)
-                observer.onCompleted()
+                completable(.completed)
             } catch let error {
-                observer.onNext(false)
-                observer.onError(error)
+                completable(.error(error))
             }
             return Disposables.create()
         }
     }
     
     /// 탈퇴
-    func deleteCurrentUser() -> Observable<Bool> {
-        Observable<Bool>.create { observer in
+    func deleteCurrentUser() -> Completable {
+        Completable.create { completable in
             Auth.auth().currentUser?.delete { error in
                 if let error {
-                    observer.onNext(false)
-                    observer.onError(error)
+                    completable(.error(error))
                     return
                 }
-                observer.onNext(true)
-                observer.onCompleted()
+                completable(.completed)
             }
             return Disposables.create()
         }

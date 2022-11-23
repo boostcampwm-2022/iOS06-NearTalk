@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FirebaseServiceType {
+enum FirebaseKey {
 
     enum FireStore: String {
         case users
@@ -15,8 +15,10 @@ enum FirebaseServiceType {
     }
     
     enum RealtimeDB: String {
+        case users
         case chatRooms
         case chatMessages
+        case userChatRoomTickets
     }
     
     enum Storage: String {

@@ -15,11 +15,13 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
     private lazy var dataSource: UITableViewDiffableDataSource<AppSettingSection, AppSettingItem> = {
         UITableViewDiffableDataSource<AppSettingSection, AppSettingItem>(tableView: self.tableView) { _, _, item in
             let cell: UITableViewCell
+
             if item == .alarmOnOff {
                 cell = AppSettingTableViewCell()
             } else {
                 cell = UITableViewCell()
             }
+
             var config = cell.defaultContentConfiguration()
             config.text = item.rawValue
             config.textProperties.alignment = .natural
@@ -60,7 +62,7 @@ private extension AppSettingViewController {
     
     func setTableView() {
         tableView.delegate = self
-        tableView.register(AppSettingTableViewCell.self, forCellReuseIdentifier: AppSettingTableViewCell.cellIndentifier)
+        tableView.register(AppSettingTableViewCell.self, forCellReuseIdentifier: AppSettingTableViewCell.identifier)
         tableView.dataSource = self.dataSource
         self.tableView.backgroundColor = .systemBackground
         self.tableView.isScrollEnabled = false
@@ -84,15 +86,3 @@ enum AppSettingItem: String, Hashable & Sendable & CaseIterable {
     case developerInfo = "개발자 정보"
     case alarmOnOff = "알람 on/off"
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-// swiftlint:disable: type_name
-struct AppSettingViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UINavigationController(rootViewController: AppSettingViewController()).showPreview(.iPhoneSE3)
-        UINavigationController(rootViewController: AppSettingViewController()).showPreview(.iPhone14Pro)
-    }
-}
-#endif

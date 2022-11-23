@@ -10,48 +10,43 @@ import UIKit
 protocol Coordinator: AnyObject {
     var navigationController: UINavigationController? { get set }
     var parentCoordinator: Coordinator? { get set }
-    var childCoordinators: [Coordinator] { get set }
-
+    
     func start()
 }
 
 final class AppCoordinator: Coordinator {
+    var parentCoordinator: Coordinator?
     var navigationController: UINavigationController?
-    weak var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator] = []
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-
-//    func start() {
-//        guard let navigationController else {
-//            return
-//        }
-//        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
-//        let childCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
-//            navigationController: navigationController,
-//            dependency: self
-//        )
-//        self.childCoordinators.append(childCoordinator)
-//        childCoordinator.start()
-//    }
     
     func start() {
-        let rootTabBarDIContainer: RootTabBarDIContainer = .init()
-        let childCoordinator: RootTabBarCoordinator = rootTabBarDIContainer.makeTabBarCoordinator()
-        childCoordinator.navigationController = self.navigationController
-        self.childCoordinators.append(childCoordinator)
-        childCoordinator.start()
+        guard let navigationController else {
+            return
+        }
+        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
+        let launchScreenCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
+            navigationController: navigationController,
+            dependency: self
+        )
+        launchScreenCoordinator.start()
     }
 }
 
 extension AppCoordinator: LaunchScreenCoordinatorDependency {
     func showMainViewController() {
-        print(#function)
+        self.navigationController?.popViewController(animated: false)
+        guard let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer()
+            .makeTabBarCoordinator(navigationController: self.navigationController) else {
+            return
+        }
+        rootTabBarCoordinator.start()
     }
-
+    
     func showLoginViewController() {
-        print(#function)
+        self.navigationController?.viewControllers.insert(LoginViewController(), at: 0)
+        self.navigationController?.popViewController(animated: false)
     }
 }

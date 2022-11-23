@@ -8,10 +8,10 @@
 import UIKit
 
 struct RootTabBarControllerDependency {
-    let mapViewController: MainMapViewController
-    let chatRoomListViewController: ChatRoomListViewController
-    let friendListViewController: FriendsListViewController
-    let myProfileViewController: MyProfileViewController
+    let mainMapNavigationController: UINavigationController
+    let chatRoomListNavigationController: UINavigationController
+    let friendListNavigationController: UINavigationController
+    let myProfileNavigationController: UINavigationController
 }
 
 final class RootTabBarController: UITabBarController {
@@ -48,25 +48,25 @@ final class RootTabBarController: UITabBarController {
     private func configureViewControllers() {
         self.viewControllers = [
             self.embed(
-                rootVC: self.dependency.mapViewController,
+                rootNav: self.dependency.mainMapNavigationController,
                 title: "홈",
                 inactivatedImage: UIImage(systemName: "house")?.withTintColor(.darkGray),
                 activatedImage: UIImage(systemName: "house.fill")?.withTintColor(.blue)
             ),
             self.embed(
-                rootVC: self.dependency.chatRoomListViewController,
+                rootNav: self.dependency.chatRoomListNavigationController,
                 title: "채팅",
                 inactivatedImage: UIImage(systemName: "message")?.withTintColor(.darkGray),
                 activatedImage: UIImage(systemName: "message.fill")?.withTintColor(.blue)
             ),
             self.embed(
-                rootVC: self.dependency.friendListViewController,
+                rootNav: self.dependency.friendListNavigationController,
                 title: "친구",
                 inactivatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.darkGray),
                 activatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.blue)
             ),
             self.embed(
-                rootVC: self.dependency.myProfileViewController,
+                rootNav: self.dependency.myProfileNavigationController,
                 title: "마이페이지",
                 inactivatedImage: UIImage(systemName: "figure.wave")?.withTintColor(.darkGray),
                 activatedImage: UIImage(systemName: "figure.wave")?.withTintColor(.blue)
@@ -75,18 +75,17 @@ final class RootTabBarController: UITabBarController {
     }
     
     private func embed(
-        rootVC: UIViewController,
+        rootNav: UINavigationController,
         title: String?,
         inactivatedImage: UIImage?,
         activatedImage: UIImage?
     ) -> UIViewController {
-        let navC = UINavigationController(rootViewController: rootVC)
         let tabBarItem = UITabBarItem(
             title: title,
             image: inactivatedImage?.withRenderingMode(.alwaysOriginal),
             selectedImage: activatedImage?.withRenderingMode(.alwaysOriginal)
         )
-        navC.tabBarItem = tabBarItem
-        return navC
+        rootNav.tabBarItem = tabBarItem
+        return rootNav
     }
 }
