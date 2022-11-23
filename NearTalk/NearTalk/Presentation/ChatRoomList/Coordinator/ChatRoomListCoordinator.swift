@@ -29,7 +29,9 @@ final class ChatRoomListCoordinator {
     func start() {
         let actions: ChatRoomListViewModelActions = .init(
             showChatRoom: self.showChatRoom,
-            showCreateChatRoom: self.showCreateChatRoom
+            showCreateChatRoom: self.showCreateChatRoom,
+            showDMChatRoomList: self.showDMChatRoomList,
+            showGroupChatRoomList: self.showGroupChatRoomList
         )
         
         let viewController = dependencies.makeChatRoomListViewController(actions: actions)
@@ -37,8 +39,16 @@ final class ChatRoomListCoordinator {
         self.navigationController?.pushViewController(viewController, animated: false)
         self.chatRoomListViewController = viewController
     }
+    
+    // MARK: - Actions
+    private func showDMChatRoomList() {
+        
+    }
+    
+    private func showGroupChatRoomList() {
+        
+    }
 
-    // MARK: - Dependency
     private func showChatRoom() {
         // let viewController = dependencies.makeChatRoomViewController(actions: )
         // navigationController?.pushViewController(viewController, animated: true)

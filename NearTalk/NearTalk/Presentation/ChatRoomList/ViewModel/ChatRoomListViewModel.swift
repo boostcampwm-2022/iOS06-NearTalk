@@ -12,9 +12,13 @@ import RxSwift
 struct ChatRoomListViewModelActions {
     let showChatRoom: () -> Void
     let showCreateChatRoom: () -> Void
+    let showDMChatRoomList: () -> Void
+    let showGroupChatRoomList: () -> Void
 }
 
 protocol ChatRoomListViewModelInput {
+    func didDMChatRoomList()
+    func didGroupChatRoomList()
     func didCreateChatRoom()
     func didSelectItem(at index: Int)
 }
@@ -47,16 +51,31 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase.getDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
+        
     }
     
+    // 안 읽은 메세지 개수 확인
+    
+    // 코어데이터 저장
+    // 캐쉬 비교
 }
 
 // MARK: - Input
 extension DefaultChatRoomListViewModel {
+    func didDMChatRoomList() {
+        actions?.showDMChatRoomList
+    }
+    
+    func didGroupChatRoomList() {
+        actions?.showGroupChatRoomList
+    }
+    
+    // 체팅방 생성 클릭시 이동
     func didCreateChatRoom() {
         actions?.showCreateChatRoom()
     }
     
+    // 채팅방 클릭시 채팅방 이동
     func didSelectItem(at index: Int) {
         print("\(index)인덱스가 선택되었습니다.")
         actions?.showChatRoom()

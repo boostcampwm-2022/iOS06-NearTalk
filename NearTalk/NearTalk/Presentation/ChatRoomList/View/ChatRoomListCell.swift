@@ -104,22 +104,21 @@ class ChatRoomListCell: UICollectionViewCell {
             make.width.height.equalTo(60)
         }
         
-        stackView2.snp.makeConstraints { make in
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
-            make.trailing.equalTo(self.contentView).offset(-48)
-            make.centerY.equalTo(self.contentView)
-            
-        }
-        
         date.snp.makeConstraints { make in
             make.top.equalTo(self.contentView).offset(8)
             make.trailing.equalTo(self.contentView).offset(-16)
         }
+        
+        stackView2.snp.makeConstraints { make in
+            make.leading.equalTo(self.img.snp.trailing).offset(16)
+            make.trailing.equalTo(self.date.snp.leading)
+            make.centerY.equalTo(self.contentView)
+        }
     }
     
     private func configureContentView() {
-        self.contentView.layer.borderColor = UIColor.gray.cgColor
-        self.contentView.layer.borderWidth = 0.5
+//        self.contentView.layer.borderColor = UIColor.gray.cgColor
+//        self.contentView.layer.borderWidth = 0.5
     }
     
 }

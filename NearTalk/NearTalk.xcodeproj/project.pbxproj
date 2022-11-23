@@ -1508,7 +1508,7 @@
 				83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */,
 				60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */,
 				83D5ECC3292B714500AD1781 /* AuthRepository.swift in Sources */,
-				555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */,
+				555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */,
 				1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */,
 				603EDDB62926C89C00BEE65C /* RootTabBarCoordinator.swift in Sources */,
 				7CFC7D70292374BD00A249E7 /* ProfileDetailViewController.swift in Sources */,
