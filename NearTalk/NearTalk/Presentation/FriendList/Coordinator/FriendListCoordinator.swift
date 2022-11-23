@@ -14,8 +14,9 @@ protocol FriendListCoordinatorDependencies {
 //    func makeProfileDetailViewController()
 }
 
-final class FriendListCoordinator {
-    private weak var navigationController: UINavigationController?
+final class FriendListCoordinator: Coordinator {
+    weak var parentCoordinator: Coordinator?
+    weak var navigationController: UINavigationController?
     private let dependencies: FriendListCoordinatorDependencies
 
     private weak var friendListViewController: FriendListViewController?

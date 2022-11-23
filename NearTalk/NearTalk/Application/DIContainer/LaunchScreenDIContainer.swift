@@ -12,7 +12,7 @@ final class LaunchScreenDIContainer {
     // MARK: - Dependencies
     
     // MARK: - Services
-    func makeAuthService() -> FirebaseAuthService {
+    func makeAuthService() -> AuthService {
         return DefaultFirebaseAuthService()
     }
     

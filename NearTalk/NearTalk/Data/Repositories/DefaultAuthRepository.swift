@@ -8,9 +8,9 @@
 import RxSwift
 
 final class DefaultAuthRepository: AuthRepository {
-    private let authService: any FirebaseAuthService
+    private let authService: any AuthService
     
-    init(authService: any FirebaseAuthService) {
+    init(authService: any AuthService) {
         self.authService = authService
     }
     

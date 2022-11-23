@@ -13,9 +13,9 @@ protocol LoginUseCase {
 }
 
 final class DefaultLoginUseCase: LoginUseCase {
-    private let authService: FirebaseAuthService
+    private let authService: AuthService
     
-    init(authService: FirebaseAuthService) {
+    init(authService: AuthService) {
         self.authService = authService
     }
     
