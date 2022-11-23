@@ -10,13 +10,8 @@ import Foundation
 import RxRelay
 import RxSwift
 
-protocol CreateGroupChatUseCaseable {
-    func validate(_ string: String)
-    func createGroupChat(title: String, description: String, maxNumOfParticipants: Int, maxRangeOfRadius: Int)
-}
-
-protocol CreateGroupChatCoordinatable: Coordinator {
-    func showChatViewController()
+struct CreateGroupChatViewModelActions {
+    let showChatViewController: () -> Void
 }
 
 protocol CreateGroupChatViewModelable {
@@ -28,15 +23,13 @@ protocol CreateGroupChatViewModelable {
 
 final class CreateGroupChatViewModel {
     // MARK: - Proporties
-    
     private let createGroupChatUseCase: CreateGroupChatUseCaseable
-    private let coordinator: CreateGroupChatCoordinatable
-    
+    private let actions: CreateGroupChatViewModelActions
     private let disposeBag = DisposeBag()
     
-    init(createGroupChatUseCase: CreateGroupChatUseCaseable, coordinator: CreateGroupChatCoordinatable) {
+    init(createGroupChatUseCase: CreateGroupChatUseCaseable, actions: CreateGroupChatViewModelActions) {
         self.createGroupChatUseCase = createGroupChatUseCase
-        self.coordinator = coordinator
+        self.actions = actions
     }
 }
 
@@ -65,7 +58,7 @@ extension CreateGroupChatViewModel: CreateGroupChatViewModelable {
         
         input.createChatButtonDidTapEvent
             .subscribe { [weak self] _ in
-                self?.coordinator.showChatViewController()
+                self?.actions.showChatViewController()
             }
             .disposed(by: disposeBag)
     

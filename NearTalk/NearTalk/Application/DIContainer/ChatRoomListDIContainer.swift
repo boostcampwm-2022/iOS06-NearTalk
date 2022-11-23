@@ -87,6 +87,10 @@ final class ChatRoomListDIContainer {
     func makeChatDIContainer() -> ChatDIContainer {
         return ChatDIContainer()
     }
+    
+    func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer {
+        return CreateGroupChatDiContainer()
+    }
 }
 
 extension ChatRoomListDIContainer: ChatRoomListCoordinatorDependencies {}

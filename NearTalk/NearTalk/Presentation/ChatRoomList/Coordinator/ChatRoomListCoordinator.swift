@@ -12,13 +12,13 @@ protocol ChatRoomListCoordinatorDependencies {
     func makeChatRoomViewController()
     func makeCreateChatRoomViewController()
     func makeChatDIContainer() -> ChatDIContainer
+    func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer
 }
 
 final class ChatRoomListCoordinator: Coordinator {
     weak var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
     private let dependencies: ChatRoomListCoordinatorDependencies
-
     private(set) weak var chatRoomListViewController: ChatRoomListViewController?
     
     // MARK: - Init
@@ -69,8 +69,12 @@ final class ChatRoomListCoordinator: Coordinator {
     }
     
     private func showCreateChatRoom() {
-        // let viewController = dependencies.makeCreateChatRoomViewController(actions: )
-        // navigationController?.pushViewController(viewController, animated: true)
+        guard let navigationController = navigationController
+        else { return }
+        
+        let diContainer = dependencies.makeCreateGroupChatDIContainer()
+        let coordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+        coordinator.start()
     }
     
 }

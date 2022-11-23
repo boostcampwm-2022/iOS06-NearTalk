@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol CreateGroupChatUseCaseable {
+    func validate(_ string: String)
+    func createGroupChat(title: String, description: String, maxNumOfParticipants: Int, maxRangeOfRadius: Int)
+}
+
 final class CreateGroupChatUseCase {
     // MARK: - Proporties
     

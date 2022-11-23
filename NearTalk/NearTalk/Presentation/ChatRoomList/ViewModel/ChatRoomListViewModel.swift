@@ -4,7 +4,7 @@
 //
 //  Created by yw22 on 2022/11/11.
 //
-
+ 
 import Foundation
 import RxRelay
 import RxSwift
@@ -65,14 +65,14 @@ extension DefaultChatRoomListViewModel {
         actions?.showGroupChatRoomList()
     }
     
-    // 체팅방 생성 클릭시 이동
-    func didCreateChatRoom() {
-        actions?.showCreateChatRoom()
-    }
-    
     // 채팅방 클릭시 채팅방 이동
     func didSelectItem(at index: Int) {
         print("\(index)인덱스가 선택되었습니다.")
         actions?.showChatRoom()
+    }
+    
+    // 체팅방 생성 클릭시 이동
+    func didCreateChatRoom() {
+        actions?.showCreateChatRoom()
     }
 }
