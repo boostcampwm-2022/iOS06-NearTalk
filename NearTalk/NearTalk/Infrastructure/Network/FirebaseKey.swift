@@ -15,8 +15,10 @@ enum FirebaseKey {
     }
     
     enum RealtimeDB: String {
+        case users
         case chatRooms
         case chatMessages
+        case userChatRoomTickets
     }
     
     enum Storage: String {
