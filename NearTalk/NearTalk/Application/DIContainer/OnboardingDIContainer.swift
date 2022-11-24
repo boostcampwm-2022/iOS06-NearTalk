@@ -8,21 +8,44 @@
 import UIKit
 
 final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
-    private let dependency: Depenency
+    private let dependency: Dependency
     
-    init(dependency: Depenency) {
-        self.dependency = dependency
+    struct Dependency {
+        let showMainViewController: (() -> Void)?
     }
     
-    struct Depenency {
-        let imageRepository: any ImageRepository
-        let profileRepository: any ProfileRepository
-        let authRepository: any AuthRepository
-        let showMainViewController: (() -> Void)?
+    init(dependency: Dependency) {
+        self.dependency = dependency
     }
     
     func showMainViewController() {
         self.dependency.showMainViewController?()
+    }
+    
+    // MARK: - Service
+    func makeImageService() -> any StorageService {
+        return DefaultStorageService()
+    }
+    
+    func makeAuthService() -> any AuthService {
+        return DefaultFirebaseAuthService()
+    }
+    
+    func makeFirestoreService() -> any FirestoreService {
+        return DefaultFirestoreService()
+    }
+    
+    // MARK: - Repository
+    func makeImageRepository() -> any ImageRepository {
+        return DefaultImageRepository(imageService: makeImageService())
+    }
+    
+    func makeAuthRepository() -> any AuthRepository {
+        return DefaultAuthRepository(authService: makeAuthService())
+    }
+    
+    func makeProfileRepository() -> any ProfileRepository {
+        return DefaultProfileRepository(firestoreService: makeFirestoreService(), firebaseAuthService: makeAuthService())
     }
     
     // MARK: - UseCases
@@ -35,11 +58,11 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
     }
     
     private func makeUploadImageUseCase() -> any UploadImageUseCase {
-        return DefaultUploadImageUseCase(imageRepository: self.dependency.imageRepository)
+        return DefaultUploadImageUseCase(imageRepository: self.makeImageRepository())
     }
     
     private func makeCreateProfileUseCase() -> any CreateProfileUseCase {
-        return DefaultCreateProfileUseCase(profileRepository: self.dependency.profileRepository, authRepository: self.dependency.authRepository)
+        return DefaultCreateProfileUseCase(profileRepository: self.makeProfileRepository(), authRepository: self.makeAuthRepository())
     }
     
     // MARK: - Create viewController
@@ -49,13 +72,16 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
             validateStatusMessageUseCase: self.makeValidateStatusMessageUseCase(),
             uploadImageUseCase: self.makeUploadImageUseCase(),
             createProfileUseCase: self.makeCreateProfileUseCase(),
-            action: action)
+            action: action
+        )
         return OnboardingViewController(viewModel: viewModel)
     }
     
     // MARK: - Coordinator
     func makeOnboardingCoordinator(
-        navigationController: UINavigationController?) -> OnboardingCoordinator {
-            return OnboardingCoordinator(navigationController: navigationController, dependency: self)
+        navigationController: UINavigationController?,
+        parent: Coordinator
+    ) -> OnboardingCoordinator {
+        return OnboardingCoordinator(navigationController: navigationController, parentCoordinator: parent, dependency: self)
     }
 }

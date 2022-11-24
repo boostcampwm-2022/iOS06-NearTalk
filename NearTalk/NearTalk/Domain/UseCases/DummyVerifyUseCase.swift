@@ -14,4 +14,11 @@ final class DummyVerifyUseCase: VerifyUserUseCase {
             return Disposables.create()
         }
     }
+    
+    func verifyProfile() -> Completable {
+        return Completable.create { completable in
+            completable(.completed)
+            return Disposables.create()
+        }
+    }
 }

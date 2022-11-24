@@ -7,7 +7,6 @@
 
 import Foundation
 import PhotosUI
-import RxRelay
 import RxSwift
 import UIKit
 
@@ -19,14 +18,14 @@ protocol OnboardingCoordinatorDependency {
 final class OnboardingCoordinator: Coordinator {
     private let dependency: any OnboardingCoordinatorDependency
     var navigationController: UINavigationController?
-    
     var parentCoordinator: Coordinator?
-    
     var childCoordinators: [Coordinator]
     
-    init(navigationController: UINavigationController?,
-         parentCoordinator: Coordinator? = nil,
-         dependency: any OnboardingCoordinatorDependency) {
+    init(
+        navigationController: UINavigationController?,
+        parentCoordinator: Coordinator? = nil,
+        dependency: any OnboardingCoordinatorDependency
+    ) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
         self.childCoordinators = []
@@ -34,14 +33,11 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     func start() {
-        showOnboardingViewController()
-    }
-    
-    func showOnboardingViewController() {
         let action: Action = Action(
             presentImagePicker: self.presentImagePicker,
             showMainViewController: self.dependency.showMainViewController,
-            presentRegisterFailure: self.presentRegisterFailure)
+            presentRegisterFailure: self.presentRegisterFailure
+        )
         let onboardingViewController: OnboardingViewController = self.dependency.makeOnboardingViewController(action: action)
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
     }
@@ -57,6 +53,7 @@ final class OnboardingCoordinator: Coordinator {
 }
 
 extension OnboardingCoordinator {
+    #warning("이미지 피커가 뜨지 않습니다")
     func presentImagePicker() -> Single<Data?> {
         return self.imagePublisher.asSingle()
     }

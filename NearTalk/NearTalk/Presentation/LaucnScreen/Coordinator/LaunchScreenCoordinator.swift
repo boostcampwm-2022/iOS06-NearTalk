@@ -9,6 +9,7 @@ import UIKit
 
 protocol LaunchScreenCoordinatorDependency {
     func showMainViewController()
+    func showOnboardingView()
     func showLoginViewController()
 }
 
@@ -36,6 +37,7 @@ final class LaunchScreenCoordinator: Coordinator {
     func start() {
         let actions: LaunchScreenViewModelActions = .init(
             showLoginViewController: dependency?.showLoginViewController,
+            showOnboardingView: dependency?.showOnboardingView,
             showMainViewController: dependency?.showMainViewController
         )
         let viewController: LaunchScreenViewController = self.diContainer.createLaunchScreenViewController(actions: actions)

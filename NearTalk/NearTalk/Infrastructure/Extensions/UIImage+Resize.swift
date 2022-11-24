@@ -18,7 +18,6 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
     }
     
-    
     /// 이미지 리사이즈
     /// 기본적으로 512KB 이하로 압축한다.
     /// 변수 단위는 kB 입니다.
@@ -31,7 +30,7 @@ extension UIImage {
         var imageSizeKB = Double(imageData.count) / size
         
         while imageSizeKB > size {
-            guard let resizedImage = resizingImage.resized(withPercentage: 0.6),
+            guard let resizedImage = resizingImage.resized(withPercentage: 0.7),
                   let imageData = resizedImage.jpegData(compressionQuality: 1.0) else {
                       return nil
                   }
