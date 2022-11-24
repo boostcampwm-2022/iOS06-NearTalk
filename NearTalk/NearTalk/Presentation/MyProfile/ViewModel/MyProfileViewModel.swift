@@ -24,7 +24,7 @@ protocol MyProfileInput {
 protocol MyProfileOutput {
     var nickName: BehaviorRelay<String?> { get }
     var message: BehaviorRelay<String?> { get }
-    var image: BehaviorRelay<Data?> { get }
+    var image: BehaviorRelay<String?> { get }
 }
 
 protocol MyProfileViewModel: MyProfileInput, MyProfileOutput {}
@@ -40,7 +40,7 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
     
     let nickName: BehaviorRelay<String?> = BehaviorRelay(value: nil)
     let message: BehaviorRelay<String?> = BehaviorRelay(value: nil)
-    let image: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    let image: BehaviorRelay<String?> = BehaviorRelay(value: nil)
     
     private let profileRepository: any ProfileRepository
     private let imageRepository: any ImageRepository
@@ -70,15 +70,16 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
     }
     
     private func downloadImage(path: String?) {
-        guard let path = path else {
-            self.image.accept(nil)
-            return
-        }
-        
-        self.imageRepository.fetch(path: path)
-            .subscribe(onSuccess: { [weak self] imageData in
-                self?.image.accept(imageData)
-            })
-            .disposed(by: self.disposeBag)
+        self.image.accept(path)
+//        guard let path = path else {
+//            self.image.accept(nil)
+//            return
+//        }
+//
+//        self.imageRepository.fetch(path: path)
+//            .subscribe(onSuccess: { [weak self] imageData in
+//                self?.image.accept(imageData)
+//            })
+//            .disposed(by: self.disposeBag)
     }
 }

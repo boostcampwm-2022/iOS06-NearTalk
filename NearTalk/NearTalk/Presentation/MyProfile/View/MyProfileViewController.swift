@@ -5,6 +5,7 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
+import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -170,13 +171,11 @@ private extension MyProfileViewController {
             .subscribe(self.messageLabel.rx.text)
             .disposed(by: self.disposeBag)
         self.viewModel.image
-            .compactMap {
-                $0
-            }
-            .map {
-                UIImage(data: $0)
-            }
-            .subscribe(self.profileImageView.rx.image)
+            .compactMap { $0 }
+            .compactMap { URL(string: $0) }
+            .bind(onNext: { url in
+                self.profileImageView.kf.setImage(with: url)
+            })
             .disposed(by: self.disposeBag)
     }
 }
