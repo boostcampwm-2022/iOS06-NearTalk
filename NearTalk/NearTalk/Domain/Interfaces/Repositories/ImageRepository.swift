@@ -6,9 +6,9 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol ImageRepository {
-    func fetch(path: String) -> Data?
-    @discardableResult
-    func save(image: Data) -> String?
+    func fetch(path: String) -> Single<Data?>
+    func save(image: Data) -> Single<String>
 }

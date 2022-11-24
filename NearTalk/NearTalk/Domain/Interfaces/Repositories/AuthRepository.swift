@@ -10,4 +10,6 @@ import RxSwift
 protocol AuthRepository {
     func logout() -> Completable
     func dropout() -> Completable
+    func login(token: String) -> Completable
+//    func fetchCurrentUserUID() -> Single<String>
 }

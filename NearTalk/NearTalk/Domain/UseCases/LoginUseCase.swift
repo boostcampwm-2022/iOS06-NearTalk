@@ -9,17 +9,17 @@ import Foundation
 import RxSwift
 
 protocol LoginUseCase {
-    func login(token idTokenString: String, nonce: String) -> Completable
+    func login(token idTokenString: String) -> Completable
 }
 
 final class DefaultLoginUseCase: LoginUseCase {
-    private let authService: AuthService
+    private let authRepository: AuthRepository
     
-    init(authService: AuthService) {
-        self.authService = authService
+    init(authRepository: AuthRepository) {
+        self.authRepository = authRepository
     }
     
-    func login(token idTokenString: String, nonce: String) -> Completable {
-        self.authService.loginWithApple(token: idTokenString, nonce: nonce)
+    func login(token idTokenString: String) -> Completable {
+        self.authRepository.login(token: idTokenString)
     }
 }

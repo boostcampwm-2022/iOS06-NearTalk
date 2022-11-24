@@ -21,4 +21,12 @@ final class DefaultAuthRepository: AuthRepository {
     func dropout() -> Completable {
         return self.authService.deleteCurrentUser()
     }
+    
+    func login(token: String) -> Completable {
+        return self.authService.loginWithApple(token: token, nonce: NonceGenerator.randomNonceString())
+    }
+    
+//    func fetchCurrentUserUID() -> Single<String> {
+//        return self.authService.fetchCurrentUID()
+//    }
 }

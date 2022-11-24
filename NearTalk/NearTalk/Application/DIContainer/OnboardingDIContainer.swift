@@ -7,58 +7,55 @@
 
 import UIKit
 
-final class DefaultOnboardingDIContainer {
-    // MARK: - Dependencies
-    func makeOnboardingCoordinatorDependency() -> any OnboardingCoordinatorDependency {
-        return DefaultOnboardingCoordinatorDependency()
+final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
+    private let dependency: Depenency
+    
+    init(dependency: Depenency) {
+        self.dependency = dependency
     }
-
+    
+    struct Depenency {
+        let imageRepository: any ImageRepository
+        let profileRepository: any ProfileRepository
+        let authRepository: any AuthRepository
+        let showMainViewController: (() -> Void)?
+    }
+    
+    func showMainViewController() {
+        self.dependency.showMainViewController?()
+    }
+    
     // MARK: - UseCases
-    private func makeOnboardingValidateUseCase() -> OnboardingValidateUseCase {
-        return DefaultOnboardingValidateUseCase()
+    private func makeValidateNickNameUseCase() -> any ValidateTextUseCase {
+        return ValidateNickNameUseCase()
     }
     
-    private func makeOnboardingSaveProfileUseCase(
-        profileRepository: any UserProfileRepository,
-        uuidRepository: any UserUUIDRepository,
-        imageRepository: any ImageRepository) -> OnboardingSaveProfileUseCase {
-        return DefaultOnboardingSaveProfileUseCase(
-            profileRepository: profileRepository,
-            uuidRepository: uuidRepository,
-            imageRepository: imageRepository)
+    private func makeValidateStatusMessageUseCase() -> any ValidateTextUseCase {
+        return ValidateStatusMessageUseCase()
     }
     
-    // MARK: - Repositories
-    private func makeProfileRepository() -> any UserProfileRepository {
-        return DefaultUserProfileRepository()
+    private func makeUploadImageUseCase() -> any UploadImageUseCase {
+        return DefaultUploadImageUseCase(imageRepository: self.dependency.imageRepository)
     }
     
-    private func makeUserUUIDRepository() -> any UserUUIDRepository {
-        return DefaultUserUUIDRepository()
-    }
-    
-    private func makeImageRepository() -> any ImageRepository {
-        return DefaultImageRepository()
-    }
-    
-    // MARK: - ViewModels
-    func makeViewModel() -> any OnboardingViewModel {
-        return DefaultOnboardingViewModel(
-            validateUseCase: makeOnboardingValidateUseCase(),
-            saveProfileUseCase: makeOnboardingSaveProfileUseCase(
-                profileRepository: self.makeProfileRepository(),
-                uuidRepository: self.makeUserUUIDRepository(),
-                imageRepository: self.makeImageRepository()))
+    private func makeCreateProfileUseCase() -> any CreateProfileUseCase {
+        return DefaultCreateProfileUseCase(profileRepository: self.dependency.profileRepository, authRepository: self.dependency.authRepository)
     }
     
     // MARK: - Create viewController
-    func makeOnboardingViewController(coordinator: OnboardingCoordinator) -> OnboardingViewController {
-        return OnboardingViewController(viewModel: makeViewModel(), coordinator: coordinator)
+    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController {
+        let viewModel: any OnboardingViewModel = DefaultOnboardingViewModel(
+            validateNickNameUseCase: self.makeValidateNickNameUseCase(),
+            validateStatusMessageUseCase: self.makeValidateStatusMessageUseCase(),
+            uploadImageUseCase: self.makeUploadImageUseCase(),
+            createProfileUseCase: self.makeCreateProfileUseCase(),
+            action: action)
+        return OnboardingViewController(viewModel: viewModel)
     }
     
     // MARK: - Coordinator
     func makeOnboardingCoordinator(
-        navigationController: UINavigationController, dependency: any OnboardingCoordinatorDependency) -> OnboardingCoordinator {
-        return OnboardingCoordinator(navigationController: navigationController, dependency: dependency)
+        navigationController: UINavigationController?) -> OnboardingCoordinator {
+            return OnboardingCoordinator(navigationController: navigationController, dependency: self)
     }
 }

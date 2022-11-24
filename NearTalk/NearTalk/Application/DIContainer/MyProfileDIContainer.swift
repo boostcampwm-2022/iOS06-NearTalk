@@ -6,46 +6,77 @@
 //
 
 import Foundation
+import UIKit
+
+final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
+    func makeProfileSettingCoordinatorDependency(
+        profile: UserProfile,
+        necessaryProfileComponent: NecessaryProfileComponent?) -> ProfileSettingCoordinatorDependency {
+            return DefaultProfileSettingDIContainer(
+                dependency: .init(updateProfileUseCase: DefaultUpdateProfileUseCase(repository: self.profileRepository),
+                                  validateNickNameUseCase: ValidateNickNameUseCase(),
+                                  validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
+                                  uploadImageUseCase: DefaultUploadImageUseCase(imageRepository: self.imageRepository),
+                                  profile: profile,
+                                  necessaryProfileComponent: necessaryProfileComponent))
+    }
+    
+    func makeMyProfileViewController(action: MyProfileViewModelAction) -> MyProfileViewController {
+        let viewModel: MyProfileViewModel = DefaultMyProfileViewModel(
+            profileRepository: self.profileRepository,
+            imageRepository: self.imageRepository,
+            action: action)
+        return MyProfileViewController(viewModel: viewModel)
+    }
+    
+    private let profileRepository: any ProfileRepository
+    private let imageRepository: any ImageRepository
+    
+    init(profileRepository: any ProfileRepository,
+         imageRepository: any ImageRepository) {
+        self.profileRepository = profileRepository
+        self.imageRepository = imageRepository
+    }
+}
 
 final class MyProfileDIContainer {
     // MARK: - Dependencies
+    struct Dependency {
+        let fireStoreService: any FirestoreService
+        let firebaseAuthService: any AuthService
+        let storageService: any StorageService
+    }
     
-    // MARK: - Services
+    private let dependency: Dependency
+    
+    init(dependency: Dependency) {
+        self.dependency = dependency
+    }
 
     // MARK: - UseCases
-    func makeMyProfileUseCase() -> MyProfileLoadUseCase {
-        return DefaultMyProfileLoadUseCase(
-            profileRepository: self.makeProfileRepository(),
-            uuidRepository: self.makeUUIDRepository(),
-            imageRepository: self.makeImageRepository()
-        )
-    }
     
     // MARK: - Repositories
-    func makeProfileRepository() -> any UserProfileRepository {
-        return DefaultUserProfileRepository()
-    }
-    
-    func makeUUIDRepository() -> any UserUUIDRepository {
-        return DefaultUserUUIDRepository()
+    func makeProfileRepository() -> any ProfileRepository {
+//        return DummyProfileRepository()
+        return DefaultProfileRepository(
+            firestoreService: self.dependency.fireStoreService,
+            firebaseAuthService: self.dependency.firebaseAuthService)
     }
     
     func makeImageRepository() -> any ImageRepository {
-        return DefaultImageRepository()
+//        return DummyImageRepository()
+        return DefaultImageRepository(imageService: self.dependency.storageService)
     }
     
-    // MARK: - ViewModels
-    func makeViewModel() -> any MyProfileViewModel {
-        return DefaultMyProfileViewModel(profileLoadUseCase: self.makeMyProfileUseCase())
+    func makeAuthRepository() -> any AuthRepository {
+//        return DummyAuthRepository()
+        return DefaultAuthRepository(authService: self.dependency.firebaseAuthService)
     }
     
-    // MARK: - Create viewController
-    func createMyProfileViewController() -> MyProfileViewController {
-        return MyProfileViewController(coordinator: self.makeMyProfileCoordinator(), viewModel: self.makeViewModel())
-    }
-    
-    // MARK: - Coordinator
-    func makeMyProfileCoordinator() -> MyProfileCoordinator {
-        return MyProfileCoordinator()
+    // MARK: - DIContainers
+    func makeCoordinatorDependency() -> any MyProfileCoordinatorDependency {
+        return DefaultMyProfileCoordinatorDependency(
+            profileRepository: self.makeProfileRepository(),
+            imageRepository: self.makeImageRepository())
     }
 }
