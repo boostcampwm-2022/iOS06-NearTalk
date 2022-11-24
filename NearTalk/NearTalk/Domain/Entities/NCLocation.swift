@@ -8,16 +8,23 @@
 import Foundation
 
 struct NCLocation: Codable {
+    static let decimalDegreePerMeter = 0.00001 / 1.11
+    
     var longitude: Double
     var latitude: Double
     
-    // http://wiki.gis.com/wiki/index.php/Decimal_degrees
+    /// http://wiki.gis.com/wiki/index.php/Decimal_degrees
     func add(longitudeMeters: Double, latitudeMeters: Double) -> NCLocation {
-        let decimalDegreePerMeter = 0.00001 / 1.11
-        
         return NCLocation(
-            longitude: self.longitude + (longitudeMeters * decimalDegreePerMeter),
-            latitude: self.latitude + (latitudeMeters * decimalDegreePerMeter)
+            longitude: self.longitude + (longitudeMeters * Self.decimalDegreePerMeter),
+            latitude: self.latitude + (latitudeMeters * Self.decimalDegreePerMeter)
         )
+    }
+    
+    func distance(from location: NCLocation) -> Double {
+        let longitudeDeltaMeters = abs(self.longitude - location.longitude) * Self.decimalDegreePerMeter
+        let latitudeDeltaMeters = abs(self.latitude - location.latitude) * Self.decimalDegreePerMeter
+        
+        return sqrt(pow(longitudeDeltaMeters, 2) + pow(latitudeDeltaMeters, 2))
     }
 }
