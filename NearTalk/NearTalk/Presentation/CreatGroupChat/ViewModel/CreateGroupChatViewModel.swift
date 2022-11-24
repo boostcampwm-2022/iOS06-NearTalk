@@ -19,11 +19,20 @@ protocol CreateGroupChatCoordinatable: Coordinator {
     func showChatViewController()
 }
 
+protocol CreateGroupChatViewModelable {
+    associatedtype Input
+    associatedtype Output
+    
+    func transform(input: Input) -> Output
+}
+
 final class CreateGroupChatViewModel {
     // MARK: - Proporties
     
     private let createGroupChatUseCase: CreateGroupChatUseCaseable
     private let coordinator: CreateGroupChatCoordinatable
+    
+    private let disposeBag = DisposeBag()
     
     init(createGroupChatUseCase: CreateGroupChatUseCaseable, coordinator: CreateGroupChatCoordinatable) {
         self.createGroupChatUseCase = createGroupChatUseCase
@@ -31,7 +40,7 @@ final class CreateGroupChatViewModel {
     }
 }
 
-extension CreateGroupChatViewModel: ViewModelable {
+extension CreateGroupChatViewModel: CreateGroupChatViewModelable {
     // TODO: - input 항목 수정 필요
     struct Input {
         let titleTextFieldDidEditEvent: Observable<Void>
@@ -46,8 +55,8 @@ extension CreateGroupChatViewModel: ViewModelable {
         var createChatButtonIsEnable = BehaviorRelay<Bool>(value: false)
     }
     
-    func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        var output = Output()
+    func transform(input: Input) -> Output {
+        let output = Output()
         
         input.maxRangeOfRadiusSliderSelected
             .map({ "\(Int($0))km" })
