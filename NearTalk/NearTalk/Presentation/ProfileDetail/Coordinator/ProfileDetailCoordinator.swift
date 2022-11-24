@@ -27,7 +27,7 @@ final class ProfileDetailCoordinator {
         let actions = ProfileDetailViewModelActions()
         
         let viewController: ProfileDetailViewController = self.dependency.makeProfileDetailViewController(actions: actions)
-        self.navigationController?.pushViewController(viewController, animated: true)
+        self.navigationController?.present(viewController, animated: true)
     }
     
     func pushChatViewController(username: String) {

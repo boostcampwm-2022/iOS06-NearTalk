@@ -10,19 +10,15 @@ import UIKit
 final class ChatRoomListDIContainer {
     
     // MARK: - Dependencies
-    struct Dependencies {
-        let apiDataTransferService: StorageService
-        let imageDataTransferService: StorageService
-    }
     
-    private let dependencies: Dependencies
+    
     
     // MARK: - Persistent Storage
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
 
     // MARK: - Services
+    
+    private let dataTransferService: StorageService = DefaultStorageService()
+    
     func makeFirestoreService() -> FirestoreService {
         return DefaultFirestoreService()
     }
@@ -51,7 +47,7 @@ final class ChatRoomListDIContainer {
     // MARK: - Repositories
     func makeRepository() -> ChatRoomListRepository {
         return DefaultChatRoomListRepository(
-            dataTransferService: dependencies.apiDataTransferService,
+            dataTransferService: dataTransferService,
             profileRepository: makeProfileRepository(),
             databaseService: makeDatabaseService(),
             firestoreService: makeFirestoreService()

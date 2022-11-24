@@ -191,7 +191,7 @@ struct ChatRoomListViewControllerPreview: PreviewProvider {
     static var previews: some View {
         let navigation = UINavigationController()
         
-        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer(dependencies: ChatRoomListDIContainer.Dependencies(apiDataTransferService: DefaultStorageService(), imageDataTransferService: DefaultStorageService()))
+        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
         let coordinator = diContainer.makeChatRoomListCoordinator(navigationController: navigation)
         coordinator.start()
         

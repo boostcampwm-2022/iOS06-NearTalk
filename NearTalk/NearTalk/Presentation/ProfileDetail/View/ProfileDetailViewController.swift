@@ -128,6 +128,7 @@ private extension ProfileDetailViewController {
     
     func configureImageView() {
         self.thumnailImageView.snp.makeConstraints {
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(24)
             $0.height.equalTo(view.bounds.width - Matric.stackViewLeftRightInset * 2)
         }
     }
@@ -181,7 +182,7 @@ struct ProfileDetailViewControllerPreview: PreviewProvider {
         let diContainer = ProfileDetailDIContainer(userID: "1234")
         let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigation)
         coordinator.start()
-        return navigation.showPreview(.iPhone14Pro)
+        return ProfileDetailViewController.create(with: ProfileDetailViewModel(userID: "", fetchProfileUseCase: DefaultFetchProfileUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), uploadChatRoomInfoUseCase: DefaultUploadChatRoomInfoUseCase(mediaRepository: DefaultMediaRepository(storageService: DefaultStorageService()), chatRoomRepository: DefaultChatRoomListRepository(dataTransferService: DefaultStorageService(), profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()), databaseService: DefaultRealTimeDatabaseService(), firestoreService: DefaultFirestoreService())), removeFriendUseCase: DefaultRemoveFriendUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), actions: ProfileDetailViewModelActions())) .showPreview(.iPhone14Pro)
     }
 }
 #endif

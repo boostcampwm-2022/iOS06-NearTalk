@@ -10,19 +10,13 @@ import UIKit
 final class FriendListDIContainer {
     
     // MARK: - Dependencies
-    struct Dependencies {
-        let firestoreService: FirestoreService
-        let firebaseAuthService: AuthService
-    }
-    
-    private let dependencies: Dependencies
     
     // MARK: - Persistent Storage
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
     
     // MARK: - Services
+    
+    private let firestoreService: FirestoreService = DefaultFirestoreService()
+    private let firebaseAuthService: AuthService = DefaultFirebaseAuthService()
     
     // MARK: - UseCases
     func makeFetchFriendListUseCase() -> FetchFriendListUseCase {
@@ -31,7 +25,7 @@ final class FriendListDIContainer {
     
     // MARK: - Repositories
     func makeRepository() -> ProfileRepository {
-        return DefaultProfileRepository(firestoreService: dependencies.firestoreService, firebaseAuthService: dependencies.firebaseAuthService)
+        return DefaultProfileRepository(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
     }
     
     // MARK: - Friend Lsit

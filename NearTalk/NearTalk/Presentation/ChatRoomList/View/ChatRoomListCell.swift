@@ -28,7 +28,7 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private let count = UILabel().then {
         $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 12)
+        $0.font = UIFont.systemFont(ofSize: 16)
     }
     
     private let recentMessage = UILabel().then {
@@ -74,7 +74,7 @@ class ChatRoomListCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     func configure(groupData: GroupChatRoomListData) {
         self.name.text = groupData.name
         self.recentMessage.text = groupData.description
@@ -117,6 +117,10 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
+    func dataOperator() {
+        
+    }
+    
     func imageLoad(path: String?) {
         guard let path = path,
               let url = URL(string: path)
@@ -141,8 +145,8 @@ struct ChatRoomListCellPreview: PreviewProvider {
         UIViewPreview {
             let cell = ChatRoomListCell(frame: .zero)
             cell.configure(groupData: GroupChatRoomListData(data: ChatRoom(userList: ["1", "2", "3", "4", "5", "6"],
-                                                                         roomName: "Ronald Robertson",
-                                                                         roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
+                                                                           roomName: "Ronald Robertson",
+                                                                           roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
             return cell
         }.previewLayout(.fixed(width: 393, height: 393 * 0.2))
     }

@@ -126,8 +126,7 @@ import SwiftUI
 struct FriendsListViewControllerPreview: PreviewProvider {
     static var previews: some View {
         let navigation = UINavigationController()
-        let dependencies = FriendListDIContainer.Dependencies(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())
-        let diContainer = FriendListDIContainer(dependencies: dependencies)
+        let diContainer = FriendListDIContainer()
         let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
         coordinator.start()
         return navigation.showPreview(.iPhone14Pro)

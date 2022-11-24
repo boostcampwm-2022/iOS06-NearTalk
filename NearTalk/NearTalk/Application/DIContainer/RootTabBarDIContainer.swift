@@ -9,7 +9,6 @@ import UIKit
 
 final class RootTabBarDIContainer {
     // MARK: - Dependencies
-    
     // MARK: - Services
     func makeStorageService() -> StorageService {
         return DefaultStorageService()
@@ -17,7 +16,7 @@ final class RootTabBarDIContainer {
     
     func makeFirebaseAuthService() -> AuthService {
         return DefaultFirebaseAuthService()
-    }
+    } 
     
     func makeFirestoreService() -> FirestoreService {
         return DefaultFirestoreService()
@@ -39,32 +38,30 @@ final class RootTabBarDIContainer {
     }
 
     // MARK: - Create viewController
-    func createTabBarController(dependency: RootTabBarControllerDependency) -> RootTabBarController {
-        return RootTabBarController(viewModel: makeViewModel(), dependency: dependency)
+    func makeRootTabBarViewController() -> RootTabBarController {
+        return RootTabBarController.create(with: makeViewModel())
     }
     
     // MARK: - Coordinator
     func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator? {
-        let chatRoomListDIContainerDependency: ChatRoomListDIContainer.Dependencies = .init(
-            apiDataTransferService: self.makeStorageService(),
-            imageDataTransferService: self.makeStorageService()
-        )
-        let chatRoomListDIContainer: ChatRoomListDIContainer = .init(dependencies: chatRoomListDIContainerDependency)
-        let chatRoomListCoordinator: ChatRoomListCoordinator = chatRoomListDIContainer.makeChatRoomListCoordinator(navigationController: .init())
-        
-        let friendListDIContainerDependencies: FriendListDIContainer.Dependencies = .init(
-            firestoreService: self.makeFirestoreService(),
-            firebaseAuthService: self.makeFirebaseAuthService()
-        )
-        let friendListDIContainer: FriendListDIContainer = .init(dependencies: friendListDIContainerDependencies)
-        let friendListCoordinator: FriendListCoordinator = friendListDIContainer.makeFriendListCoordinator(navigationController: .init())
-        
-        let dependency: RootTabBarCoordinatorDependency = .init(
-            mainMapCoordinator: MainMapCoordinator(),
-            chatRoomListCoordinator: chatRoomListCoordinator,
-            friendListCoordinator: friendListCoordinator,
-            myProfileCoordinator: MyProfileCoordinator(navigationController: .init())
-        )
-        return RootTabBarCoordinator(navigationController: navigationController, dependency: dependency)
+        return RootTabBarCoordinator(navigationController: navigationController, dependency: self)
+    }
+}
+
+extension RootTabBarDIContainer: RootTabBarCoordinatorDependency {
+    func mainMapCoordinator() -> MainMapCoordinator {
+        return MainMapCoordinator()
+    }
+    
+    func chatRoomListDIConatiner() -> ChatRoomListDIContainer {
+        return ChatRoomListDIContainer()
+    }
+    
+    func friendListDIConatiner() -> FriendListDIContainer {
+        return FriendListDIContainer()
+    }
+    
+    func myProfileDIConatiner() -> MyProfileDIContainer {
+        return MyProfileDIContainer()
     }
 }
