@@ -67,7 +67,6 @@ extension DefaultChatRoomListViewModel {
     
     // 채팅방 클릭시 채팅방 이동
     func didSelectItem(at index: Int) {
-        print("\(index)인덱스가 선택되었습니다.")
         actions?.showChatRoom()
     }
     
