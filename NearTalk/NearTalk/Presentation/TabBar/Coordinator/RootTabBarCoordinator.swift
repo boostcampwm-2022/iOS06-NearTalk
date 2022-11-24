@@ -76,6 +76,10 @@ final class RootTabBarCoordinator {
     
     private func showMyProfile() -> UIViewController {
         let navigationController = UINavigationController()
+        let dependency = self.dependency.myProfileDIConatiner()
+        
+        let coordinator = MyProfileCoordinator(navigationController: navigationController, dependency: dependency.makeCoordinatorDependency())
+        coordinator.start()
         return self.embed(
             rootNav: navigationController,
             title: "마이페이지",

@@ -17,15 +17,24 @@ final class FriendListDIContainer {
     
     private let firestoreService: FirestoreService = DefaultFirestoreService()
     private let firebaseAuthService: AuthService = DefaultFirebaseAuthService()
+    private let imageService: StorageService = DefaultStorageService()
     
     // MARK: - UseCases
     func makeFetchFriendListUseCase() -> FetchFriendListUseCase {
         return DefaultFetchFriendListUseCase(profileRepository: self.makeRepository())
     }
     
+    func makeImageUseCase() -> ImageUseCase {
+        return DefaultImageUseCase(imageRepository: makeImageRepository())
+    }
+    
     // MARK: - Repositories
     func makeRepository() -> ProfileRepository {
         return DefaultProfileRepository(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
+    }
+    
+    func makeImageRepository() -> ImageRepository {
+        return DefaultImageRepository(imageService: imageService)
     }
     
     // MARK: - Friend Lsit
@@ -34,7 +43,7 @@ final class FriendListDIContainer {
     }
     
     func makeFriendListViewModel(actions: FriendListViewModelActions) -> FriendListViewModel {
-        return DefaultFriendListViewModel(fetchFriendListUseCase: self.makeFetchFriendListUseCase(), imageUseCase: DefaultImageUseCase(imageRepository: DefaultImageRepository()), actions: actions)
+        return DefaultFriendListViewModel(fetchFriendListUseCase: makeFetchFriendListUseCase(), imageUseCase: makeImageUseCase())
     }
     
     // MARK: - Coordinator

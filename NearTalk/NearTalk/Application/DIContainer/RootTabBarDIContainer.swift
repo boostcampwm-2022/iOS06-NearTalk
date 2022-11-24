@@ -62,6 +62,6 @@ extension RootTabBarDIContainer: RootTabBarCoordinatorDependency {
     }
     
     func myProfileDIConatiner() -> MyProfileDIContainer {
-        return MyProfileDIContainer()
+        return MyProfileDIContainer(dependency: MyProfileDIContainer.Dependency(fireStoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService(), storageService: DefaultStorageService()))
     }
 }
