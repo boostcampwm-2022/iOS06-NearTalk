@@ -13,7 +13,7 @@ protocol FetchFriendListUseCase {
 }
 
 final class DefaultFetchFriendListUseCase: FetchFriendListUseCase {
-
+    
     private let disposeBag = DisposeBag()
     private let profileRepository: ProfileRepository!
     private let friendsDummyData: FriendsDummyData = FriendsDummyData()
@@ -22,17 +22,16 @@ final class DefaultFetchFriendListUseCase: FetchFriendListUseCase {
     init(profileRepository: ProfileRepository) {
         self.profileRepository = profileRepository
         self.frends = friendsDummyData.fetchFriendsData()
+        //        self.frends = self.profileRepository.fetchFriendsProfile()
     }
-
+    
     func getFriendsData() -> Observable<[Friend]> {
         return self.frends
             .asObservable()
-            .map {
-                $0.map { Friend(userID: $0.uuid,
-                               username: $0.username,
-                               statusMessage: $0.statusMessage,
-                               profileImagePath: $0.profileImagePath) }
-            }
+            .map { $0.map { Friend(userID: $0.uuid,
+                                   username: $0.username,
+                                   statusMessage: $0.statusMessage,
+                                   profileImagePath: $0.profileImagePath) } }
     }
 }
 

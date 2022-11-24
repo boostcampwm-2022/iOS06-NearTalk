@@ -106,18 +106,6 @@ struct FriendListCellPreview: PreviewProvider {
         let width: CGFloat = 393
         let height: CGFloat = width * 0.20
         
-        //        let viewModel: FriendListViewModel = DefaultFriendListViewModel(
-        //            fetchFriendListUseCase: DefaultFetchFriendListUseCase(
-        //                profileRepository: DefaultProfileRepository(
-        //                    firestoreService: DefaultFirestoreService(),
-        //                    firebaseAuthService: DefaultFirebaseAuthService()
-        //                )
-        //            ),
-        //            imageUseCase: DefaultImageUseCase(
-        //                imageRepository: DefaultImageRepository()
-        //            )
-        //        )
-        
         UIViewPreview {
             let cell = FriendListCell(frame: .zero)
             cell.configure(model: Friend(userID: "1234", username: "라이언", statusMessage: "NSCollectionLayoutItem을 이용합니다. Collection View의 가장 기본 컴포넌트입니다. Item은 크기, 개별 content의 size, space, arragnge를 어떻게 할지에 대한 blueprint입니다", profileImagePath: ""))

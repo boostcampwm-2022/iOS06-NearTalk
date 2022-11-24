@@ -66,6 +66,7 @@ final class RootTabBarCoordinator {
         let diContainer = dependency.friendListDIConatiner()
         let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()
+        
         return self.embed(
             rootNav: navigationController,
             title: "친구",
@@ -76,10 +77,10 @@ final class RootTabBarCoordinator {
     
     private func showMyProfile() -> UIViewController {
         let navigationController = UINavigationController()
-        let dependency = self.dependency.myProfileDIConatiner()
-        
-        let coordinator = MyProfileCoordinator(navigationController: navigationController, dependency: dependency.makeCoordinatorDependency())
+        let diContainer = self.dependency.myProfileDIConatiner()
+        let coordinator = MyProfileCoordinator(navigationController: navigationController, dependency: diContainer.makeCoordinatorDependency())
         coordinator.start()
+        
         return self.embed(
             rootNav: navigationController,
             title: "마이페이지",
