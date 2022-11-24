@@ -19,6 +19,10 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
         self.databaseService.sendMessage(message)
     }
     
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
+        self.databaseService.fetchSingleMessage(messageID: messageID, roomID: roomID)
+    }
+    
     func fetchMessage(page: Int, skip: Int, count: Int, roomID: String) -> Single<[ChatMessage]> {
         self.databaseService.fetchMessages(page: page, skip: skip, pageCount: count, roomID: roomID)
     }
