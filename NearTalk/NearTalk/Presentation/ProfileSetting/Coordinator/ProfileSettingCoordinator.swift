@@ -1,8 +1,8 @@
 //
-//  OnboardingCoordinator.swift
+//  ProfileSettingCoordinator.swift
 //  NearTalk
 //
-//  Created by Preston Kim on 2022/11/15.
+//  Created by Preston Kim on 2022/11/22.
 //
 
 import Foundation
@@ -11,22 +11,19 @@ import RxRelay
 import RxSwift
 import UIKit
 
-protocol OnboardingCoordinatorDependency {
-    func showMainViewController()
-    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController
+protocol ProfileSettingCoordinatorDependency {
+    func makeProfileSettingViewController(action: ProfileSettingViewModelAction) -> ProfileSettingViewController
 }
 
-final class OnboardingCoordinator: Coordinator {
-    private let dependency: any OnboardingCoordinatorDependency
+final class ProfileSettingCoordinator: Coordinator {
+    private let dependency: any ProfileSettingCoordinatorDependency
     var navigationController: UINavigationController?
-    
     var parentCoordinator: Coordinator?
-    
     var childCoordinators: [Coordinator]
     
     init(navigationController: UINavigationController?,
          parentCoordinator: Coordinator? = nil,
-         dependency: any OnboardingCoordinatorDependency) {
+         dependency: any ProfileSettingCoordinatorDependency) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
         self.childCoordinators = []
@@ -34,37 +31,35 @@ final class OnboardingCoordinator: Coordinator {
     }
     
     func start() {
-        showOnboardingViewController()
+        showProfileSettingViewController()
     }
     
-    func showOnboardingViewController() {
+    func showProfileSettingViewController() {
         let action: Action = Action(
-            presentImagePicker: self.presentImagePicker,
-            showMainViewController: self.dependency.showMainViewController,
-            presentRegisterFailure: self.presentRegisterFailure)
-        let onboardingViewController: OnboardingViewController = self.dependency.makeOnboardingViewController(action: action)
-        self.navigationController?.pushViewController(onboardingViewController, animated: true)
+            presentUpdateFailure: self.presentUpdateFailure,
+            presentImagePicker: self.presentImagePicker)
+        let profileSettingViewController: ProfileSettingViewController = self.dependency.makeProfileSettingViewController(action: action)
+        self.navigationController?.pushViewController(profileSettingViewController, animated: true)
     }
     
-    struct Action: OnboardingViewModelAction {
-        let presentImagePicker: (() -> RxSwift.Single<Data?>)?
-        let showMainViewController: (() -> Void)?
-        let presentRegisterFailure: (() -> Void)?
+    struct Action: ProfileSettingViewModelAction {
+        let presentUpdateFailure: (() -> Void)?
+        let presentImagePicker: ((BehaviorRelay<Data?>) -> Void)?
     }
     
-    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
-    
+    private var imageObserver: BehaviorRelay<Data?>?
 }
 
-extension OnboardingCoordinator {
-    func presentImagePicker() -> Single<Data?> {
-        return self.imagePublisher.asSingle()
+extension ProfileSettingCoordinator {
+    func presentImagePicker(observer: BehaviorRelay<Data?>) {
+        self.imageObserver = observer
+        self.showPHPickerViewController()
     }
     
-    func presentRegisterFailure() {
+    func presentUpdateFailure() {
         let alert: UIAlertController = .init(
-            title: "등록 실패",
-            message: "프로필 등록에 실패했습니다. 조금 있다 다시 시도해보세요",
+            title: "업데이트 실패",
+            message: "프로필 수정에 실패했습니다. 조금 있다 다시 시도해보세요",
             preferredStyle: .alert)
         let action: UIAlertAction = .init(title: "OK", style: .destructive)
         alert.addAction(action)
@@ -72,7 +67,7 @@ extension OnboardingCoordinator {
     }
 }
 
-extension OnboardingCoordinator: PHPickerViewControllerDelegate {
+extension ProfileSettingCoordinator: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         guard let itemProvider = results.first?.itemProvider else {
@@ -82,8 +77,10 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
             itemProvider.loadObject(
                 ofClass: UIImage.self,
                 completionHandler: { [weak self] image, _ in
-                    let imageData: Data? = image as? Data
-                    self?.imagePublisher.onNext(imageData)
+                    let uiImage: UIImage? = image as? UIImage
+                    let imageData: Data? = uiImage?.jpegData(compressionQuality: 1.0) ?? uiImage?.pngData()
+                    self?.imageObserver?.accept(imageData)
+                    self?.imageObserver = nil
             })
         } else {
             #if DEBUG
@@ -103,6 +100,7 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
                 #if DEBUG
                 print("Photo 접근 권한 없어용")
                 #endif
+                self.imageObserver = nil
                 Task {
                     await self.goAuthorizationSettingPage()
                 }

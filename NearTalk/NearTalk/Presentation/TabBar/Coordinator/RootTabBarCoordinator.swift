@@ -41,17 +41,12 @@ final class RootTabBarCoordinator: Coordinator {
     
 #warning("myProfileViewController DI Container 필요")
     private func makeDependency() -> RootTabBarControllerDependency {
-        
-        let myProfileDIContainer: MyProfileDIContainer = .init()
-        let myProfileCoordinator: MyProfileCoordinator = myProfileDIContainer.makeMyProfileCoordinator()
-        self.myProfileCoordinator = myProfileCoordinator
-        let myProfileVC: MyProfileViewController = .init(coordinator: myProfileCoordinator, viewModel: myProfileDIContainer.makeViewModel())
-        
+        self.myProfileCoordinator?.start()
         return .init(
             mainMapNavigationController: .init(),
             chatRoomListNavigationController: .init(),
             friendListNavigationController: .init(),
-            myProfileNavigationController: .init()
+            myProfileNavigationController: self.myProfileCoordinator?.navigationController ?? .init()
         )
     }
     

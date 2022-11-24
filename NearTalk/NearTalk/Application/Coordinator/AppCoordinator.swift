@@ -32,6 +32,7 @@ final class AppCoordinator: Coordinator {
             dependency: self
         )
         launchScreenCoordinator.start()
+//        self.showMainViewController()
     }
 }
 
@@ -46,7 +47,28 @@ extension AppCoordinator: LaunchScreenCoordinatorDependency {
     }
     
     func showLoginViewController() {
-        self.navigationController?.viewControllers.insert(LoginViewController(), at: 0)
+//        self.navigationController?.viewControllers.insert(LoginViewController(coordinator: <#LoginCoordinator#>), at: 0)
         self.navigationController?.popViewController(animated: false)
+        let loginDIContainer: LoginDIContainer = LoginDIContainer(authRepository: DefaultAuthRepository(authService: DefaultFirebaseAuthService()))
+        let loginCoordinator: LoginCoordinator = LoginCoordinator(navigationController: self.navigationController, dependency: loginDIContainer.makeLoginCoordinatorDependency(showOnboardingView: self.showOnboardingViewController))
+        loginCoordinator.start()
+    }
+    
+    func showOnboardingViewController() {
+        self.navigationController?.popViewController(animated: false)
+//        let onboardingDIContainer: DefaultOnboardingDIContainer = DefaultOnboardingDIContainer(dependency: .init(
+//            imageRepository: DummyImageRepository(),
+//            profileRepository: DummyProfileRepository(),
+//            authRepository: DummyAuthRepository(),
+//            showMainViewController: self.showMainViewController))
+        let imageService: any StorageService = DefaultStorageService()
+        let storeService: any FirestoreService = DefaultFirestoreService()
+        let authService: any AuthService = DefaultFirebaseAuthService()
+        let onboardingDIContainer: DefaultOnboardingDIContainer = DefaultOnboardingDIContainer(
+            dependency: .init(imageRepository: DefaultImageRepository(imageService: imageService),
+                              profileRepository: DefaultProfileRepository(firestoreService: storeService, firebaseAuthService: authService),
+                              authRepository: DefaultAuthRepository(authService: authService),
+                              showMainViewController: self.showMainViewController))
+        onboardingDIContainer.makeOnboardingCoordinator(navigationController: self.navigationController).start()
     }
 }

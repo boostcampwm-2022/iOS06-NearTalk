@@ -1,37 +1,35 @@
 //
-//  OnboardingViewModel.swift
+//  ProfileSettingViewModel.swift
 //  NearTalk
 //
-//  Created by Preston Kim on 2022/11/15.
+//  Created by Preston Kim on 2022/11/21.
 //
 
-import Foundation
 import RxRelay
 import RxSwift
 
-protocol OnboardingInput {
+protocol ProfileSettingInput {
     func editNickName(_ text: String)
     func editStatusMessage(_ text: String)
     func editImage()
-    func register()
+    func update()
 }
 
-protocol OnboardingOutput {
+protocol ProfileSettingOutput {
     var nickNameValidity: BehaviorRelay<Bool> { get }
     var messageValidity: BehaviorRelay<Bool> { get }
     var image: BehaviorRelay<Data?> { get }
-    var registerEnable: BehaviorRelay<Bool> { get }
+    var updateEnable: BehaviorRelay<Bool> { get }
 }
 
-protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
+protocol ProfileSettingViewModel: ProfileSettingInput, ProfileSettingOutput {}
 
-protocol OnboardingViewModelAction {
-    var presentImagePicker: (() -> Single<Data?>)? { get }
-    var showMainViewController: (() -> Void)? { get }
-    var presentRegisterFailure: (() -> Void)? { get }
+protocol ProfileSettingViewModelAction {
+    var presentImagePicker: ((BehaviorRelay<Data?>) -> Void)? { get }
+    var presentUpdateFailure: (() -> Void)? { get }
 }
 
-final class DefaultOnboardingViewModel: OnboardingViewModel {
+final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     func editNickName(_ text: String) {
         self.nickName = text
         self.nickNameValidity
@@ -45,42 +43,37 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     }
     
     func editImage() {
-        guard let presentImagePicker = self.action.presentImagePicker else {
-            return
-        }
-        let imagePickSingle: Single<Data?> = presentImagePicker()
-        imagePickSingle.subscribe(onSuccess: { [weak self] image in
-            self?.image.accept(image)
-        })
-        .disposed(by: self.disposeBag)
+        self.action.presentImagePicker?(self.image)
     }
     
-    func register() {
+    func update() {
         if let image = self.image.value {
             self.uploadImageUseCase.execute(image: image)
                 .subscribe(onSuccess: { [weak self] imagePath in
-                    self?.registerProfile(imagePath: imagePath)
+                    self?.updateProfile(imagePath: imagePath)
                 }, onFailure: { [weak self] _ in
-                    self?.action.presentRegisterFailure?()
+                    self?.action.presentUpdateFailure?()
                 })
                 .disposed(by: self.disposeBag)
         } else {
-            self.registerProfile(imagePath: nil)
+            self.updateProfile(imagePath: nil)
         }
     }
     
-    private func registerProfile(imagePath: String?) {
+    private func updateProfile(imagePath: String?) {
         let newProfile: UserProfile = UserProfile(
-            uuid: UUID().uuidString,
+            uuid: self.profile.uuid,
             username: self.nickName,
-            email: nil,
+            email: self.profile.email,
             statusMessage: self.message,
-            profileImagePath: imagePath)
-        self.createProfileUseCase.execute(profile: newProfile)
+            profileImagePath: imagePath,
+            friends: self.profile.friends,
+            chatRooms: self.profile.chatRooms)
+        self.updateProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
-                self?.action.showMainViewController?()
+                self?.profile = newProfile
             }, onError: { [weak self] _ in
-                self?.action.presentRegisterFailure?()
+                self?.action.presentUpdateFailure?()
             })
             .disposed(by: self.disposeBag)
     }
@@ -88,28 +81,33 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     let nickNameValidity: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     let messageValidity: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
     let image: RxRelay.BehaviorRelay<Data?> = BehaviorRelay(value: nil)
-    let registerEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let updateEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
+    private let updateProfileUseCase: any UpdateProfileUseCase
     private let validateNickNameUseCase: any ValidateTextUseCase
     private let validateStatusMessageUseCase: any ValidateTextUseCase
     private let uploadImageUseCase: any UploadImageUseCase
-    private let createProfileUseCase: any CreateProfileUseCase
-    private let action: any OnboardingViewModelAction
+    private let action: any ProfileSettingViewModelAction
     private let disposeBag: DisposeBag = DisposeBag()
     
-    private var nickName: String = ""
-    private var message: String = ""
+    private var nickName: String?
+    private var message: String?
+    private var profile: UserProfile
     
-    init(validateNickNameUseCase: any ValidateTextUseCase,
+    init(updateProfileUseCase: any UpdateProfileUseCase,
+         validateNickNameUseCase: any ValidateTextUseCase,
          validateStatusMessageUseCase: any ValidateTextUseCase,
          uploadImageUseCase: any UploadImageUseCase,
-         createProfileUseCase: any CreateProfileUseCase,
-         action: any OnboardingViewModelAction) {
+         action: any ProfileSettingViewModelAction,
+         profile: UserProfile) {
+        self.updateProfileUseCase = updateProfileUseCase
         self.validateNickNameUseCase = validateNickNameUseCase
         self.validateStatusMessageUseCase = validateStatusMessageUseCase
         self.uploadImageUseCase = uploadImageUseCase
-        self.createProfileUseCase = createProfileUseCase
         self.action = action
+        self.nickName = profile.username
+        self.message = profile.statusMessage
+        self.profile = profile
         self.bind()
     }
     
@@ -117,7 +115,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
         Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
             $0 && $1
         }
-        .bind(to: self.registerEnable)
+        .bind(to: self.updateEnable)
         .disposed(by: self.disposeBag)
     }
 }
