@@ -94,6 +94,9 @@ final class CreateGroupChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.backgroundColor = .systemBackground
+        
         self.addSubviews()
         self.configureConstraints()
         self.binding()
@@ -246,8 +249,6 @@ extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataS
 //import SwiftUI
 //
 //struct GroupChatViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        UINavigationController(rootViewController: GroupChatCreationViewController()) .showPreview(.iPhone14Pro)
-//    }
+//
 //}
 //#endif

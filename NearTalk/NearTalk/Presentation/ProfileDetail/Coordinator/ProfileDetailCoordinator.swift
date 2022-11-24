@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol ProfileDetailCoordinatorDependency {
+    func makeProfileDetailViewController(actions: ProfileDetailViewModelActions) -> ProfileDetailViewController
+}
+
 final class ProfileDetailCoordinator {
     private let dependency: ProfileDetailCoordinatorDependency
     
@@ -23,7 +27,7 @@ final class ProfileDetailCoordinator {
         let actions = ProfileDetailViewModelActions()
         
         let viewController: ProfileDetailViewController = self.dependency.makeProfileDetailViewController(actions: actions)
-        self.navigationController?.pushViewController(viewController, animated: false)
+        self.navigationController?.present(viewController, animated: true)
     }
     
     func pushChatViewController(username: String) {

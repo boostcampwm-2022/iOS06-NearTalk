@@ -89,11 +89,12 @@ class ProfileDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = .systemBackground
+        
         self.addSubviews()
         self.configureStackViews()
         self.configureImageView()
         self.configureButtons()
-        
         self.binding()
     }
 }
@@ -127,6 +128,7 @@ private extension ProfileDetailViewController {
     
     func configureImageView() {
         self.thumnailImageView.snp.makeConstraints {
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(24)
             $0.height.equalTo(view.bounds.width - Matric.stackViewLeftRightInset * 2)
         }
     }
@@ -175,11 +177,12 @@ private extension ProfileDetailViewController {
 import SwiftUI
 
 struct ProfileDetailViewControllerPreview: PreviewProvider {
-static var previews: some View {
-    let diContainer: ProfileDetailDIContainer = ProfileDetailDIContainer()
-
-    let vc: ProfileDetailViewController = diContainer.createProfileDetailViewController(userID: "userID", actions: ProfileDetailViewModelActions())
-    return vc.showPreview(.iPhone12Pro)
-}
+    static var previews: some View {
+        let navigation = UINavigationController()
+        let diContainer = ProfileDetailDIContainer(userID: "1234")
+        let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigation)
+        coordinator.start()
+        return ProfileDetailViewController.create(with: ProfileDetailViewModel(userID: "", fetchProfileUseCase: DefaultFetchProfileUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), uploadChatRoomInfoUseCase: DefaultUploadChatRoomInfoUseCase(mediaRepository: DefaultMediaRepository(storageService: DefaultStorageService()), chatRoomRepository: DefaultChatRoomListRepository(dataTransferService: DefaultStorageService(), profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()), databaseService: DefaultRealTimeDatabaseService(), firestoreService: DefaultFirestoreService())), removeFriendUseCase: DefaultRemoveFriendUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), actions: ProfileDetailViewModelActions())) .showPreview(.iPhone14Pro)
+    }
 }
 #endif

@@ -27,14 +27,16 @@ protocol FriendListViewModel: FriendListViewModelInput, FriendListViewModelOutpu
 final class DefaultFriendListViewModel: FriendListViewModel {
     
     private let fetchFriendListUseCase: FetchFriendListUseCase
+    private let imageUseCase: ImageUseCase
     private let actions: FriendListViewModelActions?
     private let disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - OUTPUT
     var friendsData: BehaviorRelay<[Friend]> = BehaviorRelay<[Friend]>(value: [])
     
-    init(useCase: FetchFriendListUseCase, actions: FriendListViewModelActions? = nil) {
-        self.fetchFriendListUseCase = useCase
+    init(fetchFriendListUseCase: FetchFriendListUseCase, imageUseCase: ImageUseCase, actions: FriendListViewModelActions? = nil) {
+        self.fetchFriendListUseCase = fetchFriendListUseCase
+        self.imageUseCase = imageUseCase
         self.actions = actions
         
         self.fetchFriendListUseCase.getFriendsData()

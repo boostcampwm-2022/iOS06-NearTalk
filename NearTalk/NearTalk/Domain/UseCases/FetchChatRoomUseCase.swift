@@ -10,9 +10,6 @@ import RxCocoa
 import RxSwift
 
 protocol FetchChatRoomUseCase {
-    //    func getGroupChatListCoreData() -> Observable<[GroupChatRoomListData]>
-    //    func getDataOfDMChatCoreData() -> Observable<[DMChatRoomListData]>
-    
     func getGroupChatList() -> Observable<[GroupChatRoomListData]>
     func getDMChatList() -> Observable<[DMChatRoomListData]>
 

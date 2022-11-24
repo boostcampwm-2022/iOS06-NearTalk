@@ -21,7 +21,6 @@ final class DefaultFetchFriendListUseCase: FetchFriendListUseCase {
     
     init(profileRepository: ProfileRepository) {
         self.profileRepository = profileRepository
-//        self.frends = profileRepository.fetchFriendsProfile()
         self.frends = friendsDummyData.fetchFriendsData()
     }
 
