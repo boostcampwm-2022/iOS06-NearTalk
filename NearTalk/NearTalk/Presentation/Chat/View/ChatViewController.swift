@@ -16,7 +16,6 @@ class ChatViewController: UIViewController {
 
     enum Section {
         case me
-        case other
     }
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
@@ -53,7 +52,6 @@ class ChatViewController: UIViewController {
         // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         view.addGestureRecognizer(tapGesture)
-        collectionView.keyboardDismissMode = .onDrag
         
         // diffableDataSource
         applySnapshot(animatingDifferences: false)
@@ -62,7 +60,7 @@ class ChatViewController: UIViewController {
         chatInputAccessoryView.sendButton.addTarget(self, action: #selector(tapSendButton(_:)), for: .touchUpInside)        
     }
     
-    func addSubviews() {
+    private func addSubviews() {
         [collectionView, chatInputAccessoryView].forEach {
             self.view.addSubview($0)
         }
@@ -111,7 +109,7 @@ class ChatViewController: UIViewController {
         self.collectionView.snp.remakeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(newConstant)
+            make.bottom.equalTo(chatInputAccessoryView.snp.top) // .inset(newConstant)
         }
         
         let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
@@ -154,22 +152,26 @@ class ChatViewController: UIViewController {
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
     
-    func makeDataSource() -> DataSource {
+    private func makeDataSource() -> DataSource {
         let datasource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
 
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatCollectionViewCell.identifier,
-                for: indexPath) as? ChatCollectionViewCell else {
+                for: indexPath) as? ChatCollectionViewCell,
+                  let newMessage = itemIdentifier.message
+            else {
                 return UICollectionViewCell()
             }
             cell.textAlignment = true
-            cell.message = itemIdentifier.message
+            cell.message = newMessage
+            cell.sizeToFit()
+            cell.frame.size = CGSize(width: self.view.frame.width, height: 100)
             return cell
         }
         return datasource
     }
     
-    func applySnapshot(animatingDifferences: Bool = true) {
+    private func applySnapshot(animatingDifferences: Bool = true) {
         var snapshot = Snapshot()
         snapshot.appendSections([.me])
         snapshot.appendItems(messgeList)
@@ -177,7 +179,7 @@ class ChatViewController: UIViewController {
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
     
-    func scrolltoBottom() {
+    private func scrolltoBottom() {
         let indexPath = IndexPath(item: messgeList.count - 1, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
