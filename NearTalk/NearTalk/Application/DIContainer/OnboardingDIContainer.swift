@@ -23,7 +23,7 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
     }
     
     // MARK: - Service
-    func makeImageService() -> any StorageService {
+    func makeStorageService() -> any StorageService {
         return DefaultStorageService()
     }
     
@@ -36,8 +36,8 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
     }
     
     // MARK: - Repository
-    func makeImageRepository() -> any ImageRepository {
-        return DefaultImageRepository(imageService: makeImageService())
+    func makeMediaRepository() -> any MediaRepository {
+        return DefaultMediaRepository(storageService: self.makeStorageService())
     }
     
     func makeAuthRepository() -> any AuthRepository {
@@ -58,7 +58,7 @@ final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
     }
     
     private func makeUploadImageUseCase() -> any UploadImageUseCase {
-        return DefaultUploadImageUseCase(imageRepository: self.makeImageRepository())
+        return DefaultUploadImageUseCase(mediaRepository: self.makeMediaRepository())
     }
     
     private func makeCreateProfileUseCase() -> any CreateProfileUseCase {

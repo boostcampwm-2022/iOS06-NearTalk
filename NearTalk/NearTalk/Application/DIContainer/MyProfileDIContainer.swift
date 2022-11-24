@@ -10,14 +10,14 @@ import UIKit
 
 final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
     private let profileRepository: any ProfileRepository
-    private let imageRepository: any ImageRepository
+    private let mediaRepository: any MediaRepository
     
     init(
         profileRepository: any ProfileRepository,
-        imageRepository: any ImageRepository
+        mediaRepository: any MediaRepository
     ) {
         self.profileRepository = profileRepository
-        self.imageRepository = imageRepository
+        self.mediaRepository = mediaRepository
     }
     
     func makeProfileSettingCoordinatorDependency(
@@ -28,7 +28,7 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
                     updateProfileUseCase: DefaultUpdateProfileUseCase(repository: self.profileRepository),
                     validateNickNameUseCase: ValidateNickNameUseCase(),
                     validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
-                    uploadImageUseCase: DefaultUploadImageUseCase(imageRepository: self.imageRepository),
+                    uploadImageUseCase: DefaultUploadImageUseCase(mediaRepository: self.mediaRepository),
                     profile: profile,
                     necessaryProfileComponent: necessaryProfileComponent)
             )
@@ -37,7 +37,7 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
     func makeMyProfileViewController(action: MyProfileViewModelAction) -> MyProfileViewController {
         let viewModel: MyProfileViewModel = DefaultMyProfileViewModel(
             profileRepository: self.profileRepository,
-            imageRepository: self.imageRepository,
+            mediaRepository: self.mediaRepository,
             action: action
         )
         return MyProfileViewController(viewModel: viewModel)
@@ -63,8 +63,8 @@ final class MyProfileDIContainer {
         return DefaultProfileRepository(firestoreService: self.makeFirestoreService(), firebaseAuthService: self.makeAuthService())
     }
     
-    func makeImageRepository() -> any ImageRepository {
-        return DefaultImageRepository(imageService: self.makeImageService())
+    func makeMediaRepository() -> any MediaRepository {
+        return DefaultMediaRepository(storageService: self.makeImageService())
     }
     
     func makeAuthRepository() -> any AuthRepository {
@@ -88,7 +88,7 @@ final class MyProfileDIContainer {
     func makeCoordinatorDependency() -> any MyProfileCoordinatorDependency {
         return DefaultMyProfileCoordinatorDependency(
             profileRepository: self.makeProfileRepository(),
-            imageRepository: self.makeImageRepository()
+            mediaRepository: self.makeMediaRepository()
         )
     }
 }
