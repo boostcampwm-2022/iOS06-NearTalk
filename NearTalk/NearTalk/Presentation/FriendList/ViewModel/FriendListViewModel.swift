@@ -10,7 +10,7 @@ import RxRelay
 import RxSwift
 
 struct FriendListViewModelActions {
-    let showDetailFriend: () -> Void
+    let showDetailFriend: (String) -> Void
 }
 
 protocol FriendListViewModelInput {
@@ -44,7 +44,7 @@ final class DefaultFriendListViewModel: FriendListViewModel {
     
     // MARK: - INPUT
     func didSelectItem(at index: Int) {
-        
+        actions?.showDetailFriend("userID")
     }
     
     func addFriend() {
