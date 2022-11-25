@@ -8,24 +8,29 @@
 import Foundation
 import UIKit
 
-final class DefaultLoginCoordinatorDependency: LoginCoordinatorDependency {
-    let authRepository: any AuthRepository
-    let showOnboardingView: (() -> Void)
-    
-    init(showOnboardingView: @escaping () -> Void, authRepository: any AuthRepository) {
-        self.showOnboardingView = showOnboardingView
-        self.authRepository = authRepository
-    }
-}
-
 final class LoginDIContainer {
-    private let authRepository: any AuthRepository
-    
-    init(authRepository: any AuthRepository) {
-        self.authRepository = authRepository
+    // MARK: - Service
+    func makeAuthService() -> AuthService {
+        return DefaultFirebaseAuthService()
     }
     
-    func makeLoginCoordinatorDependency(showOnboardingView: @escaping () -> Void) -> any LoginCoordinatorDependency {
-        return DefaultLoginCoordinatorDependency(showOnboardingView: showOnboardingView, authRepository: self.authRepository)
+    // MARK: - Repository
+    func makeAuthRepository() -> any AuthRepository {
+        return DefaultAuthRepository(authService: makeAuthService())
+    }
+    
+    // MARK: - ViewController
+    
+    // MARK: - Coordinator
+    func makeCoordinator(
+        _ navigationController: UINavigationController,
+        parentCoordinator: Coordinator,
+        dependency: any LoginCoordinatorDependency
+    ) -> LoginCoordinator {
+        return .init(
+            navigationController: navigationController,
+            parentCoordinator: parentCoordinator,
+            dependency: dependency
+        )
     }
 }

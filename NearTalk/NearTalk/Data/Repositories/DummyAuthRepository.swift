@@ -13,6 +13,13 @@ enum DummyAuthRepositoryError: Error {
 }
 
 final class DummyAuthRepository: AuthRepository {
+    func verify() -> RxSwift.Completable {
+        return Completable.create { completable in
+            completable(.completed)
+            return Disposables.create()
+        }
+    }
+    
     static private let uidKey: String = "MyUID"
     
     func logout() -> RxSwift.Completable {

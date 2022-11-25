@@ -26,6 +26,10 @@ final class DefaultAuthRepository: AuthRepository {
         return self.authService.loginWithApple(token: token, nonce: NonceGenerator.randomNonceString())
     }
     
+    func verify() -> Completable {
+        return self.authService.verifyUser()
+    }
+    
 //    func fetchCurrentUserUID() -> Single<String> {
 //        return self.authService.fetchCurrentUID()
 //    }
