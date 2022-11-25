@@ -60,7 +60,7 @@ final class DefaultFCMService: FCMService {
     
     func subscribeRoom(_ roomID: String) -> Completable {
         Completable.create { completable in
-            Messaging.messaging().unsubscribe(fromTopic: "/topics/\(roomID)") { error in
+            Messaging.messaging().subscribe(toTopic: "/topics/\(roomID)") { error in
                 if let error {
                     print(error)
                     completable(.error(FCMServiceError.failedToSubscribe))
@@ -74,7 +74,7 @@ final class DefaultFCMService: FCMService {
     
     func unsubscribeRoom(_ roomID: String) -> Completable {
         Completable.create { completable in
-            Messaging.messaging().subscribe(toTopic: "/topics/\(roomID)") { error in
+            Messaging.messaging().unsubscribe(fromTopic: "/topics/\(roomID)") { error in
                 if let error {
                     print(error)
                     completable(.error(FCMServiceError.failedToUnsubscribe))
