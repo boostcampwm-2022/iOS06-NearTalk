@@ -21,7 +21,7 @@ extension UIImage {
     /// 이미지 리사이즈
     /// 기본적으로 512KB 이하로 압축한다.
     /// 변수 단위는 kB 입니다.
-    func resized(to size: Double = 512) -> UIImage? {
+    func resized(toKB size: Double = 512) -> UIImage? {
         guard let imageData = self.jpegData(compressionQuality: 1.0) else {
             return nil
         }
