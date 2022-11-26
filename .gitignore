@@ -153,3 +153,5 @@ iOSInjectionProject/
 **/GoogleService-Info.plist
 
 *.xcconfig
+
+NearTalk/Carthage/

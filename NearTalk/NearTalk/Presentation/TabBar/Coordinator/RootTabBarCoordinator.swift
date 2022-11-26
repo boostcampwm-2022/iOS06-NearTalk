@@ -10,15 +10,18 @@ import UIKit
 final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var tabBarViewController: UITabBarController?
-    var parentCoordinator: Coordinator?
-    
-    init(navigationController: UINavigationController?) {
+    private let rootTabBarDIContainer: RootTabBarDIContainer
+
+    init(
+        navigationController: UINavigationController?,
+        container: RootTabBarDIContainer
+    ) {
         self.navigationController = navigationController
+        self.rootTabBarDIContainer = container
     } 
     
     func start() {
-        let diContainer: RootTabBarDIContainer = .init()
-        let viewcontroller: RootTabBarController = diContainer.makeRootTabBarViewController()
+        let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
         self.navigationController?.viewControllers.insert(viewcontroller, at: 0)

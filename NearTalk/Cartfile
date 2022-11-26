@@ -5,3 +5,5 @@ binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseDynamicLinksBinar
 binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseFirestoreBinary.json"
 binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseMessagingBinary.json"
 binary "https://dl.google.com/dl/firebase/ios/carthage/FirebaseStorageBinary.json"
+
+github "Swinject/Swinject"

@@ -15,22 +15,21 @@ protocol LoginCoordinatorDependency {
 
 final class LoginCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    var parentCoordinator: Coordinator?
     private let dependency: any LoginCoordinatorDependency
+    private let loginDIContainer: LoginDIContainer
     
     init(
         navigationController: UINavigationController? = nil,
-        parentCoordinator: Coordinator? = nil,
-        dependency: any LoginCoordinatorDependency
+        dependency: any LoginCoordinatorDependency,
+        container: LoginDIContainer
     ) {
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
         self.dependency = dependency
+        self.loginDIContainer = container
     }
     
     func start() {
-        let diContainer: LoginDIContainer = .init()
-        let loginViewController: LoginViewController = .init(coordinator: self, authRepository: diContainer.makeAuthRepository())
+        let loginViewController: LoginViewController = loginDIContainer.resolveLoginViewController(coordinator: self)
         self.navigationController?.viewControllers.insert(loginViewController, at: 0)
         self.navigationController?.popViewController(animated: false)
     }
