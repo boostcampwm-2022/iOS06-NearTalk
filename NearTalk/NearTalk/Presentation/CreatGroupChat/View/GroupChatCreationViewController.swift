@@ -75,6 +75,7 @@ final class CreateGroupChatViewController: UIViewController {
     
     private lazy var createChatButton: UIButton = UIButton().then {
         $0.setTitle("채팅방 생성하기", for: .normal)
+        $0.setTitleColor(.red, for: .disabled)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
