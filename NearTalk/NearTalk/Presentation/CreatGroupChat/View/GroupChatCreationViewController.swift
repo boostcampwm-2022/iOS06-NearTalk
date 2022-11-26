@@ -103,10 +103,10 @@ final class CreateGroupChatViewController: UIViewController {
     }
 }
 
+// MARK: - Private
+
 private extension CreateGroupChatViewController {
     func binding() {
-        // Inputs
-        
         self.titleTextField.rx.text
             .orEmpty
             .bind { [weak self] in
@@ -139,9 +139,7 @@ private extension CreateGroupChatViewController {
             .bind { [weak self] in
                 self?.viewModel.createChatButtonDIdTapped()
             }.disposed(by: disposbag)
-        
-        // outputs
-        
+                
         viewModel.createChatButtonIsEnabled
             .drive(self.createChatButton.rx.isEnabled)
             .disposed(by: disposbag)
@@ -151,7 +149,7 @@ private extension CreateGroupChatViewController {
             .disposed(by: disposbag)
     }
     
-    private func addSubviews() {
+    func addSubviews() {
         [thumnailImageView, titleTextField, descriptionTextField, pickerLabel, maxNumOfParticipantsPicker, rangeZoneLabel, rangeZoneView].forEach {
             self.stackView.addArrangedSubview($0)
         }
@@ -161,7 +159,7 @@ private extension CreateGroupChatViewController {
         }
     }
     
-    private func configureConstraints() {
+    func configureConstraints() {
         self.configureStackView()
         self.configureImageView()
         self.configureTextfields()
@@ -171,20 +169,20 @@ private extension CreateGroupChatViewController {
         self.configureButtons()
     }
     
-    private func configureStackView() {
+    func configureStackView() {
         self.stackView.snp.makeConstraints {
             $0.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
     }
     
-    private func configureImageView() {
+    func configureImageView() {
         self.thumnailImageView.snp.makeConstraints {
             $0.width.height.equalTo(100)
         }
     }
     
-    private func configureTextfields() {
+    func configureTextfields() {
         self.titleTextField.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.width.equalTo(self.view.frame.width)
@@ -196,7 +194,7 @@ private extension CreateGroupChatViewController {
         }
     }
     
-    private func configureLabels() {
+    func configureLabels() {
         self.pickerLabel.snp.makeConstraints {
             $0.leading.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             $0.height.equalTo(rangeZoneLabel.font.lineHeight)
@@ -208,21 +206,21 @@ private extension CreateGroupChatViewController {
         }
     }
     
-    private func configurePicker() {
+    func configurePicker() {
         self.maxNumOfParticipantsPicker.snp.makeConstraints {
             $0.height.equalTo(100)
             $0.width.equalTo(self.view.frame.width)
         }
     }
     
-    private func configRangeZoneView() {
+    func configRangeZoneView() {
         self.rangeZoneView.snp.makeConstraints {
             $0.height.equalTo(100)
             $0.width.equalTo(self.view.frame.width)
         }
     }
     
-    private func configureButtons() {
+    func configureButtons() {
         self.createChatButton.snp.makeConstraints {
             $0.height.equalTo(40)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
@@ -232,7 +230,7 @@ private extension CreateGroupChatViewController {
     }
     
     @objc
-    private func addImageButtonAction() {
+    func addImageButtonAction() {
         var configuration = PHPickerConfiguration()
         configuration.selectionLimit = 1
         configuration.filter = .images

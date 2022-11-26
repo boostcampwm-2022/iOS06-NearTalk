@@ -35,49 +35,76 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     var createChatButtonIsEnabled: Driver<Bool>
 
     // MARK: - Proporties
-//    private let createGroupChatUseCase: CreateGroupChatUseCaseable
+    private let createGroupChatUseCase: CreateGroupChatUseCaseable
 //    private let actions: CreateGroupChatViewModelActions
     private let disposeBag = DisposeBag()
     
-    init() {
-//        self.createGroupChatUseCase = createGroupChatUseCase
+    init(createGroupChatUseCase: CreateGroupChatUseCaseable) {
+        self.createGroupChatUseCase = createGroupChatUseCase
 //        self.actions = actions
                 
         self.createChatButtonIsEnabled = Observable
-            .combineLatest(title, description)
+            .combineLatest(titlePublishSubject, descriptionPublishSubject)
             .map {
                 !$0.0.isEmpty && !$0.1.isEmpty
             }
             .asDriver(onErrorRecover: { _ in .empty() })
         
-        self.maxRangeLabel = self.maxRange
+        self.maxRangeLabel = self.maxRangePublishSubject
             .map({"\($0)km"})
             .asDriver(onErrorRecover: { _ in .empty() })
     }
     
     // MARK: - Inputs
     
-    private var title = PublishSubject<String>()
+    private var title: String = ""
+    private var titlePublishSubject = PublishSubject<String>()
     func titleDidEdited(_ title: String) {
-        self.title.onNext(title)
+        self.title = title
+        self.titlePublishSubject.onNext(title)
     }
     
-    private var description = PublishSubject<String>()
+    private var description: String = ""
+    private var descriptionPublishSubject = PublishSubject<String>()
     func descriptionDidEdited(_ description: String) {
-        self.description.onNext(description)
+        self.description = description
+        self.descriptionPublishSubject.onNext(description)
     }
     
-    private var maxParticipant = PublishSubject<Int>()
+    private var maxParticipant: Int = 0
     func maxParticipantDidChanged(_ numOfParticipant: Int) {
-        self.maxParticipant.onNext(numOfParticipant)
+        self.maxParticipant = numOfParticipant
     }
     
-    private var maxRange = PublishSubject<Int>()
+    private var maxRange: Int = 0
+    private var maxRangePublishSubject = PublishSubject<Int>()
     func maxRangeDidChanged(_ range: Int) {
-        self.maxRange.onNext(range)
+        self.maxRange = range
+        self.maxRangePublishSubject.onNext(range)
     }
     
     func createChatButtonDIdTapped() {
         print(#function)
+        // TODO: - ChatRoom 내부 수정 필요
+        let chatRoom = ChatRoom(
+            uuid: nil,
+            userList: [],
+            roomImagePath: nil,
+            roomType: nil,
+            roomName: self.title,
+            roomDescription: self.description,
+            location: nil,
+            accessibleRadius: Double(self.maxRange),
+            recentMessageID: nil,
+            maxNumberOfParticipants: self.maxParticipant,
+            messageCount: 0
+        )
+        self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
+            .subscribe(onCompleted: { [weak self] in
+                print("onCompleted")
+            }, onError: { [weak self] _ in
+                print("onError")
+            })
+            .disposed(by: self.disposeBag)
     }
 }
