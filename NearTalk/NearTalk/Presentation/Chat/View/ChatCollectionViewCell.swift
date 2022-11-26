@@ -18,15 +18,20 @@ class ChatCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var textAlignment: Bool? {
-        didSet {
-            namelabel.textAlignment = textAlignment == true ?  .right : .left
-        }
-    }
-    
     var isInComing: Bool? {
         didSet {
             print("isInComing", isInComing)
+            textView.backgroundColor = isInComing ?? true ? .systemGray : .white
+            
+            if isInComing ?? true {
+                self.textView.snp.makeConstraints { make in
+                    make.trailing.equalToSuperview()
+                }
+            } else {
+                self.textView.snp.makeConstraints { make in
+                    make.leading.equalToSuperview()
+                }
+            }
         }
     }
     
@@ -46,12 +51,12 @@ class ChatCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    let messagelabel: UILabel = UILabel().then { label in
+    private let messagelabel: UILabel = UILabel().then { label in
         label.text = "message"
         label.numberOfLines = 0
     }
     
-    private let namelabel: UILabel = UILabel().then { label in
+    private lazy var namelabel: UILabel = UILabel().then { label in
         label.text = "name"
         label.font = UIFont.systemFont(ofSize: 16)
     }
@@ -61,17 +66,13 @@ class ChatCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 16)
     }
     
-    private let profileImageView: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "heart"))
         view.layer.cornerRadius = view.bounds.width / 2
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.clear.cgColor
         return view
     }()
-    
-    let bubbleView: UIView = UIView().then { view in
-        view.backgroundColor = .white
-    }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -82,6 +83,19 @@ class ChatCollectionViewCell: UICollectionViewCell {
         addViews()
         self.backgroundColor = .yellow
         self.contentView.backgroundColor = .blue
+    }
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        super.preferredLayoutAttributesFitting(layoutAttributes)
+        layoutIfNeeded()
+        
+        let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
+        
+        var frame = layoutAttributes.frame
+        frame.size.height = ceil(size.height)
+        
+        layoutAttributes.frame = frame
+        return layoutAttributes
     }
     
     private func addViews() {
@@ -95,21 +109,9 @@ class ChatCollectionViewCell: UICollectionViewCell {
 //        }
         
         self.textView.snp.makeConstraints { make in
-            make.width.lessThanOrEqualTo(300)
+            make.width.lessThanOrEqualTo(250)
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
-//        self.bubbleView.snp.makeConstraints { make in
-//            make.top.equalTo(messagelabel.snp.top).inset(-16)
-//            make.leading.equalTo(messagelabel.snp.leading).inset(-16)
-//            make.trailing.equalTo(messagelabel.snp.trailing).inset(-16)
-//            make.bottom.equalTo(messagelabel.snp.bottom).inset(-16)
-//        }
-        
-//        self.contentView.snp.makeConstraints { make in
-//            make.width.equalTo(250)
-//        }
     }
 }

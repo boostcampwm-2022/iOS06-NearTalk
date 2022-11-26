@@ -7,15 +7,19 @@
 
 import UIKit
 
+import RxSwift
+
 class ChatViewController: UIViewController {
-    var messgeList: [MessageItem] = []
+    private let disposeBag: DisposeBag = DisposeBag()
+    private var messgeList: [MessageItem] = []
+    
     struct MessageItem: Hashable {
         var id: String
         var message: String?
     }
 
     enum Section {
-        case me
+        case main
     }
 
     typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
@@ -23,11 +27,12 @@ class ChatViewController: UIViewController {
 
     private lazy var dataSource: DataSource = makeDataSource()
 
-    private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {
-        $0.minimumLineSpacing = 1
-        $0.minimumInteritemSpacing = 1
-        $0.scrollDirection = .vertical
+    private lazy var collectionViewFlowLayout = UICollectionViewFlowLayout().then { layout in
+        layout.scrollDirection = .vertical
         
+        let width = self.view.frame.width
+        let height = self.view.frame.height
+        layout.estimatedItemSize = CGSize(width: width, height: height)
     }
     
     private lazy var collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout).then {
@@ -41,9 +46,22 @@ class ChatViewController: UIViewController {
         $0.backgroundColor = .systemPurple
     }
     
+    private let viewModel: ChatViewModel
+    
+    // MARK: - Lifecycles
+    init(viewModel: ChatViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviews()
+        bind()
         
         // 키보드
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHandler(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -57,7 +75,7 @@ class ChatViewController: UIViewController {
         applySnapshot(animatingDifferences: false)
         
         // 전송 버튼
-        chatInputAccessoryView.sendButton.addTarget(self, action: #selector(tapSendButton(_:)), for: .touchUpInside)        
+//        chatInputAccessoryView.sendButton.addTarget(self, action: #selector(tapSendButton(_:)), for: .touchUpInside)
     }
     
     private func addSubviews() {
@@ -152,9 +170,33 @@ class ChatViewController: UIViewController {
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
     
-    private func makeDataSource() -> DataSource {
-        let datasource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+    private func scrolltoBottom() {
+        let indexPath = IndexPath(item: messgeList.count - 1, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+    }
+    
+    private func bind() {
+//        chatInputAccessoryView.sendButton.rx.tap
+//            .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text)
+            
+                
+//            self?.chatInputAccessoryView.messageInputTextField.text = nil
+//
+//            self.viewModel.sendMessage($0)
+//            self.messgeList.append(MessageItem(id: UUID().uuidString, message: $0))
+//            self.applySnapshot()
+//
+//            let indexPath = IndexPath(item: self.messgeList.count - 1, section: 0)
+//            self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+    }
+}
 
+// MARK: - Diffable ataSource
+
+private extension ChatViewController {
+    func makeDataSource() -> DataSource {
+        let datasource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatCollectionViewCell.identifier,
                 for: indexPath) as? ChatCollectionViewCell,
@@ -162,10 +204,12 @@ class ChatViewController: UIViewController {
             else {
                 return UICollectionViewCell()
             }
-            cell.textAlignment = true
+            
             cell.message = newMessage
-            cell.sizeToFit()
-            cell.frame.size = CGSize(width: self.view.frame.width, height: 100)
+            
+            cell.isInComing = indexPath.row % 2 == 0
+            
+            print(indexPath.row, cell.isInComing)
             return cell
         }
         return datasource
@@ -173,14 +217,25 @@ class ChatViewController: UIViewController {
     
     private func applySnapshot(animatingDifferences: Bool = true) {
         var snapshot = Snapshot()
-        snapshot.appendSections([.me])
+        snapshot.appendSections([.main])
         snapshot.appendItems(messgeList)
-//        dataSource.defaultRowAnimation = .fade
+        //        dataSource.defaultRowAnimation = .fade
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
-    
-    private func scrolltoBottom() {
-        let indexPath = IndexPath(item: messgeList.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-    }
 }
+
+//    func com() -> UICollectionViewCompositionalLayout {
+//        let itemHeight = self.view.frame.width * 0.20
+//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+//                                              heightDimension: .fractionalHeight(1.0))
+//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//
+//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+//                                               heightDimension: .absolute(itemHeight))
+//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+//                                                         subitems: [item])
+//
+//        let section = NSCollectionLayoutSection(group: group)
+//        let layout = UICollectionViewCompositionalLayout(section: section)
+//        return layout
+//    }

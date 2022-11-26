@@ -10,25 +10,23 @@ import Foundation
 import RxSwift
 
 protocol ChatViewModelInput {
-    var tapSendMessageButton: Single<Void> { get }
-    var message: Single<Void> { get }
+    func sendMessage(_ message: String)
 }
 
 protocol ChatViewModelOut {
-    var newMessage: Single<Void> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
-    
 }
 
-//class DefaultChatViewModel: ChatViewModel {
-//    var newMessage: RxSwift.Single<Void>
-//    
-//    var tapSendMessageButton: RxSwift.Single<Void>
-//    
-//    var message: RxSwift.Single<Void>
-//    
-//    
-//
-//}
+class DefaultChatViewModel: ChatViewModel {
+    private var messagingUseCase: MessagingUseCase
+    
+    init(messagingUseCase: MessagingUseCase) {
+        self.messagingUseCase = messagingUseCase
+    }
+    
+    func sendMessage(_ message: String) {
+        print(#function, message)
+    }
+}
