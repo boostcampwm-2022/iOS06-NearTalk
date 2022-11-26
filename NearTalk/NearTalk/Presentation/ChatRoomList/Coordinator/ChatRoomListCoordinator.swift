@@ -73,8 +73,8 @@ final class ChatRoomListCoordinator: Coordinator {
         else { return }
         
         let diContainer = dependencies.makeCreateGroupChatDIContainer()
-        let coordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
-        coordinator.start()
+//        let coordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+//        coordinator.start()
     }
     
 }

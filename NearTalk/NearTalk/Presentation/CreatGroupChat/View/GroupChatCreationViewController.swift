@@ -16,6 +16,7 @@ import Then
 final class CreateGroupChatViewController: UIViewController {
     
     // MARK: - Proporties
+    private let pickerComponentList: [Int] = Array((10...100))
     private let viewModel: CreateGroupChatViewModel
     private let disposbag: DisposeBag = DisposeBag()
     
@@ -25,8 +26,6 @@ final class CreateGroupChatViewController: UIViewController {
         static let labelFontSize: CGFloat = 11.0
         static let stackViewSpacing: CGFloat = 15.0
     }
-    
-    private let pickerComponentList: [Int] = Array((10...100))
     
     // MARK: - UI Proporties
     
@@ -79,6 +78,7 @@ final class CreateGroupChatViewController: UIViewController {
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
+        $0.isEnabled = false
     }
     
     // MARK: - LifeCycle
@@ -105,27 +105,53 @@ final class CreateGroupChatViewController: UIViewController {
 
 private extension CreateGroupChatViewController {
     func binding() {
-        let input = CreateGroupChatViewModel.Input(
-            titleTextFieldDidEditEvent: titleTextField.rx.controlEvent(.editingDidEnd).asObservable(),
-            descriptionTextFieldDidEditEvent: descriptionTextField.rx.controlEvent(.editingDidEnd).asObservable(),
-            maxNumOfParticipantsPickerSelected: maxNumOfParticipantsPicker.rx.itemSelected.map { $0.component },
-            maxRangeOfRadiusSliderSelected: rangeZoneView.rangeSlider.rx.value.asObservable(),
-            createChatButtonDidTapEvent: self.createChatButton.rx.tap.asObservable()
-        )
+        // Inputs
         
-        let output = viewModel.transform(input: input)
+        self.titleTextField.rx.text
+            .orEmpty
+            .bind { [weak self] in
+                self?.viewModel.titleDidEdited($0)
+            }
+            .disposed(by: disposbag)
         
-        // TODO: - output Binding
+        self.descriptionTextField.rx.text
+            .orEmpty
+            .bind { [weak self] in
+                self?.viewModel.descriptionDidEdited($0)
+            }
+            .disposed(by: disposbag)
         
-        output.maxRangeOfRadius
-            .asDriver()
-            .drive(onNext: { [weak self] newRange in
-                self?.rangeZoneView.range = newRange
-            })
+        self.maxNumOfParticipantsPicker.rx.itemSelected
+            .map {$0.component}
+            .bind { [weak self] in
+                self?.viewModel.maxParticipantDidChanged($0)
+            }
+            .disposed(by: disposbag)
+        
+        self.rangeZoneView.rangeSlider.rx.value
+            .map({Int($0)})
+            .bind { [weak self] in
+                self?.viewModel.maxRangeDidChanged($0)
+            }
+            .disposed(by: disposbag)
+
+        self.createChatButton.rx.tap
+            .bind { [weak self] in
+                self?.viewModel.createChatButtonDIdTapped()
+            }.disposed(by: disposbag)
+        
+        // outputs
+        
+        viewModel.createChatButtonIsEnabled
+            .drive(self.createChatButton.rx.isEnabled)
+            .disposed(by: disposbag)
+        
+        viewModel.maxRangeLabel
+            .drive(self.rangeZoneView.rangeLabel.rx.text)
             .disposed(by: disposbag)
     }
     
-    func addSubviews() {
+    private func addSubviews() {
         [thumnailImageView, titleTextField, descriptionTextField, pickerLabel, maxNumOfParticipantsPicker, rangeZoneLabel, rangeZoneView].forEach {
             self.stackView.addArrangedSubview($0)
         }
@@ -135,7 +161,7 @@ private extension CreateGroupChatViewController {
         }
     }
     
-    func configureConstraints() {
+    private func configureConstraints() {
         self.configureStackView()
         self.configureImageView()
         self.configureTextfields()
@@ -145,20 +171,20 @@ private extension CreateGroupChatViewController {
         self.configureButtons()
     }
     
-    func configureStackView() {
+    private func configureStackView() {
         self.stackView.snp.makeConstraints {
             $0.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
     }
     
-    func configureImageView() {
+    private func configureImageView() {
         self.thumnailImageView.snp.makeConstraints {
             $0.width.height.equalTo(100)
         }
     }
     
-    func configureTextfields() {
+    private func configureTextfields() {
         self.titleTextField.snp.makeConstraints {
             $0.height.equalTo(50)
             $0.width.equalTo(self.view.frame.width)
@@ -170,7 +196,7 @@ private extension CreateGroupChatViewController {
         }
     }
     
-    func configureLabels() {
+    private func configureLabels() {
         self.pickerLabel.snp.makeConstraints {
             $0.leading.equalTo(self.view.safeAreaLayoutGuide).inset(20)
             $0.height.equalTo(rangeZoneLabel.font.lineHeight)
@@ -182,21 +208,21 @@ private extension CreateGroupChatViewController {
         }
     }
     
-    func configurePicker() {
+    private func configurePicker() {
         self.maxNumOfParticipantsPicker.snp.makeConstraints {
             $0.height.equalTo(100)
             $0.width.equalTo(self.view.frame.width)
         }
     }
     
-    func configRangeZoneView() {
+    private func configRangeZoneView() {
         self.rangeZoneView.snp.makeConstraints {
             $0.height.equalTo(100)
             $0.width.equalTo(self.view.frame.width)
         }
     }
     
-    func configureButtons() {
+    private func configureButtons() {
         self.createChatButton.snp.makeConstraints {
             $0.height.equalTo(40)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide)
@@ -206,7 +232,7 @@ private extension CreateGroupChatViewController {
     }
     
     @objc
-    func addImageButtonAction() {
+    private func addImageButtonAction() {
         var configuration = PHPickerConfiguration()
         configuration.selectionLimit = 1
         configuration.filter = .images
@@ -244,11 +270,3 @@ extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataS
         print(self.pickerComponentList[row])
     }
 }
-
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct GroupChatViewControllerPreview: PreviewProvider {
-//
-//}
-//#endif
