@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 
 struct CreateGroupChatViewModelActions {
-    let showChatViewController: () -> Void
+    let showChatViewController: (String, String) -> Void
 }
 
 protocol CreateGroupChatViewModelInput {
@@ -87,11 +87,12 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     }
     
     func createChatButtonDIdTapped() {
-        print(#function)
         // TODO: - ChatRoom 내부 수정 필요
+        
+        let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
-            uuid: UUID().uuidString,
-            userList: [],
+            uuid: chatRoomUUID,
+            userList: [], // 본인 uuid 추가 필요
             roomImagePath: nil,
             roomType: "group",
             roomName: self.title,
@@ -102,11 +103,14 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             maxNumberOfParticipants: self.maxParticipant,
             messageCount: 0
         )
-        print(chatRoom)
+        print(#function, chatRoom, self.title)
         self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
             .subscribe(onCompleted: { [weak self] in
+                guard let chatRoomName = self?.title else {
+                    return
+                }
                 print("onCompleted")
-                self?.actions.showChatViewController()
+                self?.actions.showChatViewController(chatRoomUUID, chatRoomName)
             }, onError: { [weak self] _ in
                 print("onError")
             })
