@@ -8,6 +8,15 @@
 import UIKit
 
 final class ChatDIContainer {
+    private var chatRoomID: String
+    private var chatRoomName: String
+    
+    init(chatRoomID: String,
+         chatRoomName: String
+    ) {
+        self.chatRoomID = chatRoomID
+        self.chatRoomName = chatRoomName
+    }
     
     // MARK: - Dependencies
     
@@ -15,13 +24,27 @@ final class ChatDIContainer {
     
     // MARK: - Services
     
+    func makeRealTimeDatabaseService() -> RealTimeDatabaseService {
+        return DefaultRealTimeDatabaseService()
+    }
+    
+    func makeFCMService() -> FCMService {
+        return DefaultFCMService()
+    }
+    
     // MARK: - UseCases
     
     func makeMessggingUseCase() -> MessagingUseCase {
-        return DefalultMessagingUseCase()
+        return DefalultMessagingUseCase(chatMessageRepository: makeChatMessageRepository())
     }
     
     // MARK: - Repositories
+    
+    func makeChatMessageRepository() -> ChatMessageRepository {
+        return DefaultChatMessageRepository(
+            databaseService: makeRealTimeDatabaseService(),
+            fcmService: makeFCMService())
+    }
     
     // MARK: - View Controller
     
@@ -30,7 +53,10 @@ final class ChatDIContainer {
     }
     
     func makeChatViewModel() -> ChatViewModel {
-        return DefaultChatViewModel(messagingUseCase: makeMessggingUseCase())
+        return DefaultChatViewModel(
+            chatRoomID: self.chatRoomID,
+            chatRoomName: self.chatRoomName,
+            messagingUseCase: makeMessggingUseCase())
     }
     // MARK: - Coordinator
     func makeChatCoordinator(navigationController: UINavigationController) -> ChatCoordinator {
