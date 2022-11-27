@@ -123,7 +123,7 @@ private extension CreateGroupChatViewController {
             .disposed(by: disposbag)
         
         self.maxNumOfParticipantsPicker.rx.itemSelected
-            .map {$0.component}
+            .map {self.pickerComponentList[$0.row]}
             .bind { [weak self] in
                 self?.viewModel.maxParticipantDidChanged($0)
             }
