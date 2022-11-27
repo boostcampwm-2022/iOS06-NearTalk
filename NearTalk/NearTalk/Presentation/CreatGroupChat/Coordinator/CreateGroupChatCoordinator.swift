@@ -9,6 +9,7 @@ import UIKit
 
 protocol CreateGroupChatCoordinatorDependencies {
     func makeCreateGroupChatViewController(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewController
+    func makeChatDIContainer() -> ChatDIContainer
     
 }
 
@@ -35,5 +36,12 @@ final class CreateGroupChatCoordinator {
 
     func showChatViewController() {
         print(#function)
+        guard let navigationController = navigationController
+        else { return }
+        
+        let dicontainer = self.dependencies.makeChatDIContainer()
+        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        coordinator.start()
+        
     }
 }
