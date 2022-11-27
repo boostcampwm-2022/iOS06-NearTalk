@@ -73,9 +73,10 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         self.descriptionPublishSubject.onNext(description)
     }
     
-    private var maxParticipant: Int = 0
+    private var maxParticipant: Int = 10
     func maxParticipantDidChanged(_ numOfParticipant: Int) {
         self.maxParticipant = numOfParticipant
+        print(numOfParticipant)
     }
     
     private var maxRange: Int = 0
@@ -89,10 +90,10 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         print(#function)
         // TODO: - ChatRoom 내부 수정 필요
         let chatRoom = ChatRoom(
-            uuid: nil,
+            uuid: UUID().uuidString,
             userList: [],
             roomImagePath: nil,
-            roomType: nil,
+            roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
             location: nil,
@@ -101,9 +102,11 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             maxNumberOfParticipants: self.maxParticipant,
             messageCount: 0
         )
+        print(chatRoom)
         self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
             .subscribe(onCompleted: { [weak self] in
                 print("onCompleted")
+                self?.actions.showChatViewController()
             }, onError: { [weak self] _ in
                 print("onError")
             })
