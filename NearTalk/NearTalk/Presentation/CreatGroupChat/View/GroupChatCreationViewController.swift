@@ -101,12 +101,20 @@ final class CreateGroupChatViewController: UIViewController {
         self.addSubviews()
         self.configureConstraints()
         self.binding()
+        
+        // 제스처
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
+        view.addGestureRecognizer(tapGesture)
     }
 }
 
 // MARK: - Private
 
 private extension CreateGroupChatViewController {
+    @objc
+    private func hideKeyboard(_ sender: Any) {
+        view.endEditing(true)
+    }
     func binding() {
         self.titleTextField.rx.text
             .orEmpty
