@@ -10,32 +10,31 @@ import UIKit
 final class FriendListDIContainer {
     
     // MARK: - Dependencies
-    struct Dependencies {
-        let firestoreService: FirestoreService
-        let firebaseAuthService: FirebaseAuthService
-    }
-    
-    private let dependencies: Dependencies
     
     // MARK: - Persistent Storage
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
     
     // MARK: - Services
+    
+    private let firestoreService: FirestoreService = DefaultFirestoreService()
+    private let firebaseAuthService: AuthService = DefaultFirebaseAuthService()
+    private let imageService: StorageService = DefaultStorageService()
     
     // MARK: - UseCases
     func makeFetchFriendListUseCase() -> FetchFriendListUseCase {
         return DefaultFetchFriendListUseCase(profileRepository: self.makeRepository())
     }
     
-    func makeProfileDetailUseCaseAble() -> ProfileDetailUseCaseAble {
-        return ProfileDetailUseCase()
+    func makeImageUseCase() -> ImageUseCase {
+        return DefaultImageUseCase(imageRepository: makeImageRepository())
     }
     
     // MARK: - Repositories
     func makeRepository() -> ProfileRepository {
-        return DefaultProfileRepository(firestoreService: dependencies.firestoreService, firebaseAuthService: dependencies.firebaseAuthService)
+        return DefaultProfileRepository(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
+    }
+    
+    func makeImageRepository() -> ImageRepository {
+        return DefaultImageRepository(imageService: imageService)
     }
     
     // MARK: - Friend Lsit
@@ -44,27 +43,18 @@ final class FriendListDIContainer {
     }
     
     func makeFriendListViewModel(actions: FriendListViewModelActions) -> FriendListViewModel {
-        return DefaultFriendListViewModel(useCase: self.makeFetchFriendListUseCase(), actions: actions)
+        return DefaultFriendListViewModel(fetchFriendListUseCase: makeFetchFriendListUseCase(), imageUseCase: makeImageUseCase())
     }
-    
-    // MARK: - Profile Detail
-//    func makeProfileDetailViewController() -> ProfileDetailViewController {
-//        return ProfileDetailViewController(viewModel: makeProfileDetailViewModel())
-//    }
-//
-//    func makeProfileDetailViewModel() -> ProfileDetailViewModel {
-//        return ProfileDetailViewModel(profileDetailUseCase: self.makeProfileDetailUseCaseAble(), profileDetailCoordinator: self.makeProfileDetailCoordinator(makeFriendListCoordinator))
-//    }
     
     // MARK: - Coordinator
     func makeFriendListCoordinator(navigationController: UINavigationController) -> FriendListCoordinator {
         return FriendListCoordinator(navigationController: navigationController, dependencies: self)
     }
     
-//    func makeProfileDetailDIContainer() -> ProfileDetailDIContainer {
-//        let dependencies = ProfileDetailDIContainer.Dependencies()
-//        return ProfileDetailDICOntainer(dependencies: dependencies)
-//    }
+    // MARK: - DI Container
+    func makeProfileDetailDIContainer(userID: String) -> ProfileDetailDIContainer {
+        return ProfileDetailDIContainer(userID: userID)
+    }
 }
 
-extension FriendListDIContainer: FriendListCoordinatorDependencies {}
+extension FriendListDIContainer: FriendListCoordinatorDependencies { }

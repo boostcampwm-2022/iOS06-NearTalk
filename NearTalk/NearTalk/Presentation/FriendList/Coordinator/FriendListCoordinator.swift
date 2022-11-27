@@ -11,11 +11,12 @@ import UIKit
 
 protocol FriendListCoordinatorDependencies {
     func makeFriendListViewController(actions: FriendListViewModelActions) -> FriendListViewController
-//    func makeProfileDetailViewController()
+    func makeProfileDetailDIContainer(userID: String) -> ProfileDetailDIContainer
 }
 
-final class FriendListCoordinator {
-    private weak var navigationController: UINavigationController?
+final class FriendListCoordinator: Coordinator {
+    weak var parentCoordinator: Coordinator?
+    weak var navigationController: UINavigationController?
     private let dependencies: FriendListCoordinatorDependencies
 
     private weak var friendListViewController: FriendListViewController?
@@ -37,9 +38,13 @@ final class FriendListCoordinator {
     }
 
     // MARK: - Dependency
-    private func showDetailFriend() {
-//         let viewController = dependencies.makeProfileDetailViewController(actions: actions)
-//         navigationController?.pushViewController(viewController, animated: true)
+    private func showDetailFriend(userID: String) {
+        guard let navigationController = navigationController
+        else { return }
+        
+        let diContainer = self.dependencies.makeProfileDetailDIContainer(userID: userID)
+        let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigationController)
+        coordinator.start()
     }
     
 }

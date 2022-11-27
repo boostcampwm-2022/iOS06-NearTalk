@@ -16,6 +16,7 @@ import Then
 final class CreateGroupChatViewController: UIViewController {
     
     // MARK: - Proporties
+    private let pickerComponentList: [Int] = Array((10...100))
     private let viewModel: CreateGroupChatViewModel
     private let disposbag: DisposeBag = DisposeBag()
     
@@ -25,8 +26,6 @@ final class CreateGroupChatViewController: UIViewController {
         static let labelFontSize: CGFloat = 11.0
         static let stackViewSpacing: CGFloat = 15.0
     }
-    
-    private let pickerComponentList: [Int] = Array((10...100))
     
     // MARK: - UI Proporties
     
@@ -76,9 +75,11 @@ final class CreateGroupChatViewController: UIViewController {
     
     private lazy var createChatButton: UIButton = UIButton().then {
         $0.setTitle("채팅방 생성하기", for: .normal)
+        $0.setTitleColor(.red, for: .disabled)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonFontSize, weight: .bold)
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
+        $0.isEnabled = false
     }
     
     // MARK: - LifeCycle
@@ -94,31 +95,58 @@ final class CreateGroupChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.backgroundColor = .systemBackground
+        
         self.addSubviews()
         self.configureConstraints()
         self.binding()
     }
 }
 
+// MARK: - Private
+
 private extension CreateGroupChatViewController {
     func binding() {
-        let input = CreateGroupChatViewModel.Input(
-            titleTextFieldDidEditEvent: titleTextField.rx.controlEvent(.editingDidEnd).asObservable(),
-            descriptionTextFieldDidEditEvent: descriptionTextField.rx.controlEvent(.editingDidEnd).asObservable(),
-            maxNumOfParticipantsPickerSelected: maxNumOfParticipantsPicker.rx.itemSelected.map { $0.component },
-            maxRangeOfRadiusSliderSelected: rangeZoneView.rangeSlider.rx.value.asObservable(),
-            createChatButtonDidTapEvent: self.createChatButton.rx.tap.asObservable()
-        )
+        self.titleTextField.rx.text
+            .orEmpty
+            .bind { [weak self] in
+                self?.viewModel.titleDidEdited($0)
+            }
+            .disposed(by: disposbag)
         
-        let output = viewModel.transform(input: input, disposeBag: self.disposbag)
+        self.descriptionTextField.rx.text
+            .orEmpty
+            .bind { [weak self] in
+                self?.viewModel.descriptionDidEdited($0)
+            }
+            .disposed(by: disposbag)
         
-        // TODO: - output Binding
+        self.maxNumOfParticipantsPicker.rx.itemSelected
+            .map {self.pickerComponentList[$0.row]}
+            .bind { [weak self] in
+                self?.viewModel.maxParticipantDidChanged($0)
+            }
+            .disposed(by: disposbag)
         
-        output.maxRangeOfRadius
-            .asDriver()
-            .drive(onNext: { [weak self] newRange in
-                self?.rangeZoneView.range = newRange
-            })
+        self.rangeZoneView.rangeSlider.rx.value
+            .map({Int($0)})
+            .bind { [weak self] in
+                self?.viewModel.maxRangeDidChanged($0)
+            }
+            .disposed(by: disposbag)
+
+        self.createChatButton.rx.tap
+            .bind { [weak self] in
+                self?.viewModel.createChatButtonDIdTapped()
+            }.disposed(by: disposbag)
+                
+        viewModel.createChatButtonIsEnabled
+            .drive(self.createChatButton.rx.isEnabled)
+            .disposed(by: disposbag)
+        
+        viewModel.maxRangeLabel
+            .drive(self.rangeZoneView.rangeLabel.rx.text)
             .disposed(by: disposbag)
     }
     
@@ -242,12 +270,22 @@ extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataS
     }
 }
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
+/// scenedelegate에서 테스트시 필요한 코드 - 삭제 예정
+//guard let windowScene = (scene as? UIWindowScene) else { return }
+//window = UIWindow(windowScene: windowScene)
+//window = UIWindow(windowScene: windowScene)
+//window?.backgroundColor = .white
 //
-//struct GroupChatViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        UINavigationController(rootViewController: GroupChatCreationViewController()) .showPreview(.iPhone14Pro)
-//    }
-//}
-//#endif
+//let vm = DefaultCreateGroupChatViewModel(
+//    createGroupChatUseCase: CreateGroupChatUseCase(
+//        chatRoomListRepository: DefaultChatRoomListRepository(
+//            dataTransferService: DefaultStorageService(),
+//            profileRepository: DefaultProfileRepository(
+//                firestoreService: DefaultFirestoreService(),
+//                firebaseAuthService: DefaultFirebaseAuthService()),
+//            databaseService: DefaultRealTimeDatabaseService(),
+//            firestoreService: DefaultFirestoreService()
+//        )), actions: CreateGroupChatViewModelActions(showChatViewController: {print("showChatViewController")}))
+//let navigationController = CreateGroupChatViewController(viewModel: vm)
+//window?.rootViewController = navigationController
+//window?.makeKeyAndVisible()

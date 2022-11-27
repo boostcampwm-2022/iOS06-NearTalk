@@ -7,59 +7,109 @@
 
 import Foundation
 
-import RxRelay
+import RxCocoa
 import RxSwift
 
-protocol CreateGroupChatUseCaseable {
-    func validate(_ string: String)
-    func createGroupChat(title: String, description: String, maxNumOfParticipants: Int, maxRangeOfRadius: Int)
+struct CreateGroupChatViewModelActions {
+    let showChatViewController: () -> Void
 }
 
-protocol CreateGroupChatCoordinatable: Coordinator {
-    func showChatViewController()
+protocol CreateGroupChatViewModelInput {
+    func titleDidEdited(_ title: String)
+    func descriptionDidEdited(_ descriptio: String)
+    func maxParticipantDidChanged(_ numOfParticipant: Int)
+    func maxRangeDidChanged(_ range: Int)
+    func createChatButtonDIdTapped()
 }
 
-final class CreateGroupChatViewModel {
+protocol CreateGroupChatViewModelOutput {
+    var maxRangeLabel: Driver<String> { get }
+    var createChatButtonIsEnabled: Driver<Bool> { get }
+}
+
+protocol CreateGroupChatViewModel: CreateGroupChatViewModelInput, CreateGroupChatViewModelOutput {
+}
+
+final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
+    var maxRangeLabel: Driver<String>
+    var createChatButtonIsEnabled: Driver<Bool>
+
     // MARK: - Proporties
-    
     private let createGroupChatUseCase: CreateGroupChatUseCaseable
-    private let coordinator: CreateGroupChatCoordinatable
+    private let actions: CreateGroupChatViewModelActions
+    private let disposeBag = DisposeBag()
     
-    init(createGroupChatUseCase: CreateGroupChatUseCaseable, coordinator: CreateGroupChatCoordinatable) {
+    init(createGroupChatUseCase: CreateGroupChatUseCaseable,
+         actions: CreateGroupChatViewModelActions
+    ) {
         self.createGroupChatUseCase = createGroupChatUseCase
-        self.coordinator = coordinator
-    }
-}
-
-extension CreateGroupChatViewModel: ViewModelable {
-    // TODO: - input 항목 수정 필요
-    struct Input {
-        let titleTextFieldDidEditEvent: Observable<Void>
-        let descriptionTextFieldDidEditEvent: Observable<Void>
-        let maxNumOfParticipantsPickerSelected: Observable<Int>
-        let maxRangeOfRadiusSliderSelected: Observable<Float>
-        let createChatButtonDidTapEvent: Observable<Void>
-    }
-    
-    struct Output {
-        var maxRangeOfRadius = BehaviorRelay<String>(value: "1km")
-        var createChatButtonIsEnable = BehaviorRelay<Bool>(value: false)
-    }
-    
-    func transform(input: Input, disposeBag: DisposeBag) -> Output {
-        var output = Output()
-        
-        input.maxRangeOfRadiusSliderSelected
-            .map({ "\(Int($0))km" })
-            .bind(to: output.maxRangeOfRadius)
-            .disposed(by: disposeBag)
-        
-        input.createChatButtonDidTapEvent
-            .subscribe { [weak self] _ in
-                self?.coordinator.showChatViewController()
+        self.actions = actions
+                
+        self.createChatButtonIsEnabled = Observable
+            .combineLatest(titlePublishSubject, descriptionPublishSubject)
+            .map {
+                !$0.0.isEmpty && !$0.1.isEmpty
             }
-            .disposed(by: disposeBag)
+            .asDriver(onErrorRecover: { _ in .empty() })
+        
+        self.maxRangeLabel = self.maxRangePublishSubject
+            .map({"\($0)km"})
+            .asDriver(onErrorRecover: { _ in .empty() })
+    }
     
-        return output
+    // MARK: - Inputs
+    
+    private var title: String = ""
+    private var titlePublishSubject = PublishSubject<String>()
+    func titleDidEdited(_ title: String) {
+        self.title = title
+        self.titlePublishSubject.onNext(title)
+    }
+    
+    private var description: String = ""
+    private var descriptionPublishSubject = PublishSubject<String>()
+    func descriptionDidEdited(_ description: String) {
+        self.description = description
+        self.descriptionPublishSubject.onNext(description)
+    }
+    
+    private var maxParticipant: Int = 10
+    func maxParticipantDidChanged(_ numOfParticipant: Int) {
+        self.maxParticipant = numOfParticipant
+        print(numOfParticipant)
+    }
+    
+    private var maxRange: Int = 0
+    private var maxRangePublishSubject = PublishSubject<Int>()
+    func maxRangeDidChanged(_ range: Int) {
+        self.maxRange = range
+        self.maxRangePublishSubject.onNext(range)
+    }
+    
+    func createChatButtonDIdTapped() {
+        print(#function)
+        // TODO: - ChatRoom 내부 수정 필요
+        let chatRoom = ChatRoom(
+            uuid: UUID().uuidString,
+            userList: [],
+            roomImagePath: nil,
+            roomType: "group",
+            roomName: self.title,
+            roomDescription: self.description,
+            location: nil,
+            accessibleRadius: Double(self.maxRange),
+            recentMessageID: nil,
+            maxNumberOfParticipants: self.maxParticipant,
+            messageCount: 0
+        )
+        print(chatRoom)
+        self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
+            .subscribe(onCompleted: { [weak self] in
+                print("onCompleted")
+                self?.actions.showChatViewController()
+            }, onError: { [weak self] _ in
+                print("onError")
+            })
+            .disposed(by: self.disposeBag)
     }
 }

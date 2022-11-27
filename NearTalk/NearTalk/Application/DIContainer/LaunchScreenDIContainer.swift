@@ -12,13 +12,26 @@ final class LaunchScreenDIContainer {
     // MARK: - Dependencies
     
     // MARK: - Services
-    func makeAuthService() -> FirebaseAuthService {
+    func makeAuthService() -> AuthService {
         return DefaultFirebaseAuthService()
+    }
+    
+    func makeFirestoreService() -> any FirestoreService {
+        return DefaultFirestoreService()
+    }
+    
+    // MARK: - Repository
+    func makeAuthRepository() -> any AuthRepository {
+        return DefaultAuthRepository(authService: makeAuthService())
+    }
+    
+    func makeProfileRepository() -> any ProfileRepository {
+        return DefaultProfileRepository(firestoreService: makeFirestoreService(), firebaseAuthService: makeAuthService())
     }
     
     // MARK: - UseCases
     func makeVerifyUserUseCase() -> VerifyUserUseCase {
-        return DefaultVerifyUserUseCase(authService: makeAuthService())
+        return DefaultVerifyUserUseCase(authRepository: makeAuthRepository(), profileRepository: makeProfileRepository())
     }
     
     // MARK: - Repositories

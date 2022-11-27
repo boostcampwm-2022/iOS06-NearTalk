@@ -10,16 +10,23 @@ import RxSwift
 
 protocol VerifyUserUseCase {
     func verifyUser() -> Completable
+    func verifyProfile() -> Completable
 }
 
 final class DefaultVerifyUserUseCase: VerifyUserUseCase {
-    private let authService: FirebaseAuthService
+    private let authRepository: AuthRepository
+    private let profileRepository: ProfileRepository
     
-    init(authService: FirebaseAuthService) {
-        self.authService = authService
+    init(authRepository: AuthRepository, profileRepository: ProfileRepository) {
+        self.authRepository = authRepository
+        self.profileRepository = profileRepository
     }
     
     func verifyUser() -> Completable {
-        self.authService.verifyUser()
+        self.authRepository.verify()
+    }
+    
+    func verifyProfile() -> Completable {
+        self.profileRepository.fetchMyProfile().asCompletable()
     }
 }

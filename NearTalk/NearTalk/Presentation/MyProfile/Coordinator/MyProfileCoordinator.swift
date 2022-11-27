@@ -11,18 +11,31 @@ import RxSwift
 import UIKit
 
 protocol MyProfileCoordinatorDependency {
-    func makeMyProfileViewController() -> MyProfileViewController
+    func makeMyProfileViewController(action: any MyProfileViewModelAction) -> MyProfileViewController
+    func makeProfileSettingCoordinatorDependency(
+        profile: UserProfile,
+        necessaryProfileComponent: NecessaryProfileComponent?) -> any ProfileSettingCoordinatorDependency
 }
 
 final class MyProfileCoordinator: Coordinator {
     var navigationController: UINavigationController?
     weak var parentCoordinator: Coordinator?
     var childCoordinators: [Coordinator] = []
+    private let dependency: any MyProfileCoordinatorDependency
     
-    init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, childCoordinators: [Coordinator] = []) {
+    init(navigationController: UINavigationController? = nil,
+         parentCoordinator: Coordinator? = nil,
+         childCoordinators: [Coordinator] = [],
+         dependency: any MyProfileCoordinatorDependency) {
         self.navigationController = navigationController
         self.parentCoordinator = parentCoordinator
         self.childCoordinators = childCoordinators
+        self.dependency = dependency
+    }
+    
+    struct Action: MyProfileViewModelAction {
+        let showAppSettingView: (() -> Void)?
+        let showProfileSettingView: ((UserProfile, NecessaryProfileComponent?) -> Void)?
     }
     
     func start() {
@@ -30,99 +43,27 @@ final class MyProfileCoordinator: Coordinator {
     }
     
     func showMyProfileViewController() {
-        let viewController: MyProfileViewController = MyProfileViewController(
-            coordinator: self,
-            viewModel: DefaultMyProfileViewModel(
-                profileLoadUseCase: DefaultMyProfileLoadUseCase(
-                    profileRepository: DefaultUserProfileRepository(),
-                    uuidRepository: DefaultUserUUIDRepository(),
-                    imageRepository: DefaultImageRepository())))
+        let viewController: MyProfileViewController = self.dependency.makeMyProfileViewController(action: Action(
+            showAppSettingView: self.showAppSettingViewController,
+            showProfileSettingView: self.showProfileSettingViewController))
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     func showAppSettingViewController() {
+//        print(#function)
         let viewController: AppSettingViewController = AppSettingViewController()
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
-    func showProfileSettingViewController() {
-        let viewController: ProfileSettingViewController = ProfileSettingViewController(coordinator: self)
-        self.navigationController?.pushViewController(viewController, animated: true)
-    }
-    
-    private var imageReceiveHandler: Binder<UIImage?>?
-}
-
-extension MyProfileCoordinator: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        guard let itemProvider = results.first?.itemProvider else {
-            return
-        }
-        if itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(
-                ofClass: UIImage.self,
-                completionHandler: { [weak self] image, _ in
-                guard let image = image as? UIImage, let handler = self?.imageReceiveHandler else {
-                    return
-                }
-                handler.onNext(image)
-                self?.imageReceiveHandler = nil
-            })
-        } else {
-            #if DEBUG
-            print("Cannot Import Photo")
-            #endif
-        }
-    }
-    
-    func showPHPickerViewController(_ imageSelectHandler: Binder<UIImage?>) {
-        PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorization in
-            switch authorization {
-            case .authorized, .limited:
-                Task {
-                    await self.presentPHPickerViewController(imageSelectHandler)
-                }
-            default:
-                #if DEBUG
-                print("Photo 접근 권한 없어용")
-                #endif
-                Task {
-                    await self.goAuthorizationSettingPage()
-                }
-            }
-        }
-    }
-    
-    @MainActor
-    private func goAuthorizationSettingPage() {
-        guard let appName = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String else {
-            return
-        }
-        let message: String = "\(appName)이(가) 앨범 접근 허용되어 있지않습니다. \r\n 설정화면으로 가시겠습니까?"
-        let alert = UIAlertController(title: "설정", message: message, preferredStyle: .alert)
-        let cancel = UIAlertAction(title: "취소", style: .default) { (UIAlertAction) in
-            print("\(String(describing: UIAlertAction.title)) 클릭")
-        }
-        let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-            self.navigationController?.topViewController?.dismiss(animated: false)
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-        }
-
-        alert.addAction(cancel)
-        alert.addAction(confirm)
-        
-        self.navigationController?.topViewController?.present(alert, animated: true)
-    }
-    
-    @MainActor
-    private func presentPHPickerViewController(_ imageSelectHandler: Binder<UIImage?>) {
-        var config: PHPickerConfiguration = PHPickerConfiguration()
-        config.filter = .images
-        config.selectionLimit = 1
-        let vc: PHPickerViewController = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        self.imageReceiveHandler = imageSelectHandler
-        self.navigationController?.topViewController?.present(vc, animated: true)
+    func showProfileSettingViewController(profile: UserProfile, necessaryProfileComponent: NecessaryProfileComponent?) {
+        let coordinator: ProfileSettingCoordinator = ProfileSettingCoordinator(
+            navigationController: self.navigationController,
+            dependency: self.dependency.makeProfileSettingCoordinatorDependency(
+                profile: profile,
+                necessaryProfileComponent: necessaryProfileComponent))
+        coordinator.start()
+        print(#function)
+//        let viewController: ProfileSettingViewController = ProfileSettingViewController(coordinator: self)
+//        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

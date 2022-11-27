@@ -7,15 +7,27 @@
 
 import UIKit
 
-final class ProfileDetailCoordinator: ProfileDetailCoordinatable {
+protocol ProfileDetailCoordinatorDependency {
+    func makeProfileDetailViewController(actions: ProfileDetailViewModelActions) -> ProfileDetailViewController
+}
+
+final class ProfileDetailCoordinator {
+    private let dependency: ProfileDetailCoordinatorDependency
+    
     var navigationController: UINavigationController?
     
-    var parentCoordinator: Coordinator?
-    
-    var childCoordinators: [Coordinator] = []
+    init(navigationController: UINavigationController,
+         dependency: ProfileDetailCoordinatorDependency) {
+        self.navigationController = navigationController
+        self.dependency = dependency
+    }
     
     func start() {
         print(#function)
+        let actions = ProfileDetailViewModelActions()
+        
+        let viewController: ProfileDetailViewController = self.dependency.makeProfileDetailViewController(actions: actions)
+        self.navigationController?.present(viewController, animated: true)
     }
     
     func pushChatViewController(username: String) {

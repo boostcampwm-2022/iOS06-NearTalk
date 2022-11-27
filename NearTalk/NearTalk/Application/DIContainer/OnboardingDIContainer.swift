@@ -5,61 +5,83 @@
 //  Created by Preston Kim on 2022/11/15.
 //
 
-import Foundation
 import UIKit
 
-final class DefaultOnboardingDIContainer {
-    // MARK: - Dependencies
-    func makeOnboardingCoordinatorDependency() -> any OnboardingCoordinatorDependency {
-        return DefaultOnboardingCoordinatorDependency()
+final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
+    private let dependency: Dependency
+    
+    struct Dependency {
+        let showMainViewController: (() -> Void)?
     }
-
+    
+    init(dependency: Dependency) {
+        self.dependency = dependency
+    }
+    
+    func showMainViewController() {
+        self.dependency.showMainViewController?()
+    }
+    
+    // MARK: - Service
+    func makeStorageService() -> any StorageService {
+        return DefaultStorageService()
+    }
+    
+    func makeAuthService() -> any AuthService {
+        return DefaultFirebaseAuthService()
+    }
+    
+    func makeFirestoreService() -> any FirestoreService {
+        return DefaultFirestoreService()
+    }
+    
+    // MARK: - Repository
+    func makeMediaRepository() -> any MediaRepository {
+        return DefaultMediaRepository(storageService: self.makeStorageService())
+    }
+    
+    func makeAuthRepository() -> any AuthRepository {
+        return DefaultAuthRepository(authService: makeAuthService())
+    }
+    
+    func makeProfileRepository() -> any ProfileRepository {
+        return DefaultProfileRepository(firestoreService: makeFirestoreService(), firebaseAuthService: makeAuthService())
+    }
+    
     // MARK: - UseCases
-    private func makeOnboardingValidateUseCase() -> OnboardingValidateUseCase {
-        return DefaultOnboardingValidateUseCase()
+    private func makeValidateNickNameUseCase() -> any ValidateTextUseCase {
+        return ValidateNickNameUseCase()
     }
     
-    private func makeOnboardingSaveProfileUseCase(
-        profileRepository: any UserProfileRepository,
-        uuidRepository: any UserUUIDRepository,
-        imageRepository: any ImageRepository) -> OnboardingSaveProfileUseCase {
-        return DefaultOnboardingSaveProfileUseCase(
-            profileRepository: profileRepository,
-            uuidRepository: uuidRepository,
-            imageRepository: imageRepository)
+    private func makeValidateStatusMessageUseCase() -> any ValidateTextUseCase {
+        return ValidateStatusMessageUseCase()
     }
     
-    // MARK: - Repositories
-    private func makeProfileRepository() -> any UserProfileRepository {
-        return DefaultUserProfileRepository()
+    private func makeUploadImageUseCase() -> any UploadImageUseCase {
+        return DefaultUploadImageUseCase(mediaRepository: self.makeMediaRepository())
     }
     
-    private func makeUserUUIDRepository() -> any UserUUIDRepository {
-        return DefaultUserUUIDRepository()
-    }
-    
-    private func makeImageRepository() -> any ImageRepository {
-        return DefaultImageRepository()
-    }
-    
-    // MARK: - ViewModels
-    func makeViewModel() -> any OnboardingViewModel {
-        return DefaultOnboardingViewModel(
-            validateUseCase: makeOnboardingValidateUseCase(),
-            saveProfileUseCase: makeOnboardingSaveProfileUseCase(
-                profileRepository: self.makeProfileRepository(),
-                uuidRepository: self.makeUserUUIDRepository(),
-                imageRepository: self.makeImageRepository()))
+    private func makeCreateProfileUseCase() -> any CreateProfileUseCase {
+        return DefaultCreateProfileUseCase(profileRepository: self.makeProfileRepository(), authRepository: self.makeAuthRepository())
     }
     
     // MARK: - Create viewController
-    func makeOnboardingViewController(coordinator: OnboardingCoordinator) -> OnboardingViewController {
-        return OnboardingViewController(viewModel: makeViewModel(), coordinator: coordinator)
+    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController {
+        let viewModel: any OnboardingViewModel = DefaultOnboardingViewModel(
+            validateNickNameUseCase: self.makeValidateNickNameUseCase(),
+            validateStatusMessageUseCase: self.makeValidateStatusMessageUseCase(),
+            uploadImageUseCase: self.makeUploadImageUseCase(),
+            createProfileUseCase: self.makeCreateProfileUseCase(),
+            action: action
+        )
+        return OnboardingViewController(viewModel: viewModel)
     }
     
     // MARK: - Coordinator
     func makeOnboardingCoordinator(
-        navigationController: UINavigationController, dependency: any OnboardingCoordinatorDependency) -> OnboardingCoordinator {
-        return OnboardingCoordinator(navigationController: navigationController, dependency: dependency)
+        navigationController: UINavigationController?,
+        parent: Coordinator
+    ) -> OnboardingCoordinator {
+        return OnboardingCoordinator(navigationController: navigationController, parentCoordinator: parent, dependency: self)
     }
 }

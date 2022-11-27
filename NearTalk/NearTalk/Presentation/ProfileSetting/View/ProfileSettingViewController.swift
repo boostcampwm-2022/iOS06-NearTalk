@@ -18,6 +18,7 @@ final class ProfileSettingViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
+        $0.clipsToBounds = true
     }
 
     private let nicknameField: UITextField = UITextField().then {
@@ -31,8 +32,8 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     // MARK: - Properties
-    private weak var coordinator: MyProfileCoordinator?
     private let disposeBag: DisposeBag = DisposeBag()
+    private let viewModel: any ProfileSettingViewModel
 
     // MARK: - Lifecycles
     override func viewDidLoad() {
@@ -41,11 +42,18 @@ final class ProfileSettingViewController: UIViewController {
         self.configureNavigationBar()
         self.configureView()
         self.configureConstraint()
-        self.bindToProfileImage()
+        self.bindToViewModel()
     }
     
-    init(coordinator: MyProfileCoordinator) {
-        self.coordinator = coordinator
+    init(viewModel: any ProfileSettingViewModel, neccesaryProfileComponent: NecessaryProfileComponent?) {
+        self.viewModel = viewModel
+        if let neccesaryProfileComponent = neccesaryProfileComponent {
+            self.nicknameField.text = neccesaryProfileComponent.nickName
+            self.messageField.text = neccesaryProfileComponent.message
+            if let image = neccesaryProfileComponent.image {
+                self.profileImageView.image = UIImage(data: image)
+            }
+        }
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -61,6 +69,7 @@ private extension ProfileSettingViewController {
             view.addSubview($0)
         }
     }
+    
     func configureView() {
         self.view.backgroundColor = .systemBackground
     }
@@ -75,8 +84,8 @@ private extension ProfileSettingViewController {
     
     func configureConstraint() {
         profileImageView.snp.makeConstraints { (make) in
-            make.horizontalEdges.top.equalToSuperview()
-            make.width.equalTo(profileImageView.snp.height)
+            make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.height.equalTo(profileImageView.snp.width)
         }
         
         nicknameField.snp.makeConstraints { (make) in
@@ -90,15 +99,81 @@ private extension ProfileSettingViewController {
         }
     }
     
-    func bindToProfileImage() {
-        self.profileImageView.rx
-            .tapGesture()
-            .asObservable()
-            .bind(onNext: { gesture in
-                if gesture.state == .ended {
-                    self.coordinator?.showPHPickerViewController(self.profileImageView.rx.image)
-                }
+    func bindToViewModel() {
+        self.bindNickNameField()
+        self.bindMessageField()
+        self.bindProfileTap()
+        self.bindRegisterButton()
+    }
+    
+    func bindNickNameField() {
+        self.nicknameField.rx.value
+            .orEmpty
+            .bind(onNext: { [weak self] text in
+                self?.viewModel.editNickName(text)
+                
             })
             .disposed(by: self.disposeBag)
     }
+    
+    func bindMessageField() {
+        self.messageField.rx.value
+            .orEmpty
+            .bind(onNext: { [weak self] text in
+                self?.viewModel.editStatusMessage(text)
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    func bindProfileTap() {
+        self.profileImageView.rx
+            .tapGesture()
+            .bind(onNext: { [weak self] gesture in
+                if gesture.state == .ended {
+                    self?.viewModel.editImage()
+                }
+            })
+            .disposed(by: self.disposeBag)
+        self.viewModel.image
+            .compactMap {
+                $0
+            }
+            .compactMap {
+                UIImage(data: $0)
+            }
+            .subscribe(self.profileImageView.rx.image)
+            .disposed(by: self.disposeBag)
+    }
+    
+    func bindRegisterButton() {
+        if let updateButton = self.navigationItem.rightBarButtonItem {
+            self.viewModel.updateEnable
+                .bind(to: updateButton.rx.isEnabled)
+                .disposed(by: self.disposeBag)
+            updateButton.rx
+                .tap
+                .bind(onNext: { [weak self] in
+                    self?.viewModel.update()
+                })
+                .disposed(by: self.disposeBag)
+        }
+    }
 }
+
+//#if canImport(SwiftUI) && DEBUG
+//import SwiftUI
+//
+//struct ProfileSettingViewControllerPreview: PreviewProvider {
+//    static var previews: some View {
+//        let diContainer: DefaultProfileSettingDIContainer = .init(dependency: .init(
+//            updateProfileUseCase: DefaultUpdateProfileUseCase(repository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())),
+//            validateNickNameUseCase: ValidateNickNameUseCase(),
+//            validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
+//            uploadImageUseCase: DefaultUploadImageUseCase(imageRepository: DefaultImageRepository(imageService: DefaultStorageService())),
+//            profile: .init(uuid: <#T##String?#>, username: <#T##String?#>, email: <#T##String?#>, statusMessage: <#T##String?#>, profileImagePath: <#T##String?#>, friends: <#T##[String]?#>, chatRooms: <#T##[String]?#>),
+//            necessaryProfileComponent: .init(nickName: "Tester01", message: "Preview Test", image: nil)))
+//        let vc: LaunchScreenViewController = diContainer.
+//        return vc.showPreview(.iPhone14Pro)
+//    }
+//}
+//#endif

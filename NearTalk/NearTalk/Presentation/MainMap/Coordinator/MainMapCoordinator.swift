@@ -5,8 +5,14 @@
 //  Created by lymchgmk on 2022/11/14.
 //
 
-import Foundation
+import UIKit
 
-final class MainMapCoordinator {
+final class MainMapCoordinator: Coordinator {
+    var navigationController: UINavigationController?
     
+    var parentCoordinator: Coordinator?
+    
+    func start() {
+        
+    }
 }

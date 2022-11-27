@@ -9,15 +9,7 @@ import FirebaseAuth
 import Foundation
 import RxSwift
 
-protocol FirebaseAuthService {
-    func verifyUser() -> Completable
-    func fetchCurrentUserEmail() -> Single<String>
-    func loginWithApple(token idTokenString: String, nonce: String) -> Completable
-    func logout() -> Completable
-    func deleteCurrentUser() -> Completable
-}
-
-final class DefaultFirebaseAuthService: FirebaseAuthService {
+final class DefaultFirebaseAuthService: AuthService {
     
     /// 유저 로그인 확인
     func verifyUser() -> Completable {

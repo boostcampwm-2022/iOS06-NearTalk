@@ -35,15 +35,33 @@ final class AppCoordinator: Coordinator {
     }
 }
 
-extension AppCoordinator: LaunchScreenCoordinatorDependency {
+extension AppCoordinator: LaunchScreenCoordinatorDependency, LoginCoordinatorDependency {
+    func showLoginViewController() {
+        guard let navigationController = self.navigationController else {
+            return
+        }
+        let loginDIContainer: LoginDIContainer = .init()
+        let loginCoordinator: LoginCoordinator = loginDIContainer.makeCoordinator(
+            navigationController,
+            parentCoordinator: self,
+            dependency: self
+        )
+        loginCoordinator.start()
+    }
+    
     func showMainViewController() {
         self.navigationController?.popViewController(animated: false)
-        let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer()
-            .makeTabBarCoordinator(navigationController: self.navigationController)
+        let diContainer: RootTabBarDIContainer = .init()
+        let rootTabBarCoordinator: RootTabBarCoordinator = diContainer.makeTabBarCoordinator(navigationController: self.navigationController)
         rootTabBarCoordinator.start()
     }
     
-    func showLoginViewController() {
-        print(Self.self, #function)
+    func showOnboardingView() {
+        let onboardingDIContainer: DefaultOnboardingDIContainer = .init(dependency: .init(showMainViewController: self.showMainViewController))
+        let onboardingCoordinator: OnboardingCoordinator = onboardingDIContainer.makeOnboardingCoordinator(
+            navigationController: self.navigationController,
+            parent: self
+        )
+        onboardingCoordinator.start()
     }
 }

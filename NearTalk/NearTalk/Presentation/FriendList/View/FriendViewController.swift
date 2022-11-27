@@ -12,15 +12,15 @@ import UIKit
 
 final class FriendListViewController: UIViewController {
     // MARK: - UI properties
-    private let tableView = UITableView(frame: CGRect.zero, style: .plain).then {
-        $0.register(FriendListCell.self, forCellReuseIdentifier: FriendListCell.identifier)
+    private lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.register(FriendListCell.self, forCellWithReuseIdentifier: FriendListCell.identifier)
     }
     
     // MARK: - Properties
     private let disposeBag: DisposeBag = DisposeBag()
     private var viewModel: FriendListViewModel!
     
-    private var dataSource: UITableViewDiffableDataSource<Section, Friend>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Friend>?
     
     enum Section {
         case main
@@ -42,7 +42,7 @@ final class FriendListViewController: UIViewController {
     
     // MARK: - Helper
     private func addSubviews() {
-        self.view.addSubview(tableView)
+        self.view.addSubview(collectionView)
     }
 
     private func configureConstraints() {
@@ -58,7 +58,7 @@ final class FriendListViewController: UIViewController {
     }
     
     private func configureTableView() {
-        self.tableView.snp.makeConstraints { make in
+        self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.trailing.leading.equalTo(view)
         }
@@ -66,15 +66,15 @@ final class FriendListViewController: UIViewController {
     
     private func configureNavigation() {
         self.navigationItem.title = "친구 목록"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapCreateChatRoomButton))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
     }
     
     // 데이터소스 세팅
     private func configureDatasource() {
-        self.dataSource = UITableViewDiffableDataSource<Section, Friend>(tableView: self.tableView, cellProvider: { tableView, indexPath, model in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: FriendListCell.identifier, for: indexPath) as? FriendListCell
-            else { return UITableViewCell() }
-            cell.configure(model: model)
+        self.dataSource = UICollectionViewDiffableDataSource<Section, Friend>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FriendListCell.identifier, for: indexPath) as? FriendListCell
+            else { return UICollectionViewCell() }
+            cell.configure(model: itemIdentifier)
             return cell
         })
     }
@@ -85,16 +85,39 @@ final class FriendListViewController: UIViewController {
                 var snapshot = NSDiffableDataSourceSnapshot<Section, Friend>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
-                self?.dataSource?.defaultRowAnimation = .fade
                 self?.dataSource?.apply(snapshot, animatingDifferences: true)
+            })
+            .disposed(by: disposeBag)
+        
+        self.collectionView.rx.itemSelected
+            .subscribe(onNext: { [weak self] event in
+                self?.viewModel.didSelectItem(at: event[1])
+            })
+            .disposed(by: disposeBag)
+        
+        self.navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                self?.viewModel.addFriend()
             })
             .disposed(by: disposeBag)
     }
     
-    @objc private func didTapCreateChatRoomButton() {
-        print("친구 추가 이동")
+    private func createBasicListLayout() -> UICollectionViewLayout {
+        let itemHeight = self.view.frame.width * 0.20
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+      
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .absolute(itemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                         subitems: [item])
+      
+        let section = NSCollectionLayoutSection(group: group)
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        return layout
     }
-    
+
 }
 
 #if canImport(SwiftUI) && DEBUG
@@ -102,17 +125,11 @@ import SwiftUI
 
 struct FriendsListViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        lazy var firestoreService: DefaultFirestoreService = {
-            return DefaultFirestoreService()
-        }()
-        lazy var firebaseAuthService: DefaultFirebaseAuthService = {
-            return DefaultFirebaseAuthService()
-        }()
-        let dependencies = FriendListDIContainer.Dependencies(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
-        let diContainer = FriendListDIContainer(dependencies: dependencies)
-        let actions = FriendListViewModelActions(showDetailFriend: {})
-        let viewController = diContainer.makeFriendListViewController(actions: actions)
-        return UINavigationController(rootViewController: viewController).showPreview(.iPhone14Pro)
+        let navigation = UINavigationController()
+        let diContainer = FriendListDIContainer()
+        let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
+        coordinator.start()
+        return navigation.showPreview(.iPhone14Pro)
     }
 }
 #endif

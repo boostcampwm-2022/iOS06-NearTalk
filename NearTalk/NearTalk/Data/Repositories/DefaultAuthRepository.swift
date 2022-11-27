@@ -8,9 +8,9 @@
 import RxSwift
 
 final class DefaultAuthRepository: AuthRepository {
-    private let authService: any FirebaseAuthService
+    private let authService: any AuthService
     
-    init(authService: any FirebaseAuthService) {
+    init(authService: any AuthService) {
         self.authService = authService
     }
     
@@ -21,4 +21,16 @@ final class DefaultAuthRepository: AuthRepository {
     func dropout() -> Completable {
         return self.authService.deleteCurrentUser()
     }
+    
+    func login(token: String) -> Completable {
+        return self.authService.loginWithApple(token: token, nonce: NonceGenerator.randomNonceString())
+    }
+    
+    func verify() -> Completable {
+        return self.authService.verifyUser()
+    }
+    
+//    func fetchCurrentUserUID() -> Single<String> {
+//        return self.authService.fetchCurrentUID()
+//    }
 }

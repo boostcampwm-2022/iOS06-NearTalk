@@ -22,11 +22,11 @@ struct GroupChatRoomListData: Hashable {
             self.count = String(list.count)
         }
         
-        let now = NSDate()
+        let now = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd HH:mm"
         dateFormatter.locale = Locale(identifier: "ko_KR")
-        self.date = dateFormatter.string(from: now as Date)
+        self.date = dateFormatter.string(from: now)
     }
     
 }
