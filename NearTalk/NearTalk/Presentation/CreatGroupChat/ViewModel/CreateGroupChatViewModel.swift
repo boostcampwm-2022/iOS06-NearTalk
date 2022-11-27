@@ -36,12 +36,14 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
 
     // MARK: - Proporties
     private let createGroupChatUseCase: CreateGroupChatUseCaseable
-//    private let actions: CreateGroupChatViewModelActions
+    private let actions: CreateGroupChatViewModelActions
     private let disposeBag = DisposeBag()
     
-    init(createGroupChatUseCase: CreateGroupChatUseCaseable) {
+    init(createGroupChatUseCase: CreateGroupChatUseCaseable,
+         actions: CreateGroupChatViewModelActions
+    ) {
         self.createGroupChatUseCase = createGroupChatUseCase
-//        self.actions = actions
+        self.actions = actions
                 
         self.createChatButtonIsEnabled = Observable
             .combineLatest(titlePublishSubject, descriptionPublishSubject)
