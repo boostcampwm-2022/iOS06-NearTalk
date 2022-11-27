@@ -73,6 +73,9 @@ final class CreateGroupChatDiContainer {
 
     // MARK: - DI Container
     
+    func makeChatDIContainer() -> ChatDIContainer {
+        return ChatDIContainer()
+    }
 }
 
 extension CreateGroupChatDiContainer: CreateGroupChatCoordinatorDependencies {}
