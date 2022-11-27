@@ -175,23 +175,17 @@ class ChatViewController: UIViewController {
     }
     
     private func bind() {
-//        chatInputAccessoryView.sendButton.rx.tap
-//            .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text)
-            
-//            self?.chatInputAccessoryView.messageInputTextField.text = nil
-//
-//            self.viewModel.sendMessage($0)
-//            self.messgeList.append(MessageItem(id: UUID().uuidString, message: $0))
-//            self.applySnapshot()
-//
-//            let indexPath = IndexPath(item: self.messgeList.count - 1, section: 0)
-//            self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-        
         chatInputAccessoryView.sendButton.rx.tap
             .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
             .bind { [weak self] message in
                 print("전솔할 메세디: ", message)
                 self?.viewModel.sendMessage(message)
+                self?.chatInputAccessoryView.messageInputTextField.text = nil
+//                self.messgeList.append(MessageItem(id: UUID().uuidString, message: $0))
+//                self.applySnapshot()
+//
+//                let indexPath = IndexPath(item: self.messgeList.count - 1, section: 0)
+//                self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
             }
             .disposed(by: disposeBag)
     }
