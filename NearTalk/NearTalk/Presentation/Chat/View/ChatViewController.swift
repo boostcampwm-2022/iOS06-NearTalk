@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 
 class ChatViewController: UIViewController {
+    private let viewModel: ChatViewModel
     private let disposeBag: DisposeBag = DisposeBag()
     private var messgeList: [MessageItem] = []
     
@@ -45,9 +46,7 @@ class ChatViewController: UIViewController {
     private lazy var chatInputAccessoryView: ChatInputAccessoryView = ChatInputAccessoryView().then {
         $0.backgroundColor = .systemPurple
     }
-    
-    private let viewModel: ChatViewModel
-    
+        
     // MARK: - Lifecycles
     init(viewModel: ChatViewModel) {
         self.viewModel = viewModel
@@ -179,7 +178,6 @@ class ChatViewController: UIViewController {
 //        chatInputAccessoryView.sendButton.rx.tap
 //            .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text)
             
-                
 //            self?.chatInputAccessoryView.messageInputTextField.text = nil
 //
 //            self.viewModel.sendMessage($0)
@@ -188,6 +186,14 @@ class ChatViewController: UIViewController {
 //
 //            let indexPath = IndexPath(item: self.messgeList.count - 1, section: 0)
 //            self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        
+        chatInputAccessoryView.sendButton.rx.tap
+            .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
+            .bind { [weak self] message in
+                print("전솔할 메세디: ", message)
+                self?.viewModel.sendMessage(message)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
