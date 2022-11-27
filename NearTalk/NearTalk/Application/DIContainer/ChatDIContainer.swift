@@ -17,11 +17,20 @@ final class ChatDIContainer {
     
     // MARK: - UseCases
     
+    func makeMessggingUseCase() -> MessagingUseCase {
+        return DefalultMessagingUseCase()
+    }
+    
     // MARK: - Repositories
     
     // MARK: - View Controller
+    
     func makeChatViewController() -> ChatViewController {
-        return ChatViewController()
+        return ChatViewController(viewModel: makeChatViewModel())
+    }
+    
+    func makeChatViewModel() -> ChatViewModel {
+        return DefaultChatViewModel(messagingUseCase: makeMessggingUseCase())
     }
     // MARK: - Coordinator
     func makeChatCoordinator(navigationController: UINavigationController) -> ChatCoordinator {
