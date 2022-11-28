@@ -43,7 +43,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     var startChatButtonDidTapEvent = PublishRelay<Void>()
     
     var deleteFriendButtonDidTapEvent = PublishRelay<Void>()
-        
+    
     private let userID: String
     private let fetchProfileUseCase: FetchProfileUseCase
     private let uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase
@@ -65,18 +65,6 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
         self.bind()
     }
     
-//    struct Input {
-//        let viewWillAppearEvent: Observable<Void>
-//        let startChatButtonDidTapEvent: Observable<Void>
-//        let deleteFriendButtonDidTapEvent: Observable<Void>
-//    }
-//
-//    struct Output {
-//        let userName = BehaviorRelay<String>(value: "..Loading")
-//        let statusMessage = BehaviorRelay<String>(value: "..Loading")
-//        let profileImageURL = BehaviorRelay<String>(value: "")
-//    }
-    
     func bind() {
         viewWillAppearEvent
             .subscribe(onNext: { [weak self] in
@@ -95,8 +83,22 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
         
         startChatButtonDidTapEvent
             .subscribe(onNext: { [weak self] in
-                // TODO: - uploadChatRoomInfoUseCase 이용해서 구현
-                 self?.actions.showChatViewController?()
+                // TODO: - DM 구현 필요
+//                let chatRoom = ChatRoom(
+//                    uuid: <#T##String?#>,
+//                    userList: <#T##[String]?#>,
+//                    roomImagePath: <#T##String?#>,
+//                    roomType: "DM",
+//                    roomName: <#T##String?#>,
+//                    roomDescription: <#T##String?#>,
+//                    location: <#T##NCLocation?#>,
+//                    accessibleRadius: <#T##Double?#>,
+//                    recentMessageID: <#T##String?#>,
+//                    maxNumberOfParticipants: <#T##Int?#>,
+//                    messageCount: <#T##Int?#>
+//                )
+//                self.uploadChatRoomInfoUseCase.createChatRoom(chatRoom)
+                self?.actions.showChatViewController?()
             })
             .disposed(by: disposeBag)
         
