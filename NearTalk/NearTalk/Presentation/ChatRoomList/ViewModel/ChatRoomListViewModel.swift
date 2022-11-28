@@ -24,6 +24,7 @@ protocol ChatRoomListViewModelInput {
 }
 
 protocol ChatRoomListViewModelOutput {
+    func getRecentMessage(messageID: String, roomID: String) -> Single<ChatMessage>
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> { get }
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> { get }
 }
@@ -52,6 +53,10 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
         
+    }
+    
+    func getRecentMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
+        return self.chatRoomListUseCase.getRecentMessage(messageID: messageID, roomID: roomID)
     }
 }
 

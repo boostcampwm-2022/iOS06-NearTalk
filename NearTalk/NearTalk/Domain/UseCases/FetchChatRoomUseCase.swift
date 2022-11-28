@@ -17,20 +17,23 @@ protocol FetchChatRoomUseCase {
     func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
+    func getRecentMessage(messageID: String, roomID: String) -> Single<ChatMessage>
 }
 
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
 
     private let disposeBag: DisposeBag = .init()
     private let chatRoomListRepository: ChatRoomListRepository
+    private let chatMessageRepository: ChatMessageRepository
     private let chatRoom: Observable<[ChatRoom]>
     private let userChatRoomModel: Observable<[UserChatRoomModel]>
     
     private var newChatRoomUUIDList: PublishRelay<[String]> = .init()
     private lazy var newChatRoom: Observable<[ChatRoom]> = self.newGetChatRoomList()
     
-    init(chatRoomListRepository: ChatRoomListRepository) {
+    init(chatRoomListRepository: ChatRoomListRepository, chatMessageRepository: ChatMessageRepository) {
         self.chatRoomListRepository = chatRoomListRepository
+        self.chatMessageRepository = chatMessageRepository
         
         self.chatRoom = self.chatRoomListRepository.fetchChatRoomList()
         self.userChatRoomModel = self.chatRoomListRepository.fetchUserChatRoomModel()
@@ -50,6 +53,10 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
             .asObservable()
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
+    }
+    
+    func getRecentMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
+        return chatMessageRepository.fetchSingleMessage(messageID: messageID, roomID: roomID)
     }
     
     func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]> {

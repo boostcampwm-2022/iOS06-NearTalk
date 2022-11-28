@@ -65,8 +65,8 @@ final class RootTabBarCoordinator: Coordinator {
 
     private func showMyProfile() -> UIViewController {
         let navigationController = UINavigationController()
-        let diContainer = self.dependency.myProfileDIConatiner()
-        let coordinator = MyProfileCoordinator(navigationController: navigationController, dependency: diContainer.makeCoordinatorDependency())
+        let diContainer = MyProfileDIContainer()
+        let coordinator = diContainer.makeCoordinator(navigationController: navigationController, parent: self)
         coordinator.start()
         
         return self.embed(

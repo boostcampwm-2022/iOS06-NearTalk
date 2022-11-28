@@ -5,6 +5,9 @@
 //  Created by 김영욱 on 2022/11/14.
 //
 
+import Kingfisher
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
 import UIKit
@@ -12,6 +15,9 @@ import UIKit
 class ChatRoomListCell: UICollectionViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
+    
+    private var viewModel: ChatRoomListViewModel?
+    private var disposebag = DisposeBag()
     
     // MARK: - UI properties
     private let img = UIImageView().then {
@@ -75,20 +81,19 @@ class ChatRoomListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(groupData: GroupChatRoomListData) {
-        self.name.text = groupData.name
-        self.recentMessage.text = groupData.description
-        self.date.text = groupData.date
-        self.count.text = groupData.count
-        self.imageLoad(path: groupData.img)
+    func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
+        self.viewModel = viewModel
+        self.name.text = groupData.roomName
+        self.count.text = String((groupData.userList ?? []).count)
+        self.imageLoad(path: groupData.roomImagePath)
+        self.bind(messageID: groupData.recentMessageID, roomID: groupData.uuid)
     }
     
-    func configure(dmData: DMChatRoomListData) {
-        self.name.text = dmData.name
-        self.recentMessage.text = dmData.description
-        self.date.text = dmData.date
-        self.count.text = nil
-        self.imageLoad(path: dmData.img)
+    func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
+        self.viewModel = viewModel
+        self.name.text = dmData.roomName
+        self.imageLoad(path: dmData.roomImagePath)
+        self.bind(messageID: dmData.recentMessageID, roomID: dmData.uuid)
     }
     
     // MARK: - Configure views
@@ -117,11 +122,32 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
-    func dataOperator() {
-        
+    private func bind(messageID: String?, roomID: String?) {
+        guard let messageID = messageID,
+              let roomID = roomID else { return }
+        self.viewModel?.getRecentMessage(messageID: messageID, roomID: roomID)
+            .asObservable()
+            .subscribe(onNext: { [weak self] chatMessage in
+                self?.recentMessage.text = chatMessage.text
+                self?.dateOperate(date: chatMessage.createdDate)
+            })
+            .disposed(by: disposebag)
     }
     
-    func imageLoad(path: String?) {
+    private func dateOperate(date: Date?) {
+        guard let date = date
+        else { return }
+        
+        let nowDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd HH:mm"
+        let convertDate = dateFormatter.string(from: date)
+        
+        self.date.text = convertDate
+        // 날짜비교
+    }
+    
+    private func imageLoad(path: String?) {
         guard let path = path,
               let url = URL(string: path)
         else {
@@ -136,19 +162,3 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChatRoomListCellPreview: PreviewProvider {
-    static var previews: some View {
-        UIViewPreview {
-            let cell = ChatRoomListCell(frame: .zero)
-            cell.configure(groupData: GroupChatRoomListData(data: ChatRoom(userList: ["1", "2", "3", "4", "5", "6"],
-                                                                           roomName: "Ronald Robertson",
-                                                                           roomDescription: "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum.")))
-            return cell
-        }.previewLayout(.fixed(width: 393, height: 393 * 0.2))
-    }
-}
-#endif
