@@ -20,9 +20,6 @@ target 'NearTalk' do
   
   # Utils
   pod 'Then', '~> 3.0.0'
-  
-  # Swinject
-  pod 'Swinject'
 
   target 'NearTalkTests' do
     inherit! :search_paths

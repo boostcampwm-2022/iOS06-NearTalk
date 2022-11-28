@@ -10,9 +10,9 @@ import RxSwift
 
 final class DefaultProfileRepository: ProfileRepository {
     private let firestoreService: FirestoreService
-    private let firebaseAuthService: AuthService
+    private let firebaseAuthService: FirebaseAuthService
     
-    init(firestoreService: FirestoreService, firebaseAuthService: AuthService) {
+    init(firestoreService: FirestoreService, firebaseAuthService: FirebaseAuthService) {
         self.firestoreService = firestoreService
         self.firebaseAuthService = firebaseAuthService
     }

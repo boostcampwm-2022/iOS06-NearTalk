@@ -9,78 +9,41 @@ import UIKit
 
 protocol Coordinator: AnyObject {
     var navigationController: UINavigationController? { get set }
+    var parentCoordinator: Coordinator? { get set }
     
     func start()
 }
 
 final class AppCoordinator: Coordinator {
+    var parentCoordinator: Coordinator?
     var navigationController: UINavigationController?
-    private var appDIContainer: AppDIContainer?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.appDIContainer = .init(
-            navigationController: navigationController,
-            launchScreenActions: .init(
-                showLoginViewController: self.showLoginViewController,
-                showOnboardingView: self.showOnboardingView,
-                showMainViewController: self.showMainViewController
-            ),
-            loginAction: .init(
-                presentMainView: self.showMainViewController,
-                presentOnboardingView: self.showOnboardingView,
-                presentLoginFailure: { print(#function) }
-            ),
-            onboardingActions: .init(
-                presentImagePicker: nil,
-                showMainViewController: self.showMainViewController,
-                presentRegisterFailure: nil
-            )
-        )
     }
     
     func start() {
-        guard let appDIContainer else {
+        guard let navigationController else {
             return
         }
-        let launchScreenDIContainer: LaunchScreenDIContainer = appDIContainer.resolveLaunchScreenDIContainer()
-        let launchScreenCoordinator: LaunchScreenCoordinator = .init(navigationController: navigationController, container: launchScreenDIContainer)
+        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
+        let launchScreenCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
+            navigationController: navigationController,
+            dependency: self
+        )
         launchScreenCoordinator.start()
     }
 }
 
-extension AppCoordinator: LoginCoordinatorDependency {
-    func showLoginViewController() {
-        guard let appDIContainer else {
-            return
-        }
-        let loginDIContainer: LoginDIContainer = appDIContainer.resolveLoginDIContainer()
-        let loginCoordinator: LoginCoordinator = LoginCoordinator(
-            navigationController: self.navigationController,
-            container: loginDIContainer
-        )
-        loginCoordinator.start()
-    }
-    
+extension AppCoordinator: LaunchScreenCoordinatorDependency {
     func showMainViewController() {
-        guard let appDIContainer else {
-            return
-        }
         self.navigationController?.popViewController(animated: false)
-        let diContainer: RootTabBarDIContainer = appDIContainer.resolveRootTabBarDIContainer()
-        let rootTabBarCoordinator: RootTabBarCoordinator = .init(navigationController: self.navigationController, container: diContainer)
+        let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer()
+            .makeTabBarCoordinator(navigationController: self.navigationController)
         rootTabBarCoordinator.start()
     }
     
-    func showOnboardingView() {
-        guard let appDIContainer else {
-            return
-        }
-        let onboardingDIContainer: DefaultOnboardingDIContainer = appDIContainer.resolveOnboardingDIContainer()
-        let onboardingCoordinator: OnboardingCoordinator = OnboardingCoordinator(
-            container: onboardingDIContainer,
-            navigationController: self.navigationController
-        )
-        onboardingCoordinator.start()
+    func showLoginViewController() {
+        print(Self.self, #function)
     }
 }

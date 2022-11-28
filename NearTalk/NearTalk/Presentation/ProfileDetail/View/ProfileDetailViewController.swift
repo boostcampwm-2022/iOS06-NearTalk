@@ -14,7 +14,7 @@ class ProfileDetailViewController: UIViewController {
     
     // MARK: - Proporties
     
-    private var viewModel: ProfileDetailViewModelable!
+    private let viewModel: ProfileDetailViewModel?
     private let disposeBag: DisposeBag = DisposeBag()
     
     private enum Matric {
@@ -53,7 +53,7 @@ class ProfileDetailViewController: UIViewController {
         $0.font = .systemFont(ofSize: Matric.nameLabelFontSize, weight: .bold)
     }
     
-    private lazy var statusMessage: UILabel = UILabel().then {
+    private lazy var stateLabel: UILabel = UILabel().then {
         $0.text = "상태메세지"
     }
     
@@ -63,7 +63,7 @@ class ProfileDetailViewController: UIViewController {
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
     }
-
+    
     private lazy var deleteFriendButton: UIButton = UIButton().then {
         $0.setTitle("친구 삭제하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
@@ -72,13 +72,9 @@ class ProfileDetailViewController: UIViewController {
     }
     
     // MARK: - LifeCycle
-    static func create(with viewModel: any ProfileDetailViewModelable) -> ProfileDetailViewController {
-        let view = ProfileDetailViewController()
-        view.viewModel = viewModel
-        return view
-    }
     
-    init() {
+    init(viewModel: ProfileDetailViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -89,19 +85,18 @@ class ProfileDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .systemBackground
-        
         self.addSubviews()
         self.configureStackViews()
         self.configureImageView()
         self.configureButtons()
+        
         self.binding()
     }
 }
 
 private extension ProfileDetailViewController {
     func addSubviews() {
-        [thumnailImageView, nameLabel, statusMessage].forEach {
+        [thumnailImageView, nameLabel, stateLabel].forEach {
             self.profileStackView.addArrangedSubview($0)
         }
         
@@ -128,7 +123,6 @@ private extension ProfileDetailViewController {
     
     func configureImageView() {
         self.thumnailImageView.snp.makeConstraints {
-            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(24)
             $0.height.equalTo(view.bounds.width - Matric.stackViewLeftRightInset * 2)
         }
     }
@@ -144,45 +138,28 @@ private extension ProfileDetailViewController {
     }
     
     func binding() {
-        self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
-            .map({_ in})
-            .bind(to: viewModel.viewWillAppearEvent)
-            .disposed(by: disposeBag)
+        let input = ProfileDetailViewModel.Input(
+            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
+            startChatButtonDidTapEvent: self.startChatButton.rx.tap.asObservable(),
+            deleteFriendButtonDidTapEvent: self.deleteFriendButton.rx.tap.asObservable()
+        )
         
-        self.startChatButton.rx.tap
-            .bind(to: viewModel.startChatButtonDidTapEvent)
-            .disposed(by: disposeBag)
+        let output = viewModel?.transform(
+            input: input,
+            disposeBag: self.disposeBag
+        )
         
-        self.deleteFriendButton.rx.tap
-            .bind(to: viewModel.deleteFriendButtonDidTapEvent)
-            .disposed(by: disposeBag)
-                    
-        self.viewModel?.userName
-            .asDriver()
-            .drive(onNext: { name in
-                self.nameLabel.text = name
-            })
-            .disposed(by: disposeBag)
-        
-        self.viewModel?.statusMessage
-            .asDriver()
-            .drive(onNext: { statusMessage in
-                self.statusMessage.text = statusMessage
-            })
-            .disposed(by: disposeBag)
+        self.nameLabel.text = output?.username
+        self.stateLabel.text = output?.statusMessage
     }
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ProfileDetailViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        let navigation = UINavigationController()
-        let diContainer = ProfileDetailDIContainer(userID: "1234")
-        let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigation)
-        coordinator.start()
-        return ProfileDetailViewController.create(with: ProfileDetailViewModel(userID: "", fetchProfileUseCase: DefaultFetchProfileUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), uploadChatRoomInfoUseCase: DefaultUploadChatRoomInfoUseCase(mediaRepository: DefaultMediaRepository(storageService: DefaultStorageService()), chatRoomRepository: DefaultChatRoomListRepository(dataTransferService: DefaultStorageService(), profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()), databaseService: DefaultRealTimeDatabaseService(), firestoreService: DefaultFirestoreService())), removeFriendUseCase: DefaultRemoveFriendUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), actions: ProfileDetailViewModelActions())) .showPreview(.iPhone14Pro)
-    }
-}
-#endif
+//#if canImport(SwiftUI) && DEBUG
+//import SwiftUI
+//
+//struct ProfileDetailViewControllerPreview: PreviewProvider {
+//    static var previews: some View {
+//        UINavigationController(rootViewController: ProfileDetailViewController()) .showPreview(.iPhone14Pro)
+//    }
+//}
+//#endif

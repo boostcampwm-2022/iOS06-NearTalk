@@ -18,7 +18,7 @@ protocol FirestoreService {
     /// 객체 수정
     func update<T: BaseEntity>(updatedData: T, dataKey: FirebaseKey.FireStore) -> Single<T>
     /// 객체 삭제
-    func delete<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore) -> Completable
+    func delete<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore ) -> Completable
     
     /// 객체 리스트 불러오기
     func fetchList<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<[T]>
@@ -35,7 +35,7 @@ final class DefaultFirestoreService: FirestoreService {
     func create<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore) -> Single<T> {
         Single<T>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.failedToCreate(type: String(describing: T.self))))
+                single(.failure(FirebaseStoreError.failedToCreate))
                 return Disposables.create()
             }
             do {
@@ -57,12 +57,12 @@ final class DefaultFirestoreService: FirestoreService {
     func fetch<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<T> {
         Single<T>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
+                single(.failure(FirebaseStoreError.failedToFetch))
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
             guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList) else {
-                single(.failure(FirebaseStoreError.invalidQuery(type: String(describing: T.self))))
+                single(.failure(FirebaseStoreError.invalidQuery))
                 return Disposables.create()
             }
             
@@ -70,7 +70,7 @@ final class DefaultFirestoreService: FirestoreService {
                 guard error == nil,
                       let dictionary: [String: Any] = snapshot?.documents.first?.data(),
                       let data: T = try? T.decode(dictionary: dictionary) else {
-                    single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
+                    single(.failure(FirebaseStoreError.failedToFetch))
                     return
                 }
                 single(.success(data))
@@ -84,16 +84,16 @@ final class DefaultFirestoreService: FirestoreService {
         Single<T>.create { [weak self] single in
             guard let self,
                   let uuid = updatedData.uuid else {
-                single(.failure(FirebaseStoreError.invalidUUID(type: String(describing: T.self))))
+                single(.failure(FirebaseStoreError.invalidUUID))
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
-            let query: FirebaseFirestore.Query = docRef.whereField("uuid", isEqualTo: uuid)
+            let query: FirebaseFirestore.Query = docRef.whereField("UUID", isEqualTo: uuid)
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first,
                       let data: T = try? T.decode(dictionary: document.data()) else {
-                    single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
+                    single(.failure(FirebaseStoreError.failedToFetch))
                     return
                 }
                 if dataKey == .users,
@@ -128,7 +128,7 @@ final class DefaultFirestoreService: FirestoreService {
         Completable.create { [weak self] completable in
             guard let self,
                   let uuid = data.uuid else {
-                completable(.error(FirebaseStoreError.failedToDelete(type: String(describing: T.self))))
+                completable(.error(FirebaseStoreError.failedToDelete))
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
@@ -136,7 +136,7 @@ final class DefaultFirestoreService: FirestoreService {
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first else {
-                    completable(.error(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
+                    completable(.error(FirebaseStoreError.failedToFetch))
                     return
                 }
                 document.reference.delete { error in
@@ -156,18 +156,18 @@ final class DefaultFirestoreService: FirestoreService {
     func fetchList<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<[T]> {
         Single<[T]>.create { [weak self] single in
             guard let self else {
-                single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
+                single(.failure(FirebaseStoreError.failedToFetch))
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
             guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList) else {
-                single(.failure(FirebaseStoreError.invalidQuery(type: String(describing: T.self))))
+                single(.failure(FirebaseStoreError.invalidQuery))
                 return Disposables.create()
             }
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let documents: [QueryDocumentSnapshot] = snapshot?.documents else {
-                    single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
+                    single(.failure(FirebaseStoreError.failedToFetch))
                     return
                 }
                 let dataList: [T] = documents.compactMap({ try? T.decode(dictionary: $0.data()) })
@@ -200,11 +200,11 @@ final class DefaultFirestoreService: FirestoreService {
 }
 
 enum FirebaseStoreError: Error {
-    case failedToUpdate(type: String)
-    case failedToCreate(type: String)
-    case failedToFetch(type: String)
-    case failedToDelete(type: String)
-    case invalidQuery(type: String)
-    case invalidUUID(type: String)
-    case alreadyExists(type: String)
+    case failedToUpdate
+    case failedToCreate
+    case failedToFetch
+    case failedToDelete
+    case invalidQuery
+    case invalidUUID
+    case alreadyExists
 }

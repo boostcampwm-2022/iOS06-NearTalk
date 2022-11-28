@@ -34,6 +34,5 @@ final class AppSettingTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    static let identifier: String = String(describing: AppSettingTableViewCell.self)
+    static let cellIndentifier: String = "AppSettingTableViewCell"
 }

@@ -7,26 +7,23 @@
 
 import Foundation
 
-import RxSwift
-
-protocol CreateGroupChatUseCaseable {
-    func createGroupChat(chatRoom: ChatRoom) -> Completable
-}
-
 final class CreateGroupChatUseCase {
     // MARK: - Proporties
     
-    private let chatRoomListRepository: ChatRoomListRepository
+//    private let firestoreRepository: FirestoreRepository
     
-    // MARK: - Life Cycle
-    
-    init(chatRoomListRepository: ChatRoomListRepository) {
-        self.chatRoomListRepository = chatRoomListRepository
+    // TODO: - repository 주입
+    init() {
+        print(#function)
     }
 }
 
 extension CreateGroupChatUseCase: CreateGroupChatUseCaseable {
-    func createGroupChat(chatRoom: ChatRoom) -> Completable {
-        return self.chatRoomListRepository.createChatRoom(chatRoom)
+    func validate(_ string: String) {
+        print(#function)
+    }
+    
+    func createGroupChat(title: String, description: String, maxNumOfParticipants: Int, maxRangeOfRadius: Int) {
+        print(#function)
     }
 }

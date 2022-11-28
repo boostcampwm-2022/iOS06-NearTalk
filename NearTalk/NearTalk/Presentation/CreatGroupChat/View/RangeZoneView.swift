@@ -22,7 +22,7 @@ final class RangeZoneView: UIView {
     
     // MARK: - UI Proporties
     
-    lazy var rangeLabel = UILabel().then {
+    private lazy var rangeLabel = UILabel().then {
         $0.text = "1km"
     }
     

@@ -6,89 +6,46 @@
 //
 
 import Foundation
-import UIKit
-
-final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
-    private let profileRepository: any ProfileRepository
-    private let mediaRepository: any MediaRepository
-    
-    init(
-        profileRepository: any ProfileRepository,
-        mediaRepository: any MediaRepository
-    ) {
-        self.profileRepository = profileRepository
-        self.mediaRepository = mediaRepository
-    }
-    
-    func makeProfileSettingCoordinatorDependency(
-        profile: UserProfile,
-        necessaryProfileComponent: NecessaryProfileComponent?) -> ProfileSettingCoordinatorDependency {
-            return DefaultProfileSettingDIContainer(
-                dependency: .init(
-                    updateProfileUseCase: DefaultUpdateProfileUseCase(repository: self.profileRepository),
-                    validateNickNameUseCase: ValidateNickNameUseCase(),
-                    validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
-                    uploadImageUseCase: DefaultUploadImageUseCase(mediaRepository: self.mediaRepository),
-                    profile: profile,
-                    necessaryProfileComponent: necessaryProfileComponent)
-            )
-        }
-    
-    func makeMyProfileViewController(action: MyProfileViewModelAction) -> MyProfileViewController {
-        let viewModel: MyProfileViewModel = DefaultMyProfileViewModel(
-            profileRepository: self.profileRepository,
-            mediaRepository: self.mediaRepository,
-            action: action
-        )
-        return MyProfileViewController(viewModel: viewModel)
-    }
-}
 
 final class MyProfileDIContainer {
-    // MARK: - Service
-    func makeImageService() -> any StorageService {
-        return DefaultStorageService()
-    }
+    // MARK: - Dependencies
     
-    func makeAuthService() -> any AuthService {
-        return DefaultFirebaseAuthService()
-    }
-    
-    func makeFirestoreService() -> any FirestoreService {
-        return DefaultFirestoreService()
+    // MARK: - Services
+
+    // MARK: - UseCases
+    func makeMyProfileUseCase() -> MyProfileLoadUseCase {
+        return DefaultMyProfileLoadUseCase(
+            profileRepository: self.makeProfileRepository(),
+            uuidRepository: self.makeUUIDRepository(),
+            imageRepository: self.makeImageRepository()
+        )
     }
     
     // MARK: - Repositories
-    func makeProfileRepository() -> any ProfileRepository {
-        return DefaultProfileRepository(firestoreService: self.makeFirestoreService(), firebaseAuthService: self.makeAuthService())
+    func makeProfileRepository() -> any UserProfileRepository {
+        return DefaultUserProfileRepository()
     }
     
-    func makeMediaRepository() -> any MediaRepository {
-        return DefaultMediaRepository(storageService: self.makeImageService())
+    func makeUUIDRepository() -> any UserUUIDRepository {
+        return DefaultUserUUIDRepository()
     }
     
-    func makeAuthRepository() -> any AuthRepository {
-        return DefaultAuthRepository(authService: self.makeAuthService())
+    func makeImageRepository() -> any ImageRepository {
+        return DefaultImageRepository()
+    }
+    
+    // MARK: - ViewModels
+    func makeViewModel() -> any MyProfileViewModel {
+        return DefaultMyProfileViewModel(profileLoadUseCase: self.makeMyProfileUseCase())
+    }
+    
+    // MARK: - Create viewController
+    func createMyProfileViewController() -> MyProfileViewController {
+        return MyProfileViewController(coordinator: self.makeMyProfileCoordinator(), viewModel: self.makeViewModel())
     }
     
     // MARK: - Coordinator
-    func makeCoordinator(
-        navigationController: UINavigationController?,
-        parent: Coordinator
-    ) -> MyProfileCoordinator {
-        return MyProfileCoordinator(
-            navigationController: navigationController,
-            parentCoordinator: parent,
-            childCoordinators: [],
-            dependency: makeCoordinatorDependency()
-        )
-    }
-    
-    // MARK: - DIContainers
-    func makeCoordinatorDependency() -> any MyProfileCoordinatorDependency {
-        return DefaultMyProfileCoordinatorDependency(
-            profileRepository: self.makeProfileRepository(),
-            mediaRepository: self.makeMediaRepository()
-        )
+    func makeMyProfileCoordinator() -> MyProfileCoordinator {
+        return MyProfileCoordinator()
     }
 }

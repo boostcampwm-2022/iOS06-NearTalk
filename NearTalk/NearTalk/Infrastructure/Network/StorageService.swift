@@ -10,7 +10,6 @@ import Foundation
 import RxSwift
 
 protocol StorageService {
-    /// Firebase storage에 저장하고 저장된 path(URL x)를 반환한다.
     func uploadData(data: Data, fileName: String, dataType: FirebaseKey.Storage) -> Single<String>
     func downloadURL(for path: String) -> Single<URL>
 }

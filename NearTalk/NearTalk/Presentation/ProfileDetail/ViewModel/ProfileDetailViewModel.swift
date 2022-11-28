@@ -10,112 +10,72 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-struct ProfileDetailViewModelActions {
-    var showChatViewController: (() -> Void)?
-    var showChatListViewController: (() -> Void)?
+protocol ProfileDetailCoordinatable: Coordinator {
+    func pushChatViewController(username: String)
+    func pushAlertViewController(username: String)
 }
 
-protocol ProfileDetailViewModelInput {
-    var viewWillAppearEvent: PublishRelay<Void> { get set }
-    var startChatButtonDidTapEvent: PublishRelay<Void> { get set }
-    var deleteFriendButtonDidTapEvent: PublishRelay<Void> { get set }
+protocol ProfileDetailUseCaseAble {
+    var userName: String? { get }
+    var statusMessage: String? { get }
+    var profileImageURL: String? { get }
+    func fetchUserInfo()
+    func deleteUserInFriendList()
 }
 
-protocol ProfileDetailViewModelOutput {
-    var userName: BehaviorRelay<String> { get }
-    var statusMessage: BehaviorRelay<String> { get }
-    var profileImageURL: BehaviorRelay<String> { get }
+protocol ViewModelable {
+    associatedtype Input
+    associatedtype Output
+    
+    func transform(input: Input, disposeBag: DisposeBag) -> Output
 }
 
-protocol ProfileDetailViewModelable: ProfileDetailViewModelInput, ProfileDetailViewModelOutput {
+final class ProfileDetailViewModel: ViewModelable {
+    private let profileDetailUseCase: ProfileDetailUseCaseAble
+    private let profileDetailCoordinator: ProfileDetailCoordinatable
     
-}
-
-final class ProfileDetailViewModel: ProfileDetailViewModelable {
-    var userName: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
-    
-    var statusMessage: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
-    
-    var profileImageURL: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
-    
-    var viewWillAppearEvent = PublishRelay<Void>()
-    
-    var startChatButtonDidTapEvent = PublishRelay<Void>()
-    
-    var deleteFriendButtonDidTapEvent = PublishRelay<Void>()
-        
-    private let userID: String
-    private let fetchProfileUseCase: FetchProfileUseCase
-    private let uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase
-    private let removeFriendUseCase: RemoveFriendUseCase
-    private let actions: ProfileDetailViewModelActions
-    
-    private let disposeBag = DisposeBag()
-    
-    init(userID: String,
-         fetchProfileUseCase: FetchProfileUseCase,
-         uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase,
-         removeFriendUseCase: RemoveFriendUseCase,
-         actions: ProfileDetailViewModelActions) {
-        self.userID = userID
-        self.fetchProfileUseCase = fetchProfileUseCase
-        self.uploadChatRoomInfoUseCase = uploadChatRoomInfoUseCase
-        self.removeFriendUseCase = removeFriendUseCase
-        self.actions = actions
-        self.bind()
+    init(profileDetailUseCase: ProfileDetailUseCaseAble, profileDetailCoordinator: ProfileDetailCoordinator) {
+        self.profileDetailUseCase = profileDetailUseCase
+        self.profileDetailCoordinator = profileDetailCoordinator
     }
     
-//    struct Input {
-//        let viewWillAppearEvent: Observable<Void>
-//        let startChatButtonDidTapEvent: Observable<Void>
-//        let deleteFriendButtonDidTapEvent: Observable<Void>
-//    }
-//
-//    struct Output {
-//        let userName = BehaviorRelay<String>(value: "..Loading")
-//        let statusMessage = BehaviorRelay<String>(value: "..Loading")
-//        let profileImageURL = BehaviorRelay<String>(value: "")
-//    }
+    struct Input {
+        let viewWillAppearEvent: Observable<Void>
+        let startChatButtonDidTapEvent: Observable<Void>
+        let deleteFriendButtonDidTapEvent: Observable<Void>
+    }
     
-    func bind() {
-        viewWillAppearEvent
+    struct Output {
+        var username: String
+        var statusMessage: String
+        var profileImageURL = PublishRelay<String>()
+    }
+    
+    func transform(input: Input, disposeBag: DisposeBag) -> Output {
+        let output = Output(
+            username: self.profileDetailUseCase.userName ?? "Unkown username",
+            statusMessage: self.profileDetailUseCase.statusMessage ?? "Unkown statusMessage"
+        )
+        
+        input.viewWillAppearEvent
             .subscribe(onNext: { [weak self] in
-                guard let self else {
-                    return
-                }
-                self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
-                    .subscribe(onSuccess: { info in
-                        self.userName.accept(info.username ?? "Unkown")
-                        self.statusMessage.accept(info.statusMessage ?? "Unkown")
-                        self.profileImageURL.accept(info.imagePath ?? "")
-                    })
-                    .disposed(by: self.disposeBag)
+                self?.profileDetailUseCase.fetchUserInfo()
             })
             .disposed(by: disposeBag)
         
-        startChatButtonDidTapEvent
+        input.startChatButtonDidTapEvent
             .subscribe(onNext: { [weak self] in
-                // TODO: - uploadChatRoomInfoUseCase 이용해서 구현
-                 self?.actions.showChatViewController?()
+                self?.profileDetailCoordinator.pushChatViewController(username: "username")
+                
             })
             .disposed(by: disposeBag)
         
-        deleteFriendButtonDidTapEvent
+        input.deleteFriendButtonDidTapEvent
             .subscribe(onNext: { [weak self] in
-                guard let self else {
-                    return
-                }
-                self.removeFriendUseCase.removeFriend(with: self.userID)
-                    .subscribe { event in
-                        switch event {
-                        case .completed:
-                            self.actions.showChatListViewController?()
-                        case .error(let error):
-                            print("ERROR: ", error.localizedDescription)
-                        }
-                    }
-                    .disposed(by: self.disposeBag)
+                self?.profileDetailCoordinator.pushAlertViewController(username: "username")
             })
             .disposed(by: disposeBag)
+        
+        return output
     }
 }

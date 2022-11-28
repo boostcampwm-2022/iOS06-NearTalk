@@ -4,23 +4,20 @@
 //
 //  Created by yw22 on 2022/11/11.
 //
- 
+
 import Foundation
 import RxRelay
 import RxSwift
 
 struct ChatRoomListViewModelActions {
-    let showChatRoom: (String, String) -> Void
+    let showChatRoom: () -> Void
     let showCreateChatRoom: () -> Void
-    let showDMChatRoomList: () -> Void
-    let showGroupChatRoomList: () -> Void
 }
 
 protocol ChatRoomListViewModelInput {
-    func didDMChatRoomList()
-    func didGroupChatRoomList()
     func didCreateChatRoom()
     func didSelectItem(at index: Int)
+    func load()
 }
 
 protocol ChatRoomListViewModelOutput {
@@ -32,7 +29,7 @@ protocol ChatRoomListViewModel: ChatRoomListViewModelInput, ChatRoomListViewMode
 
 final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
 
-    private let chatRoomListUseCase: FetchChatRoomUseCase
+    private let chatRoomListUseCase: ChatRoomListUseCase
     private let actions: ChatRoomListViewModelActions?
     private let disposeBag: DisposeBag = DisposeBag()
 
@@ -40,10 +37,14 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> = BehaviorRelay<[GroupChatRoomListData]>(value: [])
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
     
-    init(useCase: FetchChatRoomUseCase, actions: ChatRoomListViewModelActions? = nil) {
+    init(useCase: ChatRoomListUseCase, actions: ChatRoomListViewModelActions? = nil) {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
+        load()
+    }
+    
+    func load() {
         self.chatRoomListUseCase.getGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
@@ -51,28 +52,17 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase.getDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
-        
     }
 }
 
 // MARK: - Input
 extension DefaultChatRoomListViewModel {
-    func didDMChatRoomList() {
-        actions?.showDMChatRoomList()
-    }
-    
-    func didGroupChatRoomList() {
-        actions?.showGroupChatRoomList()
-    }
-    
-    // 채팅방 클릭시 채팅방 이동
-    func didSelectItem(at index: Int) {
-        // TODO: - chatRoomID, chatRoomName가 들어가야 함, 수정 필요
-        actions?.showChatRoom("chatRoomID", "chatRoomName")
-    }
-    
-    // 체팅방 생성 클릭시 이동
     func didCreateChatRoom() {
         actions?.showCreateChatRoom()
+    }
+    
+    func didSelectItem(at index: Int) {
+        print("\(index)인덱스가 선택되었습니다.")
+        actions?.showChatRoom()
     }
 }

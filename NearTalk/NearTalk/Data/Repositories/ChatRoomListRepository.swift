@@ -13,12 +13,8 @@ protocol ChatRoomListRepository {
     // fireBase 채팅방 목록 가져오기
     func fetchChatRoomList() -> Observable<[ChatRoom]>
     func fetchUserChatRoomModel() -> Observable<[UserChatRoomModel]>
-    
-    func createChatRoom(_ chatRoom: ChatRoom) -> Completable
-    func fetchChatRoomListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
-    func fetchUserChatRoomUUIDList() -> Single<[String]>
-    func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom>
-    func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom>
-    func fetchUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
-    func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable
+
+    // coreData 채팅방 목록 가져오기
+//    func fetchCoreDataChatRoomList() -> Observable<[ChatRoom]>
+
 }

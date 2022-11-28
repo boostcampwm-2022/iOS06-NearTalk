@@ -10,40 +10,53 @@ import PhotosUI
 import RxSwift
 import UIKit
 
-final class OnboardingCoordinator: Coordinator {
-    var navigationController: UINavigationController?
-    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
-    private let onboardingDIContainer: DefaultOnboardingDIContainer
-    
-    init(
-        container: DefaultOnboardingDIContainer,
-        navigationController: UINavigationController?
-    ) {
-        self.onboardingDIContainer = container
-        self.navigationController = navigationController
-    }
-    
-    func start() {
-        let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
-        self.navigationController?.pushViewController(onboardingViewController, animated: true)
+protocol OnboardingCoordinatorDependency {
+    func makeOnboardingViewModel() -> any OnboardingViewModel
+}
+
+final class DefaultOnboardingCoordinatorDependency: OnboardingCoordinatorDependency {
+    func makeOnboardingViewModel() -> any OnboardingViewModel {
+        return DefaultOnboardingViewModel(
+            validateUseCase: DefaultOnboardingValidateUseCase(),
+            saveProfileUseCase: DefaultOnboardingSaveProfileUseCase(
+                profileRepository: DefaultUserProfileRepository(),
+                uuidRepository: DefaultUserUUIDRepository(),
+                imageRepository: DefaultImageRepository()))
     }
 }
 
-extension OnboardingCoordinator {
-    #warning("이미지 피커가 뜨지 않습니다")
-    func presentImagePicker() -> Single<Data?> {
-        return self.imagePublisher.asSingle()
+final class OnboardingCoordinator: Coordinator {
+    private let dependency: any OnboardingCoordinatorDependency
+    var navigationController: UINavigationController?
+    
+    var parentCoordinator: Coordinator?
+    
+    var childCoordinators: [Coordinator]
+    
+    init(navigationController: UINavigationController,
+         parentCoordinator: Coordinator? = nil,
+         dependency: any OnboardingCoordinatorDependency) {
+        self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
+        self.childCoordinators = []
+        self.dependency = dependency
     }
     
-    func presentRegisterFailure() {
-        let alert: UIAlertController = .init(
-            title: "등록 실패",
-            message: "프로필 등록에 실패했습니다. 조금 있다 다시 시도해보세요",
-            preferredStyle: .alert)
-        let action: UIAlertAction = .init(title: "OK", style: .destructive)
-        alert.addAction(action)
-        self.navigationController?.topViewController?.present(alert, animated: true)
+    func start() {
+        showOnboardingViewController()
     }
+    
+    func showOnboardingViewController() {
+        self.navigationController?.pushViewController(
+            OnboardingViewController(viewModel: dependency.makeOnboardingViewModel(),
+                                     coordinator: self), animated: true)
+    }
+    
+    func finish() {
+        
+    }
+    
+    private var imageReceiveHandler: Binder<UIImage?>?
 }
 
 extension OnboardingCoordinator: PHPickerViewControllerDelegate {
@@ -56,8 +69,11 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
             itemProvider.loadObject(
                 ofClass: UIImage.self,
                 completionHandler: { [weak self] image, _ in
-                    let imageData: Data? = image as? Data
-                    self?.imagePublisher.onNext(imageData)
+                guard let image = image as? UIImage, let handler = self?.imageReceiveHandler else {
+                    return
+                }
+                handler.onNext(image)
+                self?.imageReceiveHandler = nil
             })
         } else {
             #if DEBUG
@@ -66,12 +82,12 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
         }
     }
     
-    func showPHPickerViewController() {
+    func showPHPickerViewController(_ imageSelectHandler: Binder<UIImage?>) {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorization in
             switch authorization {
             case .authorized, .limited:
                 Task {
-                    await self.presentPHPickerViewController()
+                    await self.presentPHPickerViewController(imageSelectHandler)
                 }
             default:
                 #if DEBUG
@@ -106,12 +122,13 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
     }
     
     @MainActor
-    private func presentPHPickerViewController() {
+    private func presentPHPickerViewController(_ imageSelectHandler: Binder<UIImage?>) {
         var config: PHPickerConfiguration = PHPickerConfiguration()
         config.filter = .images
         config.selectionLimit = 1
         let vc: PHPickerViewController = PHPickerViewController(configuration: config)
         vc.delegate = self
+        self.imageReceiveHandler = imageSelectHandler
         self.navigationController?.topViewController?.present(vc, animated: true)
     }
 }

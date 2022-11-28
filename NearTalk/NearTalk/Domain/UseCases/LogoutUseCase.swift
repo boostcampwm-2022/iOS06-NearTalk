@@ -9,18 +9,17 @@ import Foundation
 import RxSwift
 
 protocol LogoutUseCase {
-    init(authRepository: any AuthRepository)
     func logout() -> Completable
 }
 
 final class DefaultLogoutUseCase: LogoutUseCase {
-    private let authRepository: any AuthRepository
+    private let authService: FirebaseAuthService
     
-    init(authRepository: any AuthRepository) {
-        self.authRepository = authRepository
+    init(authService: FirebaseAuthService) {
+        self.authService = authService
     }
     
     func logout() -> Completable {
-        self.authRepository.logout()
+        self.authService.logout()
     }
 }

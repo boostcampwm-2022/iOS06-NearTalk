@@ -7,45 +7,26 @@
 
 import UIKit
 
-protocol CreateGroupChatCoordinatorDependencies {
-    func makeCreateGroupChatViewController(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewController
-    func makeChatDIContainer(chatRoomID: String, chatRoomName: String) -> ChatDIContainer
-    
-}
-
-final class CreateGroupChatCoordinator {
+final class CreateGroupChatCoordinator: CreateGroupChatCoordinatable {
     // MARK: - Proporties
     
-    weak var navigationController: UINavigationController?
+    var navigationController: UINavigationController?
+    
     var parentCoordinator: Coordinator?
-    private let dependencies: CreateGroupChatCoordinatorDependencies
-    private(set) weak var createGroupChatViewController: CreateGroupChatViewController?
     
-    init(navigationController: UINavigationController, dependencies: CreateGroupChatCoordinatorDependencies) {
-        self.navigationController = navigationController
-        self.dependencies = dependencies
-    }
+    var childCoordinators: [Coordinator]
     
-    // MARK: - Lifecycles
     func start() {
-        let actions: CreateGroupChatViewModelActions = .init(showChatViewController: showChatViewController)
-        let viewController = dependencies.makeCreateGroupChatViewController(actions: actions)
-        viewController.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(viewController, animated: true)
-        self.createGroupChatViewController = viewController
-    }
-
-    func showChatViewController(chatRoomID: String, chatRoomName: String) {
         print(#function)
-        guard let navigationController = navigationController
-        else { return }
-        
-        let dicontainer = self.dependencies.makeChatDIContainer(
-            chatRoomID: chatRoomID,
-            chatRoomName: chatRoomName
-        )
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>",chatRoomID, chatRoomName)
-        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
-        coordinator.start()
+    }
+    
+    init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, childCoordinators: [Coordinator]) {
+        self.navigationController = navigationController
+        self.parentCoordinator = parentCoordinator
+        self.childCoordinators = childCoordinators
+    }
+    
+    func showChatViewController() {
+        print(#function)
     }
 }
