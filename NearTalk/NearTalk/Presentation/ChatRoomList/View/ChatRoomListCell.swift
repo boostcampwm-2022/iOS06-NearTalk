@@ -32,7 +32,7 @@ class ChatRoomListCell: UICollectionViewCell {
         $0.font = UIFont(name: "text", size: 18)
     }
     
-    private let count = UILabel().then {
+    private let currentUserCount = UILabel().then {
         $0.textColor = .gray
         $0.font = UIFont.systemFont(ofSize: 16)
     }
@@ -47,6 +47,8 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private let unreadMessageCount = UILabel().then {
+        $0.sizeToFit()
+        $0.backgroundColor = .red
         $0.font = UIFont.systemFont(ofSize: 16)
     }
     
@@ -56,7 +58,7 @@ class ChatRoomListCell: UICollectionViewCell {
         $0.alignment = .center
         $0.spacing = 8
         $0.addArrangedSubview(self.name)
-        $0.addArrangedSubview(self.count)
+        $0.addArrangedSubview(self.currentUserCount)
     }
     
     private lazy var stackView2 = UIStackView().then {
@@ -84,16 +86,20 @@ class ChatRoomListCell: UICollectionViewCell {
     func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
         self.name.text = groupData.roomName
-        self.count.text = String((groupData.userList ?? []).count)
+        self.currentUserCount.text = String((groupData.userList ?? []).count)
         self.imageLoad(path: groupData.roomImagePath)
+        self.unreadMessageCount.text = String(groupData.messageCount ?? 0)
         self.bind(messageID: groupData.recentMessageID, roomID: groupData.uuid)
+        self.textDate()
     }
     
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
         self.name.text = dmData.roomName
         self.imageLoad(path: dmData.roomImagePath)
+        self.unreadMessageCount.text = String(dmData.messageCount ?? 0)
         self.bind(messageID: dmData.recentMessageID, roomID: dmData.uuid)
+        self.textDate()
     }
     
     // MARK: - Configure views
@@ -101,21 +107,27 @@ class ChatRoomListCell: UICollectionViewCell {
         self.contentView.addSubview(self.img)
         self.contentView.addSubview(self.stackView2)
         self.contentView.addSubview(self.date)
+        self.contentView.addSubview(self.unreadMessageCount)
     }
     
     private func configureConstraints() {
-        img.snp.makeConstraints { make in
+        self.img.snp.makeConstraints { make in
             make.leading.equalTo(self.contentView).offset(16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
-        date.snp.makeConstraints { make in
+        self.date.snp.makeConstraints { make in
             make.top.equalTo(self.contentView).offset(8)
             make.trailing.equalTo(self.contentView).offset(-16)
         }
         
-        stackView2.snp.makeConstraints { make in
+        self.unreadMessageCount.snp.makeConstraints { make in
+            make.bottom.equalTo(self.contentView).offset(8)
+            make.trailing.equalTo(self.contentView).offset(-16)
+        }
+        
+        self.stackView2.snp.makeConstraints { make in
             make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
             make.centerY.equalTo(self.contentView)
@@ -138,13 +150,21 @@ class ChatRoomListCell: UICollectionViewCell {
         guard let date = date
         else { return }
         
-        let nowDate = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd HH:mm"
         let convertDate = dateFormatter.string(from: date)
         
         self.date.text = convertDate
         // 날짜비교
+    }
+    
+    private func textDate() {
+        let nowDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd HH:mm"
+        let convertDate = dateFormatter.string(from: nowDate)
+        
+        self.date.text = convertDate
     }
     
     private func imageLoad(path: String?) {
@@ -162,3 +182,37 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct ChatRoomListCellPreview: PreviewProvider {
+    static var previews: some View {
+        let navigation = UINavigationController()
+        
+        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
+        let viewModel = diContainer.makeChatRoomListViewModel(
+            actions: ChatRoomListViewModelActions(showChatRoom: {},
+                                                  showCreateChatRoom: {},
+                                                  showDMChatRoomList: {},
+                                                  showGroupChatRoomList: {})
+        )
+
+        let chatRoomData = ChatRoom(uuid: "123",
+                                    userList: ["1", "2", "3", "4", "5", "6"],
+                                    roomImagePath: "",
+                                    roomName: "테스트방",
+                                    accessibleRadius: 0,
+                                    recentMessageID: "uuid",
+                                    messageCount: 5)
+                                    
+        let groupData = GroupChatRoomListData(data: chatRoomData)
+        
+        UIViewPreview {
+            let cell = ChatRoomListCell(frame: .zero)
+            cell.configure(groupData: groupData, viewModel: viewModel)
+            return cell
+        }.previewLayout(.fixed(width: 393, height: 393 * 0.2))
+    }
+}
+#endif
