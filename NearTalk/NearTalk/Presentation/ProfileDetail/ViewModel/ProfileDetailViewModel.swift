@@ -65,7 +65,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
         self.bind()
     }
     
-    func bind() {
+    private func bind() {
         viewWillAppearEvent
             .subscribe(onNext: { [weak self] in
                 guard let self else {
