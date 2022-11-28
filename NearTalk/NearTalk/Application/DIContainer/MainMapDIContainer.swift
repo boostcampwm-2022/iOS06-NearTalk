@@ -43,13 +43,17 @@ final class MainMapDIContainer {
     }
     
     // MARK: - ViewModels
-    func makeMainMapViewModel(actions: MainMapViewModel.Actions, useCases: MainMapViewModel.UseCases) -> MainMapViewModel {
+    func makeMainMapViewModel(actions: MainMapViewModel.Actions) -> MainMapViewModel {
+        let useCases = MainMapViewModel.UseCases(
+            fetchAccessibleChatRoomsUseCase: self.makeFetchAccessibleChatRoomsUseCase()
+        )
+        
         return MainMapViewModel(actions: actions, useCases: useCases)
     }
     
     // MARK: - ViewControllers
-    func makeMainMapViewController(actions: MainMapViewModel.Actions, useCases: MainMapViewModel.UseCases) -> MainMapViewController {
-        let mainMapVM = self.makeMainMapViewModel(actions: actions, useCases: useCases)
+    func makeMainMapViewController(actions: MainMapViewModel.Actions) -> MainMapViewController {
+        let mainMapVM = self.makeMainMapViewModel(actions: actions)
         
         return MainMapViewController.create(with: mainMapVM)
     }

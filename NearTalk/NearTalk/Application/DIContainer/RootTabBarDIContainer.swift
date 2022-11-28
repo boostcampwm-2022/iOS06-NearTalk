@@ -59,8 +59,16 @@ final class RootTabBarDIContainer {
         let friendListDIContainer: FriendListDIContainer = .init(dependencies: friendListDIContainerDependencies)
         let friendListCoordinator: FriendListCoordinator = friendListDIContainer.makeFriendListCoordinator(navigationController: .init())
         
+        let mainMapDIContainerDependencies: MainMapDIContainer.Dependencies = .init(
+            firestoreService: self.makeFirestoreService(),
+            apiDataTransferService: self.makeStorageService(),
+            imageDataTransferService: self.makeStorageService()
+        )
+        let mainMapDIContainer: MainMapDIContainer = .init(dependencies: mainMapDIContainerDependencies)
+        let mainMapCoordinator: MainMapCoordinator = mainMapDIContainer.makeMainMapCoordinator(navigationController: .init())
+        
         let dependency: RootTabBarCoordinatorDependency = .init(
-            mainMapCoordinator: MainMapCoordinator(),
+            mainMapCoordinator: mainMapCoordinator,
             chatRoomListCoordinator: chatRoomListCoordinator,
             friendListCoordinator: friendListCoordinator,
             myProfileCoordinator: MyProfileCoordinator(navigationController: .init())
