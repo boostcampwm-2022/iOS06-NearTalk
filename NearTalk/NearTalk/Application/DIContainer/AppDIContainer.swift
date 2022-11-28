@@ -97,4 +97,10 @@ final class AppDIContainer {
     func resolveRootTabBarDIContainer() -> RootTabBarDIContainer {
         self.container.resolve(RootTabBarDIContainer.self)!
     }
+    
+    func registerBackToLoginView(backToLoginView: (() -> Void)?) {
+        self.container.register((() -> Void)?.self) { resolver in
+            backToLoginView
+        }
+    }
 }

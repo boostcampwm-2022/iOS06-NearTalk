@@ -70,7 +70,8 @@ final class RootTabBarCoordinator: Coordinator {
         let diContainer: MyProfileDIContainer = .init()
         let coordinator: MyProfileCoordinator = diContainer.makeCoordinator(
             navigationController: navigationController,
-            parent: self
+            parent: self,
+            backToLoginView: self.rootTabBarDIContainer.resolveBackToLoginView()
         )
         coordinator.start()
         return self.embed(

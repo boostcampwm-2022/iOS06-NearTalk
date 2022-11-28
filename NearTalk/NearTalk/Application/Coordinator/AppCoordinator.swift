@@ -67,6 +67,7 @@ extension AppCoordinator: LoginCoordinatorDependency {
             return
         }
         self.navigationController?.popViewController(animated: false)
+        appDIContainer.registerBackToLoginView(backToLoginView: self.backToLoginView)
         let diContainer: RootTabBarDIContainer = appDIContainer.resolveRootTabBarDIContainer()
         let rootTabBarCoordinator: RootTabBarCoordinator = .init(navigationController: self.navigationController, container: diContainer)
         rootTabBarCoordinator.start()

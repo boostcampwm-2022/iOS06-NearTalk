@@ -9,15 +9,24 @@ import Foundation
 import UIKit
 
 final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
+    func makeAppSettingCoordinatorDependency() -> AppSettingCoordinatorDependency {
+        return DefaultAppSettingDIContainer(dependency: .init(authRepository: self.authRepository, profileRepository: self.profileRepository, backToLoginView: self.backToLoginView))
+    }
+    
     private let profileRepository: any ProfileRepository
     private let mediaRepository: any MediaRepository
-    
+    private let authRepository: any AuthRepository
+    private let backToLoginView: (() -> Void)?
     init(
         profileRepository: any ProfileRepository,
-        mediaRepository: any MediaRepository
+        mediaRepository: any MediaRepository,
+        authRepository: any AuthRepository,
+        backToLoginView: (() -> Void)?
     ) {
         self.profileRepository = profileRepository
         self.mediaRepository = mediaRepository
+        self.authRepository = authRepository
+        self.backToLoginView = backToLoginView
     }
     
     func makeProfileSettingCoordinatorDependency(
@@ -58,7 +67,6 @@ final class MyProfileDIContainer {
         return DefaultFirestoreService()
     }
     
-    
     // MARK: - Repositories
     func makeProfileRepository() -> any ProfileRepository {
         return DefaultProfileRepository(firestoreService: self.makeFirestoreService(), firebaseAuthService: self.makeAuthService())
@@ -75,21 +83,24 @@ final class MyProfileDIContainer {
     // MARK: - Coordinator
     func makeCoordinator(
         navigationController: UINavigationController?,
-        parent: Coordinator
+        parent: Coordinator,
+        backToLoginView: (() -> Void)? = nil
     ) -> MyProfileCoordinator {
         return MyProfileCoordinator(
             navigationController: navigationController,
             parentCoordinator: parent,
             childCoordinators: [],
-            dependency: makeCoordinatorDependency()
+            dependency: makeCoordinatorDependency(backToLoginView)
         )
     }
     
     // MARK: - DIContainers
-    func makeCoordinatorDependency() -> any MyProfileCoordinatorDependency {
+    func makeCoordinatorDependency(_ backToLoginView: (() -> Void)?) -> any MyProfileCoordinatorDependency {
         return DefaultMyProfileCoordinatorDependency(
             profileRepository: self.makeProfileRepository(),
-            mediaRepository: self.makeMediaRepository()
+            mediaRepository: self.makeMediaRepository(),
+            authRepository: self.makeAuthRepository(),
+            backToLoginView: backToLoginView
         )
     }
 }
