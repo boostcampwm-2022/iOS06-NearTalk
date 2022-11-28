@@ -5,70 +5,38 @@
 //  Created by lymchgmk on 2022/11/23.
 //
 
-import Foundation
+import Swinject
 import UIKit
 
 final class MainMapDIContainer {
+    private let container: Container
     
-    // MARK: - Dependencies
-    struct Dependencies {
-        let firestoreService: FirestoreService
-        let apiDataTransferService: StorageService
-        let imageDataTransferService: StorageService
+    init(
+        container: Container,
+        navigationController: UINavigationController,
+        actions: MainMapViewModel.Actions
+    ) {
+        self.container = Container(parent: container)
+        self.registerUseCase()
+        self.registerViewModel(actions: actions)
     }
     
-    private let dependencies: Dependencies
-    
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
+    private func registerUseCase() {
+        self.container.register(FetchAccessibleChatRoomsUseCase.self) { _ in
+            let resolvedAccessibleChatRoomsRepository = self.container.resolve(AccessibleChatRoomsRepository.self)!
+            let repositories = DefaultFetchAccessibleChatRoomsUseCase.Repositories(accessibleChatRoomsRepository: resolvedAccessibleChatRoomsRepository)
+            
+            return DefaultFetchAccessibleChatRoomsUseCase(repositories: repositories)
+        }
     }
     
-    // MARK: - Use Cases
-    func makeFetchAccessibleChatRoomsUseCase() -> FetchAccessibleChatRoomsUseCase {
-        let repositories = DefaultFetchAccessibleChatRoomsUseCase.Repositories
-            .init(accessibleChatRoomsRepository: self.makeAccessibleChatRoomsRepository())
-        
-        return DefaultFetchAccessibleChatRoomsUseCase(repositories: repositories)
-    }
-    
-    // MARK: - Repositories
-    func makeAccessibleChatRoomsRepository() -> AccessibleChatRoomsRepository {
-        let dependencies = DefaultAccessibleChatRoomsRepository.Dependencies(
-            firestoreService: self.dependencies.firestoreService,
-            apiDataTransferService: self.dependencies.apiDataTransferService,
-            imageDataTransferService: self.dependencies.imageDataTransferService
-        )
-        
-        return DefaultAccessibleChatRoomsRepository(dependencies: dependencies)
-    }
-    
-    // MARK: - ViewModels
-    func makeMainMapViewModel(actions: MainMapViewModel.Actions) -> MainMapViewModel {
-        let useCases = MainMapViewModel.UseCases(
-            fetchAccessibleChatRoomsUseCase: self.makeFetchAccessibleChatRoomsUseCase()
-        )
-        
-        return MainMapViewModel(actions: actions, useCases: useCases)
-    }
-    
-    // MARK: - ViewControllers
-    func makeMainMapViewController(actions: MainMapViewModel.Actions) -> MainMapViewController {
-        let mainMapVM = self.makeMainMapViewModel(actions: actions)
-        
-        return MainMapViewController.create(with: mainMapVM)
-    }
-    
-    func makeBottomSheetViewController() -> BottomSheetViewController {
-        return BottomSheetViewController()
-    }
-    
-    // MARK: - Coordinators
-    func makeMainMapCoordinator(navigationController: UINavigationController?) -> MainMapCoordinator {
-        return MainMapCoordinator(
-            navigationController: navigationController,
-            dependencies: self
-        )
+    private func registerViewModel(actions: MainMapViewModel.Actions) {
+        self.container.register(MainMapViewModel.self) { _ in
+            let useCases = MainMapViewModel.UseCases(
+                fetchAccessibleChatRoomsUseCase: self.container.resolve(FetchAccessibleChatRoomsUseCase.self)!
+            )
+            
+            return MainMapViewModel(actions: actions, useCases: useCases)
+        }
     }
 }
-
-extension MainMapDIContainer: MainMapCoordinatorDependencies {}

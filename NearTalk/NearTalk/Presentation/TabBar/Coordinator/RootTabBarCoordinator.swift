@@ -38,6 +38,8 @@ final class RootTabBarCoordinator: Coordinator {
         
     private func showMapView() -> UIViewController {
         let navigationController = UINavigationController()
+        let diContainer: MainMapDIContainer = .init()
+        let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
         return self.embed(
             rootNav: navigationController,
             title: "홈",
