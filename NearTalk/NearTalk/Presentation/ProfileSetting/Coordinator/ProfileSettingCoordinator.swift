@@ -78,7 +78,7 @@ extension ProfileSettingCoordinator: PHPickerViewControllerDelegate {
                 ofClass: UIImage.self,
                 completionHandler: { [weak self] image, _ in
                     let uiImage: UIImage? = image as? UIImage
-                    let imageData: Data? = uiImage?.jpegData(compressionQuality: 1.0) ?? uiImage?.pngData()
+                    let imageData: Data? = uiImage?.resized()?.jpegData(compressionQuality: 1.0) ?? uiImage?.pngData()
                     self?.imageObserver?.accept(imageData)
                     self?.imageObserver = nil
             })

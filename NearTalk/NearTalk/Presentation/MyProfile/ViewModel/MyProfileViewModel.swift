@@ -43,16 +43,16 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
     let image: BehaviorRelay<String?> = BehaviorRelay(value: nil)
     
     private let profileRepository: any ProfileRepository
-    private let imageRepository: any ImageRepository
+    private let mediaRepository: any MediaRepository
     private let action: any MyProfileViewModelAction
     private var profile: UserProfile = UserProfile()
     private let disposeBag: DisposeBag = DisposeBag()
     
     init(profileRepository: any ProfileRepository,
-         imageRepository: any ImageRepository,
+         mediaRepository: any MediaRepository,
          action: any MyProfileViewModelAction) {
         self.profileRepository = profileRepository
-        self.imageRepository = imageRepository
+        self.mediaRepository = mediaRepository
         self.action = action
     }
     

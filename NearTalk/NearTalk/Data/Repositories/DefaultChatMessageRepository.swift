@@ -10,13 +10,19 @@ import RxSwift
 
 final class DefaultChatMessageRepository: ChatMessageRepository {
     private let databaseService: RealTimeDatabaseService
+    private let fcmService: FCMService
     
-    init(databaseService: RealTimeDatabaseService) {
+    init(
+        databaseService: RealTimeDatabaseService,
+        fcmService: FCMService
+    ) {
         self.databaseService = databaseService
+        self.fcmService = fcmService
     }
     
-    func sendMessage(_ message: ChatMessage) -> Completable {
+    func sendMessage(message: ChatMessage, roomName: String) -> Completable {
         self.databaseService.sendMessage(message)
+            .andThen(self.fcmService.sendMessage(message, roomName))
     }
     
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {

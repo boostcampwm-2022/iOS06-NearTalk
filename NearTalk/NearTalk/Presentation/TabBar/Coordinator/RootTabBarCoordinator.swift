@@ -7,34 +7,23 @@
 
 import UIKit
 
-protocol RootTabBarCoordinatorDependency {
-    func makeRootTabBarViewController() -> RootTabBarController
-    func mainMapCoordinator() -> MainMapCoordinator
-    func chatRoomListDIConatiner() -> ChatRoomListDIContainer
-    func friendListDIConatiner() -> FriendListDIContainer
-    func myProfileDIConatiner() -> MyProfileDIContainer
-}
-
-final class RootTabBarCoordinator {
+final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    var tabbarViewController: UITabBarController?
-    var dependency: RootTabBarCoordinatorDependency
+    var tabBarViewController: UITabBarController?
+    var parentCoordinator: Coordinator?
     
-    init(navigationController: UINavigationController?, dependency: RootTabBarCoordinatorDependency) {
+    init(navigationController: UINavigationController?) {
         self.navigationController = navigationController
-        self.dependency = dependency
     } 
     
     func start() {
-        let viewcontroller: RootTabBarController = dependency.makeRootTabBarViewController()
-        self.tabbarViewController = viewcontroller
-        
-        guard let tabbarViewController = self.tabbarViewController
-        else { return }
-        
-        tabbarViewController.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-        tabbarViewController.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(tabbarViewController, animated: true)
+        let diContainer: RootTabBarDIContainer = .init()
+        let viewcontroller: RootTabBarController = diContainer.makeRootTabBarViewController()
+        self.tabBarViewController = viewcontroller
+        viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
+        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        self.navigationController?.popViewController(animated: false)
+        self.navigationController?.navigationBar.isHidden = true
     }
         
     private func showMapView() -> UIViewController {
@@ -48,11 +37,10 @@ final class RootTabBarCoordinator {
     }
     
     private func showChatRoomList() -> UIViewController {
-        let navigationController = UINavigationController()
-        let diContainer = dependency.chatRoomListDIConatiner()
-        let coordinator = diContainer.makeChatRoomListCoordinator(navigationController: navigationController)
+        let navigationController: UINavigationController = .init()
+        let diContainer: ChatRoomListDIContainer = .init()
+        let coordinator: ChatRoomListCoordinator = diContainer.makeChatRoomListCoordinator(navigationController: navigationController)
         coordinator.start()
-        
         return self.embed(
             rootNav: navigationController,
             title: "채팅",
@@ -60,11 +48,11 @@ final class RootTabBarCoordinator {
             activatedImage: UIImage(systemName: "message.fill")?.withTintColor(.blue)
         )
     }
-    
+
     private func showFriendList() -> UIViewController {
         let navigationController = UINavigationController()
-        let diContainer = dependency.friendListDIConatiner()
-        let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
+        let diContainer: FriendListDIContainer = .init()
+        let coordinator: FriendListCoordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()
         
         return self.embed(
@@ -74,7 +62,7 @@ final class RootTabBarCoordinator {
             activatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.blue)
         )
     }
-    
+
     private func showMyProfile() -> UIViewController {
         let navigationController = UINavigationController()
         let diContainer = self.dependency.myProfileDIConatiner()

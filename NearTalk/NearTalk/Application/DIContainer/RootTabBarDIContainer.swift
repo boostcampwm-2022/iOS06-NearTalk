@@ -43,25 +43,7 @@ final class RootTabBarDIContainer {
     }
     
     // MARK: - Coordinator
-    func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator? {
-        return RootTabBarCoordinator(navigationController: navigationController, dependency: self)
-    }
-}
-
-extension RootTabBarDIContainer: RootTabBarCoordinatorDependency {
-    func mainMapCoordinator() -> MainMapCoordinator {
-        return MainMapCoordinator()
-    }
-    
-    func chatRoomListDIConatiner() -> ChatRoomListDIContainer {
-        return ChatRoomListDIContainer()
-    }
-    
-    func friendListDIConatiner() -> FriendListDIContainer {
-        return FriendListDIContainer()
-    }
-    
-    func myProfileDIConatiner() -> MyProfileDIContainer {
-        return MyProfileDIContainer(dependency: MyProfileDIContainer.Dependency(fireStoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService(), storageService: DefaultStorageService()))
+    func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator {
+        return RootTabBarCoordinator(navigationController: navigationController)
     }
 }
