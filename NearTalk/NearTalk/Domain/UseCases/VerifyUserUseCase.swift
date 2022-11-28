@@ -16,10 +16,16 @@ protocol VerifyUserUseCase {
 final class DefaultVerifyUserUseCase: VerifyUserUseCase {
     private let authRepository: AuthRepository
     private let profileRepository: ProfileRepository
+    private let userDefaultsRepository: UserDefaultsRepository
     
-    init(authRepository: AuthRepository, profileRepository: ProfileRepository) {
+    init(
+        authRepository: AuthRepository,
+        profileRepository: ProfileRepository,
+        userDefaultsRepository: UserDefaultsRepository
+    ) {
         self.authRepository = authRepository
         self.profileRepository = profileRepository
+        self.userDefaultsRepository = userDefaultsRepository
     }
     
     func verifyUser() -> Completable {
@@ -27,6 +33,10 @@ final class DefaultVerifyUserUseCase: VerifyUserUseCase {
     }
     
     func verifyProfile() -> Completable {
-        self.profileRepository.fetchMyProfile().asCompletable()
+        self.profileRepository.fetchMyProfile()
+            .do(onSuccess: { [weak self] profile in
+                self?.userDefaultsRepository.saveUserProfile(profile)
+            })
+            .asCompletable()
     }
 }
