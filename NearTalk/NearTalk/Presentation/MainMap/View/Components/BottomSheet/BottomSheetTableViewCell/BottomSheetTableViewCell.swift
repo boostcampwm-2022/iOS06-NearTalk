@@ -9,5 +9,5 @@ import UIKit
 
 final class BottomSheetTableViewCell: UITableViewCell {
     
-    static let reuseIdentifier = String(describing: BottomSheetTableViewCell.self)
+    static let reuseIdentifier = String(describing: BottomSheetViewController.self)
 }

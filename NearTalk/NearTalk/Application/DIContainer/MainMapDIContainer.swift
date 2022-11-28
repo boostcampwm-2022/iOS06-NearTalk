@@ -2,73 +2,48 @@
 //  MainMapDIContainer.swift
 //  NearTalk
 //
-//  Created by lymchgmk on 2022/11/23.
+//  Created by lymchgmk on 2022/11/21.
 //
 
-import Foundation
 import UIKit
 
 final class MainMapDIContainer {
     
-    // MARK: - Dependencies
     struct Dependencies {
-        let firestoreService: FirestoreService
-        let apiDataTransferService: StorageService
-        let imageDataTransferService: StorageService
+        
     }
     
     private let dependencies: Dependencies
+    
+    // MARK: - Storages
     
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
     
-    // MARK: - Use Cases
-    func makeFetchAccessibleChatRoomsUseCase() -> FetchAccessibleChatRoomsUseCase {
-        let repositories = DefaultFetchAccessibleChatRoomsUseCase.Repositories
-            .init(accessibleChatRoomsRepository: self.makeAccessibleChatRoomsRepository())
-        
-        return DefaultFetchAccessibleChatRoomsUseCase(repositories: repositories)
-    }
+    // MARK: - UseCases
+//    func makeFetchChatRoomsInfoUseCase() -> MainMapUseCase {
+//        return FetchChatRoomsInfoUseCase(mainMapRepository: self.makeFetchC)
+//    }
+    
+//    func makeUploadChatRoomInfoUseCase() -> MainMapUseCase {
+//        return UploadChatRoomInfoUseCase(mainMapRepository: <#T##MainMapRepository#>)
+//    }
     
     // MARK: - Repositories
-    func makeAccessibleChatRoomsRepository() -> AccessibleChatRoomsRepository {
-        let dependencies = DefaultAccessibleChatRoomsRepository.Dependencies(
-            firestoreService: self.dependencies.firestoreService,
-            apiDataTransferService: self.dependencies.apiDataTransferService,
-            imageDataTransferService: self.dependencies.imageDataTransferService
-        )
+    // func makeMainMapRepositories()
+    
+    // MARK: - MainMap Scene
+    // func makeMainMapViewModel() -> MainMapViewModel {
+    //     return DefaultMainMapViewModel(useCases: MainMapUseCase, actions: )
+    // }
+    
+//    func makeMainMapViewController() -> MainMapViewController {
+//        return MainMapViewController.create(with: self.makeMainMapViewModel())
+//    }
+    
+    // MARK: - Flow Coordinators
+    func makeMainMapFlowCoordinator() {
         
-        return DefaultAccessibleChatRoomsRepository(dependencies: dependencies)
-    }
-    
-    // MARK: - ViewModels
-    func makeMainMapViewModel(actions: MainMapViewModel.Actions) -> MainMapViewModel {
-        let useCases = MainMapViewModel.UseCases(
-            fetchAccessibleChatRoomsUseCase: self.makeFetchAccessibleChatRoomsUseCase()
-        )
-        
-        return MainMapViewModel(actions: actions, useCases: useCases)
-    }
-    
-    // MARK: - ViewControllers
-    func makeMainMapViewController(actions: MainMapViewModel.Actions) -> MainMapViewController {
-        let mainMapVM = self.makeMainMapViewModel(actions: actions)
-        
-        return MainMapViewController.create(with: mainMapVM)
-    }
-    
-    func makeBottomSheetViewController() -> BottomSheetViewController {
-        return BottomSheetViewController()
-    }
-    
-    // MARK: - Coordinators
-    func makeMainMapCoordinator(navigationController: UINavigationController?) -> MainMapCoordinator {
-        return MainMapCoordinator(
-            navigationController: navigationController,
-            dependencies: self
-        )
     }
 }
-
-extension MainMapDIContainer: MainMapCoordinatorDependencies {}
