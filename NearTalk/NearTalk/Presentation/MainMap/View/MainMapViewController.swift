@@ -13,7 +13,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class MainMapViewController: UIViewController, StoryboardInstantiable {
+final class MainMapViewController: UIViewController {
     
     // MARK: - UI Components
     private lazy var mapView: MKMapView = .init().then {
@@ -39,7 +39,7 @@ final class MainMapViewController: UIViewController, StoryboardInstantiable {
     
     // MARK: - LifeCycles
     static func create(with viewModel: MainMapViewModel) -> MainMapViewController {
-        let mainMapVC = MainMapViewController.instantiateViewController()
+        let mainMapVC = MainMapViewController()
         mainMapVC.viewModel = viewModel
         
         return mainMapVC

@@ -10,18 +10,10 @@ import UIKit
 
 final class MainMapDIContainer {
     
-    // MARK: - Dependencies
-    struct Dependencies {
-        let firestoreService: FirestoreService
-        let apiDataTransferService: StorageService
-        let imageDataTransferService: StorageService
-    }
-    
-    private let dependencies: Dependencies
-    
-    init(dependencies: Dependencies) {
-        self.dependencies = dependencies
-    }
+    // MARK: - Services
+    private let firestoreService: FirestoreService = DefaultFirestoreService()
+    private let apiDataTransferService: StorageService = DefaultStorageService()
+    private let imageDataTransferService: StorageService = DefaultStorageService()
     
     // MARK: - Use Cases
     func makeFetchAccessibleChatRoomsUseCase() -> FetchAccessibleChatRoomsUseCase {
@@ -34,9 +26,9 @@ final class MainMapDIContainer {
     // MARK: - Repositories
     func makeAccessibleChatRoomsRepository() -> AccessibleChatRoomsRepository {
         let dependencies = DefaultAccessibleChatRoomsRepository.Dependencies(
-            firestoreService: self.dependencies.firestoreService,
-            apiDataTransferService: self.dependencies.apiDataTransferService,
-            imageDataTransferService: self.dependencies.imageDataTransferService
+            firestoreService: self.firestoreService,
+            apiDataTransferService: self.apiDataTransferService,
+            imageDataTransferService: self.imageDataTransferService
         )
         
         return DefaultAccessibleChatRoomsRepository(dependencies: dependencies)
