@@ -120,7 +120,6 @@
 		608BD115292FFEFC00CB676E /* FCMNotificationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD114292FFEFC00CB676E /* FCMNotificationDTO.swift */; };
 		608BD1172930043200CB676E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 608BD1162930043200CB676E /* GoogleService-Info.plist */; };
 		608BD1192931F3E800CB676E /* AppDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD1182931F3E800CB676E /* AppDIContainer.swift */; };
-		608BD11B2931FB3800CB676E /* Swinject.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 608BD11A2931FB3800CB676E /* Swinject.xcframework */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
 		60DCAAF42928B9610087A63D /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60DCAAF32928B9610087A63D /* Cartfile */; };
 		60E749DC292C88F40048F877 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E749DB292C88F40048F877 /* AuthService.swift */; };
@@ -349,7 +348,6 @@
 		608BD114292FFEFC00CB676E /* FCMNotificationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMNotificationDTO.swift; sourceTree = "<group>"; };
 		608BD1162930043200CB676E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../../Downloads/BoostCamp/그룹프로젝트/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		608BD1182931F3E800CB676E /* AppDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDIContainer.swift; sourceTree = "<group>"; };
-		608BD11A2931FB3800CB676E /* Swinject.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Swinject.xcframework; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
 		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		60E749DB292C88F40048F877 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -443,7 +441,6 @@
 				603FD3802928D40300687ED4 /* FirebaseSharedSwift.xcframework in Frameworks */,
 				603FD3792928D40300687ED4 /* FirebaseCore.xcframework in Frameworks */,
 				603FD36D2928D40300687ED4 /* FirebaseAnalyticsSwift.xcframework in Frameworks */,
-				608BD11B2931FB3800CB676E /* Swinject.xcframework in Frameworks */,
 				603FD3742928D40300687ED4 /* FBLPromises.xcframework in Frameworks */,
 				603FD37F2928D40300687ED4 /* FirebaseAuth.xcframework in Frameworks */,
 				603FD3632928D40300687ED4 /* nanopb.xcframework in Frameworks */,
@@ -949,7 +946,6 @@
 		603FD33C2928D40300687ED4 /* Build */ = {
 			isa = PBXGroup;
 			children = (
-				608BD11A2931FB3800CB676E /* Swinject.xcframework */,
 				603FD33D2928D40300687ED4 /* .FirebaseDatabaseBinary.version */,
 				603FD33E2928D40300687ED4 /* nanopb.xcframework */,
 				603FD33F2928D40300687ED4 /* FirebaseDynamicLinks.xcframework */,
@@ -1917,7 +1913,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1969,7 +1965,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
