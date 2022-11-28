@@ -9,13 +9,6 @@ import Foundation
 
 import RxSwift
 
-struct UserProfileDetail {
-    let id: String?
-    let username: String?
-    let imagePath: String?
-    let statusMessage: String?
-}
-
 protocol FetchProfileUseCase {
     func fetchUserInfo(with userID: String) -> Single<UserProfile>
 }
