@@ -7,58 +7,44 @@
 
 import CoreLocation
 import MapKit
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
 import UIKit
 
 final class MainMapViewController: UIViewController, StoryboardInstantiable {
     
-    // MARK: - Properties
-    private var viewModel: MainMapViewModel!
-    private var repository: MainMapRepository?
-    
-    private let locationManager = CLLocationManager().then {
-        $0.desiredAccuracy = kCLLocationAccuracyBest
-    }
-    
-    private var userLocation: CLLocation?
-    // private let naverLocation = CLLocation(latitude: 37.3589, longitude: 127.1051)
-    
     // MARK: - UI Components
-    private lazy var mapView = MKMapView().then {
+    private lazy var mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
         $0.setUserTrackingMode(.follow, animated: true)
     }
-    
-    private lazy var moveToCurrentLocationButton: UIButton = UIButton().then {
+    private lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         $0.tintColor = .systemBlue
-        $0.addTarget(
-            self,
-            action: #selector(self.moveToCurrentLocation),
-            for: .touchUpInside
-        )
     }
-    
-    private lazy var createChatRoomButton: UIButton = UIButton().then {
+    private lazy var createChatRoomButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
         $0.tintColor = .systemBlue
-        $0.addTarget(
-            self,
-            action: #selector(self.createChatRoom),
-            for: .touchUpInside
-        )
+    }
+    private let bottomSheet: BottomSheetViewController = .init()
+
+    // MARK: - Properties
+    private var viewModel: MainMapViewModel!
+    private let disposeBag: DisposeBag = .init()
+    private let locationManager: CLLocationManager = .init().then {
+        $0.desiredAccuracy = kCLLocationAccuracyBest
     }
     
-    // MARK: - LifeCycle
-    static func create(with viewModel: MainMapViewModel, repository: MainMapRepository? = nil) -> MainMapViewController {
+    // MARK: - LifeCycles
+    static func create(with viewModel: MainMapViewModel) -> MainMapViewController {
         let mainMapVC = MainMapViewController.instantiateViewController()
         mainMapVC.viewModel = viewModel
-        mainMapVC.repository = repository
         
         return mainMapVC
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,6 +52,7 @@ final class MainMapViewController: UIViewController, StoryboardInstantiable {
         configureConstraints()
         configureDelegates()
         registerAnnotationViewClass()
+        bindViewModel()
         // 디버깅 용
         loadDataForMapView()
         
@@ -107,6 +94,25 @@ final class MainMapViewController: UIViewController, StoryboardInstantiable {
     private func configureDelegates() {
         self.mapView.delegate = self
         self.locationManager.delegate = self
+    }
+    
+    private func bindViewModel() {
+        self.moveToCurrentLocationButton.rx.tap
+            .asObservable()
+            .bind(onNext: { [weak self] _ in
+                if let currentUserLocation = self?.mapView.userLocation.location {
+                    self?.mapView.move(to: currentUserLocation)
+                }
+            })
+            .disposed(by: self.disposeBag)
+        
+        let input = MainMapViewModel.Input(
+            mapViewDidAppear: self.rx.methodInvoked(#selector(viewDidAppear(_:))).map { _ in self.mapView }.asObservable(),
+            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation.map { _ in self.mapView }.asObservable(),
+            didSelectMainMapAnnotation: self.mapView.rx.didSelectAnnotationView.asObservable()
+        )
+        
+        let output = self.viewModel.transform(input: input)
     }
     
     private func loadDataForMapView() {
@@ -152,7 +158,7 @@ final class MainMapViewController: UIViewController, StoryboardInstantiable {
     }
     
     private func registerAnnotationViewClass() {
-        // Single: Open or Dm
+        // Single: Group or DM
         self.mapView.register(
             GroupChatRoomAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier
@@ -167,19 +173,6 @@ final class MainMapViewController: UIViewController, StoryboardInstantiable {
             forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier
         )
     }
-    
-    @objc
-    func moveToCurrentLocation(sender: UIButton) {
-        if let currentLocation = self.locationManager.location {
-            self.mapView.move(to: currentLocation)
-        }
-    }
-    
-    // 추후에 채팅 방 생성 로직 추가
-    @objc
-    func createChatRoom() {
-        print("ChatRoom 생성")
-    }
 }
 
 // MARK: - Extensions
@@ -190,10 +183,10 @@ private extension MKMapView {
             latitudinalMeters: 10000,
             longitudinalMeters: 10000
         )
-        
+
         setCameraBoundary(region: coordinateRegion)
         setCameraZoomRange()
-        
+
         self.setRegion(coordinateRegion, animated: true)
     }
     
@@ -232,9 +225,7 @@ extension MainMapViewController: MKMapViewDelegate {
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        let bottomSheetViewController = BottomSheetViewController()
-        
-        present(bottomSheetViewController, animated: true, completion: nil)
+        self.viewModel.actions.showBottomSheetView()
     }
 }
 
@@ -245,36 +236,12 @@ extension MainMapViewController: CLLocationManagerDelegate {
             manager.requestWhenInUseAuthorization()
         case .authorizedAlways, .authorizedWhenInUse:
             manager.startUpdatingLocation()
-            self.userLocation = manager.location
         case .restricted, .denied:
-            // showRequestLocationServiceAlert()
             manager.requestWhenInUseAuthorization()
         @unknown default:
             return
         }
     }
-    
-    // 권한 요청 관련 추가 메서드
-//    private func showRequestLocationServiceAlert() {
-//        let requestLocationServiceAlert = UIAlertController(
-//            title: "위치정보 이용",
-//            message: "위치 서비스를 사용할 수 없습니다. 기기의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.",
-//            preferredStyle: .alert
-//        )
-//
-//        let goSetting = UIAlertAction(title: "설정으로 이동", style: .destructive) { _ in
-//            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
-//                UIApplication.shared.open(appSetting)
-//            }
-//        }
-//
-//        let cancel = UIAlertAction(title: "취소", style: .default)
-//
-//        requestLocationServiceAlert.addAction(cancel)
-//        requestLocationServiceAlert.addAction(goSetting)
-//
-//        present(requestLocationServiceAlert, animated: true, completion: nil)
-//    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {

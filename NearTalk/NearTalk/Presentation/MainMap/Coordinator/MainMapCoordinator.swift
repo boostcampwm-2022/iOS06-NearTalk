@@ -8,48 +8,48 @@
 import UIKit
 
 protocol MainMapCoordinatorDependencies {
-    func makeMainMapViewController(actions: MainMapViewModelActions) -> MainMapViewController
-    func makeMainMapViewController(userLocation: NCLocation) -> UIViewController
-    func makeMainMapBottomSheetViewController() -> BottomSheetViewController
+    func makeMainMapViewController(actions: MainMapViewModel.Actions) -> MainMapViewController
+    func makeBottomSheetViewController() -> BottomSheetViewController
 }
 
 final class MainMapCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    
-    private weak var navigationController: UINavigationController?
+    var parentCoordinator: Coordinator?
     private let dependencies: MainMapCoordinatorDependencies
     
     private weak var mainMapVC: MainMapViewController?
-    private weak var mainMapBottomSheetVC: BottomSheetViewController?
+    private weak var bottomSheetVC: BottomSheetViewController?
     
-    init(navigationController: UINavigationController, dependencies: MainMapCoordinatorDependencies) {
+    init(navigationController: UINavigationController? = nil, dependencies: MainMapCoordinatorDependencies) {
         self.navigationController = navigationController
         self.dependencies = dependencies
     }
     
     func start() {
-        let actions = MainMapViewModelActions(
-            showMainMapView: self.showMainMapView,
-            showBottomSheet: self.showBottomSheet,
-            showCreateChatRoomView: self.showCreateChatRoomView
-        )
+        let actions = MainMapViewModel.Actions(showCreateChatRoomView: self.showCreateChatRoomView,
+                                               showBottomSheetView: self.showBottomSheetView)
         
-        let mainMapVC = dependencies.makeMainMapViewController(actions: actions)
-        self.navigationController?.pushViewController(mainMapVC, animated: true)
-        self.mainMapVC = mainMapVC
+        self.bottomSheetVC = dependencies.makeBottomSheetViewController()
+        self.mainMapVC = dependencies.makeMainMapViewController(actions: actions)
+        
+        if let mainMapVC = self.mainMapVC {
+            self.navigationController?.pushViewController(mainMapVC, animated: true)
+        }
     }
     
-    private func showMainMapView(userLocation: NCLocation) {
-        let mainMapVC = dependencies.makeMainMapViewController(userLocation: userLocation)
-        
-        self.navigationController?.pushViewController(mainMapVC, animated: false)
+    // MARK: - Actions
+    private func showCreateChatRoomView() {
+        // TODO: - 채팅방 생성 뷰 보여주는 로직 추가
+        print(#function)
+        // CreateGroupChatCoordinator.start()
     }
     
-    private func showBottomSheet(chatRooms: [ChatRoom]) {
+    private func showBottomSheetView() {
+        guard let mainMapVC = self.mainMapVC,
+              let bottomSheetVC = self.bottomSheetVC else { return }
         
-    }
-    
-    private func showCreateChatRoomView(userLocation: NCLocation) {
+        // TODO: - BottomSheet 데이터 주입
         
+        mainMapVC.present(bottomSheetVC, animated: true)
     }
 }

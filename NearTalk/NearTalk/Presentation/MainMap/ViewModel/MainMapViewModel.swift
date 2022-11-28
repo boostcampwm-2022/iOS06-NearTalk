@@ -6,90 +6,78 @@
 //
 
 import Foundation
+import MapKit
 import RxCocoa
+import RxRelay
 import RxSwift
 
-// MARK: - Actions
-struct MainMapViewModelActions {
-    let showMainMapView: (NCLocation) -> Void
-    let showBottomSheet: ([ChatRoom]) -> Void
-    let showCreateChatRoomView: (NCLocation) -> Void
-}
-
-// MARK: - I/O Protocols
-protocol MainMapViewModelInput {
-    func viewDidLoad()
-    func didMove(user location: NCLocation)
-    func didMove(map location: NCLocation)
-    func didSelect(with annotation: ChatRoomAnnotation)
-    func didSelect(with segmentControlIndex: Int)
-    func didTapMoveToCurrentLocationButton()
-    func didTapCreateChatRoomButton()
-}
-
-protocol MainMapViewModelOutput {
-    var userLocation: BehaviorRelay<NCLocation> { get set }
-    var mapCenterLocation: BehaviorRelay<NCLocation> { get set }
-    var chatRooms: BehaviorRelay<[ChatRoom]> { get set }
-    var groupChatRooms: BehaviorRelay<[ChatRoom]> { get set }
-    var dmChatRooms: BehaviorRelay<[ChatRoom]> { get set }
-}
-
-protocol MainMapViewModel: MainMapViewModelInput, MainMapViewModelOutput {}
-
-final class DefaultMainMapViewModel: MainMapViewModel {
+final class MainMapViewModel {
+    struct Actions {
+        let showCreateChatRoomView: () -> Void
+        let showBottomSheetView: () -> Void
+    }
     
-    private let useCases: MainMapUseCase
-    private let actions: MainMapViewModelActions?
+    struct UseCases {
+        let fetchAccessibleChatRoomsUseCase: FetchAccessibleChatRoomsUseCase
+    }
     
-    // MARK: - Output
-    var userLocation = BehaviorRelay<NCLocation>(value: NCLocation.defaultNCLocation)
-    var mapCenterLocation = BehaviorRelay<NCLocation>(value: NCLocation.defaultNCLocation)
-    var chatRooms = BehaviorRelay<[ChatRoom]>(value: [])
-    var groupChatRooms = BehaviorRelay<[ChatRoom]>(value: [])
-    var dmChatRooms = BehaviorRelay<[ChatRoom]>(value: [])
+    struct Input {
+        let mapViewDidAppear: Observable<MKMapView>
+        let didUpdateUserLocation: Observable<MKMapView>
+        let didSelectMainMapAnnotation: Observable<MKAnnotationView>
+    }
     
-    // MARK: - Init
-    init(useCases: MainMapUseCase, actions: MainMapViewModelActions? = nil) {
-        self.useCases = useCases
+    struct Output {
+        let accessibleAllChatRooms: PublishRelay<[ChatRoom]> = .init()
+        let annotationAllChatRooms: PublishRelay<[ChatRoom]> = .init()
+    }
+    
+    let actions: Actions
+    let useCases: UseCases
+    let disposeBag: DisposeBag = .init()
+    
+    init(actions: Actions, useCases: UseCases) {
         self.actions = actions
+        self.useCases = useCases
     }
     
-    // MARK: - Private methods
-    private func updateUserLocation(with userLocation: NCLocation) {
-        // self.userLocation
-    }
-    
-    private func updateMapCenterLocation(with mapCenterLocation: NCLocation) {
-        // self.mapCenterLocation.onNext(mapCenterLocation)
-    }
-}
-
-// MARK: - Input(View events)
-extension DefaultMainMapViewModel {
-    func viewDidLoad() { }
-    
-    func didMove(user location: NCLocation) {
-        self.updateUserLocation(with: location)
-    }
-    
-    func didMove(map location: NCLocation) {
-        self.updateMapCenterLocation(with: location)
-    }
-    
-    func didSelect(with annotation: ChatRoomAnnotation) {
-        // self.actions?.showBottomSheet()
-    }
-    
-    func didSelect(with segmentControlIndex: Int) {
-        // self.actions?.showBottomSheet()
-    }
-    
-    func didTapMoveToCurrentLocationButton() {
-        // self.updateMapCenterLocation(with: self.userLocation)
-    }
-    
-    func didTapCreateChatRoomButton() {
-        // self.actions?.showCreateChatRoomView()
+    func transform(input: Input) -> Output {
+        let output = Output()
+        
+        input.mapViewDidAppear
+            .map { mapView in
+                let centerLocation = NCLocation(longitude: mapView.userLocation.coordinate.longitude,
+                                                latitude: mapView.userLocation.coordinate.latitude)
+                let radiusDistanceMeters = Double(2000)
+                let latitudinalMeters = mapView.region.span.latitudeDelta * NCLocation.decimalDegreePerMeter
+                let longitudinalMeters = mapView.region.span.longitudeDelta * NCLocation.decimalDegreePerMeter
+                
+                return NCMapRegion(centerLocation: centerLocation,
+                                   radiusDistanceMeters: radiusDistanceMeters,
+                                   latitudinalMeters: latitudinalMeters,
+                                   longitudinalMeters: longitudinalMeters)
+            }
+            .flatMap{ self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
+            .bind(to: output.accessibleAllChatRooms)
+            .disposed(by: self.disposeBag)
+        
+        input.didUpdateUserLocation
+            .map { mapView in
+                let centerLocation = NCLocation(longitude: mapView.userLocation.coordinate.longitude,
+                                                latitude: mapView.userLocation.coordinate.latitude)
+                let radiusDistanceMeters = Double(2000)
+                let latitudinalMeters = mapView.region.span.latitudeDelta * NCLocation.decimalDegreePerMeter
+                let longitudinalMeters = mapView.region.span.longitudeDelta * NCLocation.decimalDegreePerMeter
+                
+                return NCMapRegion(centerLocation: centerLocation,
+                                   radiusDistanceMeters: radiusDistanceMeters,
+                                   latitudinalMeters: latitudinalMeters,
+                                   longitudinalMeters: longitudinalMeters)
+            }
+            .flatMap{ self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
+            .bind(to: output.accessibleAllChatRooms)
+            .disposed(by: self.disposeBag)
+        
+        return output
     }
 }
