@@ -135,7 +135,10 @@
 		7C254DB1292DDA88004D4CEC /* ChatDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */; };
 		7C254DB3292DDAAF004D4CEC /* ChatCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */; };
 		7C254DB5292DDABF004D4CEC /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */; };
+		7C4895342931FBCB00DD5076 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C4895332931FBCB00DD5076 /* GoogleService-Info.plist */; };
+		7C4895362931FBE300DD5076 /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C4895352931FBE300DD5076 /* config.xcconfig */; };
 		7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */; };
+		7C749851292F706F00FADA94 /* MessagingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C749850292F706F00FADA94 /* MessagingUseCase.swift */; };
 		7CA4EA36292BA61300D8C757 /* RemoveFriendUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */; };
 		7CA4EA38292BA65000D8C757 /* FetchProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA37292BA65000D8C757 /* FetchProfileUseCase.swift */; };
 		7CA4EA3C292BE5FF00D8C757 /* ProfileDetailDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */; };
@@ -342,7 +345,6 @@
 		605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenDIContainer.swift; sourceTree = "<group>"; };
 		6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Dictionary.swift"; sourceTree = "<group>"; };
 		608BD10D292F709B00CB676E /* FCMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMService.swift; sourceTree = "<group>"; };
-		608BD10F292FD05300CB676E /* config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		608BD110292FD59700CB676E /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		608BD112292FD72600CB676E /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		608BD114292FFEFC00CB676E /* FCMNotificationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMNotificationDTO.swift; sourceTree = "<group>"; };
@@ -364,7 +366,10 @@
 		7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDIContainer.swift; sourceTree = "<group>"; };
 		7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCoordinator.swift; sourceTree = "<group>"; };
 		7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		7C4895332931FBCB00DD5076 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7C4895352931FBE300DD5076 /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
+		7C749850292F706F00FADA94 /* MessagingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveFriendUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA37292BA65000D8C757 /* FetchProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchProfileUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailDIContainer.swift; sourceTree = "<group>"; };
@@ -716,8 +721,8 @@
 			children = (
 				1660D233291DDB39005F7B24 /* Assets.xcassets */,
 				1660D238291DDB39005F7B24 /* Info.plist */,
-				608BD1162930043200CB676E /* GoogleService-Info.plist */,
-				608BD10F292FD05300CB676E /* config.xcconfig */,
+				7C4895332931FBCB00DD5076 /* GoogleService-Info.plist */,
+				7C4895352931FBE300DD5076 /* config.xcconfig */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -1042,6 +1047,7 @@
 		7C254DA6292DB205004D4CEC /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				7C749850292F706F00FADA94 /* MessagingUseCase.swift */,
 				7C254DA9292DB22B004D4CEC /* Coordinator */,
 				7C254DA8292DB21E004D4CEC /* ViewModel */,
 				7C254DA7292DB217004D4CEC /* View */,
@@ -1443,12 +1449,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				608BD1172930043200CB676E /* GoogleService-Info.plist in Resources */,
 				603FD3762928D40300687ED4 /* .FirebaseMessagingBinary.version in Resources */,
+				7C4895342931FBCB00DD5076 /* GoogleService-Info.plist in Resources */,
 				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
 				603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */,
 				60DCAAF42928B9610087A63D /* Cartfile in Resources */,
 				1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */,
+				7C4895362931FBE300DD5076 /* config.xcconfig in Resources */,
 				603FD36F2928D40300687ED4 /* .FirebaseFirestoreBinary.version in Resources */,
 				603FD36A2928D40300687ED4 /* .FirebaseDynamicLinksBinary.version in Resources */,
 				603FD3812928D40300687ED4 /* .FirebaseAnalyticsBinary.version in Resources */,
@@ -1638,6 +1645,8 @@
 				83649779292E1CA20002DDE5 /* DummyVerifyUseCase.swift in Sources */,
 				83D5ECC7292B74FA00AD1781 /* DropOutUseCase.swift in Sources */,
 				83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */,
+				7C749851292F706F00FADA94 /* MessagingUseCase.swift in Sources */,
+				603EDDA72926C4B300BEE65C /* TabBarUseCase.swift in Sources */,
 				603EDD6329261A2000BEE65C /* FirebaseKey.swift in Sources */,
 				555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */,
 				605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */,
@@ -1791,7 +1800,7 @@
 /* Begin XCBuildConfiguration section */
 		1660D24F291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 608BD10F292FD05300CB676E /* config.xcconfig */;
+			baseConfigurationReference = 7C4895352931FBE300DD5076 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1852,7 +1861,7 @@
 		};
 		1660D250291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 608BD10F292FD05300CB676E /* config.xcconfig */;
+			baseConfigurationReference = 7C4895352931FBE300DD5076 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
