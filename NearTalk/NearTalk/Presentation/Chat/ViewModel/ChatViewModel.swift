@@ -21,11 +21,16 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 }
 
 class DefaultChatViewModel: ChatViewModel {
+    // MARK: - Propoties
+    
     private let chatRoomID: String
     private let chatRoomName: String
     private var messagingUseCase: MessagingUseCase
     var chatMessages: Observable<ChatMessage>
+    
     private let disposebag: DisposeBag = DisposeBag()
+    
+    // MARK: - LifeCycle
     
     init(chatRoomID: String,
          chatRoomName: String,
