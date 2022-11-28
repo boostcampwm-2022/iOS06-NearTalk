@@ -68,7 +68,8 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
             statusMessage: self.message,
             profileImagePath: imagePath,
             friends: self.profile.friends,
-            chatRooms: self.profile.chatRooms)
+            chatRooms: self.profile.chatRooms
+        )
         self.updateProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.profile = newProfile

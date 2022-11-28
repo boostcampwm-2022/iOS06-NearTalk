@@ -7,56 +7,30 @@
 
 import Foundation
 import PhotosUI
-import RxRelay
 import RxSwift
 import UIKit
 
-protocol OnboardingCoordinatorDependency {
-    func showMainViewController()
-    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController
-}
-
 final class OnboardingCoordinator: Coordinator {
-    private let dependency: any OnboardingCoordinatorDependency
     var navigationController: UINavigationController?
+    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
+    private let onboardingDIContainer: DefaultOnboardingDIContainer
     
-    var parentCoordinator: Coordinator?
-    
-    var childCoordinators: [Coordinator]
-    
-    init(navigationController: UINavigationController?,
-         parentCoordinator: Coordinator? = nil,
-         dependency: any OnboardingCoordinatorDependency) {
+    init(
+        container: DefaultOnboardingDIContainer,
+        navigationController: UINavigationController?
+    ) {
+        self.onboardingDIContainer = container
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
-        self.childCoordinators = []
-        self.dependency = dependency
     }
     
     func start() {
-        showOnboardingViewController()
-    }
-    
-    func showOnboardingViewController() {
-        let action: Action = Action(
-            presentImagePicker: self.presentImagePicker,
-            showMainViewController: self.dependency.showMainViewController,
-            presentRegisterFailure: self.presentRegisterFailure)
-        let onboardingViewController: OnboardingViewController = self.dependency.makeOnboardingViewController(action: action)
+        let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
     }
-    
-    struct Action: OnboardingViewModelAction {
-        let presentImagePicker: (() -> RxSwift.Single<Data?>)?
-        let showMainViewController: (() -> Void)?
-        let presentRegisterFailure: (() -> Void)?
-    }
-    
-    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
-    
 }
 
 extension OnboardingCoordinator {
+    #warning("이미지 피커가 뜨지 않습니다")
     func presentImagePicker() -> Single<Data?> {
         return self.imagePublisher.asSingle()
     }

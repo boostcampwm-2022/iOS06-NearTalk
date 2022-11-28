@@ -24,10 +24,6 @@ final class FriendListDIContainer {
         return DefaultFetchFriendListUseCase(profileRepository: self.makeRepository())
     }
     
-    func makeImageUseCase() -> ImageUseCase {
-        return DefaultImageUseCase(imageRepository: makeImageRepository())
-    }
-    
     // MARK: - Repositories
     func makeRepository() -> ProfileRepository {
         return DefaultProfileRepository(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
@@ -43,7 +39,7 @@ final class FriendListDIContainer {
     }
     
     func makeFriendListViewModel(actions: FriendListViewModelActions) -> FriendListViewModel {
-        return DefaultFriendListViewModel(fetchFriendListUseCase: makeFetchFriendListUseCase(), imageUseCase: makeImageUseCase())
+        return DefaultFriendListViewModel(fetchFriendListUseCase: makeFetchFriendListUseCase(), actions: actions)
     }
     
     // MARK: - Coordinator

@@ -12,6 +12,7 @@ import RxSwift
 protocol RealTimeDatabaseService {
     // MARK: 채팅 메시지
     func sendMessage(_ message: ChatMessage) -> Completable
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
     func fetchMessages(page: Int, skip: Int, pageCount: Int, roomID: String) -> Single<[ChatMessage]>
     func observeNewMessage(_ chatRoomID: String) -> Observable<ChatMessage>
     
@@ -53,6 +54,29 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(messageID)
                 .setValue(messageData)
             completable(.completed)
+            return Disposables.create()
+        }
+    }
+    
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
+        Single<ChatMessage>.create { [weak self] single in
+            guard let self else {
+                single(.failure(DatabaseError.failedToFetch))
+                return Disposables.create()
+            }
+
+            self.ref
+                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
+                .child(roomID)
+                .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(messageID)
+                .observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+                    if let value: [String: Any] = snapshot.value as? [String: Any],
+                       let chatMessage: ChatMessage = try? ChatMessage.decode(dictionary: value) {
+                        single(.success(chatMessage))
+                    }
+                }
+            
             return Disposables.create()
         }
     }
@@ -132,7 +156,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.ref
                 .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
                 .child(chatRoomID)
-                .observeSingleEvent(of: .value) { snapshot in
+                .observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatRoom: ChatRoom = try? ChatRoom.decode(dictionary: value) {
                         single(.success(chatRoom))

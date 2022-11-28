@@ -5,27 +5,35 @@
 //  Created by Preston Kim on 2022/11/23.
 //
 
-import Foundation
+import Swinject
 import UIKit
 
-final class DefaultLoginCoordinatorDependency: LoginCoordinatorDependency {
-    let authRepository: any AuthRepository
-    let showOnboardingView: (() -> Void)
-    
-    init(showOnboardingView: @escaping () -> Void, authRepository: any AuthRepository) {
-        self.showOnboardingView = showOnboardingView
-        self.authRepository = authRepository
-    }
-}
-
 final class LoginDIContainer {
-    private let authRepository: any AuthRepository
+    private let container: Container
     
-    init(authRepository: any AuthRepository) {
-        self.authRepository = authRepository
+    init(container: Container, navigationController: UINavigationController, actions: LoginAction) {
+        self.container = Container(parent: container)
+        
+        self.registerLoginUseCase()
+        self.registerViewModel(loginAction: actions)
     }
     
-    func makeLoginCoordinatorDependency(showOnboardingView: @escaping () -> Void) -> any LoginCoordinatorDependency {
-        return DefaultLoginCoordinatorDependency(showOnboardingView: showOnboardingView, authRepository: self.authRepository)
+    private func registerLoginUseCase() {
+        self.container.register(LoginUseCase.self) { _ in
+            DefaultLoginUseCase(authRepository: self.container.resolve(AuthRepository.self)!)
+        }
+    }
+    
+    private func registerViewModel(loginAction: LoginAction) {
+        self.container.register(LoginViewModel.self) { _ in
+            DefaultLoginViewModel(
+                action: loginAction,
+                loginUseCase: self.container.resolve(LoginUseCase.self)!
+            )
+        }
+    }
+    
+    func resolveLoginViewController() -> LoginViewController {
+        LoginViewController(viewModel: self.container.resolve(LoginViewModel.self)!)
     }
 }

@@ -9,67 +9,79 @@ import UIKit
 
 protocol Coordinator: AnyObject {
     var navigationController: UINavigationController? { get set }
-    var parentCoordinator: Coordinator? { get set }
     
     func start()
 }
 
 final class AppCoordinator: Coordinator {
-    var parentCoordinator: Coordinator?
     var navigationController: UINavigationController?
+    private var appDIContainer: AppDIContainer?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
+        self.appDIContainer = .init(
+            navigationController: navigationController,
+            launchScreenActions: .init(
+                showLoginViewController: self.showLoginViewController,
+                showOnboardingView: self.showOnboardingView,
+                showMainViewController: self.showMainViewController
+            ),
+            loginAction: .init(
+                presentMainView: self.showMainViewController,
+                presentOnboardingView: self.showOnboardingView,
+                presentLoginFailure: { print(#function) }
+            ),
+            onboardingActions: .init(
+                presentImagePicker: nil,
+                showMainViewController: self.showMainViewController,
+                presentRegisterFailure: nil
+            )
+        )
     }
     
     func start() {
-        guard let navigationController else {
+        guard let appDIContainer else {
             return
         }
-        let launchScreenDIContainer: LaunchScreenDIContainer = .init()
-        let launchScreenCoordinator: LaunchScreenCoordinator = launchScreenDIContainer.makeLaunchScreenCoordinator(
-            navigationController: navigationController,
-            dependency: self
-        )
+        let launchScreenDIContainer: LaunchScreenDIContainer = appDIContainer.resolveLaunchScreenDIContainer()
+        let launchScreenCoordinator: LaunchScreenCoordinator = .init(navigationController: navigationController, container: launchScreenDIContainer)
         launchScreenCoordinator.start()
-//        self.showMainViewController()
     }
 }
 
-extension AppCoordinator: LaunchScreenCoordinatorDependency {
-    func showMainViewController() {
-        self.navigationController?.popToRootViewController(animated: false)
-        guard let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer(dependency: .init(backToLoginView: self.backToLoginView))
-            .makeTabBarCoordinator(navigationController: self.navigationController) else {
+extension AppCoordinator: LoginCoordinatorDependency {
+    func showLoginViewController() {
+        guard let appDIContainer else {
             return
         }
-        rootTabBarCoordinator.start()
-    }
-    
-    func showLoginViewController() {
-//        self.navigationController?.viewControllers.insert(LoginViewController(coordinator: <#LoginCoordinator#>), at: 0)
-        self.navigationController?.popViewController(animated: false)
-        let loginDIContainer: LoginDIContainer = LoginDIContainer(authRepository: DefaultAuthRepository(authService: DefaultFirebaseAuthService()))
-        let loginCoordinator: LoginCoordinator = LoginCoordinator(navigationController: self.navigationController, dependency: loginDIContainer.makeLoginCoordinatorDependency(showOnboardingView: self.showOnboardingViewController))
+        let loginDIContainer: LoginDIContainer = appDIContainer.resolveLoginDIContainer()
+        let loginCoordinator: LoginCoordinator = LoginCoordinator(
+            navigationController: self.navigationController,
+            container: loginDIContainer
+        )
         loginCoordinator.start()
     }
     
-    func showOnboardingViewController() {
+    func showMainViewController() {
+        guard let appDIContainer else {
+            return
+        }
         self.navigationController?.popViewController(animated: false)
-//        let onboardingDIContainer: DefaultOnboardingDIContainer = DefaultOnboardingDIContainer(dependency: .init(
-//            imageRepository: DummyImageRepository(),
-//            profileRepository: DummyProfileRepository(),
-//            authRepository: DummyAuthRepository(),
-//            showMainViewController: self.showMainViewController))
-        let imageService: any StorageService = DefaultStorageService()
-        let storeService: any FirestoreService = DefaultFirestoreService()
-        let authService: any AuthService = DefaultFirebaseAuthService()
-        let onboardingDIContainer: DefaultOnboardingDIContainer = DefaultOnboardingDIContainer(
-            dependency: .init(imageRepository: DefaultImageRepository(imageService: imageService),
-                              profileRepository: DefaultProfileRepository(firestoreService: storeService, firebaseAuthService: authService),
-                              authRepository: DefaultAuthRepository(authService: authService),
-                              showMainViewController: self.showMainViewController))
-        onboardingDIContainer.makeOnboardingCoordinator(navigationController: self.navigationController).start()
+        let diContainer: RootTabBarDIContainer = appDIContainer.resolveRootTabBarDIContainer()
+        let rootTabBarCoordinator: RootTabBarCoordinator = .init(navigationController: self.navigationController, container: diContainer)
+        rootTabBarCoordinator.start()
+    }
+    
+    func showOnboardingView() {
+        guard let appDIContainer else {
+            return
+        }
+        let onboardingDIContainer: DefaultOnboardingDIContainer = appDIContainer.resolveOnboardingDIContainer()
+        let onboardingCoordinator: OnboardingCoordinator = OnboardingCoordinator(
+            container: onboardingDIContainer,
+            navigationController: self.navigationController
+        )
+        onboardingCoordinator.start()
     }
     
     func backToLoginView() {

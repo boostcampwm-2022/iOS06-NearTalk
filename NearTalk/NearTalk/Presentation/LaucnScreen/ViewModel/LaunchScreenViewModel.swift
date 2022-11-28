@@ -10,6 +10,7 @@ import RxSwift
 
 struct LaunchScreenViewModelActions {
     var showLoginViewController: (() -> Void)?
+    var showOnboardingView: (() -> Void)?
     var showMainViewController: (() -> Void)?
 }
 
@@ -30,14 +31,17 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
     private let actions: LaunchScreenViewModelActions
 
     let isUserAuthenticated: PublishSubject<Bool>
+    let hasProfile: PublishSubject<Bool>
     private let disposeBag: DisposeBag
     
     init(useCase: VerifyUserUseCase, actions: LaunchScreenViewModelActions) {
         self.useCase = useCase
         self.actions = actions
         self.isUserAuthenticated = PublishSubject<Bool>()
+        self.hasProfile = PublishSubject<Bool>()
         self.disposeBag = DisposeBag()
         self.bindAuthResult()
+        self.bindProfile()
     }
     
     func checkIsAuthenticated() {
@@ -60,16 +64,50 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
             .disposed(by: self.disposeBag)
     }
     
-    func bindAuthResult() {
+    private func checkHasProfile() {
+        self.useCase.verifyProfile()
+            .subscribe(
+                onCompleted: { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    self.hasProfile.onNext(true)
+                },
+                onError: { [weak self] error in
+                    guard let self else {
+                        return
+                    }
+                    print(error)
+                    self.hasProfile.onNext(false)
+                }
+            )
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindAuthResult() {
         self.isUserAuthenticated
             .subscribe { [weak self] isAuthenticated in
                 guard let self else {
                     return
                 }
                 if isAuthenticated {
-                    self.actions.showMainViewController?()
+                    self.checkHasProfile()
                 } else {
                     self.actions.showLoginViewController?()
+                }
+            }.disposed(by: disposeBag)
+    }
+    
+    private func bindProfile() {
+        self.hasProfile
+            .subscribe { [weak self] hasProfile in
+                guard let self else {
+                    return
+                }
+                if hasProfile {
+                    self.actions.showMainViewController?()
+                } else {
+                    self.actions.showOnboardingView?()
                 }
             }.disposed(by: disposeBag)
     }

@@ -9,35 +9,25 @@ import AuthenticationServices
 import RxSwift
 
 protocol LoginCoordinatorDependency {
-//    var showMainViewController: (() -> Void) { get }
-    var showOnboardingView: (() -> Void) { get }
-    var authRepository: any AuthRepository { get }
+    func showMainViewController()
+    func showOnboardingView()
 }
 
 final class LoginCoordinator: Coordinator {
     var navigationController: UINavigationController?
+    private let loginDIContainer: LoginDIContainer
     
-    var parentCoordinator: Coordinator?
-    private let dependency: any LoginCoordinatorDependency
+    init(
+        navigationController: UINavigationController? = nil,
+        container: LoginDIContainer
+    ) {
+        self.navigationController = navigationController
+        self.loginDIContainer = container
+    }
     
     func start() {
+        let loginViewController: LoginViewController = loginDIContainer.resolveLoginViewController()
+        self.navigationController?.viewControllers.insert(loginViewController, at: 0)
         self.navigationController?.popViewController(animated: false)
-        let loginViewController: LoginViewController = LoginViewController(
-            coordinator: self,
-            authRepository: self.dependency.authRepository)
-        loginViewController.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(loginViewController, animated: true)
-//        self.navigationController?.pushViewController(loginViewController, animated: true)
-    }
-    
-    init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, dependency: any LoginCoordinatorDependency) {
-        self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
-        self.dependency = dependency
-    }
-    
-    func finish() {
-        self.navigationController?.dismiss(animated: true)
-        self.dependency.showOnboardingView()
     }
 }

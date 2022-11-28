@@ -11,14 +11,17 @@ final class RootTabBarController: UITabBarController {
     // MARK: - UI properties
     
     // MARK: - Properties
-    private var viewModel: RootTabBarViewModel!
+    private let viewModel: RootTabBarViewModel
     
     // MARK: - Lifecycles
-    static func create(with viewModel: RootTabBarViewModel) -> RootTabBarController {
-        let view = RootTabBarController()
-        view.viewModel = viewModel
-        return view
-    } 
+    init(viewModel: RootTabBarViewModel!) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

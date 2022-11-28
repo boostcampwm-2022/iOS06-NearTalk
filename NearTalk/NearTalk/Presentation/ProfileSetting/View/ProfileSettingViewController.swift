@@ -18,6 +18,7 @@ final class ProfileSettingViewController: UIViewController {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
+        $0.clipsToBounds = true
     }
 
     private let nicknameField: UITextField = UITextField().then {
@@ -83,8 +84,8 @@ private extension ProfileSettingViewController {
     
     func configureConstraint() {
         profileImageView.snp.makeConstraints { (make) in
-            make.horizontalEdges.top.equalToSuperview()
-            make.width.equalTo(profileImageView.snp.height)
+            make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide).inset(10)
+            make.height.equalTo(profileImageView.snp.width)
         }
         
         nicknameField.snp.makeConstraints { (make) in

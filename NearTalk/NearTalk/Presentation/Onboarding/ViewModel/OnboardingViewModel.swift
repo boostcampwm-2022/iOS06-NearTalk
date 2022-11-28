@@ -25,13 +25,51 @@ protocol OnboardingOutput {
 
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
-protocol OnboardingViewModelAction {
-    var presentImagePicker: (() -> Single<Data?>)? { get }
-    var showMainViewController: (() -> Void)? { get }
-    var presentRegisterFailure: (() -> Void)? { get }
+struct OnboardingViewModelAction {
+    var presentImagePicker: (() -> Single<Data?>)?
+    var showMainViewController: (() -> Void)?
+    var presentRegisterFailure: (() -> Void)?
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
+    let nickNameValidity: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let messageValidity: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let image: RxRelay.BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    let registerEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    
+    private let validateNickNameUseCase: any ValidateTextUseCase
+    private let validateStatusMessageUseCase: any ValidateTextUseCase
+    private let uploadImageUseCase: any UploadImageUseCase
+    private let createProfileUseCase: any CreateProfileUseCase
+    private let action: OnboardingViewModelAction
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    private var nickName: String = ""
+    private var message: String = ""
+    
+    init(
+        validateNickNameUseCase: any ValidateTextUseCase,
+        validateStatusMessageUseCase: any ValidateTextUseCase,
+        uploadImageUseCase: any UploadImageUseCase,
+        createProfileUseCase: any CreateProfileUseCase,
+        action: OnboardingViewModelAction
+    ) {
+        self.validateNickNameUseCase = validateNickNameUseCase
+        self.validateStatusMessageUseCase = validateStatusMessageUseCase
+        self.uploadImageUseCase = uploadImageUseCase
+        self.createProfileUseCase = createProfileUseCase
+        self.action = action
+        self.bind()
+    }
+    
+    private func bind() {
+        Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
+            $0 && $1
+        }
+        .bind(to: self.registerEnable)
+        .disposed(by: self.disposeBag)
+    }
+    
     func editNickName(_ text: String) {
         self.nickName = text
         self.nickNameValidity
@@ -75,7 +113,8 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
             username: self.nickName,
             email: nil,
             statusMessage: self.message,
-            profileImagePath: imagePath)
+            profileImagePath: imagePath
+        )
         self.createProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.action.showMainViewController?()
@@ -85,39 +124,4 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
             .disposed(by: self.disposeBag)
     }
     
-    let nickNameValidity: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    let messageValidity: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    let image: RxRelay.BehaviorRelay<Data?> = BehaviorRelay(value: nil)
-    let registerEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    
-    private let validateNickNameUseCase: any ValidateTextUseCase
-    private let validateStatusMessageUseCase: any ValidateTextUseCase
-    private let uploadImageUseCase: any UploadImageUseCase
-    private let createProfileUseCase: any CreateProfileUseCase
-    private let action: any OnboardingViewModelAction
-    private let disposeBag: DisposeBag = DisposeBag()
-    
-    private var nickName: String = ""
-    private var message: String = ""
-    
-    init(validateNickNameUseCase: any ValidateTextUseCase,
-         validateStatusMessageUseCase: any ValidateTextUseCase,
-         uploadImageUseCase: any UploadImageUseCase,
-         createProfileUseCase: any CreateProfileUseCase,
-         action: any OnboardingViewModelAction) {
-        self.validateNickNameUseCase = validateNickNameUseCase
-        self.validateStatusMessageUseCase = validateStatusMessageUseCase
-        self.uploadImageUseCase = uploadImageUseCase
-        self.createProfileUseCase = createProfileUseCase
-        self.action = action
-        self.bind()
-    }
-    
-    private func bind() {
-        Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
-            $0 && $1
-        }
-        .bind(to: self.registerEnable)
-        .disposed(by: self.disposeBag)
-    }
 }
