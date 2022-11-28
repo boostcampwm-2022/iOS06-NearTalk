@@ -11,6 +11,7 @@ import RxSwift
 
 protocol MessagingUseCase {
     func sendMessage(message: ChatMessage, roomName: String) -> Completable
+    func observeMessage(roomID: String) -> Observable<ChatMessage>
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
@@ -25,5 +26,9 @@ final class DefalultMessagingUseCase: MessagingUseCase {
             message: message,
             roomName: roomName
         )
+    }
+    
+    func observeMessage(roomID: String) -> Observable<ChatMessage> {
+        return self.chatMessageRepository.observeChatRoomMessages(roomID: roomID)
     }
 }

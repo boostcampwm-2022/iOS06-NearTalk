@@ -14,19 +14,18 @@ protocol ChatViewModelInput {
 }
 
 protocol ChatViewModelOut {
-    var chatMessages: Observable<[ChatMessage]> { get }
+    var chatMessages: Observable<ChatMessage> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 }
 
 class DefaultChatViewModel: ChatViewModel {
-    var chatMessages: RxSwift.Observable<[ChatMessage]>
-    
     private let chatRoomID: String
     private let chatRoomName: String
-    private let disposebag: DisposeBag = DisposeBag()
     private var messagingUseCase: MessagingUseCase
+    var chatMessages: Observable<ChatMessage>
+    private let disposebag: DisposeBag = DisposeBag()
     
     init(chatRoomID: String,
          chatRoomName: String,
@@ -35,6 +34,7 @@ class DefaultChatViewModel: ChatViewModel {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
         self.messagingUseCase = messagingUseCase
+        self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
     }
     
     func sendMessage(_ message: String) {
@@ -55,12 +55,11 @@ class DefaultChatViewModel: ChatViewModel {
             .subscribe { event in
                 switch event {
                 case .completed:
-                    print(">>>>>>>>>>sendMessage completed")
+                    print("2. 전송된 메세지: ", chatMessage)
                 case .error(let error):
                     print(error)
                 }
             }
             .disposed(by: disposebag)
-        
     }
 }
