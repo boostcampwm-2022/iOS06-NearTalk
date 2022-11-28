@@ -8,8 +8,10 @@
 import Foundation
 
 struct NCLocation: Codable {
-    
     static let defaultNCLocation = NCLocation(longitude: 127.1051, latitude: 37.3589) // Naver 1784
+    // 미터 당 위경도
+    static let decimalDegreePerMeter = 0.000009009
     
     var longitude: Double
     var latitude: Double
+}
