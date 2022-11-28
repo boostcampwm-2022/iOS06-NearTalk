@@ -6,11 +6,19 @@
 //
 
 import Foundation
+import ImageIO
 import PhotosUI
+import RxRelay
 import RxSwift
 import UIKit
 
-final class OnboardingCoordinator: Coordinator {
+protocol OnboardingCoordinatorDependency {
+    func showMainViewController()
+    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController
+}
+
+final class OnboardingCoordinator: NSObject, Coordinator {
+    private let dependency: any OnboardingCoordinatorDependency
     var navigationController: UINavigationController?
     private let imagePublisher: PublishSubject<Data?> = PublishSubject()
     private let onboardingDIContainer: DefaultOnboardingDIContainer
@@ -27,12 +35,21 @@ final class OnboardingCoordinator: Coordinator {
         let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
     }
+    
+    struct Action: OnboardingViewModelAction {
+        let presentImagePicker: ((BehaviorRelay<Data?>) -> Void)?
+        let showMainViewController: (() -> Void)?
+        let presentRegisterFailure: (() -> Void)?
+    }
+    
+    private var imagePublisher: BehaviorRelay<Data?>?
 }
 
 extension OnboardingCoordinator {
     #warning("이미지 피커가 뜨지 않습니다")
-    func presentImagePicker() -> Single<Data?> {
-        return self.imagePublisher.asSingle()
+    func presentImagePicker(observer: BehaviorRelay<Data?>) {
+        self.imagePublisher = observer
+        self.showPHPickerViewController()
     }
     
     func presentRegisterFailure() {
@@ -46,32 +63,13 @@ extension OnboardingCoordinator {
     }
 }
 
-extension OnboardingCoordinator: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        guard let itemProvider = results.first?.itemProvider else {
-            return
-        }
-        if itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(
-                ofClass: UIImage.self,
-                completionHandler: { [weak self] image, _ in
-                    let imageData: Data? = image as? Data
-                    self?.imagePublisher.onNext(imageData)
-            })
-        } else {
-            #if DEBUG
-            print("Cannot Import Photo")
-            #endif
-        }
-    }
-    
+extension OnboardingCoordinator {
     func showPHPickerViewController() {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorization in
             switch authorization {
             case .authorized, .limited:
                 Task {
-                    await self.presentPHPickerViewController()
+                    await self.presentUIImagePickerViewController()
                 }
             default:
                 #if DEBUG
@@ -104,14 +102,81 @@ extension OnboardingCoordinator: PHPickerViewControllerDelegate {
         
         self.navigationController?.topViewController?.present(alert, animated: true)
     }
-    
+}
+
+extension OnboardingCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @MainActor
-    private func presentPHPickerViewController() {
-        var config: PHPickerConfiguration = PHPickerConfiguration()
-        config.filter = .images
-        config.selectionLimit = 1
-        let vc: PHPickerViewController = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        self.navigationController?.topViewController?.present(vc, animated: true)
+    private func presentUIImagePickerViewController() {
+        let imagePicker: UIImagePickerController = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = false
+        imagePicker.delegate = self
+        self.navigationController?.topViewController?.present(imagePicker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        picker.dismiss(animated: true)
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.resizeImageByUIGraphics(image: image)
+//            self.resizeImage(image: image)
+//            self.cropImage(image: image)
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.resizeImageByUIGraphics(image: image)
+//            self.cropImage(image: image)
+//            self.resizeImage(image: image)
+        } else {
+            self.imagePublisher?.accept(nil)
+            self.imagePublisher = nil
+        }
+    }
+    
+    func cropImage(image: UIImage) {
+        let widthInPixel: CGFloat = image.scale * image.size.width
+        let heightInPixel: CGFloat = image.scale * image.size.height
+        let cropWidth: CGFloat = min(320, widthInPixel) / image.scale
+        let cropHeight: CGFloat = min(320, heightInPixel) / image.scale
+        
+        let xOrigin: CGFloat = (image.size.width - cropWidth) / 2.0
+        let yOrigin: CGFloat = (image.size.height - cropHeight) / 2.0
+        if let croppedImage: CGImage = image.cgImage?.cropping(to: .init(x: xOrigin, y: yOrigin, width: cropWidth, height: cropHeight)) {
+            let uiimage: UIImage = UIImage(cgImage: croppedImage)
+            self.imagePublisher?.accept(uiimage.jpegData(compressionQuality: 1.0) ?? uiimage.pngData())
+        }
+        self.imagePublisher = nil
+    }
+    
+    func resizeImage(image: UIImage) {
+        let options: [NSString: Any] = [
+            kCGImageSourceThumbnailMaxPixelSize: 320,
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImagePropertyExifCompressedBitsPerPixel: 72
+        ]
+        guard let data = image.cgImage?.dataProvider?.data, let imageSource = CGImageSourceCreateWithData(data, options as CFDictionary) else {
+            self.imagePublisher = nil
+            return
+        }
+        
+        guard let scaledImage = CGImageSourceCreateImageAtIndex(imageSource, 0, options as CFDictionary) else {
+            self.imagePublisher = nil
+            return
+        }
+        let uiimage: UIImage = UIImage(cgImage: scaledImage)
+        self.imagePublisher?.accept(uiimage.pngData() ?? uiimage.jpegData(compressionQuality: 1.0))
+        self.imagePublisher = nil
+    }
+    
+    func resizeImageByUIGraphics(image: UIImage) {
+        let widthInPixel: CGFloat = image.scale * image.size.width
+        let heightInPixel: CGFloat = image.scale * image.size.height
+        let percentage: CGFloat = min(320.0 / (heightInPixel), min(1.0, 320.0 / (widthInPixel)))
+        let newImage = image.resized(withPercentage: percentage)
+        let data = newImage?.jpegData(compressionQuality: percentage)
+        if let bytes = data?.count, bytes > 24000 {
+            let resizedData: Data? = newImage?.resized(toKB: 24.0)?.jpegData(compressionQuality: percentage)
+            self.imagePublisher?.accept(resizedData)
+        } else {
+            self.imagePublisher?.accept(data)
+        }
+        self.imagePublisher = nil
     }
 }

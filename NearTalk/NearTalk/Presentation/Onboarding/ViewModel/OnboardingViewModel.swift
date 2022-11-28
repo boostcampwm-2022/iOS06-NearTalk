@@ -25,10 +25,10 @@ protocol OnboardingOutput {
 
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
-struct OnboardingViewModelAction {
-    var presentImagePicker: (() -> Single<Data?>)?
-    var showMainViewController: (() -> Void)?
-    var presentRegisterFailure: (() -> Void)?
+protocol OnboardingViewModelAction {
+    var presentImagePicker: ((BehaviorRelay<Data?>) -> Void)? { get }
+    var showMainViewController: (() -> Void)? { get }
+    var presentRegisterFailure: (() -> Void)? { get }
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
@@ -41,7 +41,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     private let validateStatusMessageUseCase: any ValidateTextUseCase
     private let uploadImageUseCase: any UploadImageUseCase
     private let createProfileUseCase: any CreateProfileUseCase
-    private let action: OnboardingViewModelAction
+    private let action: any OnboardingViewModelAction
     private let disposeBag: DisposeBag = DisposeBag()
     
     private var nickName: String = ""
@@ -52,7 +52,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
         validateStatusMessageUseCase: any ValidateTextUseCase,
         uploadImageUseCase: any UploadImageUseCase,
         createProfileUseCase: any CreateProfileUseCase,
-        action: OnboardingViewModelAction
+        action: any OnboardingViewModelAction
     ) {
         self.validateNickNameUseCase = validateNickNameUseCase
         self.validateStatusMessageUseCase = validateStatusMessageUseCase
@@ -83,14 +83,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     }
     
     func editImage() {
-        guard let presentImagePicker = self.action.presentImagePicker else {
-            return
-        }
-        let imagePickSingle: Single<Data?> = presentImagePicker()
-        imagePickSingle.subscribe(onSuccess: { [weak self] image in
-            self?.image.accept(image)
-        })
-        .disposed(by: self.disposeBag)
+        self.action.presentImagePicker?(self.image)
     }
     
     func register() {
