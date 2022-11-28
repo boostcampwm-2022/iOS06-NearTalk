@@ -34,8 +34,14 @@ final class DefaultOnboardingDIContainer {
 
     // MARK: - UseCases
     private func registerUseCase() {
-        self.container.register(ValidateTextUseCase.self, name: "nickname") { _ in ValidateNickNameUseCase() }
-        self.container.register(ValidateTextUseCase.self, name: "statusMessage") { _ in ValidateStatusMessageUseCase() }
+        self.container.register(
+            ValidateTextUseCase.self,
+            name: OnboardingDependencyName.nickname.rawValue
+        ) { _ in ValidateNickNameUseCase() }
+        self.container.register(
+            ValidateTextUseCase.self,
+            name: OnboardingDependencyName.statusMessage.rawValue
+        ) { _ in ValidateStatusMessageUseCase() }
         self.container.register(UploadImageUseCase.self) { _ in
             DefaultUploadImageUseCase(mediaRepository: self.container.resolve(MediaRepository.self)!)
         }
@@ -51,8 +57,14 @@ final class DefaultOnboardingDIContainer {
     private func registerViewModel(action: OnboardingViewModelAction) {
         self.container.register(OnboardingViewModel.self) { _ in
             DefaultOnboardingViewModel(
-                validateNickNameUseCase: self.container.resolve(ValidateTextUseCase.self, name: "nickname")!,
-                validateStatusMessageUseCase: self.container.resolve(ValidateTextUseCase.self, name: "statusMessage")!,
+                validateNickNameUseCase: self.container.resolve(
+                    ValidateTextUseCase.self,
+                    name: OnboardingDependencyName.nickname.rawValue
+                )!,
+                validateStatusMessageUseCase: self.container.resolve(
+                    ValidateTextUseCase.self,
+                    name: OnboardingDependencyName.statusMessage.rawValue
+                )!,
                 uploadImageUseCase: self.container.resolve(UploadImageUseCase.self)!,
                 createProfileUseCase: self.container.resolve(CreateProfileUseCase.self)!,
                 action: action
@@ -64,4 +76,9 @@ final class DefaultOnboardingDIContainer {
     func resolveOnboardingViewController() -> OnboardingViewController {
         return OnboardingViewController(viewModel: self.container.resolve(OnboardingViewModel.self)!)
     }
+}
+
+enum OnboardingDependencyName: String {
+    case nickname
+    case statusMessage
 }
