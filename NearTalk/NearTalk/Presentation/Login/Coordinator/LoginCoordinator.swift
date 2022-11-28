@@ -15,26 +15,19 @@ protocol LoginCoordinatorDependency {
 
 final class LoginCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    private let dependency: any LoginCoordinatorDependency
     private let loginDIContainer: LoginDIContainer
     
     init(
         navigationController: UINavigationController? = nil,
-        dependency: any LoginCoordinatorDependency,
         container: LoginDIContainer
     ) {
         self.navigationController = navigationController
-        self.dependency = dependency
         self.loginDIContainer = container
     }
     
     func start() {
-        let loginViewController: LoginViewController = loginDIContainer.resolveLoginViewController(coordinator: self)
+        let loginViewController: LoginViewController = loginDIContainer.resolveLoginViewController()
         self.navigationController?.viewControllers.insert(loginViewController, at: 0)
         self.navigationController?.popViewController(animated: false)
-    }
-    
-    func finish() {
-        self.dependency.showOnboardingView()
     }
 }

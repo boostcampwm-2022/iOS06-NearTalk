@@ -26,6 +26,11 @@ final class AppCoordinator: Coordinator {
                 showOnboardingView: self.showOnboardingView,
                 showMainViewController: self.showMainViewController
             ),
+            loginAction: .init(
+                presentMainView: self.showMainViewController,
+                presentOnboardingView: self.showOnboardingView,
+                presentLoginFailure: { print(#function) }
+            ),
             onboardingActions: .init(
                 presentImagePicker: nil,
                 showMainViewController: self.showMainViewController,
@@ -52,7 +57,6 @@ extension AppCoordinator: LoginCoordinatorDependency {
         let loginDIContainer: LoginDIContainer = appDIContainer.resolveLoginDIContainer()
         let loginCoordinator: LoginCoordinator = LoginCoordinator(
             navigationController: self.navigationController,
-            dependency: self,
             container: loginDIContainer
         )
         loginCoordinator.start()

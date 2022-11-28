@@ -14,6 +14,7 @@ final class AppDIContainer {
     init(
         navigationController: UINavigationController,
         launchScreenActions: LaunchScreenViewModelActions,
+        loginAction: LoginAction,
         onboardingActions: OnboardingViewModelAction
     ) {
         self.container = Container()
@@ -21,7 +22,7 @@ final class AppDIContainer {
         self.registerRepository()
         
         self.registerLaunchScreenDIContainer(navigationController: navigationController, actions: launchScreenActions)
-        self.registerLoginDIContainer(navigationController: navigationController)
+        self.registerLoginDIContainer(navigationController: navigationController, actions: loginAction)
         self.registerOnboardingDIContainer(onboardingActions: onboardingActions)
         self.registerRootTabBarDIContainer()
     }
@@ -61,9 +62,13 @@ final class AppDIContainer {
     }
     
     // MARK: - LoginDIContainer
-    private func registerLoginDIContainer(navigationController: UINavigationController) {
+    private func registerLoginDIContainer(navigationController: UINavigationController, actions: LoginAction) {
         self.container.register(LoginDIContainer.self) { _ in
-            LoginDIContainer(container: self.container, navigationController: navigationController)
+            LoginDIContainer(
+                container: self.container,
+                navigationController: navigationController,
+                actions: actions
+            )
         }
     }
     
