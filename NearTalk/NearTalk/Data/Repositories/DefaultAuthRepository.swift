@@ -29,8 +29,4 @@ final class DefaultAuthRepository: AuthRepository {
     func verify() -> Completable {
         return self.authService.verifyUser()
     }
-    
-//    func fetchCurrentUserUID() -> Single<String> {
-//        return self.authService.fetchCurrentUID()
-//    }
 }

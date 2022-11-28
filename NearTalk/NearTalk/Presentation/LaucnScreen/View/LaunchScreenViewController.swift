@@ -66,8 +66,14 @@ import SwiftUI
 
 struct LaunchScreenViewControllerPreview: PreviewProvider {
     static var previews: some View {
-        let diContainer: LaunchScreenDIContainer = .init()
-        let vc: LaunchScreenViewController = diContainer.createLaunchScreenViewController(actions: LaunchScreenViewModelActions(showLoginViewController: {}, showMainViewController: {}))
+        let container: AppDIContainer = .init(
+            navigationController: .init(),
+            launchScreenActions: .init(),
+            loginAction: .init(),
+            onboardingActions: .init(showMainViewController: nil)
+        )
+        let diContainer: LaunchScreenDIContainer = container.resolveLaunchScreenDIContainer()
+        let vc: LaunchScreenViewController = diContainer.resolveLaunchScreenViewController()
         return vc.showPreview(.iPhone14Pro)
     }
 }

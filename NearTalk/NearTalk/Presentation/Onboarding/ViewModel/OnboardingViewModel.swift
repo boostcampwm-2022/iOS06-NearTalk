@@ -25,10 +25,10 @@ protocol OnboardingOutput {
 
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
-protocol OnboardingViewModelAction {
-    var presentImagePicker: (() -> Single<Data?>)? { get }
-    var showMainViewController: (() -> Void)? { get }
-    var presentRegisterFailure: (() -> Void)? { get }
+struct OnboardingViewModelAction {
+    var presentImagePicker: (() -> Single<Data?>)?
+    var showMainViewController: (() -> Void)?
+    var presentRegisterFailure: (() -> Void)?
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
@@ -41,7 +41,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     private let validateStatusMessageUseCase: any ValidateTextUseCase
     private let uploadImageUseCase: any UploadImageUseCase
     private let createProfileUseCase: any CreateProfileUseCase
-    private let action: any OnboardingViewModelAction
+    private let action: OnboardingViewModelAction
     private let disposeBag: DisposeBag = DisposeBag()
     
     private var nickName: String = ""
@@ -52,7 +52,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
         validateStatusMessageUseCase: any ValidateTextUseCase,
         uploadImageUseCase: any UploadImageUseCase,
         createProfileUseCase: any CreateProfileUseCase,
-        action: any OnboardingViewModelAction
+        action: OnboardingViewModelAction
     ) {
         self.validateNickNameUseCase = validateNickNameUseCase
         self.validateStatusMessageUseCase = validateStatusMessageUseCase

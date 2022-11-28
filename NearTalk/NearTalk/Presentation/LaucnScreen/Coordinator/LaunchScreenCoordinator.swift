@@ -7,26 +7,18 @@
 
 import UIKit
 
-protocol LaunchScreenCoordinatorDependency {
-    func showMainViewController()
-    func showOnboardingView()
-    func showLoginViewController()
-}
-
 final class LaunchScreenCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
-    private let diContainer: LaunchScreenDIContainer = .init()
-    private var dependency: LaunchScreenCoordinatorDependency?
-    private var launchScreenViewController: LaunchScreenViewController?
+    private let launchScreenDIContainer: LaunchScreenDIContainer
     
     // MARK: - Init
     init(
-        navigationController: UINavigationController? = nil,
-        dependency: LaunchScreenCoordinatorDependency
+        navigationController: UINavigationController?,
+        container: LaunchScreenDIContainer
     ) {
         self.navigationController = navigationController
-        self.dependency = dependency
+        self.launchScreenDIContainer = container
     }
     
     deinit {
@@ -35,13 +27,7 @@ final class LaunchScreenCoordinator: Coordinator {
     
     // MARK: - Lifecycles
     func start() {
-        let actions: LaunchScreenViewModelActions = .init(
-            showLoginViewController: dependency?.showLoginViewController,
-            showOnboardingView: dependency?.showOnboardingView,
-            showMainViewController: dependency?.showMainViewController
-        )
-        let viewController: LaunchScreenViewController = self.diContainer.createLaunchScreenViewController(actions: actions)
-        self.launchScreenViewController = viewController
+        let viewController: LaunchScreenViewController = self.launchScreenDIContainer.resolveLaunchScreenViewController()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 }
