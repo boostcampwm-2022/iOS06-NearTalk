@@ -29,6 +29,7 @@ final class CreateGroupChatCoordinator {
     func start() {
         let actions: CreateGroupChatViewModelActions = .init(showChatViewController: showChatViewController)
         let viewController = dependencies.makeCreateGroupChatViewController(actions: actions)
+        viewController.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(viewController, animated: true)
         self.createGroupChatViewController = viewController
     }
