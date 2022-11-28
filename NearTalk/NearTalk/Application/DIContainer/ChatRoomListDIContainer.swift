@@ -85,8 +85,8 @@ final class ChatRoomListDIContainer {
     }
     
     // MARK: - DIContainer
-    func makeChatDIContainer() -> ChatDIContainer {
-        return ChatDIContainer()
+    func makeChatDIContainer(chatRoomID: String, chatRoomName: String) -> ChatDIContainer {
+        return ChatDIContainer(chatRoomID: chatRoomID, chatRoomName: chatRoomName)
     }
     
     func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer {
