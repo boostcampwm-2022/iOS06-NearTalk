@@ -38,8 +38,8 @@ final class AppCoordinator: Coordinator {
 
 extension AppCoordinator: LaunchScreenCoordinatorDependency {
     func showMainViewController() {
-        self.navigationController?.popViewController(animated: false)
-        guard let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer()
+        self.navigationController?.popToRootViewController(animated: false)
+        guard let rootTabBarCoordinator: RootTabBarCoordinator = RootTabBarDIContainer(dependency: .init(backToLoginView: self.backToLoginView))
             .makeTabBarCoordinator(navigationController: self.navigationController) else {
             return
         }
@@ -70,5 +70,12 @@ extension AppCoordinator: LaunchScreenCoordinatorDependency {
                               authRepository: DefaultAuthRepository(authService: authService),
                               showMainViewController: self.showMainViewController))
         onboardingDIContainer.makeOnboardingCoordinator(navigationController: self.navigationController).start()
+    }
+    
+    func backToLoginView() {
+        self.navigationController?.dismiss(animated: true)
+        self.navigationController?.popToRootViewController(animated: false)
+//        self.navigationController?.popToRootViewController(animated: true)
+//        self.start()
     }
 }

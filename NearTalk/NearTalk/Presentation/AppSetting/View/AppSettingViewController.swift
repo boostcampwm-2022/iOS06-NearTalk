@@ -40,6 +40,21 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         initDataSource()
         setTableView()
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            self.viewModel.tableRowSelected(item: self.dataSource.itemIdentifier(for: indexPath))
+        }
+        
+        private let viewModel: any AppSettingViewModel
+        
+        init(viewModel: any AppSettingViewModel) {
+            self.viewModel = viewModel
+            super.init(nibName: nil, bundle: nil)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
 }
 
 private extension AppSettingViewController {
@@ -74,15 +89,4 @@ private extension AppSettingViewController {
         snapshot.appendItems(AppSettingItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
     }
-}
-
-enum AppSettingSection: Hashable & Sendable {
-    case main
-}
-
-enum AppSettingItem: String, Hashable & Sendable & CaseIterable {
-    case logout = "로그아웃"
-    case drop = "탈퇴"
-    case developerInfo = "개발자 정보"
-    case alarmOnOff = "알람 on/off"
 }

@@ -10,7 +10,7 @@ import RxSwift
 
 protocol LogoutUseCase {
     init(authRepository: any AuthRepository)
-    func logout() -> Completable
+    func execute() -> Completable
 }
 
 final class DefaultLogoutUseCase: LogoutUseCase {
@@ -20,7 +20,7 @@ final class DefaultLogoutUseCase: LogoutUseCase {
         self.authRepository = authRepository
     }
     
-    func logout() -> Completable {
+    func execute() -> Completable {
         self.authRepository.logout()
     }
 }

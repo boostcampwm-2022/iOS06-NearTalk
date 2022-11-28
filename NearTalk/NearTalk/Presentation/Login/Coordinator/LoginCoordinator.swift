@@ -25,7 +25,9 @@ final class LoginCoordinator: Coordinator {
         let loginViewController: LoginViewController = LoginViewController(
             coordinator: self,
             authRepository: self.dependency.authRepository)
-        self.navigationController?.pushViewController(loginViewController, animated: true)
+        loginViewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(loginViewController, animated: true)
+//        self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     
     init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, dependency: any LoginCoordinatorDependency) {
@@ -35,6 +37,7 @@ final class LoginCoordinator: Coordinator {
     }
     
     func finish() {
+        self.navigationController?.dismiss(animated: true)
         self.dependency.showOnboardingView()
     }
 }

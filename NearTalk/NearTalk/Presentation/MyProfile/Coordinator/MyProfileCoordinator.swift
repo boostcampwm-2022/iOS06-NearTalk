@@ -15,6 +15,7 @@ protocol MyProfileCoordinatorDependency {
     func makeProfileSettingCoordinatorDependency(
         profile: UserProfile,
         necessaryProfileComponent: NecessaryProfileComponent?) -> any ProfileSettingCoordinatorDependency
+    func makeAppSettingCoordinatorDependency() -> any AppSettingCoordinatorDependency
 }
 
 final class MyProfileCoordinator: Coordinator {
@@ -51,8 +52,8 @@ final class MyProfileCoordinator: Coordinator {
     
     func showAppSettingViewController() {
 //        print(#function)
-        let viewController: AppSettingViewController = AppSettingViewController()
-        self.navigationController?.pushViewController(viewController, animated: true)
+        let coordinator: AppSettingCoordinator = AppSettingCoordinator(navigationController: self.navigationController, dependency: self.dependency.makeAppSettingCoordinatorDependency())
+        coordinator.start()
     }
     
     func showProfileSettingViewController(profile: UserProfile, necessaryProfileComponent: NecessaryProfileComponent?) {

@@ -9,6 +9,15 @@ import UIKit
 
 final class RootTabBarDIContainer {
     // MARK: - Dependencies
+    struct Dependency {
+        let backToLoginView: (() -> Void)?
+    }
+    
+    private let dependency: Dependency
+    init(dependency: Dependency) {
+        self.dependency = dependency
+    }
+    
     // MARK: - Services
     func makeStorageService() -> StorageService {
         return DefaultStorageService()
@@ -62,6 +71,6 @@ extension RootTabBarDIContainer: RootTabBarCoordinatorDependency {
     }
     
     func myProfileDIConatiner() -> MyProfileDIContainer {
-        return MyProfileDIContainer(dependency: MyProfileDIContainer.Dependency(fireStoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService(), storageService: DefaultStorageService()))
+        return MyProfileDIContainer(dependency: MyProfileDIContainer.Dependency(fireStoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService(), storageService: DefaultStorageService(), backToLoginView: self.dependency.backToLoginView))
     }
 }

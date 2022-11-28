@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 
 final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
+    func makeAppSettingCoordinatorDependency() -> AppSettingCoordinatorDependency {
+        return DefaultAppSettingDIContainer(dependency: .init(authRepository: self.authRepository, profileRepository: self.profileRepository, backToLoginView: self.backToLoginView))
+    }
+    
     func makeProfileSettingCoordinatorDependency(
         profile: UserProfile,
         necessaryProfileComponent: NecessaryProfileComponent?) -> ProfileSettingCoordinatorDependency {
@@ -31,11 +35,15 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
     
     private let profileRepository: any ProfileRepository
     private let imageRepository: any ImageRepository
+    private let authRepository: any AuthRepository
+    private let backToLoginView: (() -> Void)?
     
     init(profileRepository: any ProfileRepository,
-         imageRepository: any ImageRepository) {
+         imageRepository: any ImageRepository, authRepository: any AuthRepository, backToLoginView: (() -> Void)?) {
         self.profileRepository = profileRepository
         self.imageRepository = imageRepository
+        self.authRepository = authRepository
+        self.backToLoginView = backToLoginView
     }
 }
 
@@ -45,6 +53,7 @@ final class MyProfileDIContainer {
         let fireStoreService: any FirestoreService
         let firebaseAuthService: any AuthService
         let storageService: any StorageService
+        let backToLoginView: (() -> Void)?
     }
     
     private let dependency: Dependency
@@ -54,6 +63,7 @@ final class MyProfileDIContainer {
     }
 
     // MARK: - UseCases
+    
     
     // MARK: - Repositories
     func makeProfileRepository() -> any ProfileRepository {
@@ -77,6 +87,6 @@ final class MyProfileDIContainer {
     func makeCoordinatorDependency() -> any MyProfileCoordinatorDependency {
         return DefaultMyProfileCoordinatorDependency(
             profileRepository: self.makeProfileRepository(),
-            imageRepository: self.makeImageRepository())
+            imageRepository: self.makeImageRepository(), authRepository: self.makeAuthRepository(), backToLoginView: self.dependency.backToLoginView)
     }
 }
