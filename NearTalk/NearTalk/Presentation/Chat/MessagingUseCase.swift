@@ -15,7 +15,11 @@ protocol MessagingUseCase {
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
+    // MARK: - Proporty
+    
     private let chatMessageRepository: ChatMessageRepository
+    
+    // MARK: - LifeCycle
     
     init(chatMessageRepository: ChatMessageRepository) {
         self.chatMessageRepository = chatMessageRepository
