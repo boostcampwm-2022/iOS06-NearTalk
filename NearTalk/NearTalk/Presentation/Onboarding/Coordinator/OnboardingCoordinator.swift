@@ -12,15 +12,8 @@ import RxRelay
 import RxSwift
 import UIKit
 
-protocol OnboardingCoordinatorDependency {
-    func showMainViewController()
-    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController
-}
-
 final class OnboardingCoordinator: NSObject, Coordinator {
-    private let dependency: any OnboardingCoordinatorDependency
     var navigationController: UINavigationController?
-    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
     private let onboardingDIContainer: DefaultOnboardingDIContainer
     
     init(
@@ -34,12 +27,6 @@ final class OnboardingCoordinator: NSObject, Coordinator {
     func start() {
         let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
-    }
-    
-    struct Action: OnboardingViewModelAction {
-        let presentImagePicker: ((BehaviorRelay<Data?>) -> Void)?
-        let showMainViewController: (() -> Void)?
-        let presentRegisterFailure: (() -> Void)?
     }
     
     private var imagePublisher: BehaviorRelay<Data?>?
