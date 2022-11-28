@@ -9,18 +9,7 @@ import Foundation
 import RxSwift
 
 protocol AccessibleChatRoomsRepository {
-    func fetchAccessibleAllChatRooms(centerLocation: NCLocation,
-                                     radiusDistance: Double,
-                                     latitudinalMeters: Double,
-                                     longitudinalMeters: Double) -> Single<[ChatRoom]>
-    
-    func fetchAccessibleGroupChatRooms(centerLocation: NCLocation,
-                                       radiusDistance: Double,
-                                       latitudinalMeters: Double,
-                                       longitudinalMeters: Double) -> Single<[GroupChatRoomListData]>
-    
-    func fetchAccessibleDMChatRooms(centerLocation: NCLocation,
-                                    radiusDistance: Double,
-                                    latitudinalMeters: Double,
-                                    longitudinalMeters: Double) -> Single<[DMChatRoomListData]>
+    func fetchAccessibleAllChatRooms(in region: NCMapRegion) -> Single<[ChatRoom]>
+    func fetchAccessibleGroupChatRooms(in region: NCMapRegion) -> Single<[GroupChatRoomListData]>
+    func fetchAccessibleDMChatRooms(in region: NCMapRegion) -> Single<[DMChatRoomListData]>
 }
