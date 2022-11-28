@@ -80,11 +80,32 @@ class ChatViewController: UIViewController {
             make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
+    
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(40.0))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(40))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                         subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
+    }
+    
     private func scrolltoBottom() {
         let indexPath = IndexPath(item: messgeItems.count - 1, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
+    
+    // MARK: - Bind
     
     private func bind() {
         chatInputAccessoryView.sendButton.rx.tap
@@ -116,25 +137,6 @@ class ChatViewController: UIViewController {
                 }
             }
             .disposed(by: disposeBag)
-    }
-    
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(40.0))
-        
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(40))
-        
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                         subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-        
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
     }
 }
 
