@@ -14,12 +14,15 @@ protocol ChatViewModelInput {
 }
 
 protocol ChatViewModelOut {
+    var chatMessages: Observable<[ChatMessage]> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 }
 
 class DefaultChatViewModel: ChatViewModel {
+    var chatMessages: RxSwift.Observable<[ChatMessage]>
+    
     private let chatRoomID: String
     private let chatRoomName: String
     private let disposebag: DisposeBag = DisposeBag()
@@ -27,7 +30,8 @@ class DefaultChatViewModel: ChatViewModel {
     
     init(chatRoomID: String,
          chatRoomName: String,
-         messagingUseCase: MessagingUseCase) {
+         messagingUseCase: MessagingUseCase
+    ) {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
         self.messagingUseCase = messagingUseCase
@@ -39,7 +43,7 @@ class DefaultChatViewModel: ChatViewModel {
         let chatMessage = ChatMessage(
             uuid: UUID().uuidString,
             chatRoomID: self.chatRoomID,
-            senderID: "532BEDF5-F47C-4D83-A60E-539075D257E0", // 임시 ID
+            senderID: "532BEDF5-F47C-4D83-A60E-539075D257E0", // 임시 ID - userdefault에 저장된 값 사용 예정
             text: message,
             messageType: MessageType.text.rawValue,
             mediaPath: nil,
@@ -51,7 +55,7 @@ class DefaultChatViewModel: ChatViewModel {
             .subscribe { event in
                 switch event {
                 case .completed:
-                    print(">>>>>>>>>>message sending completed")
+                    print(">>>>>>>>>>sendMessage completed")
                 case .error(let error):
                     print(error)
                 }
