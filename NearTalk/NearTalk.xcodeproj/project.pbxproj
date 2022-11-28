@@ -46,23 +46,15 @@
 		16988844292B0F1100CEC7B9 /* Alertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988843292B0F1100CEC7B9 /* Alertable.swift */; };
 		16988848292B788600CEC7B9 /* MainMapUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988847292B788600CEC7B9 /* MainMapUseCase.swift */; };
 		1698884A292BAB2900CEC7B9 /* DefaultMainMapRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988849292BAB2900CEC7B9 /* DefaultMainMapRepository.swift */; };
+		16988877292E510200CEC7B9 /* MainMapDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988876292E510200CEC7B9 /* MainMapDIContainer.swift */; };
+		1698887C292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */; };
+		16988880292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */; };
+		16988882292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */; };
 		555A6B2B29236D51001336ED /* FriendsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendsListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendsViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendsListViewModel.swift */; };
 		555A6B3129236D86001336ED /* FriendsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3029236D86001336ED /* FriendsListModel.swift */; };
 		555A6B3329236D98001336ED /* FriendsListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3229236D98001336ED /* FriendsListCoordinator.swift */; };
-		16988877292E510200CEC7B9 /* MainMapDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988876292E510200CEC7B9 /* MainMapDIContainer.swift */; };
-		1698887A292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988879292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift */; };
-		1698887C292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */; };
-		16988880292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */; };
-		16988882292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */; };
-		5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */; };
-		5506CDDD292B4F810002F328 /* FetchFriendListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */; };
-		5506CDDF292B50D10002F328 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDE292B50D10002F328 /* Friend.swift */; };
-		555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendListCell.swift */; };
-		555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendViewController.swift */; };
-		555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendListViewModel.swift */; };
-		555A6B3329236D98001336ED /* FriendListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3229236D98001336ED /* FriendListCoordinator.swift */; };
 		555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */; };
 		555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3729238C69001336ED /* ChatRoomList.swift */; };
 		555A6B3A29238C9B001336ED /* ChatRoomListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B3929238C9B001336ED /* ChatRoomListUseCase.swift */; };
@@ -251,11 +243,7 @@
 		16988843292B0F1100CEC7B9 /* Alertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alertable.swift; sourceTree = "<group>"; };
 		16988847292B788600CEC7B9 /* MainMapUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapUseCase.swift; sourceTree = "<group>"; };
 		16988849292BAB2900CEC7B9 /* DefaultMainMapRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMainMapRepository.swift; sourceTree = "<group>"; };
-		258D93481B53C391D3868B92 /* Pods-NearTalkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalkTests.release.xcconfig"; path = "Target Support Files/Pods-NearTalkTests/Pods-NearTalkTests.release.xcconfig"; sourceTree = "<group>"; };
-		29F8AD6D74327BEAEF2D1152 /* Pods_NearTalk_NearTalkUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk_NearTalkUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		54A11B9541C7EC85AFC89F5B /* Pods_NearTalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NearTalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		16988876292E510200CEC7B9 /* MainMapDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapDIContainer.swift; sourceTree = "<group>"; };
-		16988879292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+StoryboardInstantiable.swift"; sourceTree = "<group>"; };
 		1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAccessibleChatRoomsUseCase.swift; sourceTree = "<group>"; };
 		1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAccessibleChatRoomsRepository.swift; sourceTree = "<group>"; };
 		16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleChatRoomsRepository.swift; sourceTree = "<group>"; };
@@ -722,7 +710,6 @@
 				16530575291E17F70026B815 /* UIViewController+Preview.swift */,
 				83D3544B2925623600B9236A /* UIImageView+Rounded.swift */,
 				6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */,
-				16988879292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -745,7 +732,6 @@
 				6008FC9C2925DBCF0044F017 /* NCLocation.swift */,
 				603EDDA22926C01D00BEE65C /* UserChatModel.swift */,
 				603FD38D2929301200687ED4 /* BaseEntity.swift */,
-				6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */,
 				162B1B6B2935176D004724D9 /* NCMapRegion.swift */,
 			);
 			path = Entities;
@@ -764,8 +750,6 @@
 				603FD394292A1E7000687ED4 /* LoginUseCase.swift */,
 				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
-				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
-				6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */,
 				1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */,
 			);
 			path = UseCases;
@@ -789,9 +773,6 @@
 				16988849292BAB2900CEC7B9 /* DefaultMainMapRepository.swift */,
 				603EDDAA2926C52200BEE65C /* DefaultTabBarRepository.swift */,
 				603FD39229296B8500687ED4 /* DefaultProfileRepository.swift */,
-				83D5ECC4292B736500AD1781 /* DefaultAuthRepository.swift */,
-				6001DA8F292DBF770062EAD0 /* DefaultMediaRepository.swift */,
-				6001DA91292DC86A0062EAD0 /* DefaultChatMessageRepository.swift */,
 				1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */,
 			);
 			path = Repositories;
@@ -902,8 +883,6 @@
 				16988838292A8AED00CEC7B9 /* MainMapRepository.swift */,
 				603EDDA82926C51100BEE65C /* TabBarRepository.swift */,
 				603FD38F29296AA300687ED4 /* ProfileRepository.swift */,
-				83D5ECC2292B714500AD1781 /* AuthRepository.swift */,
-				6001DA8D292DBF400062EAD0 /* MediaRepository.swift */,
 				16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */,
 			);
 			path = Repositories;
@@ -1013,7 +992,6 @@
 				83D3543929252F1A00B9236A /* MyProfileDIContainer.swift */,
 				1698883A292A8CB500CEC7B9 /* MainMapDIContainer.swift */,
 				603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */,
-				5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */,
 				16988876292E510200CEC7B9 /* MainMapDIContainer.swift */,
 			);
 			path = DIContainer;
@@ -1547,9 +1525,8 @@
 				603EDDA32926C01D00BEE65C /* UserChatModel.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */,
-				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
+				555A6B2F29236D73001336ED /* FriendsListViewModel.swift in Sources */,
 				162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */,
-				1698887A292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
 				83D3543A29252F1A00B9236A /* MyProfileDIContainer.swift in Sources */,
@@ -1560,7 +1537,6 @@
 				162B1B6A2933E055004724D9 /* RxMapViewDiff.swift in Sources */,
 				555A6B3C29238D26001336ED /* DefaultChatRoomListRepository.swift in Sources */,
 				83D3544A292543DC00B9236A /* DefaultUserUUIDRepository.swift in Sources */,
-				55F090902921E3E3008F5B9D /* ChattingRoomListCell.swift in Sources */,
 				1698883B292A8CB500CEC7B9 /* MainMapDIContainer.swift in Sources */,
 				1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */,
 				162B1B682933E036004724D9 /* RxMapViewReactiveDataSource.swift in Sources */,
@@ -1586,8 +1562,6 @@
 				16988839292A8AED00CEC7B9 /* MainMapRepository.swift in Sources */,
 				8330622F2924A402000E786E /* String+Regex.swift in Sources */,
 				16988880292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift in Sources */,
-				6001DA8C292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift in Sources */,
-				6001DA8A292D5F270062EAD0 /* ChatMessageRepository.swift in Sources */,
 				603FD38A292928D000687ED4 /* FirebaseQueryKey.swift in Sources */,
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
 				555A6B3E29238D65001336ED /* ChatRoomListRepository.swift in Sources */,
@@ -1626,7 +1600,6 @@
 				83D3543F29253A5C00B9236A /* MyProfileLoadUseCase.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
 				7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */,
-				60E749DC292C88F40048F877 /* AuthService.swift in Sources */,
 				16988877292E510200CEC7B9 /* MainMapDIContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
