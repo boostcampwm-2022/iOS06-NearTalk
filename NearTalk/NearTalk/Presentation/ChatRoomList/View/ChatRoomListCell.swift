@@ -47,7 +47,7 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private let unreadMessageCount = UILabel().then {
-        $0.sizeToFit()
+        $0.textAlignment = .center
         $0.backgroundColor = .red
         $0.font = UIFont.systemFont(ofSize: 16)
     }
@@ -122,15 +122,17 @@ class ChatRoomListCell: UICollectionViewCell {
             make.trailing.equalTo(self.contentView).offset(-16)
         }
         
-        self.unreadMessageCount.snp.makeConstraints { make in
-            make.bottom.equalTo(self.contentView).offset(8)
-            make.trailing.equalTo(self.contentView).offset(-16)
-        }
-        
         self.stackView2.snp.makeConstraints { make in
             make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
             make.centerY.equalTo(self.contentView)
+        }
+        
+        self.unreadMessageCount.snp.makeConstraints { make in
+            make.top.equalTo(self.date.snp.bottom).offset(16)
+//            make.bottom.equalTo(self.contentView).offset(8)
+            make.trailing.equalTo(self.contentView).offset(-16)
+            make.leading.equalTo(self.stackView2.snp.trailing).offset(16)
         }
     }
     
@@ -192,7 +194,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
         
         let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
         let viewModel = diContainer.makeChatRoomListViewModel(
-            actions: ChatRoomListViewModelActions(showChatRoom: {},
+            actions: ChatRoomListViewModelActions(showChatRoom: { _, _ in },
                                                   showCreateChatRoom: {},
                                                   showDMChatRoomList: {},
                                                   showGroupChatRoomList: {})
