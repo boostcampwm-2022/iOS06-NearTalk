@@ -8,7 +8,8 @@
 import Foundation
 
 struct NCLocation: Codable {
-    static let decimalDegreePerMeter = 0.00001 / 1.11
+    // 미터 당 위경도
+    static let decimalDegreePerMeter = 0.000009009
     
     var longitude: Double
     var latitude: Double
