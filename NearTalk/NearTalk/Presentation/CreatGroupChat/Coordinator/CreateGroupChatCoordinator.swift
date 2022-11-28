@@ -7,26 +7,45 @@
 
 import UIKit
 
-final class CreateGroupChatCoordinator: CreateGroupChatCoordinatable {
+protocol CreateGroupChatCoordinatorDependencies {
+    func makeCreateGroupChatViewController(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewController
+    func makeChatDIContainer(chatRoomID: String, chatRoomName: String) -> ChatDIContainer
+    
+}
+
+final class CreateGroupChatCoordinator {
     // MARK: - Proporties
     
-    var navigationController: UINavigationController?
-    
+    weak var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
+    private let dependencies: CreateGroupChatCoordinatorDependencies
+    private(set) weak var createGroupChatViewController: CreateGroupChatViewController?
     
-    var childCoordinators: [Coordinator]
-    
-    func start() {
-        print(#function)
-    }
-    
-    init(navigationController: UINavigationController? = nil, parentCoordinator: Coordinator? = nil, childCoordinators: [Coordinator]) {
+    init(navigationController: UINavigationController, dependencies: CreateGroupChatCoordinatorDependencies) {
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
-        self.childCoordinators = childCoordinators
+        self.dependencies = dependencies
     }
     
-    func showChatViewController() {
+    // MARK: - Lifecycles
+    func start() {
+        let actions: CreateGroupChatViewModelActions = .init(showChatViewController: showChatViewController)
+        let viewController = dependencies.makeCreateGroupChatViewController(actions: actions)
+        viewController.hidesBottomBarWhenPushed = true
+        self.navigationController?.pushViewController(viewController, animated: true)
+        self.createGroupChatViewController = viewController
+    }
+
+    func showChatViewController(chatRoomID: String, chatRoomName: String) {
         print(#function)
+        guard let navigationController = navigationController
+        else { return }
+        
+        let dicontainer = self.dependencies.makeChatDIContainer(
+            chatRoomID: chatRoomID,
+            chatRoomName: chatRoomName
+        )
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>",chatRoomID, chatRoomName)
+        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        coordinator.start()
     }
 }

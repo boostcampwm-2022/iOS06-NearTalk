@@ -6,64 +6,122 @@
 //
 
 import Foundation
-import RxCocoa
+import RxRelay
 import RxSwift
 
-struct OnboardingInput {
-    let nickName: Observable<String>
-    let message: Observable<String>
+protocol OnboardingInput {
+    func editNickName(_ text: String)
+    func editStatusMessage(_ text: String)
+    func editImage()
+    func register()
 }
 
-struct OnboardingOutput {
-    let nickNameValidity: Driver<Bool>
-    let messageValidity: Driver<Bool>
-    let registerEnable: Driver<Bool>
+protocol OnboardingOutput {
+    var nickNameValidity: BehaviorRelay<Bool> { get }
+    var messageValidity: BehaviorRelay<Bool> { get }
+    var image: BehaviorRelay<Data?> { get }
+    var registerEnable: BehaviorRelay<Bool> { get }
 }
 
-protocol ViewModelType {
-    associatedtype Input
-    associatedtype Output
-    func transform(_ input: Input) -> Output
-}
+protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
-protocol OnboardingViewModel: ViewModelType where Input == OnboardingInput, Output == OnboardingOutput {
-    init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase)
-    func saveProfile(nickName: String, message: String, image: Data?) -> Single<Bool>
+struct OnboardingViewModelAction {
+    var presentImagePicker: (() -> Single<Data?>)?
+    var showMainViewController: (() -> Void)?
+    var presentRegisterFailure: (() -> Void)?
 }
 
 final class DefaultOnboardingViewModel: OnboardingViewModel {
-    func saveProfile(nickName: String, message: String, image: Data?) -> Single<Bool> {
-        return Single.just(self.saveProfileUseCase.saveProfile(nickName, message, image: image))
+    let nickNameValidity: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let messageValidity: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let image: RxRelay.BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    let registerEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    
+    private let validateNickNameUseCase: any ValidateTextUseCase
+    private let validateStatusMessageUseCase: any ValidateTextUseCase
+    private let uploadImageUseCase: any UploadImageUseCase
+    private let createProfileUseCase: any CreateProfileUseCase
+    private let action: OnboardingViewModelAction
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    private var nickName: String = ""
+    private var message: String = ""
+    
+    init(
+        validateNickNameUseCase: any ValidateTextUseCase,
+        validateStatusMessageUseCase: any ValidateTextUseCase,
+        uploadImageUseCase: any UploadImageUseCase,
+        createProfileUseCase: any CreateProfileUseCase,
+        action: OnboardingViewModelAction
+    ) {
+        self.validateNickNameUseCase = validateNickNameUseCase
+        self.validateStatusMessageUseCase = validateStatusMessageUseCase
+        self.uploadImageUseCase = uploadImageUseCase
+        self.createProfileUseCase = createProfileUseCase
+        self.action = action
+        self.bind()
     }
     
-    private let validateUseCase: any OnboardingValidateUseCase
-    private let saveProfileUseCase: any OnboardingSaveProfileUseCase
-    
-    init(validateUseCase: any OnboardingValidateUseCase, saveProfileUseCase: any OnboardingSaveProfileUseCase) {
-        self.validateUseCase = validateUseCase
-        self.saveProfileUseCase = saveProfileUseCase
+    private func bind() {
+        Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
+            $0 && $1
+        }
+        .bind(to: self.registerEnable)
+        .disposed(by: self.disposeBag)
     }
     
-    func transform(_ input: OnboardingInput) -> OnboardingOutput {
-        let nickNameValidity: Driver<Bool> = input.nickName
-            .map { [self] text in
-                self.validateUseCase.validateNickName(text)
-            }
-            .asDriver(onErrorJustReturn: false)
-        
-        let messageValidity: Driver<Bool> = input.message
-            .map { [self] text in
-                self.validateUseCase.validateMessage(text)
-            }
-            .asDriver(onErrorJustReturn: false)
-        
-        let registerEnable: Driver<Bool> = Observable
-            .combineLatest(
-                nickNameValidity.asObservable(),
-                messageValidity.asObservable()) {
-                    $0 && $1
-                }
-                .asDriver(onErrorJustReturn: false)
-        return Output(nickNameValidity: nickNameValidity, messageValidity: messageValidity, registerEnable: registerEnable)
+    func editNickName(_ text: String) {
+        self.nickName = text
+        self.nickNameValidity
+            .accept(self.validateNickNameUseCase.execute(text))
     }
+    
+    func editStatusMessage(_ text: String) {
+        self.message = text
+        self.messageValidity
+            .accept(self.validateStatusMessageUseCase.execute(text))
+    }
+    
+    func editImage() {
+        guard let presentImagePicker = self.action.presentImagePicker else {
+            return
+        }
+        let imagePickSingle: Single<Data?> = presentImagePicker()
+        imagePickSingle.subscribe(onSuccess: { [weak self] image in
+            self?.image.accept(image)
+        })
+        .disposed(by: self.disposeBag)
+    }
+    
+    func register() {
+        if let image = self.image.value {
+            self.uploadImageUseCase.execute(image: image)
+                .subscribe(onSuccess: { [weak self] imagePath in
+                    self?.registerProfile(imagePath: imagePath)
+                }, onFailure: { [weak self] _ in
+                    self?.action.presentRegisterFailure?()
+                })
+                .disposed(by: self.disposeBag)
+        } else {
+            self.registerProfile(imagePath: nil)
+        }
+    }
+    
+    private func registerProfile(imagePath: String?) {
+        let newProfile: UserProfile = UserProfile(
+            uuid: UUID().uuidString,
+            username: self.nickName,
+            email: nil,
+            statusMessage: self.message,
+            profileImagePath: imagePath
+        )
+        self.createProfileUseCase.execute(profile: newProfile)
+            .subscribe(onCompleted: { [weak self] in
+                self?.action.showMainViewController?()
+            }, onError: { [weak self] _ in
+                self?.action.presentRegisterFailure?()
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
 }

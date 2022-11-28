@@ -13,7 +13,8 @@ protocol MainMapCoordinatorDependencies {
     func makeMainMapBottomSheetViewController() -> BottomSheetViewController
 }
 
-final class MainMapCoordinator {
+final class MainMapCoordinator: Coordinator {
+    var navigationController: UINavigationController?
     
     private weak var navigationController: UINavigationController?
     private let dependencies: MainMapCoordinatorDependencies

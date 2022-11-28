@@ -5,52 +5,23 @@
 //  Created by 고병학 on 2022/11/18.
 //
 
-import Foundation
+import Swinject
 import UIKit
 
 final class RootTabBarDIContainer {
-    // MARK: - Dependencies
+    private let container: Container
     
-    // MARK: - Services
-
-    // MARK: - UseCases
-    func makeTabBarUseCase() -> TabBarUseCase {
-        return DefaultTabBarUseCase()
+    init(container: Container) {
+        self.container = Container(parent: container)
+        self.registerViewModel()
     }
     
-    // MARK: - Repositories
-    func makeRepository() -> TabBarRepository {
-        return DefaultTabBarRepository()
+    private func registerViewModel() {
+        self.container.register(RootTabBarViewModel.self) { _ in DefaultRootTabBarViewModel() }
     }
     
-    // MARK: - ViewModels
-    func makeViewModel() -> RootTabBarViewModel {
-        return DefaultRootTabBarViewModel()
-    }
-    
-#warning("mapViewController DI Container 필요")
-#warning("chatRoomListViewController DI Container 필요")
-#warning("friendListViewController DI Container 필요")
-#warning("myProfileViewController DI Container 필요")
     // MARK: - Create viewController
-    func createTabBarController() -> RootTabBarController {
-        let chatRoomListRepository = DefaultChatRoomListRepository(dataTransferService: DefaultStorageService())
-        let chatRoomListUseCase: ChatRoomListUseCase = DefaultChatRoomListUseCase(chatRoomListRepository: chatRoomListRepository)
-        
-        let myProfileDIContainer: MyProfileDIContainer = .init()
-        let myProfileVC: MyProfileViewController = .init(coordinator: myProfileDIContainer.makeMyProfileCoordinator(), viewModel: myProfileDIContainer.makeViewModel())
-        
-        let dependency: RootTabBarControllerDependency = .init(
-            mapViewController: MainMapViewController(),
-            chatRoomListViewController: ChatRoomListViewController.create(with: DefaultChatRoomListViewModel(useCase: chatRoomListUseCase)),
-            friendListViewController: FriendsListViewController(),
-            myProfileViewController: myProfileVC
-        )
-        return RootTabBarController(viewModel: makeViewModel(), dependency: dependency)
-    }
-    
-    // MARK: - Coordinator
-    func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator {
-        return RootTabBarCoordinator(navigationController: navigationController)
+    func resolveRootTabBarViewController() -> RootTabBarController {
+        return RootTabBarController(viewModel: container.resolve(RootTabBarViewModel.self)!)
     }
 }

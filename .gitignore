@@ -110,8 +110,8 @@ playground.xcworkspace
 
 # Carthage
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
 
+Carthage/Checkouts/
 Carthage/Build/
 
 # Accio dependency management
@@ -151,3 +151,7 @@ iOSInjectionProject/
 # End of https://www.toptal.com/developers/gitignore/api/xcode,swift,cocoapods,firebase,macos
 
 **/GoogleService-Info.plist
+
+*.xcconfig
+
+NearTalk/Carthage/

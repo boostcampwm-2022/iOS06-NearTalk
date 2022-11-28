@@ -6,13 +6,21 @@
 //
 
 import Foundation
+import RxSwift
 
 final class DefaultImageRepository: ImageRepository {
-    func save(image: Data) -> String? {
-        return nil
+    private let imageService: any StorageService
+    private let disposeBag: DisposeBag = DisposeBag()
+
+    init(imageService: any StorageService) {
+        self.imageService = imageService
     }
     
-    func fetch(path: String) -> Data? {
-        return nil
+    func fetch(path: String) -> RxSwift.Single<Data?> {
+        return Single.just(nil)
+    }
+    
+    func save(image: Data) -> RxSwift.Single<String> {
+        return self.imageService.uploadData(data: image, fileName: "DefaultImage", dataType: .images)
     }
 }

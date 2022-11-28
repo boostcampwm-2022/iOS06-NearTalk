@@ -5,61 +5,80 @@
 //  Created by Preston Kim on 2022/11/15.
 //
 
-import Foundation
+import Swinject
 import UIKit
 
 final class DefaultOnboardingDIContainer {
-    // MARK: - Dependencies
-    func makeOnboardingCoordinatorDependency() -> any OnboardingCoordinatorDependency {
-        return DefaultOnboardingCoordinatorDependency()
+    private let container: Container
+    
+    init(container: Container, action: OnboardingViewModelAction) {
+        self.container = Container(parent: container)
+        
+        self.registerService()
+        self.registerRepository()
+        self.registerUseCase()
+        self.registerViewModel(action: action)
+    }
+    
+    // MARK: - Service
+    private func registerService() {
+        self.container.register(StorageService.self) { _ in DefaultStorageService() }
+    }
+
+    // MARK: - Repository
+    private func registerRepository() {
+        self.container.register(MediaRepository.self) { _ in
+            DefaultMediaRepository(storageService: self.container.resolve(StorageService.self)!)
+        }
     }
 
     // MARK: - UseCases
-    private func makeOnboardingValidateUseCase() -> OnboardingValidateUseCase {
-        return DefaultOnboardingValidateUseCase()
+    private func registerUseCase() {
+        self.container.register(
+            ValidateTextUseCase.self,
+            name: OnboardingDependencyName.nickname.rawValue
+        ) { _ in ValidateNickNameUseCase() }
+        self.container.register(
+            ValidateTextUseCase.self,
+            name: OnboardingDependencyName.statusMessage.rawValue
+        ) { _ in ValidateStatusMessageUseCase() }
+        self.container.register(UploadImageUseCase.self) { _ in
+            DefaultUploadImageUseCase(mediaRepository: self.container.resolve(MediaRepository.self)!)
+        }
+        self.container.register(CreateProfileUseCase.self) { _ in
+            DefaultCreateProfileUseCase(
+                profileRepository: self.container.resolve(ProfileRepository.self)!,
+                authRepository: self.container.resolve(AuthRepository.self)!
+            )
+        }
     }
     
-    private func makeOnboardingSaveProfileUseCase(
-        profileRepository: any UserProfileRepository,
-        uuidRepository: any UserUUIDRepository,
-        imageRepository: any ImageRepository) -> OnboardingSaveProfileUseCase {
-        return DefaultOnboardingSaveProfileUseCase(
-            profileRepository: profileRepository,
-            uuidRepository: uuidRepository,
-            imageRepository: imageRepository)
-    }
-    
-    // MARK: - Repositories
-    private func makeProfileRepository() -> any UserProfileRepository {
-        return DefaultUserProfileRepository()
-    }
-    
-    private func makeUserUUIDRepository() -> any UserUUIDRepository {
-        return DefaultUserUUIDRepository()
-    }
-    
-    private func makeImageRepository() -> any ImageRepository {
-        return DefaultImageRepository()
-    }
-    
-    // MARK: - ViewModels
-    func makeViewModel() -> any OnboardingViewModel {
-        return DefaultOnboardingViewModel(
-            validateUseCase: makeOnboardingValidateUseCase(),
-            saveProfileUseCase: makeOnboardingSaveProfileUseCase(
-                profileRepository: self.makeProfileRepository(),
-                uuidRepository: self.makeUserUUIDRepository(),
-                imageRepository: self.makeImageRepository()))
+    // MARK: - ViewModel
+    private func registerViewModel(action: OnboardingViewModelAction) {
+        self.container.register(OnboardingViewModel.self) { _ in
+            DefaultOnboardingViewModel(
+                validateNickNameUseCase: self.container.resolve(
+                    ValidateTextUseCase.self,
+                    name: OnboardingDependencyName.nickname.rawValue
+                )!,
+                validateStatusMessageUseCase: self.container.resolve(
+                    ValidateTextUseCase.self,
+                    name: OnboardingDependencyName.statusMessage.rawValue
+                )!,
+                uploadImageUseCase: self.container.resolve(UploadImageUseCase.self)!,
+                createProfileUseCase: self.container.resolve(CreateProfileUseCase.self)!,
+                action: action
+            )
+        }
     }
     
     // MARK: - Create viewController
-    func makeOnboardingViewController(coordinator: OnboardingCoordinator) -> OnboardingViewController {
-        return OnboardingViewController(viewModel: makeViewModel(), coordinator: coordinator)
+    func resolveOnboardingViewController() -> OnboardingViewController {
+        return OnboardingViewController(viewModel: self.container.resolve(OnboardingViewModel.self)!)
     }
-    
-    // MARK: - Coordinator
-    func makeOnboardingCoordinator(
-        navigationController: UINavigationController, dependency: any OnboardingCoordinatorDependency) -> OnboardingCoordinator {
-        return OnboardingCoordinator(navigationController: navigationController, dependency: dependency)
-    }
+}
+
+enum OnboardingDependencyName: String {
+    case nickname
+    case statusMessage
 }
