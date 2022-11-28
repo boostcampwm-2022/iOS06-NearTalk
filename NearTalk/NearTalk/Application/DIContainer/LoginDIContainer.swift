@@ -5,32 +5,35 @@
 //  Created by Preston Kim on 2022/11/23.
 //
 
-import Foundation
+import Swinject
 import UIKit
 
 final class LoginDIContainer {
-    // MARK: - Service
-    func makeAuthService() -> AuthService {
-        return DefaultFirebaseAuthService()
+    private let container: Container
+    
+    init(container: Container, navigationController: UINavigationController, actions: LoginAction) {
+        self.container = Container(parent: container)
+        
+        self.registerLoginUseCase()
+        self.registerViewModel(loginAction: actions)
     }
     
-    // MARK: - Repository
-    func makeAuthRepository() -> any AuthRepository {
-        return DefaultAuthRepository(authService: makeAuthService())
+    private func registerLoginUseCase() {
+        self.container.register(LoginUseCase.self) { _ in
+            DefaultLoginUseCase(authRepository: self.container.resolve(AuthRepository.self)!)
+        }
     }
     
-    // MARK: - ViewController
+    private func registerViewModel(loginAction: LoginAction) {
+        self.container.register(LoginViewModel.self) { _ in
+            DefaultLoginViewModel(
+                action: loginAction,
+                loginUseCase: self.container.resolve(LoginUseCase.self)!
+            )
+        }
+    }
     
-    // MARK: - Coordinator
-    func makeCoordinator(
-        _ navigationController: UINavigationController,
-        parentCoordinator: Coordinator,
-        dependency: any LoginCoordinatorDependency
-    ) -> LoginCoordinator {
-        return .init(
-            navigationController: navigationController,
-            parentCoordinator: parentCoordinator,
-            dependency: dependency
-        )
+    func resolveLoginViewController() -> LoginViewController {
+        LoginViewController(viewModel: self.container.resolve(LoginViewModel.self)!)
     }
 }

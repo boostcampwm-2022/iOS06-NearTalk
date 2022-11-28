@@ -10,46 +10,23 @@ import PhotosUI
 import RxSwift
 import UIKit
 
-protocol OnboardingCoordinatorDependency {
-    func showMainViewController()
-    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController
-}
-
 final class OnboardingCoordinator: Coordinator {
-    private let dependency: any OnboardingCoordinatorDependency
     var navigationController: UINavigationController?
-    var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator]
+    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
+    private let onboardingDIContainer: DefaultOnboardingDIContainer
     
     init(
-        navigationController: UINavigationController?,
-        parentCoordinator: Coordinator? = nil,
-        dependency: any OnboardingCoordinatorDependency
+        container: DefaultOnboardingDIContainer,
+        navigationController: UINavigationController?
     ) {
+        self.onboardingDIContainer = container
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
-        self.childCoordinators = []
-        self.dependency = dependency
     }
     
     func start() {
-        let action: Action = Action(
-            presentImagePicker: self.presentImagePicker,
-            showMainViewController: self.dependency.showMainViewController,
-            presentRegisterFailure: self.presentRegisterFailure
-        )
-        let onboardingViewController: OnboardingViewController = self.dependency.makeOnboardingViewController(action: action)
+        let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
     }
-    
-    struct Action: OnboardingViewModelAction {
-        let presentImagePicker: (() -> RxSwift.Single<Data?>)?
-        let showMainViewController: (() -> Void)?
-        let presentRegisterFailure: (() -> Void)?
-    }
-    
-    private let imagePublisher: PublishSubject<Data?> = PublishSubject()
-    
 }
 
 extension OnboardingCoordinator {

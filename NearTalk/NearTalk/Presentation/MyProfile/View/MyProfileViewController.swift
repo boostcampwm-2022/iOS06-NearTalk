@@ -180,11 +180,11 @@ private extension MyProfileViewController {
     }
 }
 
-enum MyProfileSection: Hashable & Sendable {
+enum MyProfileSection: Hashable, Sendable {
     case main
 }
 
-enum MyProfileItem: String, Hashable & Sendable & CaseIterable {
+enum MyProfileItem: String, Hashable, Sendable, CaseIterable {
     case profileSetting = "프로필 수정"
     case appSetting = "앱 설정"
 }

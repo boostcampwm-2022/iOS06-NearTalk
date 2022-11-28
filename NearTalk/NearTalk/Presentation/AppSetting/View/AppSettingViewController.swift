@@ -76,11 +76,11 @@ private extension AppSettingViewController {
     }
 }
 
-enum AppSettingSection: Hashable & Sendable {
+enum AppSettingSection: Hashable, Sendable {
     case main
 }
 
-enum AppSettingItem: String, Hashable & Sendable & CaseIterable {
+enum AppSettingItem: String, Hashable, Sendable, CaseIterable {
     case logout = "로그아웃"
     case drop = "탈퇴"
     case developerInfo = "개발자 정보"
