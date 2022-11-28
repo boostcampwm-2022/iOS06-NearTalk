@@ -49,6 +49,7 @@ final class MainMapViewModel {
                 let centerLocation = NCLocation(longitude: mapView.userLocation.coordinate.longitude,
                                                 latitude: mapView.userLocation.coordinate.latitude)
                 let radiusDistanceMeters = Double(2000)
+                
                 let latitudinalMeters = mapView.region.span.latitudeDelta * NCLocation.decimalDegreePerMeter
                 let longitudinalMeters = mapView.region.span.longitudeDelta * NCLocation.decimalDegreePerMeter
                 
@@ -57,7 +58,7 @@ final class MainMapViewModel {
                                    latitudinalMeters: latitudinalMeters,
                                    longitudinalMeters: longitudinalMeters)
             }
-            .flatMap{ self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
+            .flatMap { self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
             .bind(to: output.accessibleAllChatRooms)
             .disposed(by: self.disposeBag)
         
