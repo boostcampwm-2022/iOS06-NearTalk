@@ -7,10 +7,13 @@
 
 import Foundation
 
+/// 유저가 특정 채팅방에서 마지막으로 읽은 메시지
 struct UserChatRoomTicket: BaseEntity {
     var uuid: String?
     var userID: String?
     var roomID: String?
     var lastReadMessageID: String?
+    
+    /// 읽었을 당시 채팅방의 총 메시지 갯수
     var lastRoomMessageCount: Int?
 }

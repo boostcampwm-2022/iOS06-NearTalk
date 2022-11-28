@@ -36,4 +36,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
     func observeChatRoomMessages(roomID: String) -> Observable<ChatMessage> {
         self.databaseService.observeNewMessage(roomID)
     }
+    
+    func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom> {
+        self.databaseService.updateChatRoom(chatRoom)
+    }
 }

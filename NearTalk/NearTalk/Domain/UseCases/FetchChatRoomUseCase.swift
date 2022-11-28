@@ -47,7 +47,6 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     func getDMChatList() -> Observable<[DMChatRoomListData]> {
         return self.chatRoom
-            .asObservable()
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
     }

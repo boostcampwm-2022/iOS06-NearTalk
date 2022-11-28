@@ -13,4 +13,6 @@ protocol ChatMessageRepository {
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
     func fetchMessage(page: Int, skip: Int, count: Int, roomID: String) -> Single<[ChatMessage]>
     func observeChatRoomMessages(roomID: String) -> Observable<ChatMessage>
+    
+    func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom>
 }
