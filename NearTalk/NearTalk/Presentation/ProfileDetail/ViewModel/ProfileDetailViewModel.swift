@@ -75,7 +75,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                     .subscribe(onSuccess: { info in
                         self.userName.accept(info.username ?? "Unkown")
                         self.statusMessage.accept(info.statusMessage ?? "Unkown")
-                        self.profileImageURL.accept(info.imagePath ?? "")
+                        self.profileImageURL.accept(info.profileImagePath ?? "")
                     })
                     .disposed(by: self.disposeBag)
             })

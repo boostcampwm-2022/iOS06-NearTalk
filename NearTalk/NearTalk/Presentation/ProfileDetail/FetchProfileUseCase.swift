@@ -17,7 +17,7 @@ struct UserProfileDetail {
 }
 
 protocol FetchProfileUseCase {
-    func fetchUserInfo(with userID: String) -> Single<UserProfileDetail>
+    func fetchUserInfo(with userID: String) -> Single<UserProfile>
 }
 
 final class DefaultFetchProfileUseCase: FetchProfileUseCase {
@@ -28,27 +28,7 @@ final class DefaultFetchProfileUseCase: FetchProfileUseCase {
         self.userProfileRepository = profileRepository
     }
     
-    func fetchUserInfo(with userID: String) -> Single<UserProfileDetail> {
-        print(#function)
-        return Single<UserProfileDetail>.create { single in
-            
-            self.userProfileRepository.fetchProfileByUUID(userID)
-                .subscribe { event in
-                    switch event {
-                    case .success(let userProfile):
-                        let userProfileDetail = UserProfileDetail(
-                            id: userProfile.uuid,
-                            username: userProfile.username,
-                            imagePath: userProfile.profileImagePath,
-                            statusMessage: userProfile.statusMessage
-                        )
-                        single(.success(userProfileDetail))
-                    case .failure(let error):
-                        single(.failure(error))
-                    }
-                }.disposed(by: self.disposebag)
-            
-            return Disposables.create()
-        }
+    func fetchUserInfo(with userID: String) -> Single<UserProfile> {
+        return  self.userProfileRepository.fetchProfileByUUID(userID)
     }
 }
