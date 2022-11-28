@@ -26,7 +26,7 @@ protocol OnboardingOutput {
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
 protocol OnboardingViewModelAction {
-    var presentImagePicker: (() -> Single<Data?>)? { get }
+    var presentImagePicker: ((BehaviorRelay<Data?>) -> Void)? { get }
     var showMainViewController: (() -> Void)? { get }
     var presentRegisterFailure: (() -> Void)? { get }
 }
@@ -83,14 +83,7 @@ final class DefaultOnboardingViewModel: OnboardingViewModel {
     }
     
     func editImage() {
-        guard let presentImagePicker = self.action.presentImagePicker else {
-            return
-        }
-        let imagePickSingle: Single<Data?> = presentImagePicker()
-        imagePickSingle.subscribe(onSuccess: { [weak self] image in
-            self?.image.accept(image)
-        })
-        .disposed(by: self.disposeBag)
+        self.action.presentImagePicker?(self.image)
     }
     
     func register() {
