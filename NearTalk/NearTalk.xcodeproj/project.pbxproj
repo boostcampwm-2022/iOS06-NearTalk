@@ -40,6 +40,7 @@
 		5553B7BD29345E8A0054F68C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7BC29345E8A0054F68C /* GoogleService-Info.plist */; };
 		5553B7BF29346F980054F68C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7BE29346F980054F68C /* GoogleService-Info.plist */; };
 		5553B7C3293470D20054F68C /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7C2293470D20054F68C /* config.xcconfig */; };
+		5553B7C629347C7A0054F68C /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5553B7C529347C7A0054F68C /* PaddingLabel.swift */; };
 		555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendListViewModel.swift */; };
@@ -265,6 +266,7 @@
 		5553B7BC29345E8A0054F68C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5553B7BE29346F980054F68C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5553B7C2293470D20054F68C /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		5553B7C529347C7A0054F68C /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		555A6B2A29236D51001336ED /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
 		555A6B2C29236D61001336ED /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 		555A6B2E29236D73001336ED /* FriendListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListViewModel.swift; sourceTree = "<group>"; };
@@ -722,7 +724,6 @@
 				1660D233291DDB39005F7B24 /* Assets.xcassets */,
 				1660D238291DDB39005F7B24 /* Info.plist */,
 				5553B7BC29345E8A0054F68C /* GoogleService-Info.plist */,
-				608BD10F292FD05300CB676E /* config.xcconfig */,
 				5553B7BE29346F980054F68C /* GoogleService-Info.plist */,
 				5553B7C2293470D20054F68C /* config.xcconfig */,
 				7C4895352931FBE300DD5076 /* config.xcconfig */,
@@ -737,6 +738,7 @@
 				16530577291E18560026B815 /* UIViewPreview.swift */,
 				60FD70612923927C00A4C29A /* NonceGenerator.swift */,
 				608BD110292FD59700CB676E /* Environment.swift */,
+				5553B7C529347C7A0054F68C /* PaddingLabel.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1643,6 +1645,7 @@
 				603FD39C292B4F4A00687ED4 /* LogoutUseCase.swift in Sources */,
 				7C254DAB292DB246004D4CEC /* ChatViewController.swift in Sources */,
 				8330622B2924A3E2000E786E /* (null) in Sources */,
+				5553B7C629347C7A0054F68C /* PaddingLabel.swift in Sources */,
 				83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */,
 				603EDD6329261A2000BEE65C /* FirebaseKey.swift in Sources */,
 				555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */,
