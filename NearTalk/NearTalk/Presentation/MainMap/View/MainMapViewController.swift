@@ -16,7 +16,7 @@ import UIKit
 final class MainMapViewController: UIViewController {
     
     // MARK: - UI Components
-    private lazy var mapView: MKMapView = .init().then {
+    private let mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
         $0.setUserTrackingMode(.follow, animated: true)
     }
@@ -42,6 +42,8 @@ final class MainMapViewController: UIViewController {
         let mainMapVC = MainMapViewController()
         mainMapVC.viewModel = viewModel
         
+        print(mainMapVC.mapView.userLocation.coordinate)
+        
         return mainMapVC
     }
 
@@ -62,6 +64,10 @@ final class MainMapViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.locationManagerDidChangeAuthorization(self.locationManager)
+    }
+    
     // MARK: - Methods
     private func addSubViews() {
         view.addSubview(self.mapView)
@@ -77,17 +83,17 @@ final class MainMapViewController: UIViewController {
         }
         
         self.moveToCurrentLocationButton.snp.makeConstraints {
-            $0.top.equalTo(self.view).offset(100)
-            $0.trailing.equalTo(self.view.snp.trailing)
-            $0.width.equalTo(40)
-            $0.height.equalTo(40)
+            $0.top.equalTo(self.view).offset(160)
+            $0.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            $0.width.equalTo(45)
+            $0.height.equalTo(45)
         }
         
         self.createChatRoomButton.snp.makeConstraints {
             $0.top.equalTo(self.moveToCurrentLocationButton.snp.bottom)
-            $0.trailing.equalTo(self.view.snp.trailing)
-            $0.width.equalTo(40)
-            $0.height.equalTo(40)
+            $0.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            $0.width.equalTo(45)
+            $0.height.equalTo(45)
         }
     }
     
@@ -98,11 +104,9 @@ final class MainMapViewController: UIViewController {
     
     private func bindViewModel() {
         self.moveToCurrentLocationButton.rx.tap
-            .asObservable()
             .bind(onNext: { [weak self] _ in
-                if let currentUserLocation = self?.mapView.userLocation.location {
-                    self?.mapView.move(to: currentUserLocation)
-                }
+                self?.mapView.showsUserLocation = true
+                self?.mapView.setUserTrackingMode(.followWithHeading, animated: true)
             })
             .disposed(by: self.disposeBag)
         

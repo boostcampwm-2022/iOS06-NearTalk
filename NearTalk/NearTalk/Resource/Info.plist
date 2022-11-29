@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>메인지도 권한 요쳥</string>
 	<key>FCM_SERVER_KEY</key>
 	<string>$(FCM_SERVER_KEY)</string>
 	<key>FCM_URL</key>
