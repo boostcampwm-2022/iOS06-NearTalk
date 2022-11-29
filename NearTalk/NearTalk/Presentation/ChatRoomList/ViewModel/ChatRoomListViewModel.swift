@@ -46,7 +46,7 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        // TODO: 데이터 연결시 newObserve_ChatList 변경
+        // TODO: 데이터 연결시 newObservGroupChatList, newObservDMChatList 변경
         self.chatRoomListUseCase.getGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
@@ -74,6 +74,8 @@ extension DefaultChatRoomListViewModel {
     }
     
     // 채팅방 클릭시 채팅방 이동
+    // 혹시몰라서 chatRoomID: chatRoomID, chatRoomName: chatRoomName, chatRoomMemberUUIDList: chatRoomMemberUUIDList
+    // 위 부분은 건들지 않고 didSelectItem에 roomID만 받고있습니다.
     func didSelectItem(at roomID: String) {
         actions?.showChatRoom(roomID, "chatRoomName", [])
     }
