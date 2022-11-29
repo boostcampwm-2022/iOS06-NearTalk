@@ -8,8 +8,8 @@
 import UIKit
 
 final class ChatDIContainer {
-    private var chatRoomID: String
-    private var chatRoomName: String
+    private let chatRoomID: String
+    private let chatRoomName: String
     
     init(chatRoomID: String,
          chatRoomName: String

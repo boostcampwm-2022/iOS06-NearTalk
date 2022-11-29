@@ -22,21 +22,8 @@ final class DefaultRemoveFriendUseCase: RemoveFriendUseCase {
     }
     
     func removeFriend(with userID: String) -> Completable {
-        print(#function)
         // 1. firebase에서 삭제 -> O
         // 2. Coredata에서 삭제 -> ?
-        
-        return Completable.create { completable in
-            self.userProfileRepository.removeFriend(userID)
-                .subscribe { event in
-                    switch event {
-                    case .completed:
-                        completable(.completed)
-                    case .error(let error):
-                        completable(.error(error))
-                    }
-                }.disposed(by: self.disposebag)
-            return Disposables.create()
-        }
+        return self.userProfileRepository.removeFriend(userID)
     }
 }
