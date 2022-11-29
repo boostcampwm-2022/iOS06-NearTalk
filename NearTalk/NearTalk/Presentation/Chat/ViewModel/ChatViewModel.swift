@@ -20,13 +20,13 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 }
 
 class DefaultChatViewModel: ChatViewModel {
-    // MARK: - Propoties
     
+    // MARK: - Propoties
     private let chatRoomID: String
     private let chatRoomName: String
     private var chatroomMemberUUIDList: [String]
     private let disposebag: DisposeBag = DisposeBag()
-
+    
     private var messagingUseCase: MessagingUseCase
     var chatMessages: Observable<ChatMessage>
     
@@ -42,7 +42,7 @@ class DefaultChatViewModel: ChatViewModel {
         self.messagingUseCase = messagingUseCase
         self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
     }
-    
+        
     func sendMessage(_ message: String) {
         print(#function, message)
         
