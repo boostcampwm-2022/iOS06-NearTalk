@@ -9,7 +9,8 @@ import Foundation
 
 struct NCLocation: Codable {
     // 미터 당 위경도
-    static let decimalDegreePerMeter = 0.000009009
+    static let decimalDegreePerMeter: Double = 0.000009009 // 도/m
+    static let meterPerDecimalDegree: Double = 111000 // m/도
     
     var longitude: Double
     var latitude: Double
@@ -23,8 +24,8 @@ struct NCLocation: Codable {
     }
     
     func distance(from location: NCLocation) -> Double {
-        let longitudeDeltaMeters = abs(self.longitude - location.longitude) * Self.decimalDegreePerMeter
-        let latitudeDeltaMeters = abs(self.latitude - location.latitude) * Self.decimalDegreePerMeter
+        let longitudeDeltaMeters = abs(self.longitude - location.longitude) * Self.meterPerDecimalDegree
+        let latitudeDeltaMeters = abs(self.latitude - location.latitude) * Self.meterPerDecimalDegree
         
         return sqrt(pow(longitudeDeltaMeters, 2) + pow(latitudeDeltaMeters, 2))
     }
