@@ -138,6 +138,7 @@
 		7C254DB3292DDAAF004D4CEC /* ChatCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */; };
 		7C254DB5292DDABF004D4CEC /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */; };
 		7C4895362931FBE300DD5076 /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7C4895352931FBE300DD5076 /* config.xcconfig */; };
+		7C522E1F2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */; };
 		7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */; };
 		7C749851292F706F00FADA94 /* MessagingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C749850292F706F00FADA94 /* MessagingUseCase.swift */; };
 		7CA4EA36292BA61300D8C757 /* RemoveFriendUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */; };
@@ -370,6 +371,7 @@
 		7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCoordinator.swift; sourceTree = "<group>"; };
 		7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		7C4895352931FBE300DD5076 /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatRoomInfoUseCase.swift; sourceTree = "<group>"; };
 		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
 		7C749850292F706F00FADA94 /* MessagingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveFriendUseCase.swift; sourceTree = "<group>"; };
@@ -1059,6 +1061,7 @@
 		7C254DA6292DB205004D4CEC /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */,
 				7C749850292F706F00FADA94 /* MessagingUseCase.swift */,
 				7C254DA9292DB22B004D4CEC /* Coordinator */,
 				7C254DA8292DB21E004D4CEC /* ViewModel */,
@@ -1754,6 +1757,7 @@
 				603EDDB32926C89000BEE65C /* RootTabBarViewModel.swift in Sources */,
 				608BD111292FD59700CB676E /* Environment.swift in Sources */,
 				6001DA88292D47320062EAD0 /* UserChatRoomTicket.swift in Sources */,
+				7C522E1F2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift in Sources */,
 				83D354482925438C00B9236A /* UserUUIDRepository.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
 				556EE2512926402000EEA145 /* ChatRoomListCell.swift in Sources */,

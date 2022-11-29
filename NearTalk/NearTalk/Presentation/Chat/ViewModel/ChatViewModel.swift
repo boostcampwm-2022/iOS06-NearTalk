@@ -25,7 +25,6 @@ class DefaultChatViewModel: ChatViewModel {
     private let chatRoomID: String
     private let chatRoomName: String
     private var chatroomMemberUUIDList: [String]
-    private let disposebag: DisposeBag = DisposeBag()
 
     private var messagingUseCase: MessagingUseCase
     var chatMessages: Observable<ChatMessage>
@@ -37,7 +36,7 @@ class DefaultChatViewModel: ChatViewModel {
     init(chatRoomID: String,
          chatRoomName: String,
          chatRoomMemberUUIDList: [String],
-         messagingUseCase: MessagingUseCase) {
+         messagingUseCase: MessagingUseCase
     ) {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
