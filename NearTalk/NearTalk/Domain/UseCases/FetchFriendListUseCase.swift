@@ -22,6 +22,8 @@ final class DefaultFetchFriendListUseCase: FetchFriendListUseCase {
     init(profileRepository: ProfileRepository) {
         self.profileRepository = profileRepository
         self.frends = friendsDummyData.fetchFriendsData()
+        
+        // 네트워크 연결시 위 더미데이터 풀고 적용
         //        self.frends = self.profileRepository.fetchFriendsProfile()
     }
     

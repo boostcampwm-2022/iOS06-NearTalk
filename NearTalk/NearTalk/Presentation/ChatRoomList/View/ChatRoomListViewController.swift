@@ -186,7 +186,7 @@ final class ChatRoomListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-
+    
 }
 
 #if canImport(SwiftUI) && DEBUG

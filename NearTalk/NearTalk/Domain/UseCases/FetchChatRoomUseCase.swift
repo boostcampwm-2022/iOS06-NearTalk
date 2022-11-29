@@ -12,28 +12,25 @@ import RxSwift
 protocol FetchChatRoomUseCase {
     func getGroupChatList() -> Observable<[GroupChatRoomListData]>
     func getDMChatList() -> Observable<[DMChatRoomListData]>
-
+    
     func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]>
     func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
-    func getRecentMessage(messageID: String, roomID: String) -> Single<ChatMessage>
 }
 
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
-
+    
     private let disposeBag: DisposeBag = .init()
     private let chatRoomListRepository: ChatRoomListRepository
-    private let chatMessageRepository: ChatMessageRepository
     private let chatRoom: Observable<[ChatRoom]>
     private let userChatRoomModel: Observable<[UserChatRoomModel]>
     
     private var newChatRoomUUIDList: PublishRelay<[String]> = .init()
     private lazy var newChatRoom: Observable<[ChatRoom]> = self.newGetChatRoomList()
     
-    init(chatRoomListRepository: ChatRoomListRepository, chatMessageRepository: ChatMessageRepository) {
+    init(chatRoomListRepository: ChatRoomListRepository) {
         self.chatRoomListRepository = chatRoomListRepository
-        self.chatMessageRepository = chatMessageRepository
         
         self.chatRoom = self.chatRoomListRepository.fetchChatRoomList()
         self.userChatRoomModel = self.chatRoomListRepository.fetchUserChatRoomModel()
@@ -43,20 +40,14 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     func getGroupChatList() -> Observable<[GroupChatRoomListData]> {
         return self.chatRoom
-            .asObservable()
             .map { $0.filter { $0.roomType == "group" } }
             .map { $0.map { GroupChatRoomListData(data: $0) } }
     }
     
     func getDMChatList() -> Observable<[DMChatRoomListData]> {
         return self.chatRoom
-            .asObservable()
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
-    }
-    
-    func getRecentMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
-        return chatMessageRepository.fetchSingleMessage(messageID: messageID, roomID: roomID)
     }
     
     func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]> {
@@ -69,6 +60,11 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
         self.newChatRoom
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
+    }
+    
+    // MARK: - 현재 채팅방 정보 불러오기 (삭제 가능성 높음)
+    func getCurrentChatRoomData(chatRoomID: String) -> Single<ChatRoom> {
+        return self.chatRoomListRepository.fetchChatRoomInfo(chatRoomID)
     }
     
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {

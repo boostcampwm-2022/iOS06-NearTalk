@@ -43,10 +43,11 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private let date = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 10)
+        $0.font = UIFont.systemFont(ofSize: 12)
     }
     
     private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then {
+        $0.isHidden = true
         $0.backgroundColor = #colorLiteral(red: 0.8102046251, green: 0, blue: 0, alpha: 1)
         $0.font = .systemFont(ofSize: 16, weight: .semibold)
         $0.textColor = .white
@@ -91,18 +92,16 @@ class ChatRoomListCell: UICollectionViewCell {
         self.name.text = groupData.roomName
         self.currentUserCount.text = String((groupData.userList ?? []).count)
         self.imageLoad(path: groupData.roomImagePath)
-        self.unreadMessageCheck(number: groupData.messageCount)
-        self.bind(messageID: groupData.recentMessageID, roomID: groupData.uuid)
-        self.testDate()
+        self.unreadMessageCheck(roomID: groupData.uuid ?? "", number: groupData.messageCount)
+        self.dateOperate(date: groupData.recentMessageDate)
     }
     
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
         self.name.text = dmData.roomName
         self.imageLoad(path: dmData.roomImagePath)
-        self.unreadMessageCheck(number: dmData.messageCount)
-        self.bind(messageID: dmData.recentMessageID, roomID: dmData.uuid)
-        self.testDate()
+        self.unreadMessageCheck(roomID: dmData.uuid ?? "", number: dmData.messageCount)
+        self.dateOperate(date: dmData.recentMessageDate)
     }
     
     // MARK: - Configure views
@@ -137,18 +136,6 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
-    private func bind(messageID: String?, roomID: String?) {
-        guard let messageID = messageID,
-              let roomID = roomID else { return }
-        self.viewModel?.getRecentMessage(messageID: messageID, roomID: roomID)
-            .asObservable()
-            .subscribe(onNext: { [weak self] chatMessage in
-                self?.recentMessage.text = chatMessage.text
-                self?.dateOperate(date: chatMessage.createdDate)
-            })
-            .disposed(by: disposebag)
-    }
-    
     private func dateOperate(date: Date?) {
         guard let date = date
         else { return }
@@ -178,21 +165,22 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private func testDate() {
         let nowDate = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd HH:mm"
-        let convertDate = dateFormatter.string(from: nowDate)
-        
-        self.date.text = convertDate
+        self.date.text = self.convertDate(date: nowDate)
     }
     
-    private func unreadMessageCheck(number: Int?) {
-        guard let number = number, number > 0 else {
+    private func unreadMessageCheck(roomID: String, number: Int?) {
+        guard let viewModel = self.viewModel,
+              let number = number, number > 0 else {
             self.unreadMessageCount.isHidden = true
             return
         }
         
-        self.unreadMessageCount.isHidden = false
-        self.unreadMessageCount.text = String(number)
+        let tickets = viewModel.userChatRoomTicket.filter { $0.roomID == roomID }
+        if let ticket = tickets.first, tickets.count == 1, number > (ticket.lastRoomMessageCount ?? 0) {
+            
+            self.unreadMessageCount.text = String(2222)
+            self.unreadMessageCount.isHidden = false
+        }
     }
     
     private func imageLoad(path: String?) {

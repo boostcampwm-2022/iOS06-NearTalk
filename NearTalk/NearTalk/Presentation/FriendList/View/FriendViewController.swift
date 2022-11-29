@@ -35,7 +35,7 @@ final class FriendListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.addSubviews()
         self.configureConstraints()
     }
@@ -44,7 +44,7 @@ final class FriendListViewController: UIViewController {
     private func addSubviews() {
         self.view.addSubview(collectionView)
     }
-
+    
     private func configureConstraints() {
         self.configureView()
         self.configureTableView()
@@ -107,29 +107,54 @@ final class FriendListViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
+        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .absolute(itemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                         subitems: [item])
-      
+                                                       subitems: [item])
+        
         let section = NSCollectionLayoutSection(group: group)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-
+    
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct FriendsListViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        let navigation = UINavigationController()
-        let diContainer = FriendListDIContainer()
-        let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
-        coordinator.start()
-        return navigation.showPreview(.iPhone14Pro)
+extension FriendListViewController {
+    
+    enum ActionType {
+        case ok
+        case cancel
+    }
+    
+    func showAlert(title: String, message: String? = nil) -> Observable<ActionType> {
+        return Observable.create { [weak self] observer in
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                observer.onNext(.ok)
+                observer.onCompleted()
+            }
+            alertController.addAction(okAction)
+            
+            self?.present(alertController, animated: true, completion: nil)
+            
+            return Disposables.create {
+                alertController.dismiss(animated: true, completion: nil)
+            }
+        }
     }
 }
+    
+#if canImport(SwiftUI) && DEBUG
+    import SwiftUI
+    
+    struct FriendsListViewControllerPreview: PreviewProvider {
+        static var previews: some View {
+            let navigation = UINavigationController()
+            let diContainer = FriendListDIContainer()
+            let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
+            coordinator.start()
+            return navigation.showPreview(.iPhone14Pro)
+        }
+    }
 #endif
