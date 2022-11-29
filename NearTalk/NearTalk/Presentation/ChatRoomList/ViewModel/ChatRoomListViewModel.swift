@@ -53,6 +53,7 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
             .disposed(by: self.disposeBag)
         
     }
+    
 }
 
 // MARK: - Input
