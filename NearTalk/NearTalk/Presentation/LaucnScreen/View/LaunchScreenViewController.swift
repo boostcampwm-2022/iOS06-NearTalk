@@ -70,7 +70,7 @@ struct LaunchScreenViewControllerPreview: PreviewProvider {
             navigationController: .init(),
             launchScreenActions: .init(),
             loginAction: .init(),
-            onboardingActions: .init(showMainViewController: nil)
+            showMainViewController: nil
         )
         let diContainer: LaunchScreenDIContainer = container.resolveLaunchScreenDIContainer()
         let vc: LaunchScreenViewController = diContainer.resolveLaunchScreenViewController()

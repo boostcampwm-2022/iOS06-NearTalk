@@ -6,6 +6,7 @@
 //
 
 import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
 
@@ -17,7 +18,15 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
             let cell: UITableViewCell
 
             if item == .alarmOnOff {
-                cell = AppSettingTableViewCell()
+                let notiCell = AppSettingTableViewCell()
+                self.viewModel.notificationOnOffSwitch
+                    .bind(to: notiCell.toggleSwitch.rx.isOn)
+                    .disposed(by: self.disposeBag)
+                notiCell.toggleSwitch.rx.value.changed.bind { [weak self] toggle in
+                    self?.viewModel.notificationSwitchToggled(on: toggle)
+                }
+                .disposed(by: self.disposeBag)
+                cell = notiCell
             } else {
                 cell = UITableViewCell()
             }
@@ -39,6 +48,27 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         configureConstraint()
         initDataSource()
         setTableView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.viewWillAppear()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.viewModel.tableRowSelected(item: self.dataSource.itemIdentifier(for: indexPath))
+    }
+        
+    private let viewModel: any AppSettingViewModel
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    init(viewModel: any AppSettingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -74,15 +104,4 @@ private extension AppSettingViewController {
         snapshot.appendItems(AppSettingItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
     }
-}
-
-enum AppSettingSection: Hashable, Sendable {
-    case main
-}
-
-enum AppSettingItem: String, Hashable, Sendable, CaseIterable {
-    case logout = "로그아웃"
-    case drop = "탈퇴"
-    case developerInfo = "개발자 정보"
-    case alarmOnOff = "알람 on/off"
 }

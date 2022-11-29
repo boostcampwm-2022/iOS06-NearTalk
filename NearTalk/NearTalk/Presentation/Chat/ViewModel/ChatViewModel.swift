@@ -23,7 +23,6 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 class DefaultChatViewModel: ChatViewModel {
     
     // MARK: - Propoties
-    
     private let chatRoomID: String
     private var chatRoom: ChatRoom?
 
@@ -32,8 +31,6 @@ class DefaultChatViewModel: ChatViewModel {
     private var userDefaultUseCase: UserDefaultUseCase
     var chatMessages: Observable<ChatMessage>
     var chatRoomInfo: Observable<ChatRoom>
-    
-    private let disposebag: DisposeBag = DisposeBag()
     
     // MARK: - LifeCycle
     
@@ -55,7 +52,7 @@ class DefaultChatViewModel: ChatViewModel {
             })
             .disposed(by: disposebag)
     }
-    
+        
     func sendMessage(_ message: String) {
         print("2-1. ", message, chatRoom)
         guard let chatRoomInfo = self.chatRoom,

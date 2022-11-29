@@ -172,6 +172,12 @@ private extension OnboardingViewController {
                 }
             })
             .disposed(by: self.disposeBag)
+        self.viewModel.image
+            .asObservable()
+            .compactMap { $0 }
+            .map { UIImage(data: $0) }
+            .bind(onNext: { self.profileImageView.image = $0 })
+            .disposed(by: self.disposeBag)
     }
     
     func bindRegisterButton() {
