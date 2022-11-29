@@ -32,6 +32,8 @@ class DefaultChatViewModel: ChatViewModel {
     var chatMessages: Observable<ChatMessage>
     var chatRoomInfo: Observable<ChatRoom>
     
+    private let disposebag: DisposeBag = DisposeBag()
+    
     // MARK: - LifeCycle
     
     init(chatRoomID: String,
