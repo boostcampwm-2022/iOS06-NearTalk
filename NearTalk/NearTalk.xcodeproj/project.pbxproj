@@ -51,7 +51,6 @@
 		55421E872935E76C0017972B /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 55421E852935E76C0017972B /* config.xcconfig */; };
 		55421E882935E76C0017972B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55421E862935E76C0017972B /* GoogleService-Info.plist */; };
 		5553B7C629347C7A0054F68C /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5553B7C529347C7A0054F68C /* PaddingLabel.swift */; };
-		5553B7BF29346F980054F68C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7BE29346F980054F68C /* GoogleService-Info.plist */; };
 		555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendListViewModel.swift */; };
@@ -727,7 +726,7 @@
 				16530579291E189D0026B815 /* ChatRoomList */,
 				7CFC7D672923709C00A249E7 /* CreatGroupChat */,
 				555A6B2629236C28001336ED /* FriendList */,
-				6012733B2921D2E400E1456B /* LaucnScreen */,
+				6012733B2921D2E400E1456B /* LaunchScreen */,
 				839D5BDA2922AD1000857FDD /* Login */,
 				1648BA922921D7240076AC35 /* MainMap */,
 				83E7F8C72922AB750003A2B6 /* MyProfile */,
@@ -767,8 +766,6 @@
 				55421E852935E76C0017972B /* config.xcconfig */,
 				55421E862935E76C0017972B /* GoogleService-Info.plist */,
 				5553B7BE29346F980054F68C /* GoogleService-Info.plist */,
-				6028096D293477A20025F3B8 /* GoogleService-Info.plist */,
-				7C4895352931FBE300DD5076 /* config.xcconfig */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -925,7 +922,7 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		6012733B2921D2E400E1456B /* LaucnScreen */ = {
+		6012733B2921D2E400E1456B /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
 				1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */,
@@ -933,7 +930,7 @@
 				6012733D2921D2F300E1456B /* ViewModel */,
 				6012733C2921D2EF00E1456B /* View */,
 			);
-			path = LaucnScreen;
+			path = LaunchScreen;
 			sourceTree = "<group>";
 		};
 		6012733C2921D2EF00E1456B /* View */ = {
@@ -1090,7 +1087,6 @@
 				555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */,
 				55C620D4292E10ED003D9E9C /* CreateGroupChatDiContainer.swift */,
 				8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */,
-				5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */,
 				605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */,
 				83649774292DF0590002DDE5 /* LoginDIContainer.swift */,
 				83D3543929252F1A00B9236A /* MyProfileDIContainer.swift */,
