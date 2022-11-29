@@ -26,7 +26,7 @@ protocol RealTimeDatabaseService {
     // MARK: 유저-채팅방 티켓 정보
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable
-    func fetchUserChatRoomTicketList(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
+    func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
 }
 
@@ -268,7 +268,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
         }
     }
     
-    func fetchUserChatRoomTicketList(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket> {
+    func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket> {
         Single<UserChatRoomTicket>.create { [weak self] single in
             guard let self else {
                 single(.failure(DatabaseError.failedToFetch))
