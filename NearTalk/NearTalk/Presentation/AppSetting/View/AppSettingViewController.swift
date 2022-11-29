@@ -6,6 +6,7 @@
 //
 
 import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
 
@@ -17,7 +18,15 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
             let cell: UITableViewCell
 
             if item == .alarmOnOff {
-                cell = AppSettingTableViewCell()
+                let notiCell = AppSettingTableViewCell()
+                self.viewModel.notificationOnOffSwitch
+                    .subscribe(notiCell.toggleSwitch.rx.value)
+                    .disposed(by: self.disposeBag)
+                notiCell.toggleSwitch.rx.value.changed.bind { [weak self] toggle in
+                    self?.viewModel.notificationSwitchToggled(on: toggle)
+                }
+                .disposed(by: self.disposeBag)
+                cell = notiCell
             } else {
                 cell = UITableViewCell()
             }
@@ -42,19 +51,20 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            self.viewModel.tableRowSelected(item: self.dataSource.itemIdentifier(for: indexPath))
-        }
+        self.viewModel.tableRowSelected(item: self.dataSource.itemIdentifier(for: indexPath))
+    }
         
-        private let viewModel: any AppSettingViewModel
-        
-        init(viewModel: any AppSettingViewModel) {
-            self.viewModel = viewModel
-            super.init(nibName: nil, bundle: nil)
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+    private let viewModel: any AppSettingViewModel
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    init(viewModel: any AppSettingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 private extension AppSettingViewController {

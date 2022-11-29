@@ -5,8 +5,10 @@
 //  Created by Preston Kim on 2022/11/23.
 //
 
+import RxCocoa
 import RxRelay
 import RxSwift
+import UserNotifications
 
 enum AppSettingSection: Hashable & Sendable {
     case main
@@ -22,15 +24,18 @@ enum AppSettingItem: String, Hashable & Sendable & CaseIterable {
 protocol AppSettingAction {
     var presentLogoutResult: ((Bool) -> Void)? { get }
     var presentDropoutResult: ((Bool) -> Void)? { get }
+    var presentNotificationPrompt: (() -> Single<Bool>)? { get }
 }
 
 protocol AppSettingInput {
     func tableRowSelected(item: AppSettingItem?)
+    func notificationSwitchToggled(on: Bool)
 }
 
 protocol AppSettingOutput {
     var itemSection: BehaviorRelay<AppSettingSection> { get }
     var itemList: BehaviorRelay<[AppSettingItem]> { get }
+    var notificationOnOffSwitch: Observable<Bool> { get }
 }
 
 protocol AppSettingViewModel: AppSettingInput, AppSettingOutput {}
@@ -43,11 +48,19 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
     
     let itemSection: BehaviorRelay<AppSettingSection> = BehaviorRelay(value: .main)
     let itemList: BehaviorRelay<[AppSettingItem]> = BehaviorRelay(value: AppSettingItem.allCases)
+    private let notificationOnOff: PublishRelay<Bool> = PublishRelay()
+    
+    var notificationOnOffSwitch: Observable<Bool> {
+        self.notificationOnOff.asObservable()
+    }
     
     init(logoutUseCase: any LogoutUseCase, dropoutUseCase: any DropoutUseCase, action: any AppSettingAction) {
         self.logoutUseCase = logoutUseCase
         self.dropoutUseCase = dropoutUseCase
         self.action = action
+        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            self?.notificationOnOff.accept(settings.authorizationStatus != .denied && settings.authorizationStatus != .notDetermined)
+        }
     }
     
     func tableRowSelected(item: AppSettingItem?) {
@@ -66,6 +79,33 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
 //        case .alarmOnOff:
 //            <#code#>
         }
+    }
+    
+    func notificationSwitchToggled(on: Bool) {
+        if on {
+            self.requestNotificationAuthorization()
+        } else {
+            UIApplication.shared.unregisterForRemoteNotifications()
+            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            self.notificationOnOff.accept(false)
+        }
+    }
+    
+    private func requestNotificationAuthorization() {
+        guard let result: Single<Bool> = self.action.presentNotificationPrompt?() else { return }
+
+        result.subscribe { [weak self] accepted in
+            if accepted {
+                UIApplication.shared.registerForRemoteNotifications()
+                UNUserNotificationCenter.current()
+                    .requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
+                        self?.notificationOnOff.accept(granted)
+                    }
+            } else {
+                self?.notificationOnOff.accept(false)
+            }
+        }
+        .disposed(by: self.disposeBag)
     }
     
     private func requestLogout() {
