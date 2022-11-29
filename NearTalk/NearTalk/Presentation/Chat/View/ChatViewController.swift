@@ -107,7 +107,7 @@ class ChatViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-        chatInputAccessoryView.sendButton.rx.tap
+        self.chatInputAccessoryView.sendButton.rx.tap
             .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
             .bind { [weak self] message in
                 print("1. 전송할 메세지: ", message)
@@ -121,10 +121,13 @@ class ChatViewController: UIViewController {
                 switch event {
                 case .next(let newMessage):
                     print("3.  받은 메세지: ", newMessage.text ?? "unknown")
+                    guard let senderID = self.viewModel.senderID else {
+                        return
+                    }
                     let messageItem = MessageItem(
                         id: newMessage.uuid ?? UUID().uuidString,
                         message: newMessage.text,
-                        type: newMessage.senderID == "532BEDF5-F47C-4D83-A60E-539075D257E0" ? MessageType.send : MessageType.receive // 임시 사용자 uuid와 비교. 추후에 변경 예정
+                        type: newMessage.senderID == senderID ? MessageType.send : MessageType.receive
                     )
                     self.messgeItems.append(messageItem)
                     self.applySnapshot()

@@ -15,6 +15,7 @@ protocol ChatViewModelInput {
 protocol ChatViewModelOut {
     var chatMessages: Observable<ChatMessage> { get }
     var chatRoomInfo: Observable<ChatRoom> { get }
+    var senderID: String? { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
@@ -25,14 +26,16 @@ class DefaultChatViewModel: ChatViewModel {
     // MARK: - Propoties
     private let chatRoomID: String
     private var chatRoom: ChatRoom?
+    private let disposebag: DisposeBag = DisposeBag()
 
     private var fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
     private var messagingUseCase: MessagingUseCase
     private var userDefaultUseCase: UserDefaultUseCase
+    
+    // MARK: - Ouputs
     var chatMessages: Observable<ChatMessage>
     var chatRoomInfo: Observable<ChatRoom>
-    
-    private let disposebag: DisposeBag = DisposeBag()
+    var senderID: String?
     
     // MARK: - LifeCycle
     
@@ -45,6 +48,8 @@ class DefaultChatViewModel: ChatViewModel {
         self.messagingUseCase = messagingUseCase
         self.fetchChatRoomInfoUseCase = fetchChatRoomInfoUseCase
         self.userDefaultUseCase = userDefaultUseCase
+        self.senderID = self.userDefaultUseCase.fetchUserUUID()
+        
         self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
         self.chatRoomInfo = self.fetchChatRoomInfoUseCase.observrChatRoomInfo(chatRoomID: self.chatRoomID)
         
@@ -60,7 +65,7 @@ class DefaultChatViewModel: ChatViewModel {
         guard let chatRoomInfo = self.chatRoom,
               let roomName = chatRoomInfo.roomName,
               let chatRoomMemberIDList = chatRoomInfo.userList,
-              let senderID = userDefaultUseCase.fetchUserUUID()
+              let senderID = self.senderID
         else {
             return
         }
@@ -80,7 +85,7 @@ class DefaultChatViewModel: ChatViewModel {
             message: chatMessage,
             roomID: self.chatRoomID,
             roomName: roomName,
-            chatMemberIDList: chatRoomMemberIDList
+            chatMemberIDList: chatRoomMemberIDList + ["42DB152C-9A69-4B1E-B803-AB766A75C95C"]
         )
         .subscribe { event in
             switch event {
