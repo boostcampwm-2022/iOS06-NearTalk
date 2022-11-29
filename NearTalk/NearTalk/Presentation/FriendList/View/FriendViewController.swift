@@ -35,7 +35,7 @@ final class FriendListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.addSubviews()
         self.configureConstraints()
     }
@@ -44,7 +44,7 @@ final class FriendListViewController: UIViewController {
     private func addSubviews() {
         self.view.addSubview(collectionView)
     }
-
+    
     private func configureConstraints() {
         self.configureView()
         self.configureTableView()
@@ -81,7 +81,7 @@ final class FriendListViewController: UIViewController {
     
     private func bind() {
         self.viewModel.friendsData
-            .bind(onNext: { [weak self] model in
+            .bind(onNext: { [weak self] (model: [Friend]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, Friend>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
@@ -97,7 +97,7 @@ final class FriendListViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.addFriend()
+                self?.showAlert()
             })
             .disposed(by: disposeBag)
     }
@@ -107,17 +107,46 @@ final class FriendListViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                               heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
+        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .absolute(itemHeight))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                         subitems: [item])
-      
+                                                       subitems: [item])
+        
         let section = NSCollectionLayoutSection(group: group)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-
+    
+    func showAlert() {
+        let alert = UIAlertController(title: "친구추가", message: "UUDI를 입력해주세요", preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addTextField()
+        
+        let cancelAction =  UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel)
+        let addFriendAction = UIAlertAction(title: "친구추가", style: UIAlertAction.Style.default) { [weak self] _ in
+            
+            if let self = self, let textFiled = alert.textFields?.first, let uuid = textFiled.text {
+                self.viewModel.addFriend(uuid: uuid)
+                    .asObservable()
+                    .subscribe { completable in
+                        switch completable {
+                        case .completed:
+                            print("Completed")
+                        case .error(let error):
+                            print("Completed with an error: \(error.localizedDescription)")
+                        }
+                    }
+                    .disposed(by: self.disposeBag)
+            }
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(addFriendAction)
+        
+        self.present(alert, animated: true)
+    }
+    
 }
 
 #if canImport(SwiftUI) && DEBUG

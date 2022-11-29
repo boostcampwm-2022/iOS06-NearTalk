@@ -29,10 +29,6 @@ final class FriendListDIContainer {
         return DefaultProfileRepository(firestoreService: firestoreService, firebaseAuthService: firebaseAuthService)
     }
     
-    func makeImageRepository() -> ImageRepository {
-        return DefaultImageRepository(imageService: imageService)
-    }
-    
     // MARK: - Friend Lsit
     func makeFriendListViewController(actions: FriendListViewModelActions) -> FriendListViewController {
         return FriendListViewController.create(with: self.makeFriendListViewModel(actions: actions))

@@ -33,6 +33,11 @@ final class ChatRoomListViewController: UIViewController {
         case main
     }
     
+    enum ChatType: Int {
+        case dm = 0
+        case group = 1
+    }
+    
     // MARK: - Lifecycle
     // todo: - 이미지 레파지토리 추가
     static func create(with viewModel: ChatRoomListViewModel) -> ChatRoomListViewController {
@@ -94,7 +99,7 @@ final class ChatRoomListViewController: UIViewController {
                 return UICollectionViewCell()
             }
             
-            cell.configure(groupData: itemIdentifier)
+            cell.configure(groupData: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
         
@@ -107,7 +112,7 @@ final class ChatRoomListViewController: UIViewController {
                 return UICollectionViewCell()
             }
             
-            cell.configure(dmData: itemIdentifier)
+            cell.configure(dmData: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
         
@@ -116,18 +121,6 @@ final class ChatRoomListViewController: UIViewController {
     
     // MARK: - bind
     private func bind() {
-        
-        self.dmCollectionView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
-            })
-            .disposed(by: disposeBag)
-        
-        self.groupCollectionView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
-            })
-            .disposed(by: disposeBag)
         
         self.viewModel.dmChatRoomData
             .bind(onNext: { [weak self] model in
@@ -147,19 +140,19 @@ final class ChatRoomListViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.leftBarButtonItems?[0].rx.tap
+        self.navigationItem.leftBarButtonItems?[ChatType.dm.rawValue].rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.didDMChatRoomList()
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.leftBarButtonItems?[1].rx.tap
+        self.navigationItem.leftBarButtonItems?[ChatType.group.rawValue].rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.didGroupChatRoomList()
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.rightBarButtonItems?[0].rx.tap
+        self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.didCreateChatRoom()
             })
@@ -181,7 +174,7 @@ final class ChatRoomListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-
+    
 }
 
 #if canImport(SwiftUI) && DEBUG
