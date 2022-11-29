@@ -26,7 +26,8 @@ final class LaunchScreenDIContainer {
         self.container.register(VerifyUserUseCase.self) { _ in
             DefaultVerifyUserUseCase(
                 authRepository: self.container.resolve(AuthRepository.self)!,
-                profileRepository: self.container.resolve(ProfileRepository.self)!
+                profileRepository: self.container.resolve(ProfileRepository.self)!,
+                userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!
             )
         }
     }

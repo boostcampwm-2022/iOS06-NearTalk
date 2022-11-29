@@ -10,9 +10,12 @@ import FirebaseCore
 import FirebaseMessaging
 import UIKit
 import UserNotifications
+import RxSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    private let disposeBag: DisposeBag = .init()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
@@ -67,7 +70,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate : MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        print("파이어베이스 토큰: \(fcmToken!)")
+        let fireStoreService: FirestoreService = DefaultFirestoreService()
+        let firebaseAuthService: AuthService = DefaultFirebaseAuthService()
+        let profileRepository: ProfileRepository = DefaultProfileRepository(
+            firestoreService: fireStoreService,
+            firebaseAuthService: firebaseAuthService
+        )
+        profileRepository.fetchMyProfile()
+            .flatMap {
+                var newProfile: UserProfile = $0
+                newProfile.fcmToken = fcmToken
+                return profileRepository.updateMyProfile(newProfile)
+            }
+            .subscribe(onSuccess: { _ in
+                print("update profile with new FCM token: \(fcmToken ?? "")")
+            }).disposed(by: disposeBag)
     }
 }
 

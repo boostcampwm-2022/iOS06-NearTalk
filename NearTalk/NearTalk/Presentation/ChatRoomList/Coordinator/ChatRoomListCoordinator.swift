@@ -11,7 +11,7 @@ protocol ChatRoomListCoordinatorDependencies {
     func makeChatRoomListViewController(actions: ChatRoomListViewModelActions) -> ChatRoomListViewController
     func makeChatRoomViewController()
     func makeCreateChatRoomViewController()
-    func makeChatDIContainer(chatRoomID: String, chatRoomName: String) -> ChatDIContainer
+    func makeChatDIContainer(chatRoomID: String, chatRoomName: String, chatRoomMemberUUIDList: [String]) -> ChatDIContainer
     func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer
 }
 
@@ -59,13 +59,14 @@ final class ChatRoomListCoordinator: Coordinator {
         chatRoomListViewController.groupCollectionView.isHidden = false
     }
 
-    private func showChatRoom(chatRoomID: String, chatRoomName: String) {
+    private func showChatRoom(chatRoomID: String, chatRoomName: String, chatRoomMemberUUIDList: [String]) {
         guard let navigationController = navigationController
         else { return }
         
         let diContainer = dependencies.makeChatDIContainer(
             chatRoomID: chatRoomID,
-            chatRoomName: chatRoomName
+            chatRoomName: chatRoomName,
+            chatRoomMemberUUIDList: chatRoomMemberUUIDList
         )
         let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
         coordinator.start()

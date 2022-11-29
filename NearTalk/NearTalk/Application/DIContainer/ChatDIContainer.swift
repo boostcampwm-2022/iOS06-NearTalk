@@ -10,12 +10,15 @@ import UIKit
 final class ChatDIContainer {
     private var chatRoomID: String
     private var chatRoomName: String
+    private let chatRoomMemberUUIDList: [String]
     
     init(chatRoomID: String,
-         chatRoomName: String
+         chatRoomName: String,
+         chatRoomMemberUUIDList: [String]
     ) {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
+        self.chatRoomMemberUUIDList = chatRoomMemberUUIDList
     }
     
     // MARK: - Dependencies
@@ -43,7 +46,9 @@ final class ChatDIContainer {
     func makeChatMessageRepository() -> ChatMessageRepository {
         return DefaultChatMessageRepository(
             databaseService: makeRealTimeDatabaseService(),
-            fcmService: makeFCMService())
+            profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()),
+            fcmService: makeFCMService()
+        )
     }
     
     // MARK: - View Controller
@@ -56,6 +61,7 @@ final class ChatDIContainer {
         return DefaultChatViewModel(
             chatRoomID: self.chatRoomID,
             chatRoomName: self.chatRoomName,
+            chatRoomMemberUUIDList: self.chatRoomMemberUUIDList,
             messagingUseCase: makeMessggingUseCase())
     }
     // MARK: - Coordinator

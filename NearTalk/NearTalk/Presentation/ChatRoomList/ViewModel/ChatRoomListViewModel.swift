@@ -10,7 +10,7 @@ import RxRelay
 import RxSwift
 
 struct ChatRoomListViewModelActions {
-    let showChatRoom: (String, String) -> Void
+    let showChatRoom: (String, String, [String]) -> Void
     let showCreateChatRoom: () -> Void
     let showDMChatRoomList: () -> Void
     let showGroupChatRoomList: () -> Void
@@ -69,7 +69,7 @@ extension DefaultChatRoomListViewModel {
     // 채팅방 클릭시 채팅방 이동
     func didSelectItem(at index: Int) {
         // TODO: - chatRoomID, chatRoomName가 들어가야 함, 수정 필요
-        actions?.showChatRoom("chatRoomID", "chatRoomName")
+        actions?.showChatRoom("chatRoomID", "chatRoomName", [])
     }
     
     // 체팅방 생성 클릭시 이동

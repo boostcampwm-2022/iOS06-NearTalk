@@ -5,38 +5,23 @@
 //  Created by dong eun shin on 2022/11/23.
 //
 
+import RxSwift
 import UIKit
 
-import RxSwift
-
 class ChatViewController: UIViewController {
+    // MARK: - Proporties
+    
     private let viewModel: ChatViewModel
+    private var messgeItems: [MessageItem]
+    
     private let disposeBag: DisposeBag = DisposeBag()
-    private var messgeList: [MessageItem] = []
-    
-    struct MessageItem: Hashable {
-        var id: String
-        var message: String?
-    }
-
-    enum Section {
-        case main
-    }
-
-    typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MessageItem>
-
     private lazy var dataSource: DataSource = makeDataSource()
-
-    private lazy var collectionViewFlowLayout = UICollectionViewFlowLayout().then { layout in
-        layout.scrollDirection = .vertical
-        
-        let width = self.view.frame.width
-        let height = self.view.frame.height
-        layout.estimatedItemSize = CGSize(width: width, height: height)
-    }
+    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = self.createLayout()
     
-    private lazy var collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout).then {
+    private lazy var collectionView: UICollectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: compositionalLayout
+    ).then {
         $0.backgroundColor = .systemGreen
         $0.showsVerticalScrollIndicator = false
         $0.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: ChatCollectionViewCell.identifier)
@@ -48,7 +33,9 @@ class ChatViewController: UIViewController {
     }
         
     // MARK: - Lifecycles
+    
     init(viewModel: ChatViewModel) {
+        self.messgeItems = []
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,9 +59,6 @@ class ChatViewController: UIViewController {
         
         // diffableDataSource
         applySnapshot(animatingDifferences: false)
-        
-        // 전송 버튼
-//        chatInputAccessoryView.sendButton.addTarget(self, action: #selector(tapSendButton(_:)), for: .touchUpInside)
     }
     
     private func addSubviews() {
@@ -96,8 +80,119 @@ class ChatViewController: UIViewController {
         }
     }
     
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(40.0))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(40))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                         subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
+    }
+    
+    private func scrolltoBottom() {
+        let indexPath = IndexPath(item: messgeItems.count - 1, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+    }
+    
+    // MARK: - Bind
+    
+    private func bind() {
+        chatInputAccessoryView.sendButton.rx.tap
+            .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
+            .bind { [weak self] message in
+                print("1. 전송할 메세지: ", message)
+                self?.viewModel.sendMessage(message)
+                self?.chatInputAccessoryView.messageInputTextField.text = nil
+            }
+            .disposed(by: disposeBag)
+        
+        self.viewModel.chatMessages
+            .subscribe { event in
+                switch event {
+                case .next(let newMessage):
+                    print("3.  받은 메세지: ", newMessage.text ?? "unknown")
+                    let messageItem = MessageItem(
+                        id: newMessage.uuid ?? UUID().uuidString,
+                        message: newMessage.text,
+                        type: newMessage.senderID == "532BEDF5-F47C-4D83-A60E-539075D257E0" ? MessageType.send : MessageType.receive // 임시 사용자 uuid와 비교. 추후에 변경 예정
+                    )
+                    self.messgeItems.append(messageItem)
+                    self.applySnapshot()
+                    self.scrolltoBottom()
+                case .error(let error):
+                    print(">>ERROR: ", error)
+                case .completed:
+                    print(">>observeMessage completed")
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - UICollectionView Diffable DataSource
+
+private extension ChatViewController {
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MessageItem>
+    
+    enum MessageType: String {
+        case send
+        case receive
+    }
+    
+    struct MessageItem: Hashable {
+        var id: String
+        var message: String?
+        var type: MessageType
+    }
+
+    enum Section {
+        case main
+    }
+    
+    func makeDataSource() -> DataSource {
+        let datasource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+            
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ChatCollectionViewCell.identifier,
+                for: indexPath) as? ChatCollectionViewCell,
+                  let newMessage = itemIdentifier.message
+            else {
+                return UICollectionViewCell()
+            }
+            
+            let messageType = itemIdentifier.type
+            cell.configure(isInComing: messageType == .receive ? true : false, message: newMessage)
+            
+            return cell
+        }
+        return datasource
+    }
+    
+    func applySnapshot(animatingDifferences: Bool = true) {
+        var snapshot = Snapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(messgeItems)
+        
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+    }
+}
+
+// MARK: - Keyboard
+
+private extension ChatViewController {
     @objc
-    private func keyboardHandler(_ notification: Notification) {
+    func keyboardHandler(_ notification: Notification) {
         print(#function)
         
         guard let userInfo = notification.userInfo,
@@ -138,7 +233,7 @@ class ChatViewController: UIViewController {
     }
     
     @objc
-    private func hideKeyboard(_ sender: Any) {
+    func hideKeyboard(_ sender: Any) {
         view.endEditing(true)
         self.chatInputAccessoryView.snp.remakeConstraints { make in
             make.width.equalTo(self.view.frame.width)
@@ -153,89 +248,4 @@ class ChatViewController: UIViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(50)
         }
     }
-    
-    @objc
-    private func tapSendButton(_ sender: Any) {
-        guard let text = chatInputAccessoryView.messageInputTextField.text else {
-            return
-        }
-        chatInputAccessoryView.messageInputTextField.text = ""
-        
-        print("전송확인>>>>>>>>>>>", text)
-        messgeList.append(MessageItem(id: UUID().uuidString, message: text))
-        applySnapshot()
-        
-        let indexPath = IndexPath(item: messgeList.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-    }
-    
-    private func scrolltoBottom() {
-        let indexPath = IndexPath(item: messgeList.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-    }
-    
-    private func bind() {
-        chatInputAccessoryView.sendButton.rx.tap
-            .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
-            .bind { [weak self] message in
-                print("전솔할 메세디: ", message)
-                self?.viewModel.sendMessage(message)
-                self?.chatInputAccessoryView.messageInputTextField.text = nil
-//                self.messgeList.append(MessageItem(id: UUID().uuidString, message: $0))
-//                self.applySnapshot()
-//
-//                let indexPath = IndexPath(item: self.messgeList.count - 1, section: 0)
-//                self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-            }
-            .disposed(by: disposeBag)
-    }
 }
-
-// MARK: - Diffable ataSource
-
-private extension ChatViewController {
-    func makeDataSource() -> DataSource {
-        let datasource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
-            
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: ChatCollectionViewCell.identifier,
-                for: indexPath) as? ChatCollectionViewCell,
-                  let newMessage = itemIdentifier.message
-            else {
-                return UICollectionViewCell()
-            }
-            
-            cell.message = newMessage
-            
-            cell.isInComing = indexPath.row % 2 == 0
-            
-            print(indexPath.row, cell.isInComing)
-            return cell
-        }
-        return datasource
-    }
-    
-    private func applySnapshot(animatingDifferences: Bool = true) {
-        var snapshot = Snapshot()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(messgeList)
-        //        dataSource.defaultRowAnimation = .fade
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
-    }
-}
-
-//    func com() -> UICollectionViewCompositionalLayout {
-//        let itemHeight = self.view.frame.width * 0.20
-//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-//                                              heightDimension: .fractionalHeight(1.0))
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//
-//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-//                                               heightDimension: .absolute(itemHeight))
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-//                                                         subitems: [item])
-//
-//        let section = NSCollectionLayoutSection(group: group)
-//        let layout = UICollectionViewCompositionalLayout(section: section)
-//        return layout
-//    }

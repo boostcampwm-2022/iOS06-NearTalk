@@ -20,4 +20,7 @@ struct UserProfile: BaseEntity {
     
     /// 입장한 채팅방 UUID 목록
     var chatRooms: [String]?
+    
+    /// FCM 토큰
+    var fcmToken: String?
 }
