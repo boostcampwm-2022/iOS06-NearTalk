@@ -69,6 +69,7 @@ final class RootTabBarCoordinator: Coordinator {
         let diContainer: FriendListDIContainer = .init()
         let coordinator: FriendListCoordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()
+        
         return self.embed(
             rootNav: navigationController,
             title: "친구",
@@ -86,6 +87,7 @@ final class RootTabBarCoordinator: Coordinator {
             backToLoginView: self.rootTabBarDIContainer.resolveBackToLoginView()
         )
         coordinator.start()
+        
         return self.embed(
             rootNav: navigationController,
             title: "마이페이지",

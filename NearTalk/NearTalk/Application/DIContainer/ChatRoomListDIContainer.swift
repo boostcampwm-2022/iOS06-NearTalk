@@ -12,7 +12,7 @@ final class ChatRoomListDIContainer {
     // MARK: - Dependencies
     
     // MARK: - Persistent Storage
-
+    
     // MARK: - Services
     
     private let dataTransferService: StorageService = DefaultStorageService()
@@ -29,17 +29,37 @@ final class ChatRoomListDIContainer {
         return DefaultFirebaseAuthService()
     }
     
+    func makeFCMService() -> FCMService {
+        return DefaultFCMService()
+    }
+    
     // MARK: - Repository
+    
+    func makeChatRoomListRepository() -> ChatRoomListRepository {
+        return DefaultChatRoomListRepository(
+            dataTransferService: dataTransferService,
+            profileRepository: makeProfileRepository(),
+            databaseService: makeDatabaseService(),
+            firestoreService: makeFirestoreService())
+    }
     func makeProfileRepository() -> ProfileRepository {
         return DefaultProfileRepository(
             firestoreService: makeFirestoreService(),
             firebaseAuthService: makeAuthService()
         )
     }
+    
+    func makeChatMessageRepository() -> ChatMessageRepository {
+        return DefaultChatMessageRepository(
+            databaseService: makeDatabaseService(),
+            profileRepository: makeProfileRepository(),
+            fcmService: makeFCMService()
+        )
+    }
 
     // MARK: - UseCases
     func makeChatRoomListUseCase() -> FetchChatRoomUseCase {
-        return DefaultFetchChatRoomUseCase(chatRoomListRepository: self.makeRepository())
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: makeChatRoomListRepository())
     }
     
     // MARK: - Repositories
@@ -52,7 +72,6 @@ final class ChatRoomListDIContainer {
         )
     }
     
-    // ExampleMVVM에서는 보여줄수 있는 Scene의 뷰컨트롤러와 뷰모델이 존재
     // MARK: - ChatRoom List
     func makeChatRoomListViewController(actions: ChatRoomListViewModelActions) -> ChatRoomListViewController {
         return ChatRoomListViewController.create(with: makeChatRoomListViewModel(actions: actions))
@@ -61,16 +80,6 @@ final class ChatRoomListDIContainer {
     func makeChatRoomListViewModel(actions: ChatRoomListViewModelActions) -> ChatRoomListViewModel {
         return DefaultChatRoomListViewModel(useCase: self.makeChatRoomListUseCase(), actions: actions)
     }
-    
-    // MARK: - Chat Room
-    func makeChatRoomViewController() { }
-    
-    // func makeChatRoomViewModel() -> ChatRoomViewModel {}
-    
-    // MARK: - Create Chat Room
-    func makeCreateChatRoomViewController() { }
-    
-    // func makeCreateChatRoomViewModel() -> ChatRoomViewModel {}
     
     // MARK: - Coordinator
     func makeChatRoomListCoordinator(navigationController: UINavigationController) -> ChatRoomListCoordinator {
