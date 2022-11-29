@@ -16,15 +16,15 @@ import UIKit
 final class MainMapViewController: UIViewController {
     
     // MARK: - UI Components
-    private let mapView: MKMapView = .init().then {
+    private(set) lazy var mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
         $0.setUserTrackingMode(.follow, animated: true)
     }
-    private lazy var moveToCurrentLocationButton: UIButton = .init().then {
+    private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         $0.tintColor = .systemBlue
     }
-    private lazy var createChatRoomButton: UIButton = .init().then {
+    private(set) lazy var createChatRoomButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
         $0.tintColor = .systemBlue
     }
@@ -41,8 +41,6 @@ final class MainMapViewController: UIViewController {
     static func create(with viewModel: MainMapViewModel) -> MainMapViewController {
         let mainMapVC = MainMapViewController()
         mainMapVC.viewModel = viewModel
-        
-        print(mainMapVC.mapView.userLocation.coordinate)
         
         return mainMapVC
     }

@@ -30,11 +30,10 @@ final class MainMapCoordinator: Coordinator {
                                                showBottomSheetView: self.showBottomSheetView)
         
         self.bottomSheetVC = dependencies.makeBottomSheetViewController()
-        self.mainMapVC = dependencies.makeMainMapViewController(actions: actions)
         
-        if let mainMapVC = self.mainMapVC {
-            self.navigationController?.pushViewController(mainMapVC, animated: true)
-        }
+        let mainMapVC = dependencies.makeMainMapViewController(actions: actions)
+        self.mainMapVC = mainMapVC
+        self.navigationController?.pushViewController(mainMapVC, animated: true)
     }
     
     // MARK: - Actions
