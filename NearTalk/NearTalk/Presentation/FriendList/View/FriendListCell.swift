@@ -67,7 +67,7 @@ final class FriendListCell: UICollectionViewCell {
             return
         }
         
-        img.kf.setImage(with: URL(string: "주소: \(url)"))
+        img.kf.setImage(with: url)
         if img.image == nil {
             img.image = UIImage(systemName: "photo")
         }

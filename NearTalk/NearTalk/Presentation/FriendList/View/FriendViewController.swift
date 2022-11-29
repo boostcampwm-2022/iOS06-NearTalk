@@ -81,7 +81,7 @@ final class FriendListViewController: UIViewController {
     
     private func bind() {
         self.viewModel.friendsData
-            .bind(onNext: { [weak self] model in
+            .bind(onNext: { [weak self] (model: [Friend]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, Friend>()
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
@@ -97,7 +97,7 @@ final class FriendListViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.addFriend()
+                self?.showAlert()
             })
             .disposed(by: disposeBag)
     }
@@ -118,43 +118,47 @@ final class FriendListViewController: UIViewController {
         return layout
     }
     
+    func showAlert() {
+        let alert = UIAlertController(title: "친구추가", message: "UUDI를 입력해주세요", preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addTextField()
+        
+        let cancelAction =  UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel)
+        let addFriendAction = UIAlertAction(title: "친구추가", style: UIAlertAction.Style.default) { [weak self] _ in
+            
+            if let self = self, let textFiled = alert.textFields?.first, let uuid = textFiled.text {
+                self.viewModel.addFriend(uuid: uuid)
+                    .asObservable()
+                    .subscribe { completable in
+                        switch completable {
+                        case .completed:
+                            print("Completed")
+                        case .error(let error):
+                            print("Completed with an error: \(error.localizedDescription)")
+                        }
+                    }
+                    .disposed(by: self.disposeBag)
+            }
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(addFriendAction)
+        
+        self.present(alert, animated: true)
+    }
+    
 }
 
-extension FriendListViewController {
-    
-    enum ActionType {
-        case ok
-        case cancel
-    }
-    
-    func showAlert(title: String, message: String? = nil) -> Observable<ActionType> {
-        return Observable.create { [weak self] observer in
-            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                observer.onNext(.ok)
-                observer.onCompleted()
-            }
-            alertController.addAction(okAction)
-            
-            self?.present(alertController, animated: true, completion: nil)
-            
-            return Disposables.create {
-                alertController.dismiss(animated: true, completion: nil)
-            }
-        }
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct FriendsListViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        let navigation = UINavigationController()
+        let diContainer = FriendListDIContainer()
+        let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
+        coordinator.start()
+        return navigation.showPreview(.iPhone14Pro)
     }
 }
-    
-#if canImport(SwiftUI) && DEBUG
-    import SwiftUI
-    
-    struct FriendsListViewControllerPreview: PreviewProvider {
-        static var previews: some View {
-            let navigation = UINavigationController()
-            let diContainer = FriendListDIContainer()
-            let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
-            coordinator.start()
-            return navigation.showPreview(.iPhone14Pro)
-        }
-    }
 #endif
