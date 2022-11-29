@@ -47,6 +47,8 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
     private let dropoutUseCase: any DropoutUseCase
     private let action: any AppSettingAction
     
+    static private let appNotificationOnOffKey: String = "appNotificationOnOffKey"
+    
     let itemSection: BehaviorRelay<AppSettingSection> = BehaviorRelay(value: .main)
     let itemList: BehaviorRelay<[AppSettingItem]> = BehaviorRelay(value: AppSettingItem.allCases)
     private let notificationOnOff: PublishRelay<Bool> = PublishRelay()
@@ -59,17 +61,24 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
         self.logoutUseCase = logoutUseCase
         self.dropoutUseCase = dropoutUseCase
         self.action = action
-        self.refreshNotificationAuthorization()
+        self.notificationOnOff.accept(UserDefaults.standard.bool(forKey: DefaultAppSettingViewModel.appNotificationOnOffKey))
     }
     
     func viewWillAppear() {
-        self.refreshNotificationAuthorization()
+        if let _ = UserDefaults.standard.object(forKey: DefaultAppSettingViewModel.appNotificationOnOffKey) as? Bool {
+            self.notificationOnOff
+                .accept(UserDefaults.standard.bool(forKey: DefaultAppSettingViewModel.appNotificationOnOffKey))
+        } else {
+            self.refreshNotificationAuthorization()
+        }
+        
     }
     
     private func refreshNotificationAuthorization() {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             let notAllowed: Bool = settings.authorizationStatus == .notDetermined || settings.authorizationStatus == .denied
             self.notificationOnOff.accept(!notAllowed)
+            UserDefaults.standard.set(!notAllowed, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
         }
     }
     
@@ -98,6 +107,7 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
             UIApplication.shared.unregisterForRemoteNotifications()
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             self.notificationOnOff.accept(false)
+            UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
         }
     }
     
@@ -112,6 +122,7 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
                 UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
                 UNUserNotificationCenter.current().removeAllDeliveredNotifications()
                 self?.notificationOnOff.accept(false)
+                UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
             }
         }
         .disposed(by: self.disposeBag)
