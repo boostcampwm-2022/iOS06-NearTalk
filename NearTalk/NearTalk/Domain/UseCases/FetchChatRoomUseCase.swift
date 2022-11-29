@@ -12,15 +12,16 @@ import RxSwift
 protocol FetchChatRoomUseCase {
     func getGroupChatList() -> Observable<[GroupChatRoomListData]>
     func getDMChatList() -> Observable<[DMChatRoomListData]>
-
+    
     func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]>
     func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
+    func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
 }
 
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
-
+    
     private let disposeBag: DisposeBag = .init()
     private let chatRoomListRepository: ChatRoomListRepository
     private let chatRoom: Observable<[ChatRoom]>
@@ -40,7 +41,6 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     func getGroupChatList() -> Observable<[GroupChatRoomListData]> {
         return self.chatRoom
-            .asObservable()
             .map { $0.filter { $0.roomType == "group" } }
             .map { $0.map { GroupChatRoomListData(data: $0) } }
     }
@@ -69,6 +69,10 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]> {
         self.chatRoomListRepository.fetchUserChatRoomTickets()
+    }
+    
+    func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
+        self.chatRoomListRepository.fetchUserChatRoomTicket(roomID)
     }
     
     // MARK: - Private

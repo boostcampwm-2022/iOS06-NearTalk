@@ -31,7 +31,11 @@ class DefaultChatViewModel: ChatViewModel {
     var chatMessages: Observable<ChatMessage>
     
     // MARK: - LifeCycle
-    init(chatRoomID: String, chatRoomName: String, chatRoomMemberUUIDList: [String], messagingUseCase: MessagingUseCase) {
+    
+    init(chatRoomID: String,
+         chatRoomName: String,
+         chatRoomMemberUUIDList: [String],
+         messagingUseCase: MessagingUseCase) {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
         self.chatroomMemberUUIDList = chatRoomMemberUUIDList
