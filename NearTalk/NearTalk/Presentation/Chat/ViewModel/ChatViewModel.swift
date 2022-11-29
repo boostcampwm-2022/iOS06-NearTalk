@@ -22,14 +22,17 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 class DefaultChatViewModel: ChatViewModel {
     private let chatRoomID: String
     private let chatRoomName: String
+    private var chatroomMemberUUIDList: [String]
     private let disposebag: DisposeBag = DisposeBag()
     private var messagingUseCase: MessagingUseCase
     
     init(chatRoomID: String,
          chatRoomName: String,
+         chatRoomMemberUUIDList: [String],
          messagingUseCase: MessagingUseCase) {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
+        self.chatroomMemberUUIDList = chatRoomMemberUUIDList
         self.messagingUseCase = messagingUseCase
     }
     
@@ -47,16 +50,21 @@ class DefaultChatViewModel: ChatViewModel {
             createdDate: Date()
         )
         
-        self.messagingUseCase.sendMessage(message: chatMessage, roomName: self.chatRoomName)
-            .subscribe { event in
-                switch event {
-                case .completed:
-                    print(">>>>>>>>>>message sending completed")
-                case .error(let error):
-                    print(error)
-                }
+        self.messagingUseCase.sendMessage(
+            message: chatMessage,
+            roomID: self.chatRoomID,
+            roomName: self.chatRoomName,
+            chatMemberIDList: self.chatroomMemberUUIDList
+        )
+        .subscribe { event in
+            switch event {
+            case .completed:
+                print(">>>>>>>>>>message sending completed")
+            case .error(let error):
+                print(error)
             }
-            .disposed(by: disposebag)
+        }
+        .disposed(by: disposebag)
         
     }
 }

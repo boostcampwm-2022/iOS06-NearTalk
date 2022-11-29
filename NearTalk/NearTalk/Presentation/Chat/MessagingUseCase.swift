@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 protocol MessagingUseCase {
-    func sendMessage(message: ChatMessage, roomName: String) -> Completable
+    func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
@@ -20,10 +20,12 @@ final class DefalultMessagingUseCase: MessagingUseCase {
         self.chatMessageRepository = chatMessageRepository
     }
     
-    func sendMessage(message: ChatMessage, roomName: String) -> Completable {
+    func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable {
         return self.chatMessageRepository.sendMessage(
             message: message,
-            roomName: roomName
+            roomID: roomID,
+            roomName: roomName,
+            chatMemberIDList: chatMemberIDList
         )
     }
 }

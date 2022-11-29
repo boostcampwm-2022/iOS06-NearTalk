@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 
 struct CreateGroupChatViewModelActions {
-    let showChatViewController: (String, String) -> Void
+    let showChatViewController: (String, String, [String]) -> Void
 }
 
 protocol CreateGroupChatViewModelInput {
@@ -110,7 +110,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
                     return
                 }
                 print("onCompleted")
-                self?.actions.showChatViewController(chatRoomUUID, chatRoomName)
+                self?.actions.showChatViewController(chatRoomUUID, chatRoomName, chatRoom.userList ?? [])
             }, onError: { [weak self] _ in
                 print("onError")
             })

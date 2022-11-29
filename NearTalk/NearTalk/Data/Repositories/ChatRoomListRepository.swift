@@ -16,9 +16,10 @@ protocol ChatRoomListRepository {
     
     func createChatRoom(_ chatRoom: ChatRoom) -> Completable
     func fetchChatRoomListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
-    func fetchUserChatRoomUUIDList() -> Single<[String]>
     func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom>
     func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom>
+    func fetchUserChatRoomUUIDList() -> Single<[String]>
+    
     func fetchUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable
 }

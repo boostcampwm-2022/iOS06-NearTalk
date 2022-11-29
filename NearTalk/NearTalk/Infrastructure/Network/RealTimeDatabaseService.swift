@@ -19,6 +19,7 @@ protocol RealTimeDatabaseService {
     // MARK: 채팅방 정보
     func createChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom>
     func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom>
+    func increaseChatRoomMessageCount(_ chatRoomID: String) -> Completable
     func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom>
     func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom>
     
@@ -151,7 +152,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom> {
         Single<ChatRoom>.create { [weak self] single in
             guard let self,
-                  let uuid: String = chatRoom.uuid,
+                  let roomID: String = chatRoom.uuid,
                   let chatRoomData: [String: Any] = try? chatRoom.encode() else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
@@ -159,10 +160,25 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             
             self.ref
                 .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(uuid)
+                .child(roomID)
                 .updateChildValues(chatRoomData)
 
             single(.success(chatRoom))
+            return Disposables.create()
+        }
+    }
+    
+    func increaseChatRoomMessageCount(_ chatRoomID: String) -> Completable {
+        Completable.create { [weak self] completable in
+            guard let self else {
+                completable(.error(DatabaseError.failedToFetch))
+                return Disposables.create()
+            }
+            
+             let updates: [String: Any] = ["\(FirebaseKey.RealtimeDB.chatRooms.rawValue)/\(chatRoomID)/messageCount": ServerValue.increment(1)] as [String: Any]
+             self.ref.updateChildValues(updates)
+
+            completable(.completed)
             return Disposables.create()
         }
     }

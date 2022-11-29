@@ -40,9 +40,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
     func fetchChatRoomListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {
         let queryList: [FirebaseQueryDTO] = [
             .init(key: "latitude", value: southWest.latitude, queryKey: .isGreaterThan),
-            .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan),
-            .init(key: "longitude", value: southWest.latitude, queryKey: .isGreaterThan),
-            .init(key: "longitude", value: northEast.latitude, queryKey: .isLessThan)
+            .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan)
         ]
         return self.firestoreService.fetchList(dataKey: .chatRoom, queryList: queryList)
     }
