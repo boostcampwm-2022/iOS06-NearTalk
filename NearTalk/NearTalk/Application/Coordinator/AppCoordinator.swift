@@ -31,11 +31,7 @@ final class AppCoordinator: Coordinator {
                 presentOnboardingView: self.showOnboardingView,
                 presentLoginFailure: { print(#function) }
             ),
-            onboardingActions: .init(
-                presentImagePicker: nil,
-                showMainViewController: self.showMainViewController,
-                presentRegisterFailure: nil
-            )
+            showMainViewController: self.showMainViewController
         )
     }
     

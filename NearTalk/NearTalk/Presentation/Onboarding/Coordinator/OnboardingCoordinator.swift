@@ -25,8 +25,15 @@ final class OnboardingCoordinator: NSObject, Coordinator {
     }
     
     func start() {
+        self.onboardingDIContainer.registerViewModel(action: Action(presentImagePicker: self.presentImagePicker(observer:), showMainViewController: self.onboardingDIContainer.showMainViewController, presentRegisterFailure: self.presentRegisterFailure))
         let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
+    }
+    
+    struct Action: OnboardingViewModelAction {
+        let presentImagePicker: ((BehaviorRelay<Data?>) -> Void)?
+        let showMainViewController: (() -> Void)?
+        let presentRegisterFailure: (() -> Void)?
     }
     
     private var imagePublisher: BehaviorRelay<Data?>?

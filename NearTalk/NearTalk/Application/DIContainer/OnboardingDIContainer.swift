@@ -10,14 +10,15 @@ import UIKit
 
 final class DefaultOnboardingDIContainer {
     private let container: Container
+    let showMainViewController: (() -> Void)?
     
-    init(container: Container, action: OnboardingViewModelAction) {
+    init(container: Container, showMainViewController: (() -> Void)?) {
         self.container = Container(parent: container)
-        
+        self.showMainViewController = showMainViewController
         self.registerService()
         self.registerRepository()
         self.registerUseCase()
-        self.registerViewModel(action: action)
+//        self.registerViewModel(action: action)
     }
     
     // MARK: - Service
@@ -54,7 +55,7 @@ final class DefaultOnboardingDIContainer {
     }
     
     // MARK: - ViewModel
-    private func registerViewModel(action: OnboardingViewModelAction) {
+    func registerViewModel(action: OnboardingViewModelAction) {
         self.container.register(OnboardingViewModel.self) { _ in
             DefaultOnboardingViewModel(
                 validateNickNameUseCase: self.container.resolve(
