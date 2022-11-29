@@ -75,7 +75,7 @@ final class MainMapViewModel {
                                    latitudinalMeters: latitudinalMeters,
                                    longitudinalMeters: longitudinalMeters)
             }
-            .flatMap{ self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
+            .flatMap { self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
             .bind(to: output.accessibleAllChatRooms)
             .disposed(by: self.disposeBag)
         

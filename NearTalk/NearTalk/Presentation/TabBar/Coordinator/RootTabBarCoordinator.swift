@@ -37,7 +37,7 @@ final class RootTabBarCoordinator: Coordinator {
     }
         
     private func showMapView() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = .init()
         let diContainer: MainMapDIContainer = .init()
         let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
         coordinator.start()
@@ -63,7 +63,7 @@ final class RootTabBarCoordinator: Coordinator {
     }
 
     private func showFriendList() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = .init()
         let diContainer: FriendListDIContainer = .init()
         let coordinator: FriendListCoordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()
