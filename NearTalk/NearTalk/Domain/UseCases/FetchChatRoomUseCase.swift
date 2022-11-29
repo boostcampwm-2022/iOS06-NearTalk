@@ -17,6 +17,7 @@ protocol FetchChatRoomUseCase {
     func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
+    func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
 }
 
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
@@ -62,17 +63,16 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
             .map { $0.map { DMChatRoomListData(data: $0) } }
     }
     
-    // MARK: - 현재 채팅방 정보 불러오기 (삭제 가능성 높음)
-    func getCurrentChatRoomData(chatRoomID: String) -> Single<ChatRoom> {
-        return self.chatRoomListRepository.fetchChatRoomInfo(chatRoomID)
-    }
-    
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {
         self.chatRoomListRepository.fetchChatRoomListWithCoordinates(southWest: southWest, northEast: northEast)
     }
     
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]> {
         self.chatRoomListRepository.fetchUserChatRoomTickets()
+    }
+    
+    func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
+        self.chatRoomListRepository.fetchUserChatRoomTicket(roomID)
     }
     
     // MARK: - Private

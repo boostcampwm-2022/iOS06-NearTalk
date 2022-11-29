@@ -34,6 +34,14 @@ final class ChatRoomListDIContainer {
     }
     
     // MARK: - Repository
+    
+    func makeChatRoomListRepository() -> ChatRoomListRepository {
+        return DefaultChatRoomListRepository(
+            dataTransferService: dataTransferService,
+            profileRepository: makeProfileRepository(),
+            databaseService: makeDatabaseService(),
+            firestoreService: makeFirestoreService())
+    }
     func makeProfileRepository() -> ProfileRepository {
         return DefaultProfileRepository(
             firestoreService: makeFirestoreService(),
@@ -42,12 +50,16 @@ final class ChatRoomListDIContainer {
     }
     
     func makeChatMessageRepository() -> ChatMessageRepository {
-        return DefaultChatMessageRepository(databaseService: makeDatabaseService(), fcmService: makeFCMService())
+        return DefaultChatMessageRepository(
+            databaseService: makeDatabaseService(),
+            profileRepository: makeProfileRepository(),
+            fcmService: makeFCMService()
+        )
     }
 
     // MARK: - UseCases
     func makeChatRoomListUseCase() -> FetchChatRoomUseCase {
-        return DefaultFetchChatRoomUseCase(chatRoomListRepository: self.makeRepository(), chatMessageRepository: self.makeChatMessageRepository())
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: makeChatRoomListRepository())
     }
     
     // MARK: - Repositories
@@ -68,16 +80,6 @@ final class ChatRoomListDIContainer {
     func makeChatRoomListViewModel(actions: ChatRoomListViewModelActions) -> ChatRoomListViewModel {
         return DefaultChatRoomListViewModel(useCase: self.makeChatRoomListUseCase(), actions: actions)
     }
-    
-    // MARK: - Chat Room
-    func makeChatRoomViewController() { }
-    
-    // func makeChatRoomViewModel() -> ChatRoomViewModel {}
-    
-    // MARK: - Create Chat Room
-    func makeCreateChatRoomViewController() { }
-    
-    // func makeCreateChatRoomViewModel() -> ChatRoomViewModel {}
     
     // MARK: - Coordinator
     func makeChatRoomListCoordinator(navigationController: UINavigationController) -> ChatRoomListCoordinator {

@@ -16,8 +16,17 @@ class ChatRoomListCell: UICollectionViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     
+    private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
     private var disposebag = DisposeBag()
+    
+    override var isSelected: Bool {
+        didSet {
+            if let uuid = self.uuid, isSelected {
+                self.viewModel?.didSelectItem(at: uuid)
+            }
+        }
+    }
     
     // MARK: - UI properties
     private let img = UIImageView().then {
@@ -89,6 +98,7 @@ class ChatRoomListCell: UICollectionViewCell {
     
     func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
+        self.uuid = groupData.uuid
         self.name.text = groupData.roomName
         self.currentUserCount.text = String((groupData.userList ?? []).count)
         self.imageLoad(path: groupData.roomImagePath)
@@ -98,6 +108,7 @@ class ChatRoomListCell: UICollectionViewCell {
     
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
+        self.uuid = dmData.uuid
         self.name.text = dmData.roomName
         self.imageLoad(path: dmData.roomImagePath)
         self.unreadMessageCheck(roomID: dmData.uuid ?? "", number: dmData.messageCount)
@@ -169,24 +180,34 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private func unreadMessageCheck(roomID: String, number: Int?) {
-        guard let viewModel = self.viewModel,
-              let number = number, number > 0 else {
+        guard let viewModel = self.viewModel else {
             self.unreadMessageCount.isHidden = true
             return
         }
         
-        let tickets = viewModel.userChatRoomTicket.filter { $0.roomID == roomID }
-        if let ticket = tickets.first, tickets.count == 1, number > (ticket.lastRoomMessageCount ?? 0) {
-            
-            self.unreadMessageCount.text = String(2222)
-            self.unreadMessageCount.isHidden = false
-        }
+        viewModel.getUserChatRoomTicket(roomID: roomID)
+            .subscribe { event in
+                switch event {
+                case .success(let ticket):
+                    guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
+                          let number = number,
+                          number > lastRoomMessageCount else {
+                        self.unreadMessageCount.isHidden = true
+                        return
+                    }
+                    
+                    self.unreadMessageCount.text = String(number - lastRoomMessageCount)
+                    self.unreadMessageCount.isHidden = false
+                    
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+            .disposed(by: disposebag)
     }
     
     private func imageLoad(path: String?) {
-        guard let path = path,
-              let url = URL(string: path)
-        else {
+        guard let path = path, let url = URL(string: path) else {
             img.image = UIImage(systemName: "photo")
             return
         }
@@ -206,7 +227,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
         let viewModel = diContainer.makeChatRoomListViewModel(
-            actions: ChatRoomListViewModelActions(showChatRoom: { _, _ in },
+            actions: ChatRoomListViewModelActions(showChatRoom: { _, _, _ in },
                                                   showCreateChatRoom: {},
                                                   showDMChatRoomList: {},
                                                   showGroupChatRoomList: {})

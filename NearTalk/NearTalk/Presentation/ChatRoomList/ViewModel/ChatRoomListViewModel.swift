@@ -17,16 +17,17 @@ struct ChatRoomListViewModelActions {
 }
 
 protocol ChatRoomListViewModelInput {
+    func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
     func didDMChatRoomList()
     func didGroupChatRoomList()
     func didCreateChatRoom()
-    func didSelectItem(at index: Int)
+    func didSelectItem(at roomID: String)
 }
 
 protocol ChatRoomListViewModelOutput {
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> { get }
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> { get }
-    var userChatRoomTicket: [UserChatRoomTicket] { get }
+    var userChatRoomTicket: UserChatRoomTicket? { get }
 }
 
 protocol ChatRoomListViewModel: ChatRoomListViewModelInput, ChatRoomListViewModelOutput {}
@@ -39,31 +40,25 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     // MARK: - Output
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> = BehaviorRelay<[GroupChatRoomListData]>(value: [])
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
-    var userChatRoomTicket: [UserChatRoomTicket] = []
+    var userChatRoomTicket: UserChatRoomTicket?
     
     init(useCase: FetchChatRoomUseCase, actions: ChatRoomListViewModelActions? = nil) {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        self.chatRoomListUseCase.newObserveGroupChatList()
+        // TODO: 데이터 연결시 newObserve_ChatList 변경
+        self.chatRoomListUseCase.getGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
         
-        self.chatRoomListUseCase.newObserveDMChatList()
+        self.chatRoomListUseCase.getDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
         
-        self.chatRoomListUseCase.getUserChatRoomTickets()
-            .subscribe { event in
-                switch event {
-                case .success(let tickets):
-                    self.userChatRoomTicket = tickets
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            .disposed(by: disposeBag)
-
+    }
+    
+    func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
+        self.chatRoomListUseCase.getUserChatRoomTicket(roomID: roomID)
     }
 
 }
@@ -79,9 +74,8 @@ extension DefaultChatRoomListViewModel {
     }
     
     // 채팅방 클릭시 채팅방 이동
-    func didSelectItem(at index: Int) {
-        // TODO: - chatRoomID, chatRoomName가 들어가야 함, 수정 필요
-        actions?.showChatRoom("chatRoomID", "chatRoomName", [])
+    func didSelectItem(at roomID: String) {
+        actions?.showChatRoom(roomID, "chatRoomName", [])
     }
     
     // 체팅방 생성 클릭시 이동

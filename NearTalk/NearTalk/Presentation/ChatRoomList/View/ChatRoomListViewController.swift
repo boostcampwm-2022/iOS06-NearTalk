@@ -122,18 +122,6 @@ final class ChatRoomListViewController: UIViewController {
     // MARK: - bind
     private func bind() {
         
-        self.dmCollectionView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
-            })
-            .disposed(by: disposeBag)
-        
-        self.groupCollectionView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
-            })
-            .disposed(by: disposeBag)
-        
         self.viewModel.dmChatRoomData
             .bind(onNext: { [weak self] model in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
