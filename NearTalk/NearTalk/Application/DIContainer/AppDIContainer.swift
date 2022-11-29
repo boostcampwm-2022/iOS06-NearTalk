@@ -15,7 +15,7 @@ final class AppDIContainer {
         navigationController: UINavigationController,
         launchScreenActions: LaunchScreenViewModelActions,
         loginAction: LoginAction,
-        onboardingActions: OnboardingViewModelAction
+        showMainViewController: (() -> Void)?
     ) {
         self.container = Container()
         self.registerService()
@@ -23,7 +23,7 @@ final class AppDIContainer {
         
         self.registerLaunchScreenDIContainer(navigationController: navigationController, actions: launchScreenActions)
         self.registerLoginDIContainer(navigationController: navigationController, actions: loginAction)
-        self.registerOnboardingDIContainer(onboardingActions: onboardingActions)
+        self.registerOnboardingDIContainer(showMainViewController: showMainViewController)
         self.registerRootTabBarDIContainer()
     }
     
@@ -81,9 +81,9 @@ final class AppDIContainer {
     }
     
     // MARK: - OnboardingDIContainer
-    private func registerOnboardingDIContainer(onboardingActions: OnboardingViewModelAction) {
+    private func registerOnboardingDIContainer(showMainViewController: (() -> Void)?) {
         self.container.register(DefaultOnboardingDIContainer.self) { _ in
-            DefaultOnboardingDIContainer(container: self.container, action: onboardingActions)
+            DefaultOnboardingDIContainer(container: self.container, showMainViewController: showMainViewController)
         }
     }
     
@@ -100,5 +100,11 @@ final class AppDIContainer {
     
     func resolveRootTabBarDIContainer() -> RootTabBarDIContainer {
         self.container.resolve(RootTabBarDIContainer.self)!
+    }
+    
+    func registerBackToLoginView(backToLoginView: @escaping (() -> Void)) {
+        self.container.register((() -> Void).self) { _ in
+            return backToLoginView
+        }
     }
 }

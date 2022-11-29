@@ -132,7 +132,7 @@ final class DefaultFirestoreService: FirestoreService {
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
-            let query: FirebaseFirestore.Query = docRef.whereField("UUID", isEqualTo: uuid)
+            let query: FirebaseFirestore.Query = docRef.whereField("uuid", isEqualTo: uuid)
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first else {

@@ -7,6 +7,13 @@
 
 import UIKit
 
+struct RootTabBarCoordinatorDependency {
+    let mainMapCoordinator: MainMapCoordinator
+    let chatRoomListCoordinator: ChatRoomListCoordinator
+    let friendListCoordinator: FriendListCoordinator
+    let myProfileCoordinator: MyProfileCoordinator
+}
+
 final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var tabBarViewController: UITabBarController?
@@ -24,13 +31,18 @@ final class RootTabBarCoordinator: Coordinator {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
-        self.navigationController?.popViewController(animated: false)
+//        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        viewcontroller.modalPresentationStyle = .fullScreen
+        self.navigationController?.topViewController?.present(viewcontroller, animated: false)
+//        self.navigationController?.popViewController(animated: false)
         self.navigationController?.navigationBar.isHidden = true
     }
         
     private func showMapView() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = .init()
+        let diContainer: MainMapDIContainer = .init()
+        let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
+        coordinator.start()
         return self.embed(
             rootNav: navigationController,
             title: "홈",
@@ -53,7 +65,7 @@ final class RootTabBarCoordinator: Coordinator {
     }
 
     private func showFriendList() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = .init()
         let diContainer: FriendListDIContainer = .init()
         let coordinator: FriendListCoordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()
@@ -70,7 +82,8 @@ final class RootTabBarCoordinator: Coordinator {
         let diContainer: MyProfileDIContainer = .init()
         let coordinator: MyProfileCoordinator = diContainer.makeCoordinator(
             navigationController: navigationController,
-            parent: self
+            parent: self,
+            backToLoginView: self.rootTabBarDIContainer.resolveBackToLoginView()
         )
         coordinator.start()
         return self.embed(
