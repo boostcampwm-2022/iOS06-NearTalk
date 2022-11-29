@@ -5,8 +5,8 @@
 //  Created by dong eun shin on 2022/11/23.
 //
 
-import UIKit
 import RxSwift
+import UIKit
 
 class ChatViewController: UIViewController {
     // MARK: - Proporties
@@ -124,7 +124,7 @@ class ChatViewController: UIViewController {
                     let messageItem = MessageItem(
                         id: newMessage.uuid ?? UUID().uuidString,
                         message: newMessage.text,
-                        type: newMessage.senderID == "532BEDF5-F47C-4D83-A60E-539075D257E0" ? MessageType.send : MessageType.receive
+                        type: newMessage.senderID == "532BEDF5-F47C-4D83-A60E-539075D257E0" ? MessageType.send : MessageType.receive // 임시 사용자 uuid와 비교. 추후에 변경 예정
                     )
                     self.messgeItems.append(messageItem)
                     self.applySnapshot()
