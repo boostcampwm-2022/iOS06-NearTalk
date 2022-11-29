@@ -13,6 +13,8 @@
 		162B1B682933E036004724D9 /* RxMapViewReactiveDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B672933E036004724D9 /* RxMapViewReactiveDataSource.swift */; };
 		162B1B6A2933E055004724D9 /* RxMapViewDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B692933E055004724D9 /* RxMapViewDiff.swift */; };
 		162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B6B2935176D004724D9 /* NCMapRegion.swift */; };
+		162B1B722935E2BF004724D9 /* UserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */; };
+		162B1B742935E2DA004724D9 /* DefaultUserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */; };
 		1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA962921D73E0076AC35 /* MainMapViewModel.swift */; };
 		1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA982921D7480076AC35 /* MainMapCoordinator.swift */; };
 		1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA9A2921D7570076AC35 /* MainMapViewController.swift */; };
@@ -41,7 +43,6 @@
 		1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D265291DE092005F7B24 /* AppCoordinator.swift */; };
 		1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 1660D279291E09CE005F7B24 /* .swiftlint.yml */; };
 		16988877292E510200CEC7B9 /* MainMapDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988876292E510200CEC7B9 /* MainMapDIContainer.swift */; };
-		1698887A292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988879292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift */; };
 		1698887C292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */; };
 		16988880292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */; };
 		16988882292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */; };
@@ -71,8 +72,6 @@
 		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
 		6028096E293477A20025F3B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6028096D293477A20025F3B8 /* GoogleService-Info.plist */; };
 		6028097A29349D6B0025F3B8 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097929349D6B0025F3B8 /* UserDefaultsService.swift */; };
-		6028097C2934ACEE0025F3B8 /* UserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097B2934ACEE0025F3B8 /* UserDefaultsRepository.swift */; };
-		6028097E2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097D2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift */; };
 		603EDD6329261A2000BEE65C /* FirebaseKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDD6229261A2000BEE65C /* FirebaseKey.swift */; };
 		603EDDA32926C01D00BEE65C /* UserChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDA22926C01D00BEE65C /* UserChatModel.swift */; };
 		603EDDA52926C43500BEE65C /* RootTabBarDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */; };
@@ -245,6 +244,8 @@
 		162B1B672933E036004724D9 /* RxMapViewReactiveDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxMapViewReactiveDataSource.swift; sourceTree = "<group>"; };
 		162B1B692933E055004724D9 /* RxMapViewDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxMapViewDiff.swift; sourceTree = "<group>"; };
 		162B1B6B2935176D004724D9 /* NCMapRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCMapRegion.swift; sourceTree = "<group>"; };
+		162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsRepository.swift; sourceTree = "<group>"; };
+		162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultUserDefaultsRepository.swift; sourceTree = "<group>"; };
 		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
 		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
 		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -277,7 +278,6 @@
 		1660D265291DE092005F7B24 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		1660D279291E09CE005F7B24 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		16988876292E510200CEC7B9 /* MainMapDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapDIContainer.swift; sourceTree = "<group>"; };
-		16988879292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+StoryboardInstantiable.swift"; sourceTree = "<group>"; };
 		1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAccessibleChatRoomsUseCase.swift; sourceTree = "<group>"; };
 		1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAccessibleChatRoomsRepository.swift; sourceTree = "<group>"; };
 		16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleChatRoomsRepository.swift; sourceTree = "<group>"; };
@@ -313,8 +313,6 @@
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
 		6028096D293477A20025F3B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6028097929349D6B0025F3B8 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
-		6028097B2934ACEE0025F3B8 /* UserDefaultsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsRepository.swift; sourceTree = "<group>"; };
-		6028097D2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserDefaultsRepository.swift; sourceTree = "<group>"; };
 		603EDD6229261A2000BEE65C /* FirebaseKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseKey.swift; sourceTree = "<group>"; };
 		603EDDA22926C01D00BEE65C /* UserChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatModel.swift; sourceTree = "<group>"; };
 		603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarDIContainer.swift; sourceTree = "<group>"; };
@@ -793,7 +791,6 @@
 				83D3544B2925623600B9236A /* UIImageView+Rounded.swift */,
 				6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */,
 				608BD112292FD72600CB676E /* UIImage+Resize.swift */,
-				16988879292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -855,6 +852,7 @@
 		1660D26E291DE34E005F7B24 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */,
 				555A6B3B29238D26001336ED /* DefaultChatRoomListRepository.swift */,
 				83D354422925414F00B9236A /* DefaultUserProfileRepository.swift */,
 				83D35449292543DC00B9236A /* DefaultUserUUIDRepository.swift */,
@@ -943,6 +941,7 @@
 		601273432921ED5100E1456B /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */,
 				555A6B3D29238D65001336ED /* ChatRoomListRepository.swift */,
 				6001DA89292D5F270062EAD0 /* ChatMessageRepository.swift */,
 				83D354402925412400B9236A /* UserProfileRepository.swift */,
@@ -1672,8 +1671,8 @@
 				603EDDA92926C51100BEE65C /* TabBarRepository.swift in Sources */,
 				555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */,
 				83D5ECD4292C5C7200AD1781 /* MyProfileCoordinator.swift in Sources */,
-				6028097E2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift in Sources */,
 				83D5ECC1292B622500AD1781 /* ValidateUseCase.swift in Sources */,
+				162B1B722935E2BF004724D9 /* UserDefaultsRepository.swift in Sources */,
 				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
 				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
 				6001DA8E292DBF400062EAD0 /* MediaRepository.swift in Sources */,
@@ -1720,7 +1719,7 @@
 				6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
-				6028097C2934ACEE0025F3B8 /* UserDefaultsRepository.swift in Sources */,
+				162B1B742935E2DA004724D9 /* DefaultUserDefaultsRepository.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
 				83649765292D33B60002DDE5 /* AppSettingViewController.swift in Sources */,
@@ -1730,7 +1729,6 @@
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
 				162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */,
-				1698887A292E55F300CEC7B9 /* UIViewController+StoryboardInstantiable.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
 				603FD39A292B4F0F00687ED4 /* VerifyUserUseCase.swift in Sources */,
