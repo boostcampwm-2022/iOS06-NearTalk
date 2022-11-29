@@ -62,7 +62,7 @@ extension AppCoordinator: LoginCoordinatorDependency {
         guard let appDIContainer else {
             return
         }
-        self.navigationController?.popViewController(animated: false)
+//        self.navigationController?.popViewController(animated: false)
         appDIContainer.registerBackToLoginView(backToLoginView: self.backToLoginView)
         let diContainer: RootTabBarDIContainer = appDIContainer.resolveRootTabBarDIContainer()
         let rootTabBarCoordinator: RootTabBarCoordinator = .init(navigationController: self.navigationController, container: diContainer)
@@ -82,7 +82,7 @@ extension AppCoordinator: LoginCoordinatorDependency {
     }
     
     func backToLoginView() {
-        self.navigationController?.dismiss(animated: true)
+        self.navigationController?.dismiss(animated: false)
         self.navigationController?.popToRootViewController(animated: false)
 //        self.navigationController?.popToRootViewController(animated: true)
 //        self.start()

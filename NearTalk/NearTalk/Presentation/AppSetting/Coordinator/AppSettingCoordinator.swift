@@ -27,7 +27,10 @@ final class AppSettingCoordinator: Coordinator {
     }
     
     func start() {
-        let viewController: AppSettingViewController = self.dependency.makeAppSettingViewController(action: Action(presentLogoutResult: self.presentLogoutResult(success:), presentDropoutResult: self.presentDropoutResult(success:), presentNotificationPrompt: self.presentNotificationPrompt))
+        let viewController: AppSettingViewController = self.dependency.makeAppSettingViewController(
+            action: Action(presentLogoutResult: self.presentLogoutResult(success:),
+                           presentDropoutResult: self.presentDropoutResult(success:),
+                           presentNotificationPrompt: self.presentNotificationPrompt))
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
