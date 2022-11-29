@@ -24,4 +24,8 @@ final class RootTabBarDIContainer {
     func resolveRootTabBarViewController() -> RootTabBarController {
         return RootTabBarController(viewModel: container.resolve(RootTabBarViewModel.self)!)
     }
+    
+    func resolveBackToLoginView() -> (() -> Void)? {
+        return self.container.resolve((() -> Void).self)
+    }
 }

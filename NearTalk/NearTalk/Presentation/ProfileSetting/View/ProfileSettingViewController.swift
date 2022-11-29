@@ -159,21 +159,3 @@ private extension ProfileSettingViewController {
         }
     }
 }
-
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct ProfileSettingViewControllerPreview: PreviewProvider {
-//    static var previews: some View {
-//        let diContainer: DefaultProfileSettingDIContainer = .init(dependency: .init(
-//            updateProfileUseCase: DefaultUpdateProfileUseCase(repository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())),
-//            validateNickNameUseCase: ValidateNickNameUseCase(),
-//            validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
-//            uploadImageUseCase: DefaultUploadImageUseCase(imageRepository: DefaultImageRepository(imageService: DefaultStorageService())),
-//            profile: .init(uuid: <#T##String?#>, username: <#T##String?#>, email: <#T##String?#>, statusMessage: <#T##String?#>, profileImagePath: <#T##String?#>, friends: <#T##[String]?#>, chatRooms: <#T##[String]?#>),
-//            necessaryProfileComponent: .init(nickName: "Tester01", message: "Preview Test", image: nil)))
-//        let vc: LaunchScreenViewController = diContainer.
-//        return vc.showPreview(.iPhone14Pro)
-//    }
-//}
-//#endif
