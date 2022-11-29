@@ -33,7 +33,7 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                 return self.databaseService.updateChatRoom(newChatRoom).asCompletable()
             }
             .andThen(self.databaseService.increaseChatRoomMessageCount(roomID))
-            .andThen(self.sendPushNotification(message, roomName, ["String"]))
+            .andThen(self.sendPushNotification(message, roomName, chatMemberIDList))
     }
     
     private func sendPushNotification(_ message: ChatMessage, _ roomName: String, _ chatMemberIDList: [String]) -> Completable {

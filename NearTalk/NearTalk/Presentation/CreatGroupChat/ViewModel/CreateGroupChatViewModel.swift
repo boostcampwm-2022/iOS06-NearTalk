@@ -36,13 +36,16 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
 
     // MARK: - Proporties
     private let createGroupChatUseCase: CreateGroupChatUseCaseable
+    private let userDefaultUseCase: UserDefaultUseCase
     private let actions: CreateGroupChatViewModelActions
     private let disposeBag = DisposeBag()
     
     init(createGroupChatUseCase: CreateGroupChatUseCaseable,
+         userDefaultUseCase: UserDefaultUseCase,
          actions: CreateGroupChatViewModelActions
     ) {
         self.createGroupChatUseCase = createGroupChatUseCase
+        self.userDefaultUseCase = userDefaultUseCase
         self.actions = actions
                 
         self.createChatButtonIsEnabled = Observable
@@ -88,11 +91,14 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     
     func createChatButtonDIdTapped() {
         // TODO: - ChatRoom 내부 수정 필요
+        guard let userUUID = userDefaultUseCase.fetchUserUUID() else {
+            return
+        }
         
         let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
             uuid: chatRoomUUID,
-            userList: ["532BEDF5-F47C-4D83-A60E-539075D257E0"], // 임시 ID - userdefault에 저장된 값 사용 예정
+            userList: [userUUID], // 임시 ID - userdefault에 저장된 값 사용 예정
             roomImagePath: nil,
             roomType: "group",
             roomName: self.title,

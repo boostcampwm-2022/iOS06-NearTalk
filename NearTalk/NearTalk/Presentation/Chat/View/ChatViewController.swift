@@ -136,6 +136,12 @@ class ChatViewController: UIViewController {
                 }
             }
             .disposed(by: disposeBag)
+        
+        self.viewModel.chatRoomInfo
+            .bind { chatRoom in
+                self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") \(chatRoom.userList?.count ?? 0)"
+            }
+            .disposed(by: disposeBag)
     }
 }
 

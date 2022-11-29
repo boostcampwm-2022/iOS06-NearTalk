@@ -15,6 +15,10 @@ final class CreateGroupChatDiContainer {
 
     // MARK: - Services
     
+    func makeUserDefaultService() -> UserDefaultService {
+        return DefaultUserDefaultsService()
+    }
+    
     func makeDataTransferService() -> StorageService {
         return DefaultStorageService()
     }
@@ -36,8 +40,16 @@ final class CreateGroupChatDiContainer {
     func makeCreateGroupChatUseCase() -> CreateGroupChatUseCaseable {
         return CreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository())
     }
+    
+    func makeUserDefaultUseCase() -> UserDefaultUseCase {
+        return DefaultUserDefaultUseCase(userDefaultsRepository: self.makeUserDefaultsRepository())
+    }
 
     // MARK: - Repositories
+    
+    func makeUserDefaultsRepository() -> UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: self.makeUserDefaultService())
+    }
     
     func makeProfileRepository() -> ProfileRepository {
         return DefaultProfileRepository(
@@ -61,7 +73,8 @@ final class CreateGroupChatDiContainer {
 
     func makeCreateGroupChatViewModel(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewModel {
         return DefaultCreateGroupChatViewModel(
-            createGroupChatUseCase: makeCreateGroupChatUseCase(),
+            createGroupChatUseCase: self.makeCreateGroupChatUseCase(),
+            userDefaultUseCase: self.makeUserDefaultUseCase(),
             actions: actions)
     }
 
@@ -74,11 +87,7 @@ final class CreateGroupChatDiContainer {
     // MARK: - DI Container
     
     func makeChatDIContainer(chatRoomID: String, chatRoomName: String, chatRoomMemberUUIDList: [String]) -> ChatDIContainer {
-        return ChatDIContainer(
-            chatRoomID: chatRoomID,
-            chatRoomName: chatRoomName,
-            chatRoomMemberUUIDList: chatRoomMemberUUIDList
-        )
+        return ChatDIContainer(chatRoomID: chatRoomID)
     }
 }
 
