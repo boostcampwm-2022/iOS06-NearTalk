@@ -20,7 +20,7 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
             if item == .alarmOnOff {
                 let notiCell = AppSettingTableViewCell()
                 self.viewModel.notificationOnOffSwitch
-                    .subscribe(notiCell.toggleSwitch.rx.value)
+                    .bind(to: notiCell.toggleSwitch.rx.isOn)
                     .disposed(by: self.disposeBag)
                 notiCell.toggleSwitch.rx.value.changed.bind { [weak self] toggle in
                     self?.viewModel.notificationSwitchToggled(on: toggle)
@@ -48,6 +48,11 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         configureConstraint()
         initDataSource()
         setTableView()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.viewModel.viewWillAppear()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

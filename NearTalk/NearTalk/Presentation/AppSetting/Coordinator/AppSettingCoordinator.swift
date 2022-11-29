@@ -62,12 +62,36 @@ final class AppSettingCoordinator: Coordinator {
                 single(.success(false))
             })
             let allowAction: UIAlertAction = UIAlertAction(title: "허용", style: .default) { _ in
-                single(.success(true))
+                guard let _ = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String else {
+                    single(.failure(SystemSettingError.noBundleIdentifier))
+                    return
+                }
+                UNUserNotificationCenter.current().requestAuthorization { accept, _ in
+                    single(.success(accept))
+                    if !accept {
+                        Task { [weak self] in
+                            await self?.moveToAppSettingPage()
+                        }
+                    }
+                }
             }
             alert.addAction(disallowAction)
             alert.addAction(allowAction)
             self?.navigationController?.topViewController?.present(alert, animated: true)
             return Disposables.create()
         }
+    }
+    
+    @MainActor
+    private func moveToAppSettingPage() {
+        if #available(iOS 16, *) {
+            UIApplication.shared.open(URL(string: UIApplication.openNotificationSettingsURLString)!)
+        } else {
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        }
+    }
+    
+    enum SystemSettingError: Error {
+        case noBundleIdentifier
     }
 }

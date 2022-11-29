@@ -28,6 +28,7 @@ protocol AppSettingAction {
 }
 
 protocol AppSettingInput {
+    func viewWillAppear()
     func tableRowSelected(item: AppSettingItem?)
     func notificationSwitchToggled(on: Bool)
 }
@@ -58,8 +59,17 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
         self.logoutUseCase = logoutUseCase
         self.dropoutUseCase = dropoutUseCase
         self.action = action
-        UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
-            self?.notificationOnOff.accept(settings.authorizationStatus != .denied && settings.authorizationStatus != .notDetermined)
+        self.refreshNotificationAuthorization()
+    }
+    
+    func viewWillAppear() {
+        self.refreshNotificationAuthorization()
+    }
+    
+    private func refreshNotificationAuthorization() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            let notAllowed: Bool = settings.authorizationStatus == .notDetermined || settings.authorizationStatus == .denied
+            self.notificationOnOff.accept(!notAllowed)
         }
     }
     
@@ -92,16 +102,15 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
     }
     
     private func requestNotificationAuthorization() {
-        guard let result: Single<Bool> = self.action.presentNotificationPrompt?() else { return }
-
+        guard let result: Single<Bool> = self.action.presentNotificationPrompt?() else {
+            return
+        }
         result.subscribe { [weak self] accepted in
             if accepted {
-                UIApplication.shared.registerForRemoteNotifications()
-                UNUserNotificationCenter.current()
-                    .requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
-                        self?.notificationOnOff.accept(granted)
-                    }
+                self?.refreshNotificationAuthorization()
             } else {
+                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+                UNUserNotificationCenter.current().removeAllDeliveredNotifications()
                 self?.notificationOnOff.accept(false)
             }
         }
