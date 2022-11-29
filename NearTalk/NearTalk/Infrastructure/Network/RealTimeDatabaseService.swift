@@ -51,9 +51,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
             
             self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(roomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(roomID)
                 .child(messageID)
                 .setValue(messageData)
             completable(.completed)
@@ -69,9 +68,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
 
             self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(roomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(roomID)
                 .child(messageID)
                 .observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
@@ -92,9 +90,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
             
             self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(roomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(roomID)
                 .queryStarting(atValue: skip)
                 .queryLimited(toFirst: UInt(pageCount))
                 .observeSingleEvent(of: .value) { snapshot in
@@ -116,9 +113,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
             
             self.newMessageHandler = self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(chatRoomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(chatRoomID)
                 .observe(.childAdded) { (snapshot) -> Void in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatMessage: ChatMessage = try? ChatMessage.decode(dictionary: value) {

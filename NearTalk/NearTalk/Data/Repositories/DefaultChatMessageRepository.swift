@@ -36,6 +36,7 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                 newChatRoom.recentMessageText = message.text
                 return self.databaseService.updateChatRoom(newChatRoom).asCompletable()
             }
+            .andThen(self.databaseService.sendMessage(message))
             .andThen(self.databaseService.increaseChatRoomMessageCount(roomID))
             .andThen(self.sendPushNotification(message, roomName, chatMemberIDList))
     }

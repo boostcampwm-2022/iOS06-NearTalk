@@ -70,7 +70,6 @@
 		6008FC9D2925DBCF0044F017 /* NCLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6008FC9C2925DBCF0044F017 /* NCLocation.swift */; };
 		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
 		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
-		6028096E293477A20025F3B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6028096D293477A20025F3B8 /* GoogleService-Info.plist */; };
 		6028097A29349D6B0025F3B8 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097929349D6B0025F3B8 /* UserDefaultsService.swift */; };
 		603EDD6329261A2000BEE65C /* FirebaseKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDD6229261A2000BEE65C /* FirebaseKey.swift */; };
 		603EDDA32926C01D00BEE65C /* UserChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDA22926C01D00BEE65C /* UserChatModel.swift */; };
@@ -316,7 +315,6 @@
 		6008FC9C2925DBCF0044F017 /* NCLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCLocation.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
-		6028096D293477A20025F3B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6028097929349D6B0025F3B8 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
 		603EDD6229261A2000BEE65C /* FirebaseKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseKey.swift; sourceTree = "<group>"; };
 		603EDDA22926C01D00BEE65C /* UserChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatModel.swift; sourceTree = "<group>"; };
@@ -1525,7 +1523,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				603FD3762928D40300687ED4 /* .FirebaseMessagingBinary.version in Resources */,
-				6028096E293477A20025F3B8 /* GoogleService-Info.plist in Resources */,
 				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
 				603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */,
 				60DCAAF42928B9610087A63D /* Cartfile in Resources */,
