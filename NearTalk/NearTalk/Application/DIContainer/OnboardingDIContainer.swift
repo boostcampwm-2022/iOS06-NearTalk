@@ -49,7 +49,7 @@ final class DefaultOnboardingDIContainer {
         self.container.register(CreateProfileUseCase.self) { _ in
             DefaultCreateProfileUseCase(
                 profileRepository: self.container.resolve(ProfileRepository.self)!,
-                authRepository: self.container.resolve(AuthRepository.self)!
+                userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!
             )
         }
     }

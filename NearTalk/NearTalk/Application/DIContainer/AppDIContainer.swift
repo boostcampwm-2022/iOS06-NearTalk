@@ -30,6 +30,7 @@ final class AppDIContainer {
     private func registerService() {
         self.container.register(FirestoreService.self) { _ in DefaultFirestoreService() }
         self.container.register(AuthService.self) { _ in DefaultFirebaseAuthService() }
+        self.container.register(UserDefaultService.self) { _ in DefaultUserDefaultsService() }
     }
     
     private func registerRepository() {
@@ -41,6 +42,9 @@ final class AppDIContainer {
         }
         self.container.register(AuthRepository.self) { _ in
             DefaultAuthRepository(authService: self.container.resolve(AuthService.self)!)
+        }
+        self.container.register(UserDefaultsRepository.self) { _ in
+            DefaultUserDefaultsRepository(userDefaultsService: self.container.resolve(UserDefaultService.self)!)
         }
     }
     

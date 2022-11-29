@@ -19,7 +19,7 @@ final class RootTabBarDIContainer {
     private func registerViewModel() {
         self.container.register(RootTabBarViewModel.self) { _ in DefaultRootTabBarViewModel() }
     }
-    
+
     // MARK: - Create viewController
     func resolveRootTabBarViewController() -> RootTabBarController {
         return RootTabBarController(viewModel: container.resolve(RootTabBarViewModel.self)!)

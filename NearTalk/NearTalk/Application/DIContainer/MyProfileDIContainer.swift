@@ -10,21 +10,29 @@ import UIKit
 
 final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
     func makeAppSettingCoordinatorDependency() -> AppSettingCoordinatorDependency {
-        return DefaultAppSettingDIContainer(dependency: .init(authRepository: self.authRepository, profileRepository: self.profileRepository, backToLoginView: self.backToLoginView))
+        return DefaultAppSettingDIContainer(dependency: .init(
+            authRepository: self.authRepository,
+            profileRepository: self.profileRepository,
+            userDefaultsRepository: self.userDefaultsRepository,
+            backToLoginView: self.backToLoginView))
     }
     
     private let profileRepository: any ProfileRepository
     private let mediaRepository: any MediaRepository
     private let authRepository: any AuthRepository
     private let backToLoginView: (() -> Void)?
+    private let userDefaultsRepository: any UserDefaultsRepository
+    
     init(
         profileRepository: any ProfileRepository,
         mediaRepository: any MediaRepository,
+        userDefaultsRepository: any UserDefaultsRepository,
         authRepository: any AuthRepository,
         backToLoginView: (() -> Void)?
     ) {
         self.profileRepository = profileRepository
         self.mediaRepository = mediaRepository
+        self.userDefaultsRepository = userDefaultsRepository
         self.authRepository = authRepository
         self.backToLoginView = backToLoginView
     }
@@ -34,7 +42,10 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
         necessaryProfileComponent: NecessaryProfileComponent?) -> ProfileSettingCoordinatorDependency {
             return DefaultProfileSettingDIContainer(
                 dependency: .init(
-                    updateProfileUseCase: DefaultUpdateProfileUseCase(repository: self.profileRepository),
+                    updateProfileUseCase: DefaultUpdateProfileUseCase(
+                        repository: self.profileRepository,
+                        userDefaultsRepository: self.userDefaultsRepository
+                    ),
                     validateNickNameUseCase: ValidateNickNameUseCase(),
                     validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
                     uploadImageUseCase: DefaultUploadImageUseCase(mediaRepository: self.mediaRepository),
@@ -80,6 +91,10 @@ final class MyProfileDIContainer {
         return DefaultAuthRepository(authService: self.makeAuthService())
     }
     
+    func makeUserDefaultsRepository() -> any UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: DefaultUserDefaultsService())
+    }
+    
     // MARK: - Coordinator
     func makeCoordinator(
         navigationController: UINavigationController?,
@@ -99,6 +114,7 @@ final class MyProfileDIContainer {
         return DefaultMyProfileCoordinatorDependency(
             profileRepository: self.makeProfileRepository(),
             mediaRepository: self.makeMediaRepository(),
+            userDefaultsRepository: self.makeUserDefaultsRepository(),
             authRepository: self.makeAuthRepository(),
             backToLoginView: backToLoginView
         )

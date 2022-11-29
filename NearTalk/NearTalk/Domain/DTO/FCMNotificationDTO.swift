@@ -8,9 +8,15 @@
 import Foundation
 
 struct FCMNotificationDTO: Codable {
-    var to: String?
     var notification: NotiTitleAndBody?
     var data: NotiData?
+    var registrationIds: [String]?
+    
+    enum CodingKeys: String, CodingKey {
+        case notification
+        case data
+        case registrationIds = "registration_ids"
+    }
 }
 
 struct NotiTitleAndBody: Codable {

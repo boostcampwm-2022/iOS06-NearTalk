@@ -10,19 +10,37 @@ import RxSwift
 
 final class DefaultChatMessageRepository: ChatMessageRepository {
     private let databaseService: RealTimeDatabaseService
+    private let profileRepository: any ProfileRepository
     private let fcmService: FCMService
     
     init(
         databaseService: RealTimeDatabaseService,
+        profileRepository: any ProfileRepository,
         fcmService: FCMService
     ) {
         self.databaseService = databaseService
+        self.profileRepository = profileRepository
         self.fcmService = fcmService
     }
     
-    func sendMessage(message: ChatMessage, roomName: String) -> Completable {
-        self.databaseService.sendMessage(message)
-            .andThen(self.fcmService.sendMessage(message, roomName))
+    func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable {
+        self.databaseService.fetchChatRoomInfo(roomID)
+            .flatMapCompletable { chatRoom in
+                var newChatRoom: ChatRoom = chatRoom
+                newChatRoom.recentMessageID = message.chatRoomID
+                newChatRoom.recentMessageDate = message.createdDate
+                newChatRoom.recentMessageText = message.text
+                return self.databaseService.updateChatRoom(newChatRoom).asCompletable()
+            }
+            .andThen(self.databaseService.increaseChatRoomMessageCount(roomID))
+            .andThen(self.sendPushNotification(message, roomName, ["String"]))
+    }
+    
+    private func sendPushNotification(_ message: ChatMessage, _ roomName: String, _ chatMemberIDList: [String]) -> Completable {
+        self.profileRepository.fetchProfileByUUIDList(chatMemberIDList)
+            .flatMapCompletable { (profileList: [UserProfile]) in
+                self.fcmService.sendMessage(message, roomName, profileList.compactMap({ $0.fcmToken }))
+            }
     }
     
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
@@ -36,4 +54,12 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
     func observeChatRoomMessages(roomID: String) -> Observable<ChatMessage> {
         self.databaseService.observeNewMessage(roomID)
     }
+    
+    func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom> {
+        self.databaseService.updateChatRoom(chatRoom)
+    }
+}
+
+enum DefaultChatMessageRepositoryError: Error {
+    case fetchRoomInfoError
 }

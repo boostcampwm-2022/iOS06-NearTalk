@@ -89,6 +89,11 @@ final class DefaultProfileRepository: ProfileRepository {
         return self.firestoreService.fetch(dataKey: .users, queryList: query)
     }
     
+    func fetchProfileByUUIDList(_ uuidList: [String]) -> Single<[UserProfile]> {
+        let query: [FirebaseQueryDTO] = [.init(key: "uuid", value: uuidList, queryKey: .in)]
+        return self.firestoreService.fetchList(dataKey: .users, queryList: query)
+    }
+    
     private func fetchProfileByEmail(_ email: String) -> Single<UserProfile> {
         let query: [FirebaseQueryDTO] = [.init(key: "email", value: email, queryKey: .isEqualTo)]
         return self.firestoreService.fetch(dataKey: .users, queryList: query)

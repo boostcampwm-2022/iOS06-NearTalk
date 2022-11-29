@@ -7,6 +7,13 @@
 
 import UIKit
 
+struct RootTabBarCoordinatorDependency {
+    let mainMapCoordinator: MainMapCoordinator
+    let chatRoomListCoordinator: ChatRoomListCoordinator
+    let friendListCoordinator: FriendListCoordinator
+    let myProfileCoordinator: MyProfileCoordinator
+}
+
 final class RootTabBarCoordinator: Coordinator {
     var navigationController: UINavigationController?
     var tabBarViewController: UITabBarController?
@@ -30,7 +37,10 @@ final class RootTabBarCoordinator: Coordinator {
     }
         
     private func showMapView() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = .init()
+        let diContainer: MainMapDIContainer = .init()
+        let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
+        coordinator.start()
         return self.embed(
             rootNav: navigationController,
             title: "홈",
@@ -53,7 +63,7 @@ final class RootTabBarCoordinator: Coordinator {
     }
 
     private func showFriendList() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController: UINavigationController = .init()
         let diContainer: FriendListDIContainer = .init()
         let coordinator: FriendListCoordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()

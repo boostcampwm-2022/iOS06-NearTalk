@@ -12,23 +12,28 @@ protocol DropoutUseCase {
 }
 
 final class DefaultDropOutUseCase: DropoutUseCase {
-//    private let authRepository: any AuthRepository
     private let profileRepository: any ProfileRepository
+    private let authRepository: any AuthRepository
+    private let userDefaultsRepository: any UserDefaultsRepository
     
-    init(profileRepository: ProfileRepository) {
-//        self.authRepository = authRepository
+    init(profileRepository: any ProfileRepository,
+         authRepository: any AuthRepository,
+         userDefaultsRepository: any UserDefaultsRepository) {
         self.profileRepository = profileRepository
+        self.authRepository = authRepository
+        self.userDefaultsRepository = userDefaultsRepository
     }
     
     func execute() -> Completable {
-        return self.deleteProfile()//.andThen(self.deleteAccount())
+        userDefaultsRepository.removeUserProfile()
+        return self.deleteProfile().andThen(self.deleteAccount())
     }
     
     private func deleteProfile() -> Completable {
         return self.profileRepository.deleteMyProfile()
     }
     
-//    private func deleteAccount() -> Completable {
-//        return self.authRepository.dropout()
-//    }
+    private func deleteAccount() -> Completable {
+        return self.authRepository.dropout()
+    }
 }
