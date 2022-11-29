@@ -5,10 +5,11 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
+import RxCocoa
 import UIKit
 
 final class AppSettingTableViewCell: UITableViewCell {
-    private let toggleSwitch = UISwitch()
+    let toggleSwitch = UISwitch()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -36,4 +37,8 @@ final class AppSettingTableViewCell: UITableViewCell {
     }
 
     static let identifier: String = String(describing: AppSettingTableViewCell.self)
+    
+//    var switchOnOff: ControlProperty<Bool> {
+//        self.toggleSwitch.rx.isOn
+//    }
 }

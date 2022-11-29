@@ -31,8 +31,10 @@ final class RootTabBarCoordinator: Coordinator {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
-        self.navigationController?.popViewController(animated: false)
+//        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        viewcontroller.modalPresentationStyle = .fullScreen
+        self.navigationController?.topViewController?.present(viewcontroller, animated: false)
+//        self.navigationController?.popViewController(animated: false)
         self.navigationController?.navigationBar.isHidden = true
     }
         
@@ -80,7 +82,8 @@ final class RootTabBarCoordinator: Coordinator {
         let diContainer: MyProfileDIContainer = .init()
         let coordinator: MyProfileCoordinator = diContainer.makeCoordinator(
             navigationController: navigationController,
-            parent: self
+            parent: self,
+            backToLoginView: self.rootTabBarDIContainer.resolveBackToLoginView()
         )
         coordinator.start()
         return self.embed(
