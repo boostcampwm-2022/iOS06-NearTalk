@@ -6,15 +6,19 @@
 //
 
 import Foundation
-
 import RxSwift
 
 protocol MessagingUseCase {
     func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable
+    func observeMessage(roomID: String) -> Observable<ChatMessage>
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
+    // MARK: - Proporty
+    
     private let chatMessageRepository: ChatMessageRepository
+    
+    // MARK: - LifeCycle
     
     init(chatMessageRepository: ChatMessageRepository) {
         self.chatMessageRepository = chatMessageRepository
@@ -27,5 +31,9 @@ final class DefalultMessagingUseCase: MessagingUseCase {
             roomName: roomName,
             chatMemberIDList: chatMemberIDList
         )
+    }
+    
+    func observeMessage(roomID: String) -> Observable<ChatMessage> {
+        return self.chatMessageRepository.observeChatRoomMessages(roomID: roomID)
     }
 }

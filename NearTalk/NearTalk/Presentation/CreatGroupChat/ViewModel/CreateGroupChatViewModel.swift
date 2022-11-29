@@ -92,12 +92,12 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
             uuid: chatRoomUUID,
-            userList: [], // 본인 uuid 추가 필요
+            userList: ["532BEDF5-F47C-4D83-A60E-539075D257E0"], // 임시 ID - userdefault에 저장된 값 사용 예정
             roomImagePath: nil,
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            location: nil,
+            location: NCLocation(longitude: 37.3596093566472, latitude: 127.1056219310272), // 임시 위치
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
             maxNumberOfParticipants: self.maxParticipant,
