@@ -16,6 +16,10 @@ enum DummyProfileRepoError: Error {
 }
 
 final class DummyProfileRepository: ProfileRepository {
+    func fetchProfileByUUIDList(_ uuidList: [String]) -> RxSwift.Single<[UserProfile]> {
+        return .just([])
+    }
+    
     private func encode(profile: UserProfile) -> Data? {
         let jsonEncoder: JSONEncoder = JSONEncoder()
         return try? jsonEncoder.encode(profile)

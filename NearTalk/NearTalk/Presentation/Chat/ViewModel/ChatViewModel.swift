@@ -24,6 +24,9 @@ class DefaultChatViewModel: ChatViewModel {
     
     private let chatRoomID: String
     private let chatRoomName: String
+    private var chatroomMemberUUIDList: [String]
+    private let disposebag: DisposeBag = DisposeBag()
+
     private var messagingUseCase: MessagingUseCase
     var chatMessages: Observable<ChatMessage>
     
@@ -33,10 +36,12 @@ class DefaultChatViewModel: ChatViewModel {
     
     init(chatRoomID: String,
          chatRoomName: String,
-         messagingUseCase: MessagingUseCase
+         chatRoomMemberUUIDList: [String],
+         messagingUseCase: MessagingUseCase) {
     ) {
         self.chatRoomID = chatRoomID
         self.chatRoomName = chatRoomName
+        self.chatroomMemberUUIDList = chatRoomMemberUUIDList
         self.messagingUseCase = messagingUseCase
         self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
     }
@@ -55,15 +60,20 @@ class DefaultChatViewModel: ChatViewModel {
             createdDate: Date()
         )
         
-        self.messagingUseCase.sendMessage(message: chatMessage, roomName: self.chatRoomName)
-            .subscribe { event in
-                switch event {
-                case .completed:
-                    print("2. 전송된 메세지: ", chatMessage)
-                case .error(let error):
-                    print(error)
-                }
+        self.messagingUseCase.sendMessage(
+            message: chatMessage,
+            roomID: self.chatRoomID,
+            roomName: self.chatRoomName,
+            chatMemberIDList: self.chatroomMemberUUIDList
+        )
+        .subscribe { event in
+            switch event {
+            case .completed:
+                print(">>>>>>>>>>message sending completed")
+            case .error(let error):
+                print(error)
             }
-            .disposed(by: disposebag)
+        }
+        .disposed(by: disposebag)
     }
 }
