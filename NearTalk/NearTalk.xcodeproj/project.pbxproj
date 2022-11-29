@@ -49,7 +49,6 @@
 		5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */; };
 		5506CDDD292B4F810002F328 /* FetchFriendListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */; };
 		5506CDDF292B50D10002F328 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDE292B50D10002F328 /* Friend.swift */; };
-		5553B7BF29346F980054F68C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7BE29346F980054F68C /* GoogleService-Info.plist */; };
 		555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendListViewModel.swift */; };
@@ -725,7 +724,7 @@
 				16530579291E189D0026B815 /* ChatRoomList */,
 				7CFC7D672923709C00A249E7 /* CreatGroupChat */,
 				555A6B2629236C28001336ED /* FriendList */,
-				6012733B2921D2E400E1456B /* LaucnScreen */,
+				6012733B2921D2E400E1456B /* LaunchScreen */,
 				1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */,
 				839D5BDA2922AD1000857FDD /* Login */,
 				1648BA922921D7240076AC35 /* MainMap */,
@@ -766,7 +765,6 @@
 				1660D238291DDB39005F7B24 /* Info.plist */,
 				5553B7BE29346F980054F68C /* GoogleService-Info.plist */,
 				6028096D293477A20025F3B8 /* GoogleService-Info.plist */,
-				7C4895352931FBE300DD5076 /* config.xcconfig */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -912,14 +910,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		6012733B2921D2E400E1456B /* LaucnScreen */ = {
+		6012733B2921D2E400E1456B /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
 				6012733E2921D2F700E1456B /* Coordinator */,
 				6012733D2921D2F300E1456B /* ViewModel */,
 				6012733C2921D2EF00E1456B /* View */,
 			);
-			path = LaucnScreen;
+			path = LaunchScreen;
 			sourceTree = "<group>";
 		};
 		6012733C2921D2EF00E1456B /* View */ = {
@@ -1076,7 +1074,6 @@
 				555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */,
 				55C620D4292E10ED003D9E9C /* CreateGroupChatDiContainer.swift */,
 				8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */,
-				5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */,
 				605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */,
 				83649774292DF0590002DDE5 /* LoginDIContainer.swift */,
 				83D3543929252F1A00B9236A /* MyProfileDIContainer.swift */,
@@ -2014,7 +2011,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -2044,7 +2041,7 @@
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;
@@ -2066,7 +2063,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -2096,7 +2093,7 @@
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;
