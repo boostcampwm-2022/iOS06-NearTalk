@@ -11,13 +11,16 @@ import UIKit
 final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependency {
     private let profileRepository: any ProfileRepository
     private let mediaRepository: any MediaRepository
+    private let userDefaultsRepository: any UserDefaultsRepository
     
     init(
         profileRepository: any ProfileRepository,
-        mediaRepository: any MediaRepository
+        mediaRepository: any MediaRepository,
+        userDefaultsRepository: any UserDefaultsRepository
     ) {
         self.profileRepository = profileRepository
         self.mediaRepository = mediaRepository
+        self.userDefaultsRepository = userDefaultsRepository
     }
     
     func makeProfileSettingCoordinatorDependency(
@@ -25,7 +28,10 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
         necessaryProfileComponent: NecessaryProfileComponent?) -> ProfileSettingCoordinatorDependency {
             return DefaultProfileSettingDIContainer(
                 dependency: .init(
-                    updateProfileUseCase: DefaultUpdateProfileUseCase(repository: self.profileRepository),
+                    updateProfileUseCase: DefaultUpdateProfileUseCase(
+                        repository: self.profileRepository,
+                        userDefaultsRepository: self.userDefaultsRepository
+                    ),
                     validateNickNameUseCase: ValidateNickNameUseCase(),
                     validateStatusMessageUseCase: ValidateStatusMessageUseCase(),
                     uploadImageUseCase: DefaultUploadImageUseCase(mediaRepository: self.mediaRepository),
@@ -71,6 +77,10 @@ final class MyProfileDIContainer {
         return DefaultAuthRepository(authService: self.makeAuthService())
     }
     
+    func makeUserDefaultsRepository() -> any UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: DefaultUserDefaultsService())
+    }
+    
     // MARK: - Coordinator
     func makeCoordinator(
         navigationController: UINavigationController?,
@@ -88,7 +98,8 @@ final class MyProfileDIContainer {
     func makeCoordinatorDependency() -> any MyProfileCoordinatorDependency {
         return DefaultMyProfileCoordinatorDependency(
             profileRepository: self.makeProfileRepository(),
-            mediaRepository: self.makeMediaRepository()
+            mediaRepository: self.makeMediaRepository(),
+            userDefaultsRepository: self.makeUserDefaultsRepository()
         )
     }
 }

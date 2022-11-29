@@ -18,4 +18,5 @@ protocol ProfileRepository {
     func removeFriend(_ friendUUID: String) -> Completable
     func fetchFriendsProfile() -> Single<[UserProfile]>
     func fetchProfileByUUID(_ uuid: String) -> Single<UserProfile>
+    func fetchProfileByUUIDList(_ uuidList: [String]) -> Single<[UserProfile]>
 }

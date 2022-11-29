@@ -6,34 +6,14 @@
 //
 
 import UIKit
-
 import SnapKit
 
 class ChatCollectionViewCell: UICollectionViewCell {
+    // MARK: - Proporty
+    
     static let identifier = String(describing: ChatRoomListCell.self)
     
-    var message: String? {
-        didSet {
-            textView.text = message
-        }
-    }
-    
-    var isInComing: Bool? {
-        didSet {
-            print("isInComing", isInComing)
-            textView.backgroundColor = isInComing ?? true ? .systemGray : .white
-            
-            if isInComing ?? true {
-                self.textView.snp.makeConstraints { make in
-                    make.trailing.equalToSuperview()
-                }
-            } else {
-                self.textView.snp.makeConstraints { make in
-                    make.leading.equalToSuperview()
-                }
-            }
-        }
-    }
+    // MARK: - UI Proporty
     
     private let textView: UITextView = {
         let view = UITextView()
@@ -50,11 +30,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
         view.sizeToFit()
         return view
     }()
-    
-    private let messagelabel: UILabel = UILabel().then { label in
-        label.text = "message"
-        label.numberOfLines = 0
-    }
     
     private lazy var namelabel: UILabel = UILabel().then { label in
         label.text = "name"
@@ -74,6 +49,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    // MARK: - LifeCycle
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -85,17 +62,29 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.contentView.backgroundColor = .blue
     }
     
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        super.preferredLayoutAttributesFitting(layoutAttributes)
-        layoutIfNeeded()
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.textView.snp.remakeConstraints { make in
+            make.width.lessThanOrEqualTo(250)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+    }
+
+    func configure(isInComing: Bool, message: String) {
+        self.textView.text = message
         
-        let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
+        textView.backgroundColor = isInComing ? .systemGray : .white
         
-        var frame = layoutAttributes.frame
-        frame.size.height = ceil(size.height)
-        
-        layoutAttributes.frame = frame
-        return layoutAttributes
+        if isInComing {
+            self.textView.snp.makeConstraints { make in
+                make.leading.equalToSuperview()
+            }
+        } else {
+            self.textView.snp.makeConstraints { make in
+                make.trailing.equalToSuperview()
+            }
+        }
     }
     
     private func addViews() {

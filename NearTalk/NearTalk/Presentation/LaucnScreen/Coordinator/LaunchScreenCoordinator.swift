@@ -21,10 +21,6 @@ final class LaunchScreenCoordinator: Coordinator {
         self.launchScreenDIContainer = container
     }
     
-    deinit {
-        print(Self.self, #function)
-    }
-    
     // MARK: - Lifecycles
     func start() {
         let viewController: LaunchScreenViewController = self.launchScreenDIContainer.resolveLaunchScreenViewController()

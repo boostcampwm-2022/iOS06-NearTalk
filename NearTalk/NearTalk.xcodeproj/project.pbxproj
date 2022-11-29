@@ -48,8 +48,6 @@
 		5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */; };
 		5506CDDD292B4F810002F328 /* FetchFriendListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */; };
 		5506CDDF292B50D10002F328 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDE292B50D10002F328 /* Friend.swift */; };
-		5553B7BF29346F980054F68C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7BE29346F980054F68C /* GoogleService-Info.plist */; };
-		5553B7C3293470D20054F68C /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5553B7C2293470D20054F68C /* config.xcconfig */; };
 		555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2A29236D51001336ED /* FriendListCell.swift */; };
 		555A6B2D29236D61001336ED /* FriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2C29236D61001336ED /* FriendViewController.swift */; };
 		555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555A6B2E29236D73001336ED /* FriendListViewModel.swift */; };
@@ -71,6 +69,10 @@
 		6008FC9D2925DBCF0044F017 /* NCLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6008FC9C2925DBCF0044F017 /* NCLocation.swift */; };
 		601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */; };
 		601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 601273412921D34E00E1456B /* LaunchScreenViewController.swift */; };
+		6028096E293477A20025F3B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6028096D293477A20025F3B8 /* GoogleService-Info.plist */; };
+		6028097A29349D6B0025F3B8 /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097929349D6B0025F3B8 /* UserDefaultsService.swift */; };
+		6028097C2934ACEE0025F3B8 /* UserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097B2934ACEE0025F3B8 /* UserDefaultsRepository.swift */; };
+		6028097E2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6028097D2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift */; };
 		603EDD6329261A2000BEE65C /* FirebaseKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDD6229261A2000BEE65C /* FirebaseKey.swift */; };
 		603EDDA32926C01D00BEE65C /* UserChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDA22926C01D00BEE65C /* UserChatModel.swift */; };
 		603EDDA52926C43500BEE65C /* RootTabBarDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */; };
@@ -287,8 +289,6 @@
 		5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListDIContainer.swift; sourceTree = "<group>"; };
 		5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFriendListUseCase.swift; sourceTree = "<group>"; };
 		5506CDDE292B50D10002F328 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
-		5553B7BE29346F980054F68C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5553B7C2293470D20054F68C /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		555A6B2A29236D51001336ED /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
 		555A6B2C29236D61001336ED /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 		555A6B2E29236D73001336ED /* FriendListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListViewModel.swift; sourceTree = "<group>"; };
@@ -311,6 +311,10 @@
 		6008FC9C2925DBCF0044F017 /* NCLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCLocation.swift; sourceTree = "<group>"; };
 		6012733F2921D34000E1456B /* LaunchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewModel.swift; sourceTree = "<group>"; };
 		601273412921D34E00E1456B /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		6028096D293477A20025F3B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6028097929349D6B0025F3B8 /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
+		6028097B2934ACEE0025F3B8 /* UserDefaultsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsRepository.swift; sourceTree = "<group>"; };
+		6028097D2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserDefaultsRepository.swift; sourceTree = "<group>"; };
 		603EDD6229261A2000BEE65C /* FirebaseKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseKey.swift; sourceTree = "<group>"; };
 		603EDDA22926C01D00BEE65C /* UserChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatModel.swift; sourceTree = "<group>"; };
 		603EDDA42926C43500BEE65C /* RootTabBarDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabBarDIContainer.swift; sourceTree = "<group>"; };
@@ -742,6 +746,7 @@
 		1660D25E291DDDAA005F7B24 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				6028097829349D5F0025F3B8 /* UserDefaults */,
 				60FD705829238CBB00A4C29A /* Network */,
 				1660D263291DDEE2005F7B24 /* Extensions */,
 				1660D261291DDEBE005F7B24 /* Utils */,
@@ -754,8 +759,7 @@
 			children = (
 				1660D233291DDB39005F7B24 /* Assets.xcassets */,
 				1660D238291DDB39005F7B24 /* Info.plist */,
-				5553B7BE29346F980054F68C /* GoogleService-Info.plist */,
-				5553B7C2293470D20054F68C /* config.xcconfig */,
+				6028096D293477A20025F3B8 /* GoogleService-Info.plist */,
 				7C4895352931FBE300DD5076 /* config.xcconfig */,
 			);
 			path = Resource;
@@ -951,6 +955,14 @@
 				16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		6028097829349D5F0025F3B8 /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				6028097929349D6B0025F3B8 /* UserDefaultsService.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 		603EDDAC2926C84E00BEE65C /* TabBar */ = {
@@ -1491,20 +1503,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				603FD3762928D40300687ED4 /* .FirebaseMessagingBinary.version in Resources */,
+				6028096E293477A20025F3B8 /* GoogleService-Info.plist in Resources */,
 				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
 				603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */,
 				60DCAAF42928B9610087A63D /* Cartfile in Resources */,
 				1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */,
 				7C4895362931FBE300DD5076 /* config.xcconfig in Resources */,
 				603FD36F2928D40300687ED4 /* .FirebaseFirestoreBinary.version in Resources */,
-				5553B7C3293470D20054F68C /* config.xcconfig in Resources */,
 				603FD36A2928D40300687ED4 /* .FirebaseDynamicLinksBinary.version in Resources */,
 				603FD3812928D40300687ED4 /* .FirebaseAnalyticsBinary.version in Resources */,
 				1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */,
 				603FD3692928D40300687ED4 /* .FirebaseAuthBinary.version in Resources */,
 				603FD3622928D40300687ED4 /* .FirebaseDatabaseBinary.version in Resources */,
 				1648BAB6292391940076AC35 /* DummyData.plist in Resources */,
-				5553B7BF29346F980054F68C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1661,6 +1672,7 @@
 				603EDDA92926C51100BEE65C /* TabBarRepository.swift in Sources */,
 				555A6B3529238C13001336ED /* ChatRoomListDIContainer.swift in Sources */,
 				83D5ECD4292C5C7200AD1781 /* MyProfileCoordinator.swift in Sources */,
+				6028097E2934AD450025F3B8 /* DefaultUserDefaultsRepository.swift in Sources */,
 				83D5ECC1292B622500AD1781 /* ValidateUseCase.swift in Sources */,
 				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
 				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
@@ -1708,6 +1720,7 @@
 				6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
+				6028097C2934ACEE0025F3B8 /* UserDefaultsRepository.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
 				83649765292D33B60002DDE5 /* AppSettingViewController.swift in Sources */,
@@ -1806,6 +1819,7 @@
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
 				556EE2512926402000EEA145 /* ChatRoomListCell.swift in Sources */,
 				1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */,
+				6028097A29349D6B0025F3B8 /* UserDefaultsService.swift in Sources */,
 				7C254DAF292DC853004D4CEC /* chatInputAccessoryView.swift in Sources */,
 				7CFC7D6A292370DB00A249E7 /* GroupChatCreationViewController.swift in Sources */,
 				830897DB292CC3830090EC18 /* ProfileSettingCoordinator.swift in Sources */,
@@ -1861,7 +1875,6 @@
 /* Begin XCBuildConfiguration section */
 		1660D24F291DDB3A005F7B24 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C4895352931FBE300DD5076 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1922,7 +1935,6 @@
 		};
 		1660D250291DDB3A005F7B24 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7C4895352931FBE300DD5076 /* config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
