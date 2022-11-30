@@ -35,7 +35,6 @@
 		1660D22A291DDB38005F7B24 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D229291DDB38005F7B24 /* SceneDelegate.swift */; };
 		1660D232291DDB38005F7B24 /* NearTalk.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1660D230291DDB38005F7B24 /* NearTalk.xcdatamodeld */; };
 		1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1660D233291DDB39005F7B24 /* Assets.xcassets */; };
-		1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */; };
 		1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D241291DDB3A005F7B24 /* NearTalkTests.swift */; };
 		1660D24C291DDB3A005F7B24 /* NearTalkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24B291DDB3A005F7B24 /* NearTalkUITests.swift */; };
 		1660D24E291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1660D24D291DDB3A005F7B24 /* NearTalkUITestsLaunchTests.swift */; };
@@ -273,7 +272,6 @@
 		1660D229291DDB38005F7B24 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1660D231291DDB38005F7B24 /* NearTalk.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NearTalk.xcdatamodel; sourceTree = "<group>"; };
 		1660D233291DDB39005F7B24 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		1660D236291DDB39005F7B24 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1660D238291DDB39005F7B24 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1660D23D291DDB3A005F7B24 /* NearTalkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NearTalkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1660D241291DDB3A005F7B24 /* NearTalkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearTalkTests.swift; sourceTree = "<group>"; };
@@ -292,8 +290,8 @@
 		5506CDDE292B50D10002F328 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		55421E852935E76C0017972B /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		55421E862935E76C0017972B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5553B7C529347C7A0054F68C /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		5553B7BE29346F980054F68C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5553B7C529347C7A0054F68C /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		555A6B2A29236D51001336ED /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
 		555A6B2C29236D61001336ED /* FriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewController.swift; sourceTree = "<group>"; };
 		555A6B2E29236D73001336ED /* FriendListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListViewModel.swift; sourceTree = "<group>"; };
@@ -658,7 +656,6 @@
 				1660D24A291DDB3A005F7B24 /* NearTalkUITests */,
 				1660D225291DDB37005F7B24 /* Products */,
 				EF9BC89A864970D54CE8E69D /* Pods */,
-				85A8838D008DE3BEF9830429 /* Frameworks */,
 				7C43C1F229361920008322FC /* Recovered References */,
 				2461FCD4A34405BB5DEC161C /* Frameworks */,
 			);
@@ -935,7 +932,6 @@
 		6012733B2921D2E400E1456B /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
-				1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */,
 				6012733E2921D2F700E1456B /* Coordinator */,
 				6012733D2921D2F300E1456B /* ViewModel */,
 				6012733C2921D2EF00E1456B /* View */,
@@ -1544,7 +1540,6 @@
 				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
 				603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */,
 				60DCAAF42928B9610087A63D /* Cartfile in Resources */,
-				1660D237291DDB39005F7B24 /* LaunchScreen.storyboard in Resources */,
 				603FD36F2928D40300687ED4 /* .FirebaseFirestoreBinary.version in Resources */,
 				83DEA7002934DEE5008E2C76 /* config.xcconfig in Resources */,
 				603FD36A2928D40300687ED4 /* .FirebaseDynamicLinksBinary.version in Resources */,
@@ -1903,17 +1898,6 @@
 			targetProxy = 1660D248291DDB3A005F7B24 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		1660D235291DDB39005F7B24 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1660D236291DDB39005F7B24 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1660D24F291DDB3A005F7B24 /* Debug */ = {
