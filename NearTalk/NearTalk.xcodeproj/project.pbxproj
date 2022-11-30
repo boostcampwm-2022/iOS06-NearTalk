@@ -47,6 +47,7 @@
 		5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */; };
 		5506CDDD292B4F810002F328 /* FetchFriendListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */; };
 		5506CDDF292B50D10002F328 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5506CDDE292B50D10002F328 /* Friend.swift */; };
+		55416E332936613E00229F94 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55416E322936613E00229F94 /* LaunchScreen.storyboard */; };
 		55421E872935E76C0017972B /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 55421E852935E76C0017972B /* config.xcconfig */; };
 		55421E882935E76C0017972B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55421E862935E76C0017972B /* GoogleService-Info.plist */; };
 		5553B7C629347C7A0054F68C /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5553B7C529347C7A0054F68C /* PaddingLabel.swift */; };
@@ -288,6 +289,7 @@
 		5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListDIContainer.swift; sourceTree = "<group>"; };
 		5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFriendListUseCase.swift; sourceTree = "<group>"; };
 		5506CDDE292B50D10002F328 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		55416E322936613E00229F94 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		55421E852935E76C0017972B /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		55421E862935E76C0017972B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5553B7BE29346F980054F68C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -932,6 +934,7 @@
 		6012733B2921D2E400E1456B /* LaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
+				55416E322936613E00229F94 /* LaunchScreen.storyboard */,
 				6012733E2921D2F700E1456B /* Coordinator */,
 				6012733D2921D2F300E1456B /* ViewModel */,
 				6012733C2921D2EF00E1456B /* View */,
@@ -1539,6 +1542,7 @@
 				603FD3762928D40300687ED4 /* .FirebaseMessagingBinary.version in Resources */,
 				1660D27A291E09CE005F7B24 /* .swiftlint.yml in Resources */,
 				603FD36C2928D40300687ED4 /* .FirebaseStorageBinary.version in Resources */,
+				55416E332936613E00229F94 /* LaunchScreen.storyboard in Resources */,
 				60DCAAF42928B9610087A63D /* Cartfile in Resources */,
 				603FD36F2928D40300687ED4 /* .FirebaseFirestoreBinary.version in Resources */,
 				83DEA7002934DEE5008E2C76 /* config.xcconfig in Resources */,
