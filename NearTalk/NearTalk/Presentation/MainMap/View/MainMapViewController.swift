@@ -28,7 +28,7 @@ final class MainMapViewController: UIViewController {
         $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
         $0.tintColor = .systemBlue
     }
-    private let bottomSheet: BottomSheetViewController = .init()
+    // private let bottomSheet: BottomSheetViewController = .init()
 
     // MARK: - Properties
     private var viewModel: MainMapViewModel!
@@ -77,7 +77,9 @@ final class MainMapViewController: UIViewController {
     private func configureConstraints() {
         self.mapView.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
         self.moveToCurrentLocationButton.snp.makeConstraints {
@@ -101,20 +103,39 @@ final class MainMapViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        self.moveToCurrentLocationButton.rx.tap
-            .bind(onNext: { [weak self] _ in
+        let input = MainMapViewModel.Input(
+            didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
+            didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
+            currentUserMapRegion: self.mapView.rx.region.map { region in
+                let centerLocation: NCLocation = .init(longitude: region.center.longitude, latitude: region.center.latitude)
+                let latitudeDelta: Double = region.span.latitudeDelta
+                let longitudeDelta: Double = region.span.longitudeDelta
+                
+                return NCMapRegion(centerLocation: centerLocation,
+                                   latitudeDelta: latitudeDelta,
+                                   longitudeDelta: longitudeDelta)
+            },
+            didTapChatRoomAnnotation: self.mapView.rx.didSelectAnnotationView.map { $0 }.asObservable()
+        )
+    
+        let output = self.viewModel.transform(input: input)
+        output.moveToCurrentLocationEvent
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 == true }
+            .drive(onNext: { [weak self] _ in
                 self?.mapView.showsUserLocation = true
-                self?.mapView.setUserTrackingMode(.followWithHeading, animated: true)
+                self?.mapView.setUserTrackingMode(.follow, animated: true)
             })
             .disposed(by: self.disposeBag)
         
-        let input = MainMapViewModel.Input(
-            mapViewDidAppear: self.rx.methodInvoked(#selector(viewDidAppear(_:))).map { _ in self.mapView }.asObservable(),
-            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation.map { _ in self.mapView }.asObservable(),
-            didSelectMainMapAnnotation: self.mapView.rx.didSelectAnnotationView.asObservable()
-        )
-        
-        let output = self.viewModel.transform(input: input)
+        output.showCreateChatRoomViewEvent
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 == true }
+            .drive(onNext: { [weak self] _ in
+                // TODO: - 채팅방 생성 뷰로 이동
+                print("Create chatroom!")
+            })
+            .disposed(by: self.disposeBag)
     }
     
     private func loadDataForMapView() {
