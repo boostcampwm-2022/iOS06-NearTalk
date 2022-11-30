@@ -47,11 +47,11 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.actions = actions
         
         // TODO: 데이터 연결시 newObservGroupChatList, newObservDMChatList 변경
-        self.chatRoomListUseCase.getGroupChatList()
+        self.chatRoomListUseCase.newObserveGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
         
-        self.chatRoomListUseCase.getDMChatList()
+        self.chatRoomListUseCase.newObserveDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
         
