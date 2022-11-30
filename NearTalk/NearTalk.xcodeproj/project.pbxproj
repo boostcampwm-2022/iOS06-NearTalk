@@ -183,6 +183,9 @@
 		83649777292E15A50002DDE5 /* DummyAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649776292E15A50002DDE5 /* DummyAuthRepository.swift */; };
 		83649779292E1CA20002DDE5 /* DummyVerifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */; };
 		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
+		83808C0329371637002B78C0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0229371637002B78C0 /* OnboardingView.swift */; };
+		83808C0529371777002B78C0 /* OnboardingViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0429371777002B78C0 /* OnboardingViewPreview.swift */; };
+		83808C0729372C08002B78C0 /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0629372C08002B78C0 /* ProfileSettingView.swift */; };
 		8386B7CA292F59740095597D /* AppSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386B7C9292F59740095597D /* AppSettingCoordinator.swift */; };
 		8386B7CC292F5D1C0095597D /* AppSettingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */; };
 		839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D5BDC2922AD1000857FDD /* LoginViewController.swift */; };
@@ -424,6 +427,9 @@
 		83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyVerifyUseCase.swift; sourceTree = "<group>"; };
 		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		83808C0229371637002B78C0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		83808C0429371777002B78C0 /* OnboardingViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewPreview.swift; sourceTree = "<group>"; };
+		83808C0629372C08002B78C0 /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		8386B7C9292F59740095597D /* AppSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingCoordinator.swift; sourceTree = "<group>"; };
 		8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingDIContainer.swift; sourceTree = "<group>"; };
 		839D5BDC2922AD1000857FDD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -1286,6 +1292,7 @@
 			isa = PBXGroup;
 			children = (
 				8367AB632922AF6300678669 /* ProfileSettingViewController.swift */,
+				83808C0629372C08002B78C0 /* ProfileSettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1304,6 +1311,8 @@
 			isa = PBXGroup;
 			children = (
 				8375F2222922B043004538AF /* OnboardingViewController.swift */,
+				83808C0229371637002B78C0 /* OnboardingView.swift */,
+				83808C0429371777002B78C0 /* OnboardingViewPreview.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1750,6 +1759,7 @@
 				6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
+				83808C0529371777002B78C0 /* OnboardingViewPreview.swift in Sources */,
 				162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
@@ -1773,6 +1783,7 @@
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				83D5ECD3292BF1F100AD1781 /* MyProfileDIContainer.swift in Sources */,
+				83808C0729372C08002B78C0 /* ProfileSettingView.swift in Sources */,
 				603FD395292A1E7000687ED4 /* LoginUseCase.swift in Sources */,
 				16530576291E17F70026B815 /* UIViewController+Preview.swift in Sources */,
 				83D5ECCE292BE81D00AD1781 /* MyProfileViewController.swift in Sources */,
@@ -1818,6 +1829,7 @@
 				16530580291E19250026B815 /* ChatRoomListViewModel.swift in Sources */,
 				603FD39329296B8500687ED4 /* DefaultProfileRepository.swift in Sources */,
 				60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */,
+				83808C0329371637002B78C0 /* OnboardingView.swift in Sources */,
 				7CA4EA3C292BE5FF00D8C757 /* ProfileDetailDIContainer.swift in Sources */,
 				5506CDDD292B4F810002F328 /* FetchFriendListUseCase.swift in Sources */,
 				83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */,

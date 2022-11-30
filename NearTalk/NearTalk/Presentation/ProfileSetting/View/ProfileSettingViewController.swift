@@ -14,47 +14,29 @@ import UIKit
 
 final class ProfileSettingViewController: UIViewController {
     // MARK: - UI properties
-    private let profileImageView: UIImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
-        $0.isUserInteractionEnabled = true
-        $0.backgroundColor = .lightGray
-        $0.clipsToBounds = true
-    }
-
-    private let nicknameField: UITextField = UITextField().then {
-        $0.placeholder = "닉네임"
-        $0.font = UIFont.systemFont(ofSize: 30)
-    }
-    
-    private let messageField: UITextField = UITextField().then {
-        $0.placeholder = "상태 메세지"
-        $0.font = UIFont.systemFont(ofSize: 30)
-    }
+    private lazy var rootView: ProfileSettingView = ProfileSettingView()
     
     // MARK: - Properties
     private let disposeBag: DisposeBag = DisposeBag()
     private let viewModel: any ProfileSettingViewModel
 
     // MARK: - Lifecycles
+    override func loadView() {
+        self.view = self.rootView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.addSubViews()
         self.configureNavigationBar()
-        self.configureView()
-        self.configureConstraint()
         self.bindToViewModel()
     }
     
     init(viewModel: any ProfileSettingViewModel, neccesaryProfileComponent: NecessaryProfileComponent?) {
         self.viewModel = viewModel
-        if let neccesaryProfileComponent = neccesaryProfileComponent {
-            self.nicknameField.text = neccesaryProfileComponent.nickName
-            self.messageField.text = neccesaryProfileComponent.message
-            if let image = neccesaryProfileComponent.image {
-                self.profileImageView.image = UIImage(data: image)
-            }
-        }
         super.init(nibName: nil, bundle: nil)
+        if let neccesaryProfileComponent = neccesaryProfileComponent {
+            self.rootView.injectProfileData(profileData: neccesaryProfileComponent)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -64,39 +46,14 @@ final class ProfileSettingViewController: UIViewController {
 
 // MARK: - Helpers
 private extension ProfileSettingViewController {
-    func addSubViews() {
-        [profileImageView, nicknameField, messageField].forEach {
-            view.addSubview($0)
-        }
-    }
-    
-    func configureView() {
-        self.view.backgroundColor = .systemBackground
-    }
     
     func configureNavigationBar() {
-        self.navigationController?.navigationBar.backgroundColor = .systemGray5
-        self.navigationController?.navigationBar.isTranslucent = false
+//        self.navigationController?.navigationBar.backgroundColor = .systemGray5
+//        self.navigationController?.navigationBar.isTranslucent = false
         self.navigationItem.title = "프로필 설정"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
-    }
-    
-    func configureConstraint() {
-        profileImageView.snp.makeConstraints { (make) in
-            make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(profileImageView.snp.width)
-        }
-        
-        nicknameField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
-        }
-        
-        messageField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(nicknameField.snp.bottom).offset(10)
-        }
+        self.navigationItem.largeTitleDisplayMode = .automatic
+//        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
     }
     
     func bindToViewModel() {
@@ -107,8 +64,7 @@ private extension ProfileSettingViewController {
     }
     
     func bindNickNameField() {
-        self.nicknameField.rx.value
-            .orEmpty
+        self.rootView.nickNameText
             .bind(onNext: { [weak self] text in
                 self?.viewModel.editNickName(text)
                 
@@ -117,8 +73,7 @@ private extension ProfileSettingViewController {
     }
     
     func bindMessageField() {
-        self.messageField.rx.value
-            .orEmpty
+        self.rootView.messageText
             .bind(onNext: { [weak self] text in
                 self?.viewModel.editStatusMessage(text)
             })
@@ -126,22 +81,16 @@ private extension ProfileSettingViewController {
     }
     
     func bindProfileTap() {
-        self.profileImageView.rx
-            .tapGesture()
-            .bind(onNext: { [weak self] gesture in
-                if gesture.state == .ended {
-                    self?.viewModel.editImage()
-                }
+        self.rootView.tapProfileEvent
+            .bind(onNext: { [weak self] _ in
+                self?.viewModel.editImage()
             })
             .disposed(by: self.disposeBag)
         self.viewModel.image
-            .compactMap {
-                $0
-            }
-            .compactMap {
-                UIImage(data: $0)
-            }
-            .subscribe(self.profileImageView.rx.image)
+            .asDriver()
+            .compactMap { $0 }
+            .map { UIImage(data: $0) }
+            .drive(self.rootView.profileImage)
             .disposed(by: self.disposeBag)
     }
     
