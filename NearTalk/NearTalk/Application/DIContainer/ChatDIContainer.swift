@@ -9,16 +9,9 @@ import UIKit
 
 final class ChatDIContainer {
     private var chatRoomID: String
-    private var chatRoomName: String
-    private let chatRoomMemberUUIDList: [String]
     
-    init(chatRoomID: String,
-         chatRoomName: String,
-         chatRoomMemberUUIDList: [String]
-    ) {
+    init(chatRoomID: String) {
         self.chatRoomID = chatRoomID
-        self.chatRoomName = chatRoomName
-        self.chatRoomMemberUUIDList = chatRoomMemberUUIDList
     }
     
     // MARK: - Dependencies
@@ -35,19 +28,61 @@ final class ChatDIContainer {
         return DefaultFCMService()
     }
     
+    func makeFirestoreService() -> FirestoreService {
+        return DefaultFirestoreService()
+    }
+    
+    func makeAuthService() -> AuthService {
+        return DefaultFirebaseAuthService()
+    }
+    
+    func makeUserDefaultService() -> UserDefaultService {
+        return DefaultUserDefaultsService()
+    }
+    
     // MARK: - UseCases
     
     func makeMessggingUseCase() -> MessagingUseCase {
-        return DefalultMessagingUseCase(chatMessageRepository: makeChatMessageRepository())
+        return DefalultMessagingUseCase(chatMessageRepository: self.makeChatMessageRepository())
+    }
+    
+    func makeFetchChatRoomInfoUseCase() -> FetchChatRoomInfoUseCase {
+        return DefaultFetchChatRoomInfoUseCase(chatRoomListRepository: self.makeChatRoomListRepository())
+    }
+    
+    func makeUserDefaultUseCase() -> UserDefaultUseCase {
+        return DefaultUserDefaultUseCase(userDefaultsRepository: self.makeUserDefaultsRepository())
     }
     
     // MARK: - Repositories
     
+    func makeUserDefaultsRepository() -> UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: self.makeUserDefaultService())
+    }
+    
     func makeChatMessageRepository() -> ChatMessageRepository {
         return DefaultChatMessageRepository(
             databaseService: makeRealTimeDatabaseService(),
-            profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()),
+            profileRepository: DefaultProfileRepository(
+                firestoreService: DefaultFirestoreService(),
+                firebaseAuthService: DefaultFirebaseAuthService()),
             fcmService: makeFCMService()
+        )
+    }
+    
+    func makeChatRoomListRepository() -> ChatRoomListRepository {
+        return DefaultChatRoomListRepository(
+            dataTransferService: DefaultStorageService(),
+            profileRepository: self.makeProfileRepository(),
+            databaseService: DefaultRealTimeDatabaseService(),
+            firestoreService: DefaultFirestoreService()
+        )
+    }
+    
+    func makeProfileRepository() -> ProfileRepository {
+        return DefaultProfileRepository(
+            firestoreService: makeFirestoreService(),
+            firebaseAuthService: makeAuthService()
         )
     }
     
@@ -60,9 +95,9 @@ final class ChatDIContainer {
     func makeChatViewModel() -> ChatViewModel {
         return DefaultChatViewModel(
             chatRoomID: self.chatRoomID,
-            chatRoomName: self.chatRoomName,
-            chatRoomMemberUUIDList: self.chatRoomMemberUUIDList,
-            messagingUseCase: makeMessggingUseCase())
+            fetchChatRoomInfoUseCase: self.makeFetchChatRoomInfoUseCase(),
+            userDefaultUseCase: self.makeUserDefaultUseCase(),
+            messagingUseCase: self.makeMessggingUseCase())
     }
     // MARK: - Coordinator
     func makeChatCoordinator(navigationController: UINavigationController) -> ChatCoordinator {
