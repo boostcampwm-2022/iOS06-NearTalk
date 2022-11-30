@@ -102,9 +102,9 @@ final class AppDIContainer {
         self.container.resolve(RootTabBarDIContainer.self)!
     }
     
-    func registerBackToLoginView(backToLoginView: @escaping (() -> Void)) {
-        self.container.register((() -> Void).self) { _ in
-            return backToLoginView
+    func registerBackToLoginClosure(_ closure: @escaping (BackToLoginViewClosure)) {
+        self.container.register(BackToLoginViewClosure.self) { _ in
+            return closure
         }
     }
 }
