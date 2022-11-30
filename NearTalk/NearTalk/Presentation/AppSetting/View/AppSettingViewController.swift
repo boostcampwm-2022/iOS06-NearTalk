@@ -50,9 +50,14 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         setTableView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewDidLayoutSubviews() {
         self.viewModel.viewWillAppear()
+        super.viewDidLayoutSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.viewModel.viewWillAppear()
+        super.viewWillAppear(animated)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
