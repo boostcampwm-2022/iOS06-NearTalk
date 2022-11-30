@@ -38,7 +38,7 @@ final class CreateGroupChatDiContainer {
     // MARK: - UseCases
     
     func makeCreateGroupChatUseCase() -> CreateGroupChatUseCaseable {
-        return CreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository())
+        return CreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository(), profileRepository: makeProfileRepository())
     }
     
     func makeUserDefaultUseCase() -> UserDefaultUseCase {
