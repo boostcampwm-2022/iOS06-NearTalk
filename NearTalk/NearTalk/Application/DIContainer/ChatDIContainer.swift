@@ -54,6 +54,10 @@ final class ChatDIContainer {
         return DefaultUserDefaultUseCase(userDefaultsRepository: self.makeUserDefaultsRepository())
     }
     
+    func makeFetchProfileUseCase() -> FetchProfileUseCase {
+        return DefaultFetchProfileUseCase(profileRepository: self.makeProfileRepository())
+    }
+    
     // MARK: - Repositories
     
     func makeUserDefaultsRepository() -> UserDefaultsRepository {
@@ -97,6 +101,7 @@ final class ChatDIContainer {
             chatRoomID: self.chatRoomID,
             fetchChatRoomInfoUseCase: self.makeFetchChatRoomInfoUseCase(),
             userDefaultUseCase: self.makeUserDefaultUseCase(),
+            fetchProfileUseCase: self.makeFetchProfileUseCase(),
             messagingUseCase: self.makeMessggingUseCase())
     }
     // MARK: - Coordinator

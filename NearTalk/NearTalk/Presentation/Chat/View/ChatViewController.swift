@@ -127,9 +127,12 @@ class ChatViewController: UIViewController {
                     else {
                         return
                     }
-                    
+                    // TODO: - 메세지 보낸 사람의 이름과 이미지 가져오기
+//                    let userName = self.viewModel.fetchUserInfo(userID: userID)
+                                        
                     let messageItem = MessageItem(
                         id: messageUUID,
+                        userName: "알수없음",
                         message: newMessage.text,
                         type: newMessage.senderID == userID ? MessageType.send : MessageType.receive,
                         createdDate: createdDate
@@ -166,8 +169,10 @@ private extension ChatViewController {
     
     struct MessageItem: Hashable {
         var id: String
+        var userName: String
         var message: String?
         var type: MessageType
+        var imagePath: String?
         var createdDate: Date
     }
 

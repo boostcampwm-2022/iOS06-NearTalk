@@ -13,6 +13,7 @@ protocol ChatViewModelInput {
 }
 
 protocol ChatViewModelOut {
+    func fetchUserInfo(userID: String) -> String?
     var chatMessages: Observable<ChatMessage> { get }
     var chatRoomInfo: Observable<ChatRoom> { get }
     var userID: String? { get }
@@ -31,6 +32,7 @@ class DefaultChatViewModel: ChatViewModel {
     private var fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
     private var messagingUseCase: MessagingUseCase
     private var userDefaultUseCase: UserDefaultUseCase
+    private var fetchProfileUseCase: FetchProfileUseCase
     
     // MARK: - Ouputs
     var chatMessages: Observable<ChatMessage>
@@ -42,12 +44,14 @@ class DefaultChatViewModel: ChatViewModel {
     init(chatRoomID: String,
          fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase,
          userDefaultUseCase: UserDefaultUseCase,
+         fetchProfileUseCase: FetchProfileUseCase,
          messagingUseCase: MessagingUseCase
     ) {
         self.chatRoomID = chatRoomID
         self.messagingUseCase = messagingUseCase
         self.fetchChatRoomInfoUseCase = fetchChatRoomInfoUseCase
         self.userDefaultUseCase = userDefaultUseCase
+        self.fetchProfileUseCase = fetchProfileUseCase
         self.userID = self.userDefaultUseCase.fetchUserUUID()
         
         self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
@@ -95,5 +99,16 @@ class DefaultChatViewModel: ChatViewModel {
             }
         }
         .disposed(by: disposebag)
+    }
+    
+    func fetchUserInfo(userID: String) -> String? {
+        var name: String?
+        self.fetchProfileUseCase.fetchUserInfo(with: userID)
+            .subscribe(onSuccess: { userProfile in
+                name = userProfile.username
+                print(">>>>>>>>>>>>>>>>>", name)
+            })
+            .disposed(by: disposebag)
+        return name
     }
 }
