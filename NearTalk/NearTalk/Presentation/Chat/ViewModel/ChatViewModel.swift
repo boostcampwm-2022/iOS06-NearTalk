@@ -85,7 +85,7 @@ class DefaultChatViewModel: ChatViewModel {
             message: chatMessage,
             roomID: self.chatRoomID,
             roomName: roomName,
-            chatMemberIDList: chatRoomMemberIDList + ["42DB152C-9A69-4B1E-B803-AB766A75C95C"]
+            chatMemberIDList: chatRoomMemberIDList
         )
         .subscribe { event in
             switch event {

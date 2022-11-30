@@ -85,7 +85,7 @@ class ChatViewController: UIViewController {
                                               heightDimension: .estimated(40.0))
         
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+        
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                heightDimension: .estimated(40))
         
@@ -93,7 +93,8 @@ class ChatViewController: UIViewController {
                                                          subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        
+        section.interGroupSpacing = 8.0
+
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         return layout
