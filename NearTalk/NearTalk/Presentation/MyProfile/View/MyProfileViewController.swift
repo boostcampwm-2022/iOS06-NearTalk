@@ -144,10 +144,10 @@ private extension MyProfileViewController {
     }
     
     func configureNavigationBar() {
-        navigationController?.navigationBar.backgroundColor = .systemGray5
+//        navigationController?.navigationBar.backgroundColor = .systemGray5
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.title = "내 프로필"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
+//        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
     }
     
     func setTableView() {
