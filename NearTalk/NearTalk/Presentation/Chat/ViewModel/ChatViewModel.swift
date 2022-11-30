@@ -61,7 +61,6 @@ class DefaultChatViewModel: ChatViewModel {
     }
         
     func sendMessage(_ message: String) {
-        print("2-1. ", message, chatRoom)
         guard let chatRoomInfo = self.chatRoom,
               let roomName = chatRoomInfo.roomName,
               let chatRoomMemberIDList = chatRoomInfo.userList,
@@ -90,7 +89,7 @@ class DefaultChatViewModel: ChatViewModel {
         .subscribe { event in
             switch event {
             case .completed:
-                print("2-2: message sending completed")
+                print("message sending completed")
             case .error(let error):
                 print(error)
             }

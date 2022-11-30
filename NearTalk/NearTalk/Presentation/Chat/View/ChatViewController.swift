@@ -29,7 +29,9 @@ class ChatViewController: UIViewController {
     }
     
     private lazy var chatInputAccessoryView: ChatInputAccessoryView = ChatInputAccessoryView().then {
-        $0.backgroundColor = .systemPurple
+        $0.layer.borderWidth = 2.0
+        $0.layer.borderColor = UIColor.systemOrange.cgColor
+        $0.backgroundColor = .white
     }
         
     // MARK: - Lifecycles
@@ -111,7 +113,6 @@ class ChatViewController: UIViewController {
         self.chatInputAccessoryView.sendButton.rx.tap
             .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
             .bind { [weak self] message in
-                print("1. 전송할 메세지: ", message)
                 self?.viewModel.sendMessage(message)
                 self?.chatInputAccessoryView.messageInputTextField.text = nil
             }
@@ -121,7 +122,6 @@ class ChatViewController: UIViewController {
             .subscribe { event in
                 switch event {
                 case .next(let newMessage):
-                    print("3.  받은 메세지: ", newMessage.text ?? "unknown")
                     guard let senderID = self.viewModel.senderID else {
                         return
                     }
@@ -203,8 +203,6 @@ private extension ChatViewController {
 private extension ChatViewController {
     @objc
     func keyboardHandler(_ notification: Notification) {
-        print(#function)
-        
         guard let userInfo = notification.userInfo,
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? NSValue,
               let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
@@ -239,7 +237,7 @@ private extension ChatViewController {
         }
         
         animator.startAnimation()
-        scrolltoBottom()
+        self.scrolltoBottom()
     }
     
     @objc

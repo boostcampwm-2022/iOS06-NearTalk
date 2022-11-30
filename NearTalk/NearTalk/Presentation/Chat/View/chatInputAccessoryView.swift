@@ -16,7 +16,7 @@ class ChatInputAccessoryView: UIView {
     }
     
     lazy var sendButton = UIButton(type: .system).then {
-        $0.setImage(UIImage(systemName: "heart"), for: .normal)
+        $0.setImage(UIImage(systemName: "arrow.up.circle.fill"), for: .normal)
         $0.layer.cornerRadius = 15
         $0.layer.borderWidth = 1.0
         $0.layer.borderColor = UIColor.systemOrange.cgColor
@@ -43,9 +43,9 @@ class ChatInputAccessoryView: UIView {
         }
         
         messageInputTextField.snp.makeConstraints { make in
-            make.height.equalTo(50)
+            make.height.equalTo(35)
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview() // .offset(20)
+            make.leading.equalToSuperview().offset(20)
             make.trailing.equalTo(sendButton.snp.leading).offset(-20)
         }
     }
