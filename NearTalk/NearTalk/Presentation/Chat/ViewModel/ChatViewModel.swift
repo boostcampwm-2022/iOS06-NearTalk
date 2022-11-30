@@ -15,7 +15,7 @@ protocol ChatViewModelInput {
 protocol ChatViewModelOut {
     var chatMessages: Observable<ChatMessage> { get }
     var chatRoomInfo: Observable<ChatRoom> { get }
-    var senderID: String? { get }
+    var userID: String? { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
@@ -35,7 +35,7 @@ class DefaultChatViewModel: ChatViewModel {
     // MARK: - Ouputs
     var chatMessages: Observable<ChatMessage>
     var chatRoomInfo: Observable<ChatRoom>
-    var senderID: String?
+    var userID: String?
     
     // MARK: - LifeCycle
     
@@ -48,7 +48,7 @@ class DefaultChatViewModel: ChatViewModel {
         self.messagingUseCase = messagingUseCase
         self.fetchChatRoomInfoUseCase = fetchChatRoomInfoUseCase
         self.userDefaultUseCase = userDefaultUseCase
-        self.senderID = self.userDefaultUseCase.fetchUserUUID()
+        self.userID = self.userDefaultUseCase.fetchUserUUID()
         
         self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
         self.chatRoomInfo = self.fetchChatRoomInfoUseCase.observrChatRoomInfo(chatRoomID: self.chatRoomID)
@@ -64,7 +64,7 @@ class DefaultChatViewModel: ChatViewModel {
         guard let chatRoomInfo = self.chatRoom,
               let roomName = chatRoomInfo.roomName,
               let chatRoomMemberIDList = chatRoomInfo.userList,
-              let senderID = self.senderID
+              let senderID = self.userID
         else {
             return
         }

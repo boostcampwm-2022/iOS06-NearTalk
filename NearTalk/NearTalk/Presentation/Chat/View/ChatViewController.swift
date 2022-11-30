@@ -22,7 +22,6 @@ class ChatViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: compositionalLayout
     ).then {
-        $0.backgroundColor = .systemGreen
         $0.showsVerticalScrollIndicator = false
         $0.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: ChatCollectionViewCell.identifier)
         $0.delegate = self
@@ -70,15 +69,15 @@ class ChatViewController: UIViewController {
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(50)
+            make.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+            make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
         
         chatInputAccessoryView.snp.makeConstraints { make in
             make.width.equalTo(self.view.frame.width)
             make.height.equalTo(50)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(20)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
     
@@ -122,13 +121,18 @@ class ChatViewController: UIViewController {
             .subscribe { event in
                 switch event {
                 case .next(let newMessage):
-                    guard let senderID = self.viewModel.senderID else {
+                    guard let userID = self.viewModel.userID,
+                          let createdDate = newMessage.createdDate,
+                          let messageUUID = newMessage.uuid
+                    else {
                         return
                     }
+                    
                     let messageItem = MessageItem(
-                        id: newMessage.uuid ?? UUID().uuidString,
+                        id: messageUUID,
                         message: newMessage.text,
-                        type: newMessage.senderID == senderID ? MessageType.send : MessageType.receive
+                        type: newMessage.senderID == userID ? MessageType.send : MessageType.receive,
+                        createdDate: createdDate
                     )
                     self.messgeItems.append(messageItem)
                     self.applySnapshot()
@@ -143,7 +147,7 @@ class ChatViewController: UIViewController {
         
         self.viewModel.chatRoomInfo
             .bind { chatRoom in
-                self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") \(chatRoom.userList?.count ?? 0)"
+                self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") (\(chatRoom.userList?.count ?? 0))"
             }
             .disposed(by: disposeBag)
     }
@@ -164,6 +168,7 @@ private extension ChatViewController {
         var id: String
         var message: String?
         var type: MessageType
+        var createdDate: Date
     }
 
     enum Section {
@@ -204,7 +209,7 @@ private extension ChatViewController {
     @objc
     func keyboardHandler(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? NSValue,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
               let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
               let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
               let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
@@ -219,17 +224,12 @@ private extension ChatViewController {
         let bottomConstant: CGFloat = 20
         let newConstant = keyboardHeight + (safeAreaExists ? 0 : bottomConstant)
         
-        self.chatInputAccessoryView.snp.remakeConstraints { make in
+        self.chatInputAccessoryView.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(newConstant)
-            make.width.equalTo(self.view.frame.width)
-            make.height.equalTo(50)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
         }
         
-        self.collectionView.snp.remakeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(chatInputAccessoryView.snp.top) // .inset(newConstant)
+        self.collectionView.snp.makeConstraints { make in
+            make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
         
         let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
@@ -246,14 +246,13 @@ private extension ChatViewController {
         self.chatInputAccessoryView.snp.remakeConstraints { make in
             make.width.equalTo(self.view.frame.width)
             make.height.equalTo(50)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(20)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
-        
+
         self.collectionView.snp.remakeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(50)
+            make.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+            make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
     }
 }

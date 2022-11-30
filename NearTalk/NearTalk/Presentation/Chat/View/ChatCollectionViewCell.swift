@@ -70,21 +70,18 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.profileImageView.image = nil
     }
 
-    func configure(isInComing: Bool, message: String) {
+    func configure(isInComing: Bool, message: String, name: String? = nil) {
         self.textView.text = message
-        
-        textView.backgroundColor = isInComing ? .darkGray : .white
+        self.textView.backgroundColor = isInComing ? .darkGray : .systemGray
+        self.namelabel.text = isInComing ? "name" : ""
+        self.profileImageView.image = isInComing ? UIImage(systemName: "heart") : nil
         
         if isInComing {
-            self.namelabel.text = "nameLabel"
-            self.profileImageView.image = UIImage(systemName: "heart")
             self.textView.snp.makeConstraints { make in
                 make.leading.equalTo(profileImageView.snp.trailing)
                 make.top.equalTo(namelabel.snp.bottom)
             }
         } else {
-            self.namelabel.text = ""
-            self.profileImageView.image = nil
             self.textView.snp.makeConstraints { make in
                 make.trailing.equalToSuperview()
                 make.top.equalToSuperview()
