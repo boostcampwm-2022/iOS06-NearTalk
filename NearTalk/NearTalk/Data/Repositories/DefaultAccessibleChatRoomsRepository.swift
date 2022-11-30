@@ -24,30 +24,29 @@ final class DefaultAccessibleChatRoomsRepository {
 }
 
 extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
+    
     func fetchAccessibleAllChatRooms(in region: NCMapRegion) -> Single<[ChatRoom]> {
-        
         let centerLocation = region.centerLocation
-        let radiusDistanceMeters = region.radiusDistanceMeters
-        let latitudinalMeters = region.latitudinalMeters
-        let longitudinalMeters = region.longitudinalMeters
-        
-        let southWest = centerLocation.add(longitudeMeters: -longitudinalMeters / 2, latitudeMeters: -latitudinalMeters / 2)
-        let northEast = centerLocation.add(longitudeMeters: longitudinalMeters / 2, latitudeMeters: latitudinalMeters / 2)
+        let southWest = centerLocation.add(longitudeDelta: -(region.longitudeDelta / 2), latitudeDelta: -(region.latitudeDelta / 2))
+        let northEast = centerLocation.add(longitudeDelta: region.longitudeDelta / 2, latitudeDelta: region.latitudeDelta / 2)
         
         let queryList: [FirebaseQueryDTO] = [
             .init(key: "latitude", value: southWest.latitude, queryKey: .isGreaterThan),
-            .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan),
-            .init(key: "longitude", value: southWest.latitude, queryKey: .isGreaterThan),
-            .init(key: "longitude", value: northEast.latitude, queryKey: .isLessThan)
+            .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan)
         ]
         
-        return self.dependencies.firestoreService.fetchList(dataKey: .chatRoom, queryList: queryList)
+        let service = self.dependencies.firestoreService
+        let latitudeFilteredChatRooms = service.fetchList(dataKey: .chatRoom, queryList: queryList) as Single<[ChatRoom]>
+        
+        return latitudeFilteredChatRooms
             .map {
                 $0.filter {
-                    if let chatRoomLocation = $0.location {
-                        return centerLocation.distance(from: chatRoomLocation) <= radiusDistanceMeters
+                    guard let chatRoomLongitude = $0.location?.longitude else {
+                        return false
                     }
-                    return false
+                    
+                    return southWest.longitude < chatRoomLongitude && chatRoomLongitude < northEast.longitude
+                    
                 }
             }
     }

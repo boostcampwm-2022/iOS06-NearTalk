@@ -17,10 +17,13 @@ struct NCLocation: Codable {
     
     /// http://wiki.gis.com/wiki/index.php/Decimal_degrees
     func add(longitudeMeters: Double, latitudeMeters: Double) -> NCLocation {
-        return NCLocation(
-            longitude: self.longitude + (longitudeMeters * Self.decimalDegreePerMeter),
-            latitude: self.latitude + (latitudeMeters * Self.decimalDegreePerMeter)
-        )
+        return NCLocation(longitude: self.longitude + (longitudeMeters * Self.decimalDegreePerMeter),
+                          latitude: self.latitude + (latitudeMeters * Self.decimalDegreePerMeter))
+    }
+    
+    func add(longitudeDelta: Double, latitudeDelta: Double) -> NCLocation {
+        return NCLocation(longitude: self.longitude + longitudeDelta,
+                          latitude: self.latitude + latitudeDelta)
     }
     
     func distance(from location: NCLocation) -> Double {
