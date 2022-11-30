@@ -27,7 +27,7 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     private let chatRoom: Observable<[ChatRoom]>
     private let userChatRoomModel: Observable<[UserChatRoomModel]>
     
-    private var newChatRoomUUIDList: PublishRelay<[String]> = .init()
+    private var newChatRoomUUIDList: BehaviorRelay<[String]> = BehaviorRelay<[String]>(value: [])
     private lazy var newChatRoom: Observable<[ChatRoom]> = self.newGetChatRoomList()
     
     init(chatRoomListRepository: ChatRoomListRepository) {
@@ -82,7 +82,11 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
                 guard let self else {
                     throw FetchChatRoomUseCaseError.failedToFetchRoom
                 }
-                let fetchChatRoomList: [Observable<ChatRoom>] = uuidList.map {
+                
+                // Test
+                let dummyUUID = ["21578E2D-AC38-4BA1-8B85-7A38C8D473F6"]
+                
+                let fetchChatRoomList: [Observable<ChatRoom>] = dummyUUID.map {
                     self.chatRoomListRepository.observeChatRoomInfo($0)
                 }
                 return Observable.combineLatest(fetchChatRoomList)
@@ -95,7 +99,11 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
                 guard let self else {
                     return
                 }
-                self.newChatRoomUUIDList.accept(uuidList)
+                
+                // Test
+                let dummyUUID = ["21578E2D-AC38-4BA1-8B85-7A38C8D473F6"]
+                
+                self.newChatRoomUUIDList.accept(dummyUUID)
             }.disposed(by: disposeBag)
     }
 }

@@ -43,7 +43,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     private lazy var profileImageView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "heart"))
-        view.layer.cornerRadius = view.bounds.width / 2
+        view.layer.cornerRadius = 20.0
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.clear.cgColor
         return view
@@ -67,21 +67,24 @@ class ChatCollectionViewCell: UICollectionViewCell {
             make.bottom.equalToSuperview()
         }
         self.namelabel.text = ""
+        self.profileImageView.image = nil
     }
 
     func configure(isInComing: Bool, message: String) {
         self.textView.text = message
         
-        textView.backgroundColor = isInComing ? .systemGray : .white
+        textView.backgroundColor = isInComing ? .darkGray : .white
         
         if isInComing {
             self.namelabel.text = "nameLabel"
+            self.profileImageView.image = UIImage(systemName: "heart")
             self.textView.snp.makeConstraints { make in
-                make.leading.equalToSuperview()
+                make.leading.equalTo(profileImageView.snp.trailing)
                 make.top.equalTo(namelabel.snp.bottom)
             }
         } else {
             self.namelabel.text = ""
+            self.profileImageView.image = nil
             self.textView.snp.makeConstraints { make in
                 make.trailing.equalToSuperview()
                 make.top.equalToSuperview()
@@ -95,7 +98,14 @@ class ChatCollectionViewCell: UICollectionViewCell {
         }
         
         self.namelabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.right.equalToSuperview()
+            make.top.equalToSuperview()
+        }
+        
+        self.profileImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.left.equalToSuperview()
+            make.right.equalTo(namelabel.snp.left)
             make.top.equalToSuperview()
         }
         
