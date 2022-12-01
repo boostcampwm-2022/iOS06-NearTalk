@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 
 struct ProfileDetailViewModelActions {
-    var showChatViewController: (() -> Void)?
+    let showChatViewController: (String) -> Void
     var showChatListViewController: (() -> Void)?
 }
 
@@ -63,23 +63,33 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
         self.removeFriendUseCase = removeFriendUseCase
         self.actions = actions
         self.bind()
+        
+        self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
+            .subscribe(onSuccess: { info in
+                self.userName.accept(info.username ?? "Unkown")
+                self.statusMessage.accept(info.statusMessage ?? "Unkown")
+                self.profileImageURL.accept(info.profileImagePath ?? "")
+            }, onFailure: { error in
+                print("ERROR: fetchUserInfo - ", error.localizedDescription)
+            })
+            .disposed(by: self.disposeBag)
     }
     
     private func bind() {
-        viewWillAppearEvent
-            .subscribe(onNext: { [weak self] in
-                guard let self else {
-                    return
-                }
-                self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
-                    .subscribe(onSuccess: { info in
-                        self.userName.accept(info.username ?? "Unkown")
-                        self.statusMessage.accept(info.statusMessage ?? "Unkown")
-                        self.profileImageURL.accept(info.profileImagePath ?? "")
-                    })
-                    .disposed(by: self.disposeBag)
-            })
-            .disposed(by: disposeBag)
+//        viewWillAppearEvent
+//            .subscribe(onNext: { [weak self] in
+//                guard let self else {
+//                    return
+//                }
+//                self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
+//                    .subscribe(onSuccess: { info in
+//                        self.userName.accept(info.username ?? "Unkown")
+//                        self.statusMessage.accept(info.statusMessage ?? "Unkown")
+//                        self.profileImageURL.accept(info.profileImagePath ?? "")
+//                    })
+//                    .disposed(by: self.disposeBag)
+//            })
+//            .disposed(by: disposeBag)
         
         startChatButtonDidTapEvent
             .subscribe(onNext: { [weak self] in
@@ -98,7 +108,8 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
 //                    messageCount: <#T##Int?#>
 //                )
 //                self.uploadChatRoomInfoUseCase.createChatRoom(chatRoom)
-                self?.actions.showChatViewController?()
+                print("startChatButtonDidTapEvent")
+//                self?.actions.showChatViewController("chatroomUUID")
             })
             .disposed(by: disposeBag)
         
@@ -107,6 +118,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                 guard let self else {
                     return
                 }
+                print("deleteFriendButtonDidTapEvent")
                 self.removeFriendUseCase.removeFriend(with: self.userID)
                     .subscribe { event in
                         switch event {
