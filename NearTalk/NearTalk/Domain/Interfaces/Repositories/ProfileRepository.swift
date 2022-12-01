@@ -15,6 +15,7 @@ protocol ProfileRepository {
     func deleteMyProfile() -> Completable
     
     func addFriend(_ friendUUID: String) -> Completable
+    func addChatRoom(_ chatRoomUUID: String) -> Completable
     func removeFriend(_ friendUUID: String) -> Completable
     func fetchFriendsProfile() -> Single<[UserProfile]>
     func fetchProfileByUUID(_ uuid: String) -> Single<UserProfile>

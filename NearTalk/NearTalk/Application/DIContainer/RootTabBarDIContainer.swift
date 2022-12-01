@@ -8,6 +8,8 @@
 import Swinject
 import UIKit
 
+typealias BackToLoginViewClosure = () -> Void
+
 final class RootTabBarDIContainer {
     private let container: Container
     
@@ -25,7 +27,7 @@ final class RootTabBarDIContainer {
         return RootTabBarController(viewModel: container.resolve(RootTabBarViewModel.self)!)
     }
     
-    func resolveBackToLoginView() -> (() -> Void)? {
-        return self.container.resolve((() -> Void).self)
+    func resolveBackToLoginView() -> BackToLoginViewClosure? {
+        return self.container.resolve(BackToLoginViewClosure.self)
     }
 }

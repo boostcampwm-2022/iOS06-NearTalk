@@ -63,6 +63,16 @@ final class DefaultProfileRepository: ProfileRepository {
             .asCompletable()
     }
     
+    func addChatRoom(_ chatRoomUUID: String) -> Completable {
+        self.fetchMyProfile()
+            .flatMap { (myProfile: UserProfile) -> Single<UserProfile> in
+                var newProfile: UserProfile = myProfile
+                newProfile.chatRooms?.append(chatRoomUUID)
+                return self.firestoreService.update(updatedData: newProfile, dataKey: .users)
+            }
+            .asCompletable()
+    }
+    
     func removeFriend(_ friendUUID: String) -> Completable {
         self.fetchMyProfile()
             .flatMap { (myProfile: UserProfile) -> Single<UserProfile> in

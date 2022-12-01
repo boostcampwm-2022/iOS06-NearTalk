@@ -67,7 +67,7 @@ final class FriendListCell: UICollectionViewCell {
             return
         }
         
-        img.kf.setImage(with: URL(string: "주소: \(url)"))
+        img.kf.setImage(with: url)
         if img.image == nil {
             img.image = UIImage(systemName: "photo")
         }
@@ -105,18 +105,6 @@ struct FriendListCellPreview: PreviewProvider {
     static var previews: some View {
         let width: CGFloat = 393
         let height: CGFloat = width * 0.20
-        
-        //        let viewModel: FriendListViewModel = DefaultFriendListViewModel(
-        //            fetchFriendListUseCase: DefaultFetchFriendListUseCase(
-        //                profileRepository: DefaultProfileRepository(
-        //                    firestoreService: DefaultFirestoreService(),
-        //                    firebaseAuthService: DefaultFirebaseAuthService()
-        //                )
-        //            ),
-        //            imageUseCase: DefaultImageUseCase(
-        //                imageRepository: DefaultImageRepository()
-        //            )
-        //        )
         
         UIViewPreview {
             let cell = FriendListCell(frame: .zero)

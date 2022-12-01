@@ -35,7 +35,6 @@ final class DefaultAppSettingDIContainer: AppSettingCoordinatorDependency {
     private func makeDropoutUseCase() -> any DropoutUseCase {
         return DefaultDropOutUseCase(
             profileRepository: self.dependency.profileRepository,
-            authRepository: self.dependency.authRepository,
             userDefaultsRepository: self.dependency.userDefaultsRepository)
     }
     
