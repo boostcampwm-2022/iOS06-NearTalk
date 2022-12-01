@@ -116,7 +116,10 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
                     return
                 }
                 print("onCompleted", chatRoomName)
-                self?.actions.showChatViewController(chatRoomUUID)
+                self?.createGroupChatUseCase.addChatRoom(chatRoomUUID: chatRoomUUID)
+                    .subscribe(onCompleted: {
+                        self?.actions.showChatViewController(chatRoomUUID)
+                    })
             }, onError: { _ in
                 print("onError")
             })

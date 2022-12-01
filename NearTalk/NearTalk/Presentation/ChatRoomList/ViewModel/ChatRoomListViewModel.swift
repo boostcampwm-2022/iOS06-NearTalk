@@ -73,9 +73,6 @@ extension DefaultChatRoomListViewModel {
         actions?.showGroupChatRoomList()
     }
     
-    // 채팅방 클릭시 채팅방 이동
-    // 혹시몰라서 chatRoomID: chatRoomID, chatRoomName: chatRoomName, chatRoomMemberUUIDList: chatRoomMemberUUIDList
-    // 위 부분은 건들지 않고 didSelectItem에 roomID만 받고있습니다.
     func didSelectItem(at roomID: String) {
         actions?.showChatRoom(roomID, "chatRoomName", [])
     }
