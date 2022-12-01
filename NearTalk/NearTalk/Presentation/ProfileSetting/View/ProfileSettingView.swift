@@ -11,8 +11,6 @@ import RxSwift
 import SnapKit
 import UIKit
 
-typealias KeyboardShowValues = (frame: CGRect, curve: UIView.AnimationCurve, duration: Double)
-
 final class ProfileSettingView: UIView {
     // MARK: - UI properties
     private let profileImageView: UIImageView = UIImageView().then {
@@ -138,95 +136,6 @@ extension ProfileSettingView {
             .filter { _ in
                 self.messageField.isFirstResponder
             }
-    }
-    
-    func moveUpKeyboardAboveNickName(userInfo: [AnyHashable: Any]) {
-        print(#function)
-        
-        guard let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
-              let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
-        else {
-            return
-        }
-        
-        let keyboardSize: CGRect = keyboardFrame
-        let keyboardHeight: CGFloat = keyboardSize.height
-        
-        let newConstant = keyboardHeight - (self.frame.height - self.profileImageView.frame.height - self.nickNameLabel.frame.height - self.nicknameField.frame.height - self.nickNameValidityMessageLabel.frame.height - 50)
-        
-        self.profileImageView.snp.remakeConstraints { make in
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(profileImageView.snp.width)
-            make.top.equalTo(self.safeAreaLayoutGuide).offset(-newConstant)
-        }
-        
-        self.messageLabel.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(20)
-            make.top.equalTo(nickNameValidityMessageLabel.snp.bottom).offset(30 + keyboardHeight)
-        }
-        
-        let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-            self?.layoutIfNeeded()
-        }
-        
-        animator.startAnimation()
-    }
-    
-    func moveUpKeyboardAboveMessage(userInfo: [AnyHashable: Any]) {
-        print(#function)
-        
-        guard let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
-              let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
-              let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
-        else {
-            return
-        }
-        
-        let keyboardSize: CGRect = keyboardFrame
-        let keyboardHeight: CGFloat = keyboardSize.height
-        let newConstant = keyboardHeight
-        
-        self.profileImageView.snp.remakeConstraints { make in
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(profileImageView.snp.width)
-            make.top.equalTo(self.safeAreaLayoutGuide).offset(-newConstant)
-        }
-        
-        let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-            self?.layoutIfNeeded()
-        }
-        
-        animator.startAnimation()
-    }
-
-    func moveDownKeyboard(userInfo: [AnyHashable: Any]) {
-        print(#function)
-        self.endEditing(true)
-        guard let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
-              let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
-        else {
-            return
-        }
-        
-        self.profileImageView.snp.remakeConstraints { make in
-            make.horizontalEdges.top.equalTo(self.safeAreaLayoutGuide)
-            make.height.equalTo(profileImageView.snp.width)
-        }
-
-        self.messageLabel.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(20)
-            make.top.equalTo(nickNameValidityMessageLabel.snp.bottom).offset(30)
-        }
-        
-        let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
-            self?.layoutIfNeeded()
-        }
-        
-        animator.startAnimation()
     }
     
     var nickNameValidityMessage: AnyObserver<String?> {

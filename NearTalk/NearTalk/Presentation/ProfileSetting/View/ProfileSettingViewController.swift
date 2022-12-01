@@ -101,11 +101,11 @@ private extension ProfileSettingViewController {
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillShowOnNickNameField
             .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardUp(keyboardShowValue: $0) })
+            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillDismissFromNickNameField
-            .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardDown(keyboardShowValue: $0) })
+            .filter { self.keyboardNotificationHandler($0) != nil }
+            .drive(onNext: { _ in self.moveKeyboardDown() })
             .disposed(by: self.disposeBag)
     }
     
@@ -131,11 +131,11 @@ private extension ProfileSettingViewController {
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillShowOnMessageField
             .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardUp(keyboardShowValue: $0) })
+            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillDismissFromMessageField
-            .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardDown(keyboardShowValue: $0) })
+            .filter { self.keyboardNotificationHandler($0) != nil }
+            .drive(onNext: { _ in self.moveKeyboardDown() })
             .disposed(by: self.disposeBag)
     }
     
@@ -168,58 +168,22 @@ private extension ProfileSettingViewController {
     }
 }
 
-extension UIScrollView {
-    func updateContentSize() {
-        let unionCalculatedTotalRect = recursiveUnionInDepthFor(view: self)
-        
-        // 계산된 크기로 컨텐츠 사이즈 설정
-        self.contentSize = CGSize(width: self.frame.width, height: unionCalculatedTotalRect.height + 50)
-    }
-    
-    private func recursiveUnionInDepthFor(view: UIView) -> CGRect {
-        var totalRect: CGRect = .zero
-        
-        // 모든 자식 View의 컨트롤의 크기를 재귀적으로 호출하며 최종 영역의 크기를 설정
-        for subView in view.subviews {
-            totalRect = totalRect.union(recursiveUnionInDepthFor(view: subView))
-        }
-        
-        // 최종 계산 영역의 크기를 반환
-        return totalRect.union(view.frame)
-    }
-}
-
 extension UIViewController {
-    func keyboardNotificationHandler(_ notification: Notification) -> KeyboardShowValues? {
-        print(#function)
-        
+    func keyboardNotificationHandler(_ notification: Notification) -> CGFloat? {
         guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? CGRect,
-              let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
-              let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
-        else {
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? CGRect else {
             return nil
         }
-        return KeyboardShowValues(keyboardFrame, keyboardCurve, keyboardDuration)
+        return keyboardFrame.height
     }
 }
 
 extension ProfileSettingViewController {
-    func moveKeyboardUp(keyboardShowValue: KeyboardShowValues) {
-//        let animator = UIViewPropertyAnimator(duration: keyboardShowValue.duration, curve: keyboardShowValue.curve) { [weak self] in
-//            self?.view.layoutIfNeeded()
-//        }
-//
-//        animator.startAnimation()
-        self.scrollToUp(keyboardHeight: keyboardShowValue.frame.height)
+    func moveKeyboardUp(keyboardHeight: CGFloat) {
+        self.scrollToUp(keyboardHeight: keyboardHeight)
     }
     
-    func moveKeyboardDown(keyboardShowValue: KeyboardShowValues) {
-//        let animator = UIViewPropertyAnimator(duration: keyboardShowValue.duration, curve: keyboardShowValue.curve) { [weak self] in
-//            self?.view.layoutIfNeeded()
-//        }
-//        animator.startAnimation()
+    func moveKeyboardDown() {
         self.scrollToDown()
     }
     
