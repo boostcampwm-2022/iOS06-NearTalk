@@ -36,22 +36,22 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private lazy var name = UILabel().then {
+        $0.font = UIFont(name: "text", size: 16)
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        $0.sizeToFit()
-        $0.font = UIFont(name: "text", size: 18)
     }
     
     private let currentUserCount = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .darkGray
+        $0.font = UIFont.systemFont(ofSize: 14)
     }
     
     private let recentMessage = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 14)
+        $0.font = UIFont.systemFont(ofSize: 12)
         $0.numberOfLines = 2
     }
     
     private let date = UILabel().then {
+        $0.textAlignment = .right
         $0.font = UIFont.systemFont(ofSize: 12)
     }
     
@@ -68,7 +68,7 @@ class ChatRoomListCell: UICollectionViewCell {
     private lazy var stackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fill
-        $0.alignment = .center
+        $0.alignment = .bottom
         $0.spacing = 8
         $0.addArrangedSubview(self.name)
         $0.addArrangedSubview(self.currentUserCount)
@@ -78,7 +78,7 @@ class ChatRoomListCell: UICollectionViewCell {
         $0.axis = .vertical
         $0.distribution = .fill
         $0.alignment = .leading
-        $0.spacing = 4
+        $0.spacing = 6
         $0.addArrangedSubview(self.stackView)
         $0.addArrangedSubview(self.recentMessage)
     }
@@ -127,14 +127,16 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private func configureConstraints() {
         self.img.snp.makeConstraints { make in
-            make.leading.equalTo(self.contentView).offset(16)
+            make.leading.equalTo(self.contentView).offset(12)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
         self.date.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView).offset(8)
+            make.top.equalTo(self.img.snp.top).offset(6)
             make.trailing.equalTo(self.contentView).offset(-16)
+            make.width.equalTo(68)
+            
         }
         
         self.unreadMessageCount.snp.makeConstraints { make in
@@ -146,6 +148,10 @@ class ChatRoomListCell: UICollectionViewCell {
             make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
             make.centerY.equalTo(self.contentView)
+        }
+        
+        self.currentUserCount.snp.makeConstraints { make in
+            make.width.equalTo(40)
         }
     }
     
@@ -219,7 +225,7 @@ class ChatRoomListCell: UICollectionViewCell {
             return
         }
         
-        img.kf.setImage(with: URL(string: "주소: \(url)"))
+        img.kf.setImage(with: url)
         if img.image == nil {
             img.image = UIImage(systemName: "photo")
         }
@@ -241,11 +247,12 @@ struct ChatRoomListCellPreview: PreviewProvider {
         )
 
         let chatRoomData = ChatRoom(uuid: "123",
-                                    userList: ["1", "2", "3", "4", "5", "6"],
+                                    userList: ["1", "2", "3", "4", "5", "6", "6", "6", "6", "6", "6", "6", "6", "6", "6"],
                                     roomImagePath: "",
-                                    roomName: "테스트방",
+                                    roomName: "테스트트방테스트방",
                                     accessibleRadius: 0,
-                                    recentMessageID: "uuid",
+                                    recentMessageText: "테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중",
+                                    recentMessageDate: Calendar.current.date(byAdding: .year, value: -1, to: Date()),
                                     messageCount: 2222)
                                     
         let groupData = GroupChatRoomListData(data: chatRoomData)
