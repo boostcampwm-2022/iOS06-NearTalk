@@ -143,8 +143,10 @@ final class MainMapViewController: UIViewController {
             .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
-            .subscribe(onNext: { chatRoomsInfo in
-                let bottomSheet = BottomSheetViewController()
+            .asObservable()
+            .bind(onNext: {
+                let bottomSheet: BottomSheetViewController = .create(with: $0)
+                
                 self.present(bottomSheet, animated: true)
             })
             .disposed(by: self.disposeBag)

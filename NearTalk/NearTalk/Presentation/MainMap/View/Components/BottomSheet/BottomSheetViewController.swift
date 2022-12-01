@@ -6,6 +6,7 @@
 //
 //
 
+import RxCocoa
 import SnapKit
 import UIKit
 
@@ -16,11 +17,19 @@ final class BottomSheetViewController: UIViewController {
         $0.backgroundColor = .red
     }
     
-    private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
+    lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(BottomSheetTableViewCell.self,
                     forCellReuseIdentifier: BottomSheetTableViewCell.reuseIdentifier)
         $0.delegate = self
-        $0.dataSource = self
+    }
+    
+    private var dataSource: [ChatRoom] = []
+    
+    static func create(with datasource: [ChatRoom]) -> BottomSheetViewController {
+        let bottomSheetVC = BottomSheetViewController()
+        bottomSheetVC.dataSource = datasource
+        
+        return bottomSheetVC
     }
     
     override func viewDidLoad() {
@@ -73,7 +82,7 @@ extension BottomSheetViewController: UITableViewDelegate {
 
 extension BottomSheetViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 40
+        return self.dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
