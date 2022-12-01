@@ -26,16 +26,28 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         $0.axis = .vertical
     }
     
+    private let nicknameTitleLabel: UILabel = UILabel().then { label in
+        label.textAlignment = .natural
+        label.text = "닉네임"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+    }
+    
     private let nicknameLabel = UILabel().then {
         $0.textAlignment = .natural
         $0.text = "닉네임"
-        $0.font = UIFont.systemFont(ofSize: 30)
+        $0.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+    }
+    
+    private let messageTitleLabel: UILabel = UILabel().then { label in
+        label.textAlignment = .natural
+        label.text = "상태 메세지"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
     }
     
     private let messageLabel = UILabel().then {
         $0.textAlignment = .natural
         $0.text = "상태 메세지"
-        $0.font = UIFont.systemFont(ofSize: 30)
+        $0.font = UIFont.systemFont(ofSize: 24)
     }
     
     private let tableView: UITableView = UITableView()
@@ -125,7 +137,9 @@ private extension MyProfileViewController {
         
         myProfileView.addSubview(profileImageView)
         myProfileView.addSubview(fieldStack)
+        fieldStack.addArrangedSubview(nicknameTitleLabel)
         fieldStack.addArrangedSubview(nicknameLabel)
+        fieldStack.addArrangedSubview(messageTitleLabel)
         fieldStack.addArrangedSubview(messageLabel)
     }
     
