@@ -12,7 +12,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class ProfileSettingViewController: UIViewController, UIScrollViewDelegate {
+final class ProfileSettingViewController: UIViewController {
     // MARK: - UI properties
     private let rootView: ProfileSettingView = ProfileSettingView()
     private let scrollView: UIScrollView = UIScrollView().then {
@@ -57,10 +57,6 @@ final class ProfileSettingViewController: UIViewController, UIScrollViewDelegate
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        scrollView.contentOffset.x = 0
     }
 }
 
@@ -178,7 +174,7 @@ extension UIViewController {
     }
 }
 
-extension ProfileSettingViewController {
+private extension ProfileSettingViewController {
     func moveKeyboardUp(keyboardHeight: CGFloat) {
         self.scrollToUp(keyboardHeight: keyboardHeight)
     }

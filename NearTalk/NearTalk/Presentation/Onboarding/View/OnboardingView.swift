@@ -19,15 +19,35 @@ final class OnboardingView: UIView {
         $0.isUserInteractionEnabled = true
         $0.backgroundColor = .lightGray
     }
+    
+    private let nickNameLabel: UILabel = UILabel().then {
+        $0.text = "닉네임"
+    }
+    
+    private let nickNameValidityMessageLabel: UILabel = UILabel().then {
+        $0.text = ""
+    }
+    
+    private let messageValidityMessageLabel: UILabel = UILabel().then {
+        $0.text = ""
+    }
+    
+    private let messageLabel: UILabel = UILabel().then {
+        $0.text = "상태메세지"
+    }
 
     private let nicknameField: UITextField = UITextField().then {
         $0.placeholder = "닉네임"
-        $0.font = UIFont.systemFont(ofSize: 30)
+        $0.borderStyle = .roundedRect
+        $0.autocapitalizationType = .none
+        $0.clearButtonMode = .always
     }
     
     private let messageField: UITextField = UITextField().then {
         $0.placeholder = "상태 메세지"
-        $0.font = UIFont.systemFont(ofSize: 30)
+        $0.borderStyle = .roundedRect
+        $0.autocapitalizationType = .none
+        $0.clearButtonMode = .always
     }
     
     private let registerButton: UIButton = UIButton().then {
@@ -52,6 +72,12 @@ final class OnboardingView: UIView {
 }
 
 extension OnboardingView {
+    var height: CGFloat {
+        self.subviews.reduce(30 + 10 + 10 + 30 + 10 + 10 + 30 + 30 + 30) { partialResult, subView in
+            partialResult + subView.frame.height
+        }
+    }
+    
     var nickNameText: Observable<String> {
         self.nicknameField.rx.text
             .orEmpty
@@ -87,6 +113,64 @@ extension OnboardingView {
             .isEnabled
             .asObserver()
     }
+    
+    private var keyboardWillShow: ControlEvent<Notification> {
+        return ControlEvent(events: NotificationCenter.default.rx
+            .notification(UIResponder.keyboardWillShowNotification))
+    }
+    
+    private var keyboardWillHide: ControlEvent<Notification> {
+        return ControlEvent(events: NotificationCenter.default.rx
+            .notification(UIResponder.keyboardWillHideNotification))
+    }
+    
+    var keyboardWillShowOnNickNameField: Driver<Notification> {
+        return self.keyboardWillShow.asDriver()
+            .filter { _ in
+                self.nicknameField.isFirstResponder
+            }
+    }
+    
+    var keyboardWillDismissFromNickNameField: Driver<Notification> {
+        return self.keyboardWillHide.asDriver()
+            .filter { _ in
+                self.nicknameField.isFirstResponder
+            }
+    }
+    
+    var keyboardWillShowOnMessageField: Driver<Notification> {
+        return self.keyboardWillShow.asDriver()
+            .filter { _ in
+                self.messageField.isFirstResponder
+            }
+    }
+    
+    var keyboardWillDismissFromMessageField: Driver<Notification> {
+        return self.keyboardWillHide.asDriver()
+            .filter { _ in
+                self.messageField.isFirstResponder
+            }
+    }
+    
+    var nickNameValidityMessage: AnyObserver<String?> {
+        self.nickNameValidityMessageLabel.rx.text
+            .asObserver()
+    }
+    
+    var nickNameValidityColor: AnyObserver<UIColor> {
+        self.nickNameValidityMessageLabel.rx.textColor
+            .asObserver()
+    }
+    
+    var messageValidityMessage: AnyObserver<String?> {
+        self.messageValidityMessageLabel.rx.text
+            .asObserver()
+    }
+    
+    var messageValidityColor: AnyObserver<UIColor> {
+        self.messageValidityMessageLabel.rx.textColor
+            .asObserver()
+    }
 }
 
 extension OnboardingView {
@@ -97,7 +181,7 @@ extension OnboardingView {
 
 private extension OnboardingView {
     func addSubViews() {
-        [logoView, profileImageView, nicknameField, messageField, registerButton].forEach {
+        [logoView, profileImageView, nickNameLabel, nicknameField, nickNameValidityMessageLabel, messageLabel, messageField, messageValidityMessageLabel, registerButton].forEach {
             self.addSubview($0)
         }
     }
@@ -105,8 +189,8 @@ private extension OnboardingView {
     func configureConstraints() {
         self.configureLogoView()
         self.configureProfileImageView()
-        self.configureNickNameField()
-        self.configureMessageField()
+        self.configureNickNameSection()
+        self.configureMessageSection()
         self.configureRegisterButton()
     }
     
@@ -126,27 +210,47 @@ private extension OnboardingView {
         }
     }
     
-    func configureNickNameField() {
+    func configureNickNameSection() {
+        nickNameLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(self.profileImageView.snp.bottom).offset(30)
+        }
+        
         nicknameField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(profileImageView.snp.bottom).offset(30)
+            make.horizontalEdges.equalTo(nickNameLabel)
+            make.top.equalTo(nickNameLabel.snp.bottom).offset(10)
             make.height.equalTo(nicknameField.snp.width).multipliedBy(0.15)
+        }
+        
+        nickNameValidityMessageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(nickNameLabel)
+            make.top.equalTo(nicknameField.snp.bottom).offset(10)
         }
     }
     
-    func configureMessageField() {
+    func configureMessageSection() {
+        messageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(20)
+            make.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(30)
+        }
+        
         messageField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(nicknameField.snp.bottom).offset(30)
+            make.horizontalEdges.equalTo(messageLabel)
+            make.top.equalTo(messageLabel.snp.bottom).offset(10)
             make.height.equalTo(messageField.snp.width).multipliedBy(0.15)
+        }
+        
+        messageValidityMessageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(messageLabel)
+            make.top.equalTo(messageField.snp.bottom).offset(10)
         }
     }
     
     func configureRegisterButton() {
         registerButton.snp.makeConstraints { (make) in
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.bottom.equalTo(self.safeAreaLayoutGuide).inset(30)
-            make.top.greaterThanOrEqualToSuperview().offset(30)
+            make.top.equalTo(self.messageValidityMessageLabel).offset(30)
+            make.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
         }
     }
 }
