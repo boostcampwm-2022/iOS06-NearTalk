@@ -17,10 +17,8 @@ final class BottomSheetViewController: UIViewController {
     }
     
     private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
-        $0.register(
-            BottomSheetTableViewCell.self,
-            forCellReuseIdentifier: BottomSheetTableViewCell.reuseIdentifier
-        )
+        $0.register(BottomSheetTableViewCell.self,
+                    forCellReuseIdentifier: BottomSheetTableViewCell.reuseIdentifier)
         $0.delegate = self
         $0.dataSource = self
     }
@@ -55,11 +53,16 @@ final class BottomSheetViewController: UIViewController {
     private func configureLayout() {
         self.view.backgroundColor = .systemOrange
         
-        if let sheetController = self.sheetPresentationController {
-            sheetController.detents = [.medium(), .large()]
-            sheetController.preferredCornerRadius = 20
-            sheetController.prefersGrabberVisible = true
-            sheetController.prefersScrollingExpandsWhenScrolledToEdge = false
+        self.modalPresentationStyle = .pageSheet
+        
+        if let sheet = self.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.preferredCornerRadius = 20
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
         }
     }
 }

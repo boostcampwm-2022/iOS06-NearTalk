@@ -25,13 +25,14 @@ final class MainMapViewModel {
         let didTapMoveToCurrentLocationButton: Observable<Void>
         let didTapCreateChatRoomButton: Observable<Void>
         let currentUserMapRegion: Observable<NCMapRegion>
-        let didTapChatRoomAnnotation: Observable<MKAnnotationView>
+        let didTapChatRoomAnnotation: Observable<ChatRoomAnnotation>
     }
     
     struct Output {
         let moveToCurrentLocationEvent: BehaviorRelay<Bool> = .init(value: false)
         let showCreateChatRoomViewEvent: BehaviorRelay<Bool> = .init(value: false)
-        let accessibleChatRooms: PublishRelay<[ChatRoom]> = .init()
+        let showAccessibleChatRooms: PublishRelay<[ChatRoom]> = .init()
+        let showAnnotationChatRooms: PublishRelay<[ChatRoom]> = .init()
     }
     
     let actions: Actions
@@ -56,8 +57,11 @@ final class MainMapViewModel {
             .disposed(by: self.disposeBag)
         
         input.currentUserMapRegion
-            .flatMap { self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
-            .subscribe(onNext: { output.accessibleChatRooms.accept($0) })
+            .flatMap { _ in
+                let dummyChatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchDummyChatRooms()
+                return dummyChatRooms
+            }
+            .subscribe(onNext: { output.showAccessibleChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
         
         return output

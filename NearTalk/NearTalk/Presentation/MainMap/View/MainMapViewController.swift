@@ -28,7 +28,6 @@ final class MainMapViewController: UIViewController {
         $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
         $0.tintColor = .systemBlue
     }
-    // private let bottomSheet: BottomSheetViewController = .init()
 
     // MARK: - Properties
     private var viewModel: MainMapViewModel!
@@ -53,13 +52,6 @@ final class MainMapViewController: UIViewController {
         configureDelegates()
         registerAnnotationViewClass()
         bindViewModel()
-        // 디버깅 용
-        loadDataForMapView()
-        
-        if let sheetController = self.presentationController as? UISheetPresentationController {
-            sheetController.detents = [.medium(), .large()]
-            sheetController.prefersGrabberVisible = true
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,7 +95,9 @@ final class MainMapViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        // MARK: - Bind VM input
         let input = MainMapViewModel.Input(
+            // Event: self.rx.methodInvoked(#selector(viewDidAppear(_:))).map({ _ in }).asObservable(),
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             currentUserMapRegion: self.mapView.rx.region.map { region in
@@ -115,9 +109,10 @@ final class MainMapViewController: UIViewController {
                                    latitudeDelta: latitudeDelta,
                                    longitudeDelta: longitudeDelta)
             },
-            didTapChatRoomAnnotation: self.mapView.rx.didSelectAnnotationView.map { $0 }.asObservable()
+            didTapChatRoomAnnotation: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation as? ChatRoomAnnotation }.asObservable()
         )
-    
+        
+        // MARK: - Bind VM output
         let output = self.viewModel.transform(input: input)
         output.moveToCurrentLocationEvent
             .asDriver(onErrorJustReturn: false)
@@ -136,48 +131,17 @@ final class MainMapViewController: UIViewController {
                 print("Create chatroom!")
             })
             .disposed(by: self.disposeBag)
-    }
-    
-    private func loadDataForMapView() {
-        // 디버깅 용
-        struct ChatRoomData: Decodable {
-            let chatRoomAnnotations: [ChatRoomAnnotation]
-
-            let centerLatitude: CLLocationDegrees
-            let centerLongitude: CLLocationDegrees
-            let latitudeDelta: CLLocationDegrees
-            let longitudeDelta: CLLocationDegrees
-
-            var region: MKCoordinateRegion {
-                let center = CLLocationCoordinate2D(
-                    latitude: centerLatitude,
-                    longitude: centerLongitude
-                )
-                let span = MKCoordinateSpan(
-                    latitudeDelta: latitudeDelta,
-                    longitudeDelta: longitudeDelta
-                )
-                
-                return MKCoordinateRegion(
-                    center: center,
-                    span: span
-                )
-            }
-        }
         
-        guard let plistURL = Bundle.main.url(forResource: "DummyData", withExtension: "plist") else {
-            fatalError("Failed to resolve URL for `Data.plist` in bundle.")
-        }
-
-        do {
-            let plistData = try Data(contentsOf: plistURL)
-            let decoder = PropertyListDecoder()
-            let decodedData = try decoder.decode(ChatRoomData.self, from: plistData)
-            self.mapView.region = decodedData.region
-            self.mapView.addAnnotations(decodedData.chatRoomAnnotations)
-        } catch {
-            fatalError("Failed to load provided data, error: \(error.localizedDescription)")
-        }
+        output.showAccessibleChatRooms
+            .map { chatRooms in
+                chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
+            }
+            .asDriver(onErrorJustReturn: [])
+            .drive(onNext: { annotations in
+                self.mapView.removeAnnotations(self.mapView.annotations)
+                self.mapView.addAnnotations(annotations)
+            })
+            .disposed(by: self.disposeBag)
     }
     
     private func registerAnnotationViewClass() {
@@ -246,10 +210,6 @@ extension MainMapViewController: MKMapViewDelegate {
             )
         }
     }
-
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        self.viewModel.actions.showBottomSheetView()
-    }
 }
 
 extension MainMapViewController: CLLocationManagerDelegate {
@@ -270,9 +230,5 @@ extension MainMapViewController: CLLocationManagerDelegate {
         if let location = locations.last {
             self.mapView.move(to: location)
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(#function)
     }
 }
