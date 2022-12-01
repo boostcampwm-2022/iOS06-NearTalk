@@ -83,10 +83,6 @@ private extension ProfileSettingViewController {
     func configureNavigationBar() {
         self.navigationItem.title = "프로필 설정"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
-        self.navigationItem.largeTitleDisplayMode = .automatic
-        if let navigationBar = self.navigationController?.navigationBar {
-            self.rootView.bringSubviewToFront(navigationBar)
-        }
         self.navigationController?.isNavigationBarHidden = false
     }
     
