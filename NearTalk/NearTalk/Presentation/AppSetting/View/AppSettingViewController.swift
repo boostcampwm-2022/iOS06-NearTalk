@@ -53,7 +53,25 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
     override func viewDidLayoutSubviews() {
         self.viewModel.viewWillAppear()
         super.viewDidLayoutSubviews()
+        tableView.snp.remakeConstraints { (make) in
+            make.horizontalEdges.equalToSuperview().inset(15)
+            make.top.equalToSuperview().inset(30)
+            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+                partialResult + cell.frame.height
+            }))
+        }
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        tableView.snp.remakeConstraints { (make) in
+//            make.horizontalEdges.equalToSuperview().inset(15)
+//            make.top.equalToSuperview().inset(30)
+//            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+//                partialResult + cell.frame.height
+//            }))
+//        }
+//        super.viewDidAppear(animated)
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.viewModel.viewWillAppear()
@@ -97,6 +115,7 @@ private extension AppSettingViewController {
         tableView.register(AppSettingTableViewCell.self, forCellReuseIdentifier: AppSettingTableViewCell.identifier)
         tableView.dataSource = self.dataSource
         tableView.separatorInset = .zero
+        tableView.layer.cornerRadius = 5.0
         self.tableView.isScrollEnabled = false
     }
     

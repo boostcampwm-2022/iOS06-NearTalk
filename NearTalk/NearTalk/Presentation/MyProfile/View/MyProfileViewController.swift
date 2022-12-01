@@ -72,6 +72,17 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         super.viewWillLayoutSubviews()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.snp.remakeConstraints { (make) in
+            make.top.equalTo(myProfileView.snp.bottom).offset(20)
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+                partialResult + cell.frame.height
+            }))
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
 //        self.profileImageView.makeRounded()
         self.viewModel.viewWillAppear()
