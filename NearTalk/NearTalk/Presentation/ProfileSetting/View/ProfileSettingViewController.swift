@@ -17,7 +17,7 @@ final class ProfileSettingViewController: UIViewController, UIScrollViewDelegate
     private let rootView: ProfileSettingView = ProfileSettingView()
     private let scrollView: UIScrollView = UIScrollView().then {
         $0.keyboardDismissMode = .onDrag
-        $0.alwaysBounceHorizontal = false
+        $0.bounces = false
     }
     
     // MARK: - Properties
@@ -25,19 +25,15 @@ final class ProfileSettingViewController: UIViewController, UIScrollViewDelegate
     private let viewModel: any ProfileSettingViewModel
 
     // MARK: - Lifecycles
-    override func viewWillLayoutSubviews() {
-//        self.rootView.frame = self.view.frame
-        super.viewWillLayoutSubviews()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        let subViewsheight: CGFloat = self.rootView.subviews.reduce(0, { partialResult, view in
-//            partialResult + view.frame.height
-//        })
-//        let height: CGFloat = self.view.frame.height + subViewsheight
-//        self.scrollView.contentSize = .init(width: self.view.frame.width, height: height)
-        self.scrollView.updateContentSize()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.scrollView.contentSize = .init(width: self.view.frame.width, height: self.rootView.height)
+        self.rootView.frame = .init(origin: .zero, size: self.scrollView.contentSize)
+        self.rootView.snp.makeConstraints { make in
+            make.edges.equalTo(self.scrollView.contentLayoutGuide)
+            make.width.equalToSuperview()
+            make.height.equalTo(self.scrollView.contentSize.height)
+        }
     }
     
     override func loadView() {
@@ -48,15 +44,6 @@ final class ProfileSettingViewController: UIViewController, UIScrollViewDelegate
         super.viewDidLoad()
         self.configureNavigationBar()
         self.scrollView.addSubview(self.rootView)
-        self.rootView.snp.makeConstraints { make in
-            make.edges.equalTo(self.scrollView.contentLayoutGuide)
-            make.width.equalToSuperview()
-            make.height.equalToSuperview().priority(.low)
-        }
-//        self.scrollView.snp.makeConstraints { make in
-//            make.edges.width.equalTo(self.view.safeAreaLayoutGuide)
-//        }
-        
         self.bindToViewModel()
     }
     
@@ -79,7 +66,6 @@ final class ProfileSettingViewController: UIViewController, UIScrollViewDelegate
 
 // MARK: - Helpers
 private extension ProfileSettingViewController {
-    
     func configureNavigationBar() {
         self.navigationItem.title = "프로필 설정"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
@@ -114,12 +100,12 @@ private extension ProfileSettingViewController {
             .drive(self.rootView.nickNameValidityColor)
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillShowOnNickNameField
-            .compactMap { $0.userInfo }
-            .drive(onNext: { self.rootView.moveUpKeyboardAboveNickName(userInfo: $0) })
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardUp(keyboardShowValue: $0) })
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillDismissFromNickNameField
-            .compactMap { $0.userInfo }
-            .drive(onNext: { self.rootView.moveDownKeyboard(userInfo: $0) })
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardDown(keyboardShowValue: $0) })
             .disposed(by: self.disposeBag)
     }
     
@@ -128,14 +114,6 @@ private extension ProfileSettingViewController {
             .bind(onNext: { [weak self] text in
                 self?.viewModel.editStatusMessage(text)
             })
-            .disposed(by: self.disposeBag)
-        self.rootView.keyboardWillShowOnMessageField
-            .compactMap { $0.userInfo }
-            .drive(onNext: { self.rootView.moveUpKeyboardAboveMessage(userInfo: $0) })
-            .disposed(by: self.disposeBag)
-        self.rootView.keyboardWillDismissFromMessageField
-            .compactMap { $0.userInfo }
-            .drive(onNext: { self.rootView.moveDownKeyboard(userInfo: $0) })
             .disposed(by: self.disposeBag)
         self.viewModel.messageValidity
             .asDriver()
@@ -150,6 +128,14 @@ private extension ProfileSettingViewController {
                 isValid ? UIColor.green : UIColor.red
             }
             .drive(self.rootView.messageValidityColor)
+            .disposed(by: self.disposeBag)
+        self.rootView.keyboardWillShowOnMessageField
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardUp(keyboardShowValue: $0) })
+            .disposed(by: self.disposeBag)
+        self.rootView.keyboardWillDismissFromMessageField
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardDown(keyboardShowValue: $0) })
             .disposed(by: self.disposeBag)
     }
     
@@ -187,7 +173,7 @@ extension UIScrollView {
         let unionCalculatedTotalRect = recursiveUnionInDepthFor(view: self)
         
         // 계산된 크기로 컨텐츠 사이즈 설정
-        self.contentSize = CGSize(width: self.frame.width, height: unionCalculatedTotalRect.height+50)
+        self.contentSize = CGSize(width: self.frame.width, height: unionCalculatedTotalRect.height + 50)
     }
     
     private func recursiveUnionInDepthFor(view: UIView) -> CGRect {
@@ -200,5 +186,51 @@ extension UIScrollView {
         
         // 최종 계산 영역의 크기를 반환
         return totalRect.union(view.frame)
+    }
+}
+
+extension UIViewController {
+    func keyboardNotificationHandler(_ notification: Notification) -> KeyboardShowValues? {
+        print(#function)
+        
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? CGRect,
+              let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
+              let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
+        else {
+            return nil
+        }
+        return KeyboardShowValues(keyboardFrame, keyboardCurve, keyboardDuration)
+    }
+}
+
+extension ProfileSettingViewController {
+    func moveKeyboardUp(keyboardShowValue: KeyboardShowValues) {
+//        let animator = UIViewPropertyAnimator(duration: keyboardShowValue.duration, curve: keyboardShowValue.curve) { [weak self] in
+//            self?.view.layoutIfNeeded()
+//        }
+//
+//        animator.startAnimation()
+        self.scrollToUp(keyboardHeight: keyboardShowValue.frame.height)
+    }
+    
+    func moveKeyboardDown(keyboardShowValue: KeyboardShowValues) {
+//        let animator = UIViewPropertyAnimator(duration: keyboardShowValue.duration, curve: keyboardShowValue.curve) { [weak self] in
+//            self?.view.layoutIfNeeded()
+//        }
+//        animator.startAnimation()
+        self.scrollToDown()
+    }
+    
+    func scrollToUp(keyboardHeight: CGFloat) {
+        let inset: UIEdgeInsets = .init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        self.scrollView.contentInset = inset
+        self.scrollView.scrollIndicatorInsets = inset
+    }
+    
+    func scrollToDown() {
+        self.scrollView.contentInset = .zero
+        self.scrollView.scrollIndicatorInsets = .zero
     }
 }

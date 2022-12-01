@@ -11,7 +11,7 @@ import RxSwift
 import SnapKit
 import UIKit
 
-typealias KeyboardShowValues = (frame: CGRect, curve: Int, duration: Double)
+typealias KeyboardShowValues = (frame: CGRect, curve: UIView.AnimationCurve, duration: Double)
 
 final class ProfileSettingView: UIView {
     // MARK: - UI properties
@@ -71,6 +71,12 @@ final class ProfileSettingView: UIView {
 }
 
 extension ProfileSettingView {    
+    var height: CGFloat {
+        self.subviews.reduce(30 + 10 + 10 + 30 + 10 + 10) { partialResult, subView in
+            partialResult + subView.frame.height
+        }
+    }
+    
     var nickNameText: Observable<String> {
         self.nicknameField.rx.text
             .orEmpty
