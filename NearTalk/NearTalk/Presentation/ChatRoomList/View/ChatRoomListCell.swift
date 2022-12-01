@@ -227,7 +227,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
         let viewModel = diContainer.makeChatRoomListViewModel(
-            actions: ChatRoomListViewModelActions(showChatRoom: { _, _, _ in },
+            actions: ChatRoomListViewModelActions(showChatRoom: { _ in },
                                                   showCreateChatRoom: {},
                                                   showDMChatRoomList: {},
                                                   showGroupChatRoomList: {})

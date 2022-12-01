@@ -45,6 +45,7 @@ final class DefaultFriendListViewModel: FriendListViewModel {
     }
     
     // MARK: - INPUT
+    // TODO: - userID 수정
     func didSelectItem(at index: Int) {
         actions?.showDetailFriend("userID")
     }
