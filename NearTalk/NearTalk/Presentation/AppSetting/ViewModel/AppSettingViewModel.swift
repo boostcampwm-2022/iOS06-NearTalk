@@ -119,7 +119,9 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
         result.subscribe { [weak self] accepted in
             if accepted {
                 self?.refreshNotificationAuthorization()
-                UIApplication.shared.registerForRemoteNotifications()
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             } else {
                 UIApplication.shared.unregisterForRemoteNotifications()
 //                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()

@@ -13,12 +13,8 @@ final class AppSettingTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.addSubview(toggleSwitch)
+        self.accessoryView = toggleSwitch
         toggleSwitch.isUserInteractionEnabled = true
-        toggleSwitch.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().inset(10)
-            make.centerY.equalToSuperview()
-        }
     }
     
     override func layoutSubviews() {
@@ -37,8 +33,4 @@ final class AppSettingTableViewCell: UITableViewCell {
     }
 
     static let identifier: String = String(describing: AppSettingTableViewCell.self)
-    
-//    var switchOnOff: ControlProperty<Bool> {
-//        self.toggleSwitch.rx.isOn
-//    }
 }

@@ -96,7 +96,7 @@ private extension AppSettingViewController {
         tableView.delegate = self
         tableView.register(AppSettingTableViewCell.self, forCellReuseIdentifier: AppSettingTableViewCell.identifier)
         tableView.dataSource = self.dataSource
-        self.tableView.backgroundColor = .systemBackground
+        tableView.separatorInset = .zero
         self.tableView.isScrollEnabled = false
     }
     

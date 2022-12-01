@@ -18,7 +18,6 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     private let profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
-        $0.backgroundColor = .lightGray
     }
     
     private let fieldStack = UIStackView().then {
@@ -67,11 +66,16 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         self.bindViewModel()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.profileImageView.makeRounded()
+    override func viewWillLayoutSubviews() {
         configureTableView()
-        super.viewWillAppear(animated)
+        self.profileImageView.makeRounded()
+        super.viewWillLayoutSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+//        self.profileImageView.makeRounded()
         self.viewModel.viewWillAppear()
+        super.viewWillAppear(animated)
     }
     
     init(viewModel: any MyProfileViewModel) {
@@ -118,6 +122,7 @@ private extension MyProfileViewController {
         self.tableView.layer.cornerRadius = 5.0
         self.tableView.layer.masksToBounds = true
         self.tableView.clipsToBounds = true
+        self.tableView.separatorInset = .zero
     }
     
     func configureConstraint() {
@@ -172,7 +177,15 @@ private extension MyProfileViewController {
             .compactMap { $0 }
             .compactMap { URL(string: $0) }
             .bind(onNext: { url in
+                self.profileImageView.backgroundColor = .clear
                 self.profileImageView.kf.setImage(with: url)
+            })
+            .disposed(by: self.disposeBag)
+        self.viewModel.image
+            .filter { $0 == nil }
+            .bind(onNext: { _ in
+                self.profileImageView.backgroundColor = .lightGray
+                self.profileImageView.image = nil
             })
             .disposed(by: self.disposeBag)
     }
