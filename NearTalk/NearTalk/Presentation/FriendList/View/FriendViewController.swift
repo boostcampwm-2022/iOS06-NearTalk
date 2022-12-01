@@ -133,6 +133,7 @@ final class FriendListViewController: UIViewController {
                         switch completable {
                         case .completed:
                             print("Completed")
+                            self.viewModel.reload()
                         case .error(let error):
                             print("Completed with an error: \(error.localizedDescription)")
                         }

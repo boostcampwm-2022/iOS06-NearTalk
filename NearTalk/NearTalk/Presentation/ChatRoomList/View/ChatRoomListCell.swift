@@ -102,6 +102,7 @@ class ChatRoomListCell: UICollectionViewCell {
         self.name.text = groupData.roomName
         self.currentUserCount.text = String((groupData.userList ?? []).count)
         self.imageLoad(path: groupData.roomImagePath)
+        self.recentMessage.text = groupData.recentMessageText == nil ? "새로 생성된 방입니다" : groupData.recentMessageText
         self.unreadMessageCheck(roomID: groupData.uuid ?? "", number: groupData.messageCount)
         self.dateOperate(date: groupData.recentMessageDate)
     }
@@ -111,6 +112,7 @@ class ChatRoomListCell: UICollectionViewCell {
         self.uuid = dmData.uuid
         self.name.text = dmData.roomName
         self.imageLoad(path: dmData.roomImagePath)
+        self.recentMessage.text = dmData.recentMessageText == nil ? "새로 생성된 방입니다" : dmData.recentMessageText
         self.unreadMessageCheck(roomID: dmData.uuid ?? "", number: dmData.messageCount)
         self.dateOperate(date: dmData.recentMessageDate)
     }
@@ -192,13 +194,18 @@ class ChatRoomListCell: UICollectionViewCell {
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
                           let number = number,
                           number > lastRoomMessageCount else {
-                        self.unreadMessageCount.isHidden = true
+                        
+                        DispatchQueue.main.async {
+                            self.unreadMessageCount.isHidden = true
+                        }
+                        
                         return
                     }
-                    
-                    self.unreadMessageCount.text = String(number - lastRoomMessageCount)
-                    self.unreadMessageCount.isHidden = false
-                    
+                    DispatchQueue.main.async {
+                        self.unreadMessageCount.text = String(number - lastRoomMessageCount)
+                        self.unreadMessageCount.isHidden = false
+                    }
+
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -227,7 +234,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
     static var previews: some View {
         let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
         let viewModel = diContainer.makeChatRoomListViewModel(
-            actions: ChatRoomListViewModelActions(showChatRoom: { _, _, _ in },
+            actions: ChatRoomListViewModelActions(showChatRoom: { _ in },
                                                   showCreateChatRoom: {},
                                                   showDMChatRoomList: {},
                                                   showGroupChatRoomList: {})
