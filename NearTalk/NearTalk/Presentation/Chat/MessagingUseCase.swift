@@ -36,4 +36,11 @@ final class DefalultMessagingUseCase: MessagingUseCase {
     func observeMessage(roomID: String) -> Observable<ChatMessage> {
         return self.chatMessageRepository.observeChatRoomMessages(roomID: roomID)
     }
+    
+    // TODO: - 입장한 유저 챗룸에 추가하기
+//    func addUserInChatRoom(chatRoom: ChatRoom, userID: String) {
+//        var newChatRoom = chatRoom
+//        newChatRoom.userList?.append(userID)
+//        self.chatMessageRepository.updateChatRoom(newChatRoom)
+//    }
 }

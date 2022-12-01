@@ -73,7 +73,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     func configure(isInComing: Bool, message: String, name: String? = nil) {
         self.textView.text = message
         self.textView.backgroundColor = isInComing ? .darkGray : .systemGray
-        self.namelabel.text = isInComing ? "name" : ""
+        self.namelabel.text = isInComing ? name : ""
         self.profileImageView.image = isInComing ? UIImage(systemName: "heart") : nil
         
         if isInComing {

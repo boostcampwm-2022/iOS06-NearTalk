@@ -103,7 +103,7 @@ class ChatViewController: UIViewController {
     
     private func scrolltoBottom() {
         let indexPath = IndexPath(item: messgeItems.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true) // animated 수정 필요
     }
     
     // MARK: - Bind
@@ -121,22 +121,13 @@ class ChatViewController: UIViewController {
             .subscribe { event in
                 switch event {
                 case .next(let newMessage):
-                    guard let userID = self.viewModel.userID,
-                          let createdDate = newMessage.createdDate,
-                          let messageUUID = newMessage.uuid
+                    guard let myID = self.viewModel.myID
                     else {
                         return
                     }
-                    // TODO: - 메세지 보낸 사람의 이름과 이미지 가져오기
-//                    let userName = self.viewModel.fetchUserInfo(userID: userID)
-                                        
-                    let messageItem = MessageItem(
-                        id: messageUUID,
-                        userName: "알수없음",
-                        message: newMessage.text,
-                        type: newMessage.senderID == userID ? MessageType.send : MessageType.receive,
-                        createdDate: createdDate
-                    )
+                    let userProfile = self.viewModel.getUserProfile(userID: newMessage.senderID ?? "")
+                    print(userProfile, newMessage.senderID)
+                    let messageItem = MessageItem(chatMessage: newMessage, myID: myID, userName: userProfile?.username)
                     self.messgeItems.append(messageItem)
                     self.applySnapshot()
                     self.scrolltoBottom()
@@ -161,20 +152,6 @@ class ChatViewController: UIViewController {
 private extension ChatViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MessageItem>
-    
-    enum MessageType: String {
-        case send
-        case receive
-    }
-    
-    struct MessageItem: Hashable {
-        var id: String
-        var userName: String
-        var message: String?
-        var type: MessageType
-        var imagePath: String?
-        var createdDate: Date
-    }
 
     enum Section {
         case main
@@ -192,7 +169,7 @@ private extension ChatViewController {
             }
             
             let messageType = itemIdentifier.type
-            cell.configure(isInComing: messageType == .receive ? true : false, message: newMessage)
+            cell.configure(isInComing: messageType == .receive ? true : false, message: newMessage, name: itemIdentifier.userName)
             
             return cell
         }
@@ -202,7 +179,7 @@ private extension ChatViewController {
     func applySnapshot(animatingDifferences: Bool = true) {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messgeItems)
+        snapshot.appendItems(messgeItems.sorted { $0.createdDate < $1.createdDate })
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
