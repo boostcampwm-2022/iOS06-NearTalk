@@ -97,7 +97,6 @@ final class MainMapViewController: UIViewController {
     private func bindViewModel() {
         // MARK: - Bind VM input
         let input = MainMapViewModel.Input(
-            // Event: self.rx.methodInvoked(#selector(viewDidAppear(_:))).map({ _ in }).asObservable(),
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             currentUserMapRegion: self.mapView.rx.region.map { region in
@@ -109,7 +108,7 @@ final class MainMapViewController: UIViewController {
                                    latitudeDelta: latitudeDelta,
                                    longitudeDelta: longitudeDelta)
             },
-            didTapChatRoomAnnotation: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation as? ChatRoomAnnotation }.asObservable()
+            didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation }
         )
         
         // MARK: - Bind VM output
@@ -140,6 +139,13 @@ final class MainMapViewController: UIViewController {
             .drive(onNext: { annotations in
                 self.mapView.removeAnnotations(self.mapView.annotations)
                 self.mapView.addAnnotations(annotations)
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.showAnnotationChatRooms
+            .subscribe(onNext: { chatRoomsInfo in
+                let bottomSheet = BottomSheetViewController()
+                self.present(bottomSheet, animated: true)
             })
             .disposed(by: self.disposeBag)
     }

@@ -63,10 +63,15 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
     func fetchDummyChatRooms() -> Single<[ChatRoom]> {
         let dummyChatRooms: [ChatRoom] = [
             ChatRoom(location: NCLocation(longitude: 127.091, latitude: 37.32)),
+            ChatRoom(location: NCLocation(longitude: 127.0911, latitude: 37.321)),
+            ChatRoom(location: NCLocation(longitude: 127.0912, latitude: 37.322)),
             ChatRoom(location: NCLocation(longitude: 127.092, latitude: 37.33)),
             ChatRoom(location: NCLocation(longitude: 127.093, latitude: 37.34)),
             ChatRoom(location: NCLocation(longitude: 127.094, latitude: 37.35)),
-            ChatRoom(location: NCLocation(longitude: 127.095, latitude: 37.36))
+            ChatRoom(location: NCLocation(longitude: 127.095, latitude: 37.36)),
+            ChatRoom(location: NCLocation(longitude: 127.0951, latitude: 37.36)),
+            ChatRoom(location: NCLocation(longitude: 127.0952, latitude: 37.36)),
+            ChatRoom(location: NCLocation(longitude: 127.0953, latitude: 37.36))
         ]
         
         return Single.just(dummyChatRooms)

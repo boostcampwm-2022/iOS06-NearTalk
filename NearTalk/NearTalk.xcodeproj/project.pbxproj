@@ -2007,7 +2007,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location GPS 권한 요청입니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2023,7 +2023,7 @@
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;
@@ -2059,7 +2059,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location GPS 권한 요청입니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2075,7 +2075,7 @@
 					"$(OTHER_LDFLAGS)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Boostcamp.iOS.i5S.NearTalk;
+				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;

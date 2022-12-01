@@ -25,7 +25,7 @@ final class MainMapViewModel {
         let didTapMoveToCurrentLocationButton: Observable<Void>
         let didTapCreateChatRoomButton: Observable<Void>
         let currentUserMapRegion: Observable<NCMapRegion>
-        let didTapChatRoomAnnotation: Observable<ChatRoomAnnotation>
+        let didTapAnnotationView: Observable<MKAnnotation>
     }
     
     struct Output {
@@ -61,13 +61,25 @@ final class MainMapViewModel {
                 let dummyChatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchDummyChatRooms()
                 return dummyChatRooms
             }
-            .subscribe(onNext: { output.showAccessibleChatRooms.accept($0) })
+            .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
+            .disposed(by: self.disposeBag)
+        
+        input.didTapAnnotationView
+            .map {
+                if $0 is MKClusterAnnotation {
+                    let tmp1 = $0 as! MKClusterAnnotation
+                    return tmp1.memberAnnotations.map {
+                        let tmp2 = $0 as! ChatRoomAnnotation
+                        return tmp2.chatRoomInfo
+                    }
+                } else {
+                    let tmp3 = $0 as! ChatRoomAnnotation
+                    return [tmp3.chatRoomInfo]
+                }
+            }
+            .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
         
         return output
-    }
-    
-    private func fetchChatRooms(userLocation: NCLocation) {
-        
     }
 }
