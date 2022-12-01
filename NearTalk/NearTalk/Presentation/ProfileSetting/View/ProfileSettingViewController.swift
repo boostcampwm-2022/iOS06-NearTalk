@@ -43,6 +43,7 @@ final class ProfileSettingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureNavigationBar()
+        self.view.backgroundColor = .white
         self.scrollView.addSubview(self.rootView)
         self.bindToViewModel()
     }
