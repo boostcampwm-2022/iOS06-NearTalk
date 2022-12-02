@@ -166,7 +166,7 @@ extension OnboardingCoordinator: UIImagePickerControllerDelegate, UINavigationCo
         let newImage = image.resized(withPercentage: percentage)
         let data = newImage?.jpegData(compressionQuality: percentage)
         if let bytes = data?.count, bytes > 24000 {
-            let resizedData: Data? = newImage?.resized(toKB: 24.0)?.jpegData(compressionQuality: percentage)
+            let resizedData: Data? = newImage?.resized()?.jpegData(compressionQuality: percentage)
             self.imagePublisher?.accept(resizedData)
         } else {
             self.imagePublisher?.accept(data)

@@ -53,7 +53,25 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
     override func viewDidLayoutSubviews() {
         self.viewModel.viewWillAppear()
         super.viewDidLayoutSubviews()
+        tableView.snp.remakeConstraints { (make) in
+            make.horizontalEdges.equalToSuperview().inset(15)
+            make.top.equalToSuperview().inset(30)
+            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+                partialResult + cell.frame.height
+            }))
+        }
     }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        tableView.snp.remakeConstraints { (make) in
+//            make.horizontalEdges.equalToSuperview().inset(15)
+//            make.top.equalToSuperview().inset(30)
+//            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+//                partialResult + cell.frame.height
+//            }))
+//        }
+//        super.viewDidAppear(animated)
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.viewModel.viewWillAppear()
@@ -79,10 +97,7 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
 
 private extension AppSettingViewController {
     func configureUI() {
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.backgroundColor = .systemGray5
         navigationItem.title = "앱 설정"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
         view.addSubview(tableView)
         view.backgroundColor = .systemBackground
     }
@@ -99,7 +114,8 @@ private extension AppSettingViewController {
         tableView.delegate = self
         tableView.register(AppSettingTableViewCell.self, forCellReuseIdentifier: AppSettingTableViewCell.identifier)
         tableView.dataSource = self.dataSource
-        self.tableView.backgroundColor = .systemBackground
+        tableView.separatorInset = .zero
+        tableView.layer.cornerRadius = 5.0
         self.tableView.isScrollEnabled = false
     }
     
