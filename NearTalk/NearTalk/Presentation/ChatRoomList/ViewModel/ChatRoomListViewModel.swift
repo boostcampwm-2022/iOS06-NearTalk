@@ -10,7 +10,7 @@ import RxRelay
 import RxSwift
 
 struct ChatRoomListViewModelActions {
-    let showChatRoom: (String, String, [String]) -> Void
+    let showChatRoom: (String) -> Void
     let showCreateChatRoom: () -> Void
     let showDMChatRoomList: () -> Void
     let showGroupChatRoomList: () -> Void
@@ -22,6 +22,7 @@ protocol ChatRoomListViewModelInput {
     func didGroupChatRoomList()
     func didCreateChatRoom()
     func didSelectItem(at roomID: String)
+    func viewWillAppear()
 }
 
 protocol ChatRoomListViewModelOutput {
@@ -46,7 +47,6 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        // TODO: 데이터 연결시 newObservGroupChatList, newObservDMChatList 변경
         self.chatRoomListUseCase.newObserveGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
@@ -54,7 +54,6 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase.newObserveDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
-        
     }
     
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
@@ -65,6 +64,10 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
 
 // MARK: - Input
 extension DefaultChatRoomListViewModel {
+    func viewWillAppear() {
+        self.chatRoomListUseCase.newGetChatRoomUUIDList()
+    }
+    
     func didDMChatRoomList() {
         actions?.showDMChatRoomList()
     }
@@ -74,7 +77,7 @@ extension DefaultChatRoomListViewModel {
     }
     
     func didSelectItem(at roomID: String) {
-        actions?.showChatRoom(roomID, "chatRoomName", [])
+        actions?.showChatRoom(roomID)
     }
     
     // 체팅방 생성 클릭시 이동

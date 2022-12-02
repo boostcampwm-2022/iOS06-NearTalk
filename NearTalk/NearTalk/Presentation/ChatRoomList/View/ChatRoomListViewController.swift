@@ -34,8 +34,8 @@ final class ChatRoomListViewController: UIViewController {
     }
     
     enum ChatType: Int {
-        case dm = 0
-        case group = 1
+        case group = 0
+        case dm = 1
     }
     
     // MARK: - Lifecycle
@@ -44,6 +44,11 @@ final class ChatRoomListViewController: UIViewController {
         let view = ChatRoomListViewController()
         view.viewModel = viewModel
         return view
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.viewWillAppear()
     }
     
     override func viewDidLoad() {
@@ -77,35 +82,40 @@ final class ChatRoomListViewController: UIViewController {
     
     private func configureView() {
         self.view.backgroundColor = .systemBackground
-        self.groupCollectionView.isHidden = true
+        self.dmCollectionView.isHidden = true
     }
     
     private func configureNavigation() {
         let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: nil)
-        
         let groupChatButton: UIBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: nil)
         let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
         
-        self.navigationItem.leftBarButtonItems = [dmChatButton, groupChatButton]
+        self.navigationItem.leftBarButtonItems = [groupChatButton, dmChatButton]
         self.navigationItem.rightBarButtonItem = createGroupChatButton
     }
     
     private func configureDatasource() {
         
-        self.groupDataSource = UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>(collectionView: self.groupCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        self.groupDataSource = UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>(
+            collectionView: self.groupCollectionView,
+            cellProvider: { collectionView, indexPath, itemIdentifier in
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatRoomListCell.identifier,
                 for: indexPath) as? ChatRoomListCell else {
                 return UICollectionViewCell()
             }
-            
+
             cell.configure(groupData: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
         
         self.groupCollectionView.dataSource = self.groupDataSource
         
-        self.dmDataSource = UICollectionViewDiffableDataSource<Section, DMChatRoomListData>(collectionView: self.dmCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        self.dmDataSource = UICollectionViewDiffableDataSource<Section, DMChatRoomListData>(
+            collectionView: self.dmCollectionView,
+            cellProvider: { collectionView, indexPath, itemIdentifier in
+                
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatRoomListCell.identifier,
                 for: indexPath) as? ChatRoomListCell else {
@@ -123,19 +133,19 @@ final class ChatRoomListViewController: UIViewController {
     private func bind() {
         
         self.viewModel.dmChatRoomData
-            .bind(onNext: { [weak self] model in
+            .bind(onNext: { [weak self] (model: [DMChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model)
+                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
         self.viewModel.groupChatRoomData
-            .bind(onNext: { [weak self] model in
+            .bind(onNext: { [weak self] (model: [GroupChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model)
+                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
@@ -161,14 +171,11 @@ final class ChatRoomListViewController: UIViewController {
     
     private func createBasicListLayout() -> UICollectionViewLayout {
         let itemHeight = self.view.frame.width * 0.20
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .absolute(itemHeight))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitems: [item])
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(itemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         let layout = UICollectionViewCompositionalLayout(section: section)
