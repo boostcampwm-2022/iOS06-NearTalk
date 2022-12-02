@@ -44,4 +44,8 @@ final class DefalultMessagingUseCase: MessagingUseCase {
         return self.chatMessageRepository.updateChatRoom(newChatRoom)
             .asCompletable()
     }
+    
+    func fetchMessage(roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
+        self.chatMessageRepository.fetchMessage(page: 0, skip: 0, count: totalMessageCount, roomID: roomID)
+    }
 }
