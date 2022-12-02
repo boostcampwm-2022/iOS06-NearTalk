@@ -32,4 +32,9 @@ final class DefaultFetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase {
     func observrChatRoomInfo(chatRoomID: String) -> Observable<ChatRoom> {
         return chatRoomListRepository.observeChatRoomInfo(chatRoomID)
     }
+    
+    func updateUserChatRoomTicket() {
+    
+    }
+    
 }
