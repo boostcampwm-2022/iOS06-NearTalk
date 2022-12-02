@@ -27,6 +27,9 @@ class DefaultChatViewModel: ChatViewModel {
     // MARK: - Propoties
     private let chatRoomID: String
     private var chatRoom: ChatRoom?
+    var myID: String?
+    private var userUUIDList: [String]
+    private var userProfileList: [String: UserProfile]
     private let disposebag: DisposeBag = DisposeBag()
 
     private var fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
@@ -36,11 +39,7 @@ class DefaultChatViewModel: ChatViewModel {
     
     // MARK: - Ouputs
     var chatMessages: Observable<ChatMessage>
-//    var chatMessageList: BehaviorRelay<[MessageItem]> = BehaviorRelay<[MessageItem]>(value: [])
     var chatRoomInfo: Observable<ChatRoom>
-    var myID: String?
-    private var userUUIDList: [String]?
-    private var userProfileList: [String: UserProfile]
     
     // MARK: - LifeCycle
     // - 채팅방의 참가자 UUID가 있으니까 → fetch → VM
@@ -62,19 +61,34 @@ class DefaultChatViewModel: ChatViewModel {
         
         self.chatRoomInfo = self.fetchChatRoomInfoUseCase.observrChatRoomInfo(chatRoomID: self.chatRoomID)
         self.userProfileList = [:]
+        self.userUUIDList = []
         // 1. chatRoom
         self.chatRoomInfo
             .subscribe(onNext: { [weak self] chatRoom in
-                guard let self = self else {
+                guard let self = self,
+                      let userUUIDList = chatRoom.userList,
+                    let myID = self.myID
+                else {
                     return
                 }
                 self.chatRoom = chatRoom
-                self.userUUIDList = chatRoom.userList // 2. userUUIDList
-                print("------>>>>>>",chatRoom.uuid , chatRoom.userList)
+                self.userUUIDList = userUUIDList
+                // 2. userUUIDList
                 // myID를 chatRoom의 userUUIDList에 추가하기
+                if !userUUIDList.contains(myID) {
+                    print("~~~~~~~~~~~~~myID를 chatRoom의 userUUIDList에 추가하기", myID, userUUIDList)
+                    self.messagingUseCase.addUserInChatRoom(chatRoom: chatRoom, userID: myID)
+                        .subscribe {
+                            self.userUUIDList.append(myID)
+                            print("addUserInChatRoom 성공")
+                        } onError: { error in
+                            print("addUserInChatRoom 씰패", error)
+                        }.disposed(by: self.disposebag)
+
+                }
                 
                // 3. userProfile
-                self.userUUIDList?.forEach {
+                self.userUUIDList.forEach {
                     self.fetchProfileUseCase.fetchUserInfo(with: $0)
                         .subscribe { [weak self] userProfile in
                             guard let self = self,
@@ -95,8 +109,7 @@ class DefaultChatViewModel: ChatViewModel {
     func sendMessage(_ message: String) {
         guard let chatRoomInfo = self.chatRoom,
               let roomName = chatRoomInfo.roomName,
-              let chatRoomMemberIDList = chatRoomInfo.userList,
-              let senderID = self.myID
+              let chatRoomMemberIDList = chatRoomInfo.userList
         else {
             return
         }
@@ -104,7 +117,7 @@ class DefaultChatViewModel: ChatViewModel {
         let chatMessage = ChatMessage(
             uuid: UUID().uuidString,
             chatRoomID: self.chatRoomID,
-            senderID: senderID,
+            senderID: self.myID,
             text: message,
             messageType: MessageType.text.rawValue,
             mediaPath: nil,
