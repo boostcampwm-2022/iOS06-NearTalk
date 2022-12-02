@@ -11,7 +11,7 @@ import RxSwift
 protocol MessagingUseCase {
     func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable
     func observeMessage(roomID: String) -> Observable<ChatMessage>
-    func addUserInChatRoom(chatRoom: ChatRoom, userID: String) -> Completable
+    func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
@@ -38,7 +38,7 @@ final class DefalultMessagingUseCase: MessagingUseCase {
         return self.chatMessageRepository.observeChatRoomMessages(roomID: roomID)
     }
     
-    func addUserInChatRoom(chatRoom: ChatRoom, userID: String) -> Completable {
+    func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable {
         var newChatRoom = chatRoom
         newChatRoom.userList?.append(userID)
         return self.chatMessageRepository.updateChatRoom(newChatRoom)
