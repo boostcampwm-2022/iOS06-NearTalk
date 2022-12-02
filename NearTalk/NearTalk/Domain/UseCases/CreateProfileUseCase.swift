@@ -10,24 +10,25 @@ import RxSwift
 
 protocol CreateProfileUseCase {
     func execute(profile: UserProfile) -> Completable
-//    func fetchUID() -> Single<String>
 }
 
 final class DefaultCreateProfileUseCase: CreateProfileUseCase {
     private let profileRepository: any ProfileRepository
-    private let authRepository: any AuthRepository
+    private let userDefaultsRepository: any UserDefaultsRepository
 
-    init(profileRepository: ProfileRepository, authRepository: any AuthRepository) {
+    init(
+        profileRepository: ProfileRepository,
+        userDefaultsRepository: any UserDefaultsRepository
+    ) {
         self.profileRepository = profileRepository
-        self.authRepository = authRepository
+        self.userDefaultsRepository = userDefaultsRepository
     }
-    
-//    func fetchUID() -> Single<String> {
-//        return self.authRepository.fetchCurrentUserUID()
-//    }
-    
+
     func execute(profile: UserProfile) -> Completable {
         return self.profileRepository.createMyProfile(profile)
+            .do(onSuccess: { [weak self] profile in
+                self?.userDefaultsRepository.saveUserProfile(profile)
+            })
             .asCompletable()
     }
 }

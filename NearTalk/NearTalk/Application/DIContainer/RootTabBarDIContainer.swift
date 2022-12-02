@@ -5,45 +5,29 @@
 //  Created by 고병학 on 2022/11/18.
 //
 
+import Swinject
 import UIKit
 
-final class RootTabBarDIContainer {
-    // MARK: - Dependencies
-    // MARK: - Services
-    func makeStorageService() -> StorageService {
-        return DefaultStorageService()
-    }
-    
-    func makeFirebaseAuthService() -> AuthService {
-        return DefaultFirebaseAuthService()
-    } 
-    
-    func makeFirestoreService() -> FirestoreService {
-        return DefaultFirestoreService()
-    }
+typealias BackToLoginViewClosure = () -> Void
 
-    // MARK: - UseCases
-    func makeTabBarUseCase() -> TabBarUseCase {
-        return DefaultTabBarUseCase()
+final class RootTabBarDIContainer {
+    private let container: Container
+    
+    init(container: Container) {
+        self.container = Container(parent: container)
+        self.registerViewModel()
     }
     
-    // MARK: - Repositories
-    func makeRepository() -> TabBarRepository {
-        return DefaultTabBarRepository()
-    }
-    
-    // MARK: - ViewModels
-    func makeViewModel() -> RootTabBarViewModel {
-        return DefaultRootTabBarViewModel()
+    private func registerViewModel() {
+        self.container.register(RootTabBarViewModel.self) { _ in DefaultRootTabBarViewModel() }
     }
 
     // MARK: - Create viewController
-    func makeRootTabBarViewController() -> RootTabBarController {
-        return RootTabBarController.create(with: makeViewModel())
+    func resolveRootTabBarViewController() -> RootTabBarController {
+        return RootTabBarController(viewModel: container.resolve(RootTabBarViewModel.self)!)
     }
     
-    // MARK: - Coordinator
-    func makeTabBarCoordinator(navigationController: UINavigationController?) -> RootTabBarCoordinator {
-        return RootTabBarCoordinator(navigationController: navigationController)
+    func resolveBackToLoginView() -> BackToLoginViewClosure? {
+        return self.container.resolve(BackToLoginViewClosure.self)
     }
 }

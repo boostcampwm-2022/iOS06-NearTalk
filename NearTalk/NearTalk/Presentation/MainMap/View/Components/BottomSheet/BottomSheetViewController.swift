@@ -6,6 +6,8 @@
 //
 //
 
+import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
 
@@ -17,13 +19,13 @@ final class BottomSheetViewController: UIViewController {
     }
     
     private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
-        $0.register(
-            BottomSheetTableViewCell.self,
-            forCellReuseIdentifier: BottomSheetTableViewCell.reuseIdentifier
-        )
+        $0.register(BottomSheetTableViewCell.self,
+                    forCellReuseIdentifier: BottomSheetTableViewCell.reuseIdentifier)
         $0.delegate = self
         $0.dataSource = self
     }
+    
+    private var dataSource: [ChatRoom] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +33,11 @@ final class BottomSheetViewController: UIViewController {
         self.addSubViews()
         self.configureConstraints()
         self.configureLayout()
+    }
+    
+    func loadData(with dataSource: [ChatRoom]) {
+        self.dataSource = dataSource
+        self.chatRoomsTableView.reloadData()
     }
     
     private func addSubViews() {
@@ -55,38 +62,33 @@ final class BottomSheetViewController: UIViewController {
     private func configureLayout() {
         self.view.backgroundColor = .systemOrange
         
-        if let sheetController = self.sheetPresentationController {
-            sheetController.detents = [.medium(), .large()]
-            sheetController.preferredCornerRadius = 20
-            sheetController.prefersGrabberVisible = true
-            sheetController.prefersScrollingExpandsWhenScrolledToEdge = false
+        self.modalPresentationStyle = .pageSheet
+        
+        if let sheet = self.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.selectedDetentIdentifier = .medium
+            sheet.preferredCornerRadius = 20
+            sheet.prefersGrabberVisible = true
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
         }
     }
 }
 
-extension BottomSheetViewController: UITableViewDelegate {
-    
-}
-
-extension BottomSheetViewController: UITableViewDataSource {
+extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 40
+        return self.dataSource.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath)
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath) as? BottomSheetTableViewCell ?? BottomSheetTableViewCell()
+        cell.bind(to: self.dataSource[indexPath.row])
+
         return cell
     }
-}
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct BottomSheetViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        return BottomSheetViewController()
-            .showPreview(.iPhone14Pro)
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
 }
-#endif

@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 protocol FCMService {
-    func sendMessage(_ message: ChatMessage, _ roomName: String) -> Completable
+    func sendMessage(_ message: ChatMessage, _ roomName: String, _ tokenList: [String]) -> Completable
     func subscribeRoom(_ roomID: String) -> Completable
     func unsubscribeRoom(_ roomID: String) -> Completable
 }
@@ -22,15 +22,12 @@ enum FCMServiceError: Error {
 }
 
 final class DefaultFCMService: FCMService {
-    func sendMessage(_ message: ChatMessage, _ roomName: String) -> Completable {
-        Completable.create { completable in
-            guard let roomID: String = message.chatRoomID else {
-                completable(.error(FCMServiceError.failedToSendFCM))
-                return Disposables.create()
-            }
+    func sendMessage(_ message: ChatMessage, _ roomName: String, _ tokenList: [String]) -> Completable {
+        print("-+++++++", tokenList)
+        return Completable.create { completable in
             let dto: FCMNotificationDTO = .init(
-                to: "/topics/\(roomID)",
-                notification: .init(title: "\(roomName)", body: message.text)
+                notification: .init(title: "\(roomName)", body: message.text),
+                registrationIds: tokenList
             )
             guard let postData: Data = try? JSONEncoder().encode(dto) else {
                 completable(.error(FCMServiceError.failedToSendFCM))

@@ -20,4 +20,18 @@ struct UserProfile: BaseEntity {
     
     /// 입장한 채팅방 UUID 목록
     var chatRooms: [String]?
+    
+    /// FCM 토큰
+    var fcmToken: String?
+    
+    init(uuid: String? = nil, username: String? = nil, email: String? = nil, statusMessage: String? = nil, profileImagePath: String? = nil, friends: [String]? = [], chatRooms: [String]? = [], fcmToken: String? = nil) {
+        self.uuid = uuid
+        self.username = username
+        self.email = email
+        self.statusMessage = statusMessage
+        self.profileImagePath = profileImagePath
+        self.friends = friends
+        self.chatRooms = chatRooms
+        self.fcmToken = fcmToken
+    }
 }

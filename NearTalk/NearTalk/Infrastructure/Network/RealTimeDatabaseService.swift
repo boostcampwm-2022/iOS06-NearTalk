@@ -18,12 +18,15 @@ protocol RealTimeDatabaseService {
     
     // MARK: 채팅방 정보
     func createChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom>
+    func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom>
+    func increaseChatRoomMessageCount(_ chatRoomID: String) -> Completable
     func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom>
     func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom>
     
     // MARK: 유저-채팅방 티켓 정보
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable
+    func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
 }
 
@@ -48,9 +51,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
             
             self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(roomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(roomID)
                 .child(messageID)
                 .setValue(messageData)
             completable(.completed)
@@ -66,9 +68,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
 
             self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(roomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(roomID)
                 .child(messageID)
                 .observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
@@ -89,9 +90,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
             
             self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(roomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(roomID)
                 .queryStarting(atValue: skip)
                 .queryLimited(toFirst: UInt(pageCount))
                 .observeSingleEvent(of: .value) { snapshot in
@@ -113,9 +113,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             }
             
             self.newMessageHandler = self.ref
-                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
-                .child(chatRoomID)
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
+                .child(chatRoomID)
                 .observe(.childAdded) { (snapshot) -> Void in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatMessage: ChatMessage = try? ChatMessage.decode(dictionary: value) {
@@ -139,9 +138,45 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.ref
                 .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
                 .child(uuid)
+                .child(FirebaseKey.RealtimeDB.chatRoomInfo.rawValue)
                 .setValue(chatRoomData)
 
             single(.success(chatRoom))
+            return Disposables.create()
+        }
+    }
+    
+    func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom> {
+        Single<ChatRoom>.create { [weak self] single in
+            guard let self,
+                  let roomID: String = chatRoom.uuid,
+                  let chatRoomData: [String: Any] = try? chatRoom.encode() else {
+                single(.failure(DatabaseError.failedToFetch))
+                return Disposables.create()
+            }
+            
+            self.ref
+                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
+                .child(roomID)
+                .child(FirebaseKey.RealtimeDB.chatRoomInfo.rawValue)
+                .updateChildValues(chatRoomData)
+
+            single(.success(chatRoom))
+            return Disposables.create()
+        }
+    }
+    
+    func increaseChatRoomMessageCount(_ chatRoomID: String) -> Completable {
+        Completable.create { [weak self] completable in
+            guard let self else {
+                completable(.error(DatabaseError.failedToFetch))
+                return Disposables.create()
+            }
+            
+             let updates: [String: Any] = ["\(FirebaseKey.RealtimeDB.chatRooms.rawValue)/\(chatRoomID)/\(FirebaseKey.RealtimeDB.chatRoomInfo.rawValue)/messageCount": ServerValue.increment(1)] as [String: Any]
+             self.ref.updateChildValues(updates)
+
+            completable(.completed)
             return Disposables.create()
         }
     }
@@ -156,6 +191,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.ref
                 .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
                 .child(chatRoomID)
+                .child(FirebaseKey.RealtimeDB.chatRoomInfo.rawValue)
                 .observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatRoom: ChatRoom = try? ChatRoom.decode(dictionary: value) {
@@ -177,6 +213,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.ref
                 .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
                 .child(chatRoomID)
+                .child(FirebaseKey.RealtimeDB.chatRoomInfo.rawValue)
                 .observe(.value) { snapshot in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatRoom: ChatRoom = try? ChatRoom.decode(dictionary: value) {
@@ -192,7 +229,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
-                  let uuid: String = ticket.uuid,
+                  let roomID: String = ticket.roomID,
                   let userID: String = ticket.userID,
                   let ticketData: [String: Any] = try? ticket.encode() else {
                 completable(.error(DatabaseError.failedToCreate))
@@ -203,7 +240,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(FirebaseKey.RealtimeDB.users.rawValue)
                 .child(userID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
-                .child(uuid)
+                .child(roomID)
                 .setValue(ticketData)
             completable(.completed)
             return Disposables.create()
@@ -213,7 +250,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
-                  let uuid: String = ticket.uuid,
+                  let roomID: String = ticket.roomID,
                   let userID: String = ticket.userID,
                   let ticketData: [String: Any] = try? ticket.encode() else {
                 completable(.error(DatabaseError.failedToCreate))
@@ -224,9 +261,32 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(FirebaseKey.RealtimeDB.users.rawValue)
                 .child(userID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
-                .child(uuid)
+                .child(roomID)
                 .updateChildValues(ticketData)
             completable(.completed)
+            return Disposables.create()
+        }
+    }
+    
+    func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket> {
+        Single<UserChatRoomTicket>.create { [weak self] single in
+            guard let self else {
+                single(.failure(DatabaseError.failedToFetch))
+                return Disposables.create()
+            }
+            
+            self.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(userID)
+                .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
+                .child(roomID)
+                .observeSingleEvent(of: .value) { snapshot in
+                    if let value: [String: Any] = snapshot.value as? [String: Any],
+                       let userChatRoomTicket: UserChatRoomTicket = try? UserChatRoomTicket.decode(dictionary: value) {
+                        single(.success(userChatRoomTicket))
+                    }
+                }
+            
             return Disposables.create()
         }
     }

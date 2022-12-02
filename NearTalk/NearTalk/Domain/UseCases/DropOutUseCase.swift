@@ -8,18 +8,25 @@
 import RxSwift
 
 protocol DropoutUseCase {
-    func dropout() -> Completable
-    init(authRepository: AuthRepository)
+    func execute() -> Completable
 }
 
 final class DefaultDropOutUseCase: DropoutUseCase {
-    private let authRepository: any AuthRepository
+    private let profileRepository: any ProfileRepository
+    private let userDefaultsRepository: any UserDefaultsRepository
     
-    init(authRepository: AuthRepository) {
-        self.authRepository = authRepository
+    init(profileRepository: any ProfileRepository,
+         userDefaultsRepository: any UserDefaultsRepository) {
+        self.profileRepository = profileRepository
+        self.userDefaultsRepository = userDefaultsRepository
     }
     
-    func dropout() -> Completable {
-        return self.authRepository.dropout()
+    func execute() -> Completable {
+        userDefaultsRepository.removeUserProfile()
+        return self.deleteProfile()
+    }
+    
+    private func deleteProfile() -> Completable {
+        return self.profileRepository.deleteMyProfile()
     }
 }

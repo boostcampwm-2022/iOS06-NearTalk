@@ -6,18 +6,16 @@ import SnapKit
 import Then
 import UIKit
 
-final class LoginViewController: UIViewController, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+final class LoginViewController: UIViewController {
     private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
     private let loginButton = ASAuthorizationAppleIDButton(type: .default, style: .black).then {
         $0.cornerRadius = 5
     }
     private let disposeBag: DisposeBag = DisposeBag()
-    private var coordinator: LoginCoordinator?
-    private let authRepository: any AuthRepository
+    private let viewModel: LoginViewModel
     
-    init(coordinator: LoginCoordinator, authRepository: any AuthRepository) {
-        self.coordinator = coordinator
-        self.authRepository = authRepository
+    init(viewModel: LoginViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -36,27 +34,6 @@ final class LoginViewController: UIViewController, ASAuthorizationControllerDele
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return self.view.window!
     }
-    
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        switch authorization.credential {
-        case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
-#if DEBUG
-                print("Faile to fetch id token")
-#endif
-                return
-            }
-            self.firebaseLogin(idToken: idTokenString)
-        default:
-            break
-        }
-    }
-    
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-#if DEBUG
-        print("apple authorization error: \(error)")
-#endif
-    }
 }
 private extension LoginViewController {
     func configureUI() {
@@ -65,15 +42,14 @@ private extension LoginViewController {
     }
     func configureConstraint() {
         self.logoView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(30)
-            make.height.width.equalTo(60)
-            make.centerX.equalToSuperview()
+            make.height.width.equalTo(240)
+            make.center.equalToSuperview()
         }
         
         self.loginButton.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(30)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(10)
-            make.height.equalTo(loginButton.snp.width).multipliedBy(0.1)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(loginButton.snp.width).multipliedBy(0.15)
         }
     }
     
@@ -87,18 +63,7 @@ private extension LoginViewController {
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
-    
-    func firebaseLogin(idToken: String) {
-        self.authRepository.login(token: idToken)
-            .subscribe(onCompleted: {
-                print("success")
-                self.coordinator?.finish()
-            }, onError: {
-                print("failed: \($0)")
-            })
-            .disposed(by: disposeBag)
-    }
-    
+
     func bindToLoginButton() {
         loginButton.rx.tapGesture()
             .bind {
@@ -107,5 +72,28 @@ private extension LoginViewController {
                 }
             }
             .disposed(by: disposeBag)
+    }
+}
+
+extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
+#if DEBUG
+                print("Faile to fetch id token")
+#endif
+                return
+            }
+            self.viewModel.requestFireBaseLogin(token: idTokenString)
+        default:
+            break
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+#if DEBUG
+        print("apple authorization error: \(error)")
+#endif
     }
 }

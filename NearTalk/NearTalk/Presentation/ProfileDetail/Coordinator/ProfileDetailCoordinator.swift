@@ -12,9 +12,8 @@ protocol ProfileDetailCoordinatorDependency {
 }
 
 final class ProfileDetailCoordinator {
-    private let dependency: ProfileDetailCoordinatorDependency
-    
     var navigationController: UINavigationController?
+    private let dependency: ProfileDetailCoordinatorDependency
     
     init(navigationController: UINavigationController,
          dependency: ProfileDetailCoordinatorDependency) {
@@ -23,7 +22,6 @@ final class ProfileDetailCoordinator {
     }
     
     func start() {
-        print(#function)
         let actions = ProfileDetailViewModelActions()
         
         let viewController: ProfileDetailViewController = self.dependency.makeProfileDetailViewController(actions: actions)

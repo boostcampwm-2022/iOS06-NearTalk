@@ -5,83 +5,81 @@
 //  Created by Preston Kim on 2022/11/15.
 //
 
+import Swinject
 import UIKit
 
-final class DefaultOnboardingDIContainer: OnboardingCoordinatorDependency {
-    private let dependency: Dependency
+final class DefaultOnboardingDIContainer {
+    private let container: Container
+    let showMainViewController: (() -> Void)?
     
-    struct Dependency {
-        let showMainViewController: (() -> Void)?
-    }
-    
-    init(dependency: Dependency) {
-        self.dependency = dependency
-    }
-    
-    func showMainViewController() {
-        self.dependency.showMainViewController?()
+    init(container: Container, showMainViewController: (() -> Void)?) {
+        self.container = Container(parent: container)
+        self.showMainViewController = showMainViewController
+        self.registerService()
+        self.registerRepository()
+        self.registerUseCase()
+//        self.registerViewModel(action: action)
     }
     
     // MARK: - Service
-    func makeStorageService() -> any StorageService {
-        return DefaultStorageService()
+    private func registerService() {
+        self.container.register(StorageService.self) { _ in DefaultStorageService() }
     }
-    
-    func makeAuthService() -> any AuthService {
-        return DefaultFirebaseAuthService()
-    }
-    
-    func makeFirestoreService() -> any FirestoreService {
-        return DefaultFirestoreService()
-    }
-    
+
     // MARK: - Repository
-    func makeMediaRepository() -> any MediaRepository {
-        return DefaultMediaRepository(storageService: self.makeStorageService())
+    private func registerRepository() {
+        self.container.register(MediaRepository.self) { _ in
+            DefaultMediaRepository(storageService: self.container.resolve(StorageService.self)!)
+        }
     }
-    
-    func makeAuthRepository() -> any AuthRepository {
-        return DefaultAuthRepository(authService: makeAuthService())
-    }
-    
-    func makeProfileRepository() -> any ProfileRepository {
-        return DefaultProfileRepository(firestoreService: makeFirestoreService(), firebaseAuthService: makeAuthService())
-    }
-    
+
     // MARK: - UseCases
-    private func makeValidateNickNameUseCase() -> any ValidateTextUseCase {
-        return ValidateNickNameUseCase()
+    private func registerUseCase() {
+        self.container.register(
+            ValidateTextUseCase.self,
+            name: OnboardingDependencyName.nickname.rawValue
+        ) { _ in ValidateNickNameUseCase() }
+        self.container.register(
+            ValidateTextUseCase.self,
+            name: OnboardingDependencyName.statusMessage.rawValue
+        ) { _ in ValidateStatusMessageUseCase() }
+        self.container.register(UploadImageUseCase.self) { _ in
+            DefaultUploadImageUseCase(mediaRepository: self.container.resolve(MediaRepository.self)!)
+        }
+        self.container.register(CreateProfileUseCase.self) { _ in
+            DefaultCreateProfileUseCase(
+                profileRepository: self.container.resolve(ProfileRepository.self)!,
+                userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!
+            )
+        }
     }
     
-    private func makeValidateStatusMessageUseCase() -> any ValidateTextUseCase {
-        return ValidateStatusMessageUseCase()
-    }
-    
-    private func makeUploadImageUseCase() -> any UploadImageUseCase {
-        return DefaultUploadImageUseCase(mediaRepository: self.makeMediaRepository())
-    }
-    
-    private func makeCreateProfileUseCase() -> any CreateProfileUseCase {
-        return DefaultCreateProfileUseCase(profileRepository: self.makeProfileRepository(), authRepository: self.makeAuthRepository())
+    // MARK: - ViewModel
+    func registerViewModel(action: OnboardingViewModelAction) {
+        self.container.register(OnboardingViewModel.self) { _ in
+            DefaultOnboardingViewModel(
+                validateNickNameUseCase: self.container.resolve(
+                    ValidateTextUseCase.self,
+                    name: OnboardingDependencyName.nickname.rawValue
+                )!,
+                validateStatusMessageUseCase: self.container.resolve(
+                    ValidateTextUseCase.self,
+                    name: OnboardingDependencyName.statusMessage.rawValue
+                )!,
+                uploadImageUseCase: self.container.resolve(UploadImageUseCase.self)!,
+                createProfileUseCase: self.container.resolve(CreateProfileUseCase.self)!,
+                action: action
+            )
+        }
     }
     
     // MARK: - Create viewController
-    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController {
-        let viewModel: any OnboardingViewModel = DefaultOnboardingViewModel(
-            validateNickNameUseCase: self.makeValidateNickNameUseCase(),
-            validateStatusMessageUseCase: self.makeValidateStatusMessageUseCase(),
-            uploadImageUseCase: self.makeUploadImageUseCase(),
-            createProfileUseCase: self.makeCreateProfileUseCase(),
-            action: action
-        )
-        return OnboardingViewController(viewModel: viewModel)
+    func resolveOnboardingViewController() -> OnboardingViewController {
+        return OnboardingViewController(viewModel: self.container.resolve(OnboardingViewModel.self)!)
     }
-    
-    // MARK: - Coordinator
-    func makeOnboardingCoordinator(
-        navigationController: UINavigationController?,
-        parent: Coordinator
-    ) -> OnboardingCoordinator {
-        return OnboardingCoordinator(navigationController: navigationController, parentCoordinator: parent, dependency: self)
-    }
+}
+
+enum OnboardingDependencyName: String {
+    case nickname
+    case statusMessage
 }

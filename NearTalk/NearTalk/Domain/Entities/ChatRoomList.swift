@@ -8,43 +8,44 @@
 import Foundation
 
 struct GroupChatRoomListData: Hashable {
-    var img: String?
-    var name: String?
-    var description: String?
-    var date: String?
-    var count: String?
+    var uuid: String?
+    var userList: [String]?
+    var roomImagePath: String?
+    var roomName: String?
+    var accessibleRadius: Double?
+    var recentMessageText: String?
+    var recentMessageDate: Date?
+    var messageCount: Int?
     
     init(data: ChatRoom) {
-        self.name = data.roomName
-        self.description = data.roomDescription
-        
-        if let list = data.userList, !list.isEmpty {
-            self.count = String(list.count)
-        }
-        
-        let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd HH:mm"
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        self.date = dateFormatter.string(from: now)
+        self.uuid = data.uuid
+        self.userList = data.userList
+        self.roomImagePath = data.roomImagePath
+        self.roomName = data.roomName
+        self.accessibleRadius = data.accessibleRadius
+        self.messageCount = data.messageCount
+        self.recentMessageText = data.recentMessageText
+        self.recentMessageDate = data.recentMessageDate
     }
     
 }
 
 struct DMChatRoomListData: Hashable {
-    var img: String?
-    var name: String?
-    var description: String?
-    var date: String?
+    var uuid: String?
+    var roomImagePath: String?
+    var roomName: String?
+    var recentMessageID: String?
+    var recentMessageText: String?
+    var recentMessageDate: Date?
+    var messageCount: Int?
     
     init(data: ChatRoom) {
-        self.name = data.roomName
-        self.description = data.roomDescription
-        
-        let now = NSDate()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd HH:mm"
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        self.date = dateFormatter.string(from: now as Date)
+        self.uuid = data.uuid
+        self.roomImagePath = data.roomImagePath
+        self.roomName = data.roomName
+        self.recentMessageID = data.recentMessageID
+        self.messageCount = data.messageCount
+        self.recentMessageText = data.recentMessageText
+        self.recentMessageDate = data.recentMessageDate
     }
 }

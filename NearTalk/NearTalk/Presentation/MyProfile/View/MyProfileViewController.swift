@@ -18,7 +18,6 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     private let profileImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = true
-        $0.backgroundColor = .lightGray
     }
     
     private let fieldStack = UIStackView().then {
@@ -27,16 +26,28 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         $0.axis = .vertical
     }
     
+    private let nicknameTitleLabel: UILabel = UILabel().then { label in
+        label.textAlignment = .natural
+        label.text = "닉네임"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+    }
+    
     private let nicknameLabel = UILabel().then {
         $0.textAlignment = .natural
         $0.text = "닉네임"
-        $0.font = UIFont.systemFont(ofSize: 30)
+        $0.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+    }
+    
+    private let messageTitleLabel: UILabel = UILabel().then { label in
+        label.textAlignment = .natural
+        label.text = "상태 메세지"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
     }
     
     private let messageLabel = UILabel().then {
         $0.textAlignment = .natural
         $0.text = "상태 메세지"
-        $0.font = UIFont.systemFont(ofSize: 30)
+        $0.font = UIFont.systemFont(ofSize: 24)
     }
     
     private let tableView: UITableView = UITableView()
@@ -67,11 +78,27 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         self.bindViewModel()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.profileImageView.makeRounded()
+    override func viewWillLayoutSubviews() {
         configureTableView()
-        super.viewWillAppear(animated)
+        self.profileImageView.makeRounded()
+        super.viewWillLayoutSubviews()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.snp.remakeConstraints { (make) in
+            make.top.equalTo(myProfileView.snp.bottom).offset(20)
+            make.horizontalEdges.equalToSuperview().inset(10)
+            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+                partialResult + cell.frame.height
+            }))
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+//        self.profileImageView.makeRounded()
         self.viewModel.viewWillAppear()
+        super.viewWillAppear(animated)
     }
     
     init(viewModel: any MyProfileViewModel) {
@@ -110,7 +137,9 @@ private extension MyProfileViewController {
         
         myProfileView.addSubview(profileImageView)
         myProfileView.addSubview(fieldStack)
+        fieldStack.addArrangedSubview(nicknameTitleLabel)
         fieldStack.addArrangedSubview(nicknameLabel)
+        fieldStack.addArrangedSubview(messageTitleLabel)
         fieldStack.addArrangedSubview(messageLabel)
     }
     
@@ -118,6 +147,7 @@ private extension MyProfileViewController {
         self.tableView.layer.cornerRadius = 5.0
         self.tableView.layer.masksToBounds = true
         self.tableView.clipsToBounds = true
+        self.tableView.separatorInset = .zero
     }
     
     func configureConstraint() {
@@ -144,10 +174,8 @@ private extension MyProfileViewController {
     }
     
     func configureNavigationBar() {
-        navigationController?.navigationBar.backgroundColor = .systemGray5
         navigationController?.navigationBar.isTranslucent = false
         navigationItem.title = "내 프로필"
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
     }
     
     func setTableView() {
@@ -174,17 +202,25 @@ private extension MyProfileViewController {
             .compactMap { $0 }
             .compactMap { URL(string: $0) }
             .bind(onNext: { url in
+                self.profileImageView.backgroundColor = .clear
                 self.profileImageView.kf.setImage(with: url)
+            })
+            .disposed(by: self.disposeBag)
+        self.viewModel.image
+            .filter { $0 == nil }
+            .bind(onNext: { _ in
+                self.profileImageView.backgroundColor = .lightGray
+                self.profileImageView.image = nil
             })
             .disposed(by: self.disposeBag)
     }
 }
 
-enum MyProfileSection: Hashable & Sendable {
+enum MyProfileSection: Hashable, Sendable {
     case main
 }
 
-enum MyProfileItem: String, Hashable & Sendable & CaseIterable {
+enum MyProfileItem: String, Hashable, Sendable, CaseIterable {
     case profileSetting = "프로필 수정"
     case appSetting = "앱 설정"
 }

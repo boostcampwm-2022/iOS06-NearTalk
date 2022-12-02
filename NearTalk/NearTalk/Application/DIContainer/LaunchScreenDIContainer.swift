@@ -5,52 +5,44 @@
 //  Created by 고병학 on 2022/11/13.
 //
 
+import Swinject
 import UIKit
 
 /// LaunchScreenViewController에 필요한 의존성을 주입해주는 클래스
 final class LaunchScreenDIContainer {
-    // MARK: - Dependencies
+    private let container: Container
     
-    // MARK: - Services
-    func makeAuthService() -> AuthService {
-        return DefaultFirebaseAuthService()
+    init(
+        container: Container,
+        navigationController: UINavigationController,
+        actions: LaunchScreenViewModelActions
+    ) {
+        self.container = Container(parent: container)
+        self.registerUseCase()
+        self.registerViewModel(actions: actions)
     }
     
-    func makeFirestoreService() -> any FirestoreService {
-        return DefaultFirestoreService()
+    private func registerUseCase() {
+        self.container.register(VerifyUserUseCase.self) { _ in
+            DefaultVerifyUserUseCase(
+                authRepository: self.container.resolve(AuthRepository.self)!,
+                profileRepository: self.container.resolve(ProfileRepository.self)!,
+                userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!
+            )
+        }
     }
     
-    // MARK: - Repository
-    func makeAuthRepository() -> any AuthRepository {
-        return DefaultAuthRepository(authService: makeAuthService())
-    }
-    
-    func makeProfileRepository() -> any ProfileRepository {
-        return DefaultProfileRepository(firestoreService: makeFirestoreService(), firebaseAuthService: makeAuthService())
-    }
-    
-    // MARK: - UseCases
-    func makeVerifyUserUseCase() -> VerifyUserUseCase {
-        return DefaultVerifyUserUseCase(authRepository: makeAuthRepository(), profileRepository: makeProfileRepository())
-    }
-    
-    // MARK: - Repositories
-    
-    // MARK: - ViewModels
-    func makeViewModel(actions: LaunchScreenViewModelActions) -> LaunchScreenViewModel {
-        return DefaultLaunchScreenViewModel(useCase: self.makeVerifyUserUseCase(), actions: actions)
+    private func registerViewModel(actions: LaunchScreenViewModelActions) {
+        self.container.register(LaunchScreenViewModel.self) { _ in
+            DefaultLaunchScreenViewModel(
+                useCase: self.container.resolve(VerifyUserUseCase.self)!,
+                actions: actions
+            )
+        }
     }
     
     // MARK: - Create viewController
-    func createLaunchScreenViewController(actions: LaunchScreenViewModelActions) -> LaunchScreenViewController {
-        return LaunchScreenViewController(viewModel: self.makeViewModel(actions: actions))
-    }
-    
-    // MARK: - Coordinator
-    func makeLaunchScreenCoordinator(
-        navigationController: UINavigationController,
-        dependency: LaunchScreenCoordinatorDependency
-    ) -> LaunchScreenCoordinator {
-        return LaunchScreenCoordinator(navigationController: navigationController, dependency: dependency)
+    func resolveLaunchScreenViewController() -> LaunchScreenViewController {
+        return LaunchScreenViewController(viewModel: self.container.resolve(LaunchScreenViewModel.self)!)
     }
 }

@@ -12,35 +12,21 @@ import RxRelay
 import RxSwift
 import UIKit
 
-protocol OnboardingCoordinatorDependency {
-    func showMainViewController()
-    func makeOnboardingViewController(action: OnboardingViewModelAction) -> OnboardingViewController
-}
-
 final class OnboardingCoordinator: NSObject, Coordinator {
-    private let dependency: any OnboardingCoordinatorDependency
     var navigationController: UINavigationController?
-    var parentCoordinator: Coordinator?
-    var childCoordinators: [Coordinator]
+    private let onboardingDIContainer: DefaultOnboardingDIContainer
     
     init(
-        navigationController: UINavigationController?,
-        parentCoordinator: Coordinator? = nil,
-        dependency: any OnboardingCoordinatorDependency
+        container: DefaultOnboardingDIContainer,
+        navigationController: UINavigationController?
     ) {
+        self.onboardingDIContainer = container
         self.navigationController = navigationController
-        self.parentCoordinator = parentCoordinator
-        self.childCoordinators = []
-        self.dependency = dependency
     }
     
     func start() {
-        let action: Action = Action(
-            presentImagePicker: self.presentImagePicker,
-            showMainViewController: self.dependency.showMainViewController,
-            presentRegisterFailure: self.presentRegisterFailure
-        )
-        let onboardingViewController: OnboardingViewController = self.dependency.makeOnboardingViewController(action: action)
+        self.onboardingDIContainer.registerViewModel(action: Action(presentImagePicker: self.presentImagePicker(observer:), showMainViewController: self.onboardingDIContainer.showMainViewController, presentRegisterFailure: self.presentRegisterFailure))
+        let onboardingViewController: OnboardingViewController = self.onboardingDIContainer.resolveOnboardingViewController()
         self.navigationController?.pushViewController(onboardingViewController, animated: true)
     }
     
@@ -180,7 +166,7 @@ extension OnboardingCoordinator: UIImagePickerControllerDelegate, UINavigationCo
         let newImage = image.resized(withPercentage: percentage)
         let data = newImage?.jpegData(compressionQuality: percentage)
         if let bytes = data?.count, bytes > 24000 {
-            let resizedData: Data? = newImage?.resized(toKB: 24.0)?.jpegData(compressionQuality: percentage)
+            let resizedData: Data? = newImage?.resized()?.jpegData(compressionQuality: percentage)
             self.imagePublisher?.accept(resizedData)
         } else {
             self.imagePublisher?.accept(data)

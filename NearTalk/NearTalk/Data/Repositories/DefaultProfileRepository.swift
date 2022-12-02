@@ -57,7 +57,21 @@ final class DefaultProfileRepository: ProfileRepository {
         self.fetchMyProfile()
             .flatMap { (myProfile: UserProfile) -> Single<UserProfile> in
                 var newProfile: UserProfile = myProfile
-                newProfile.friends?.append(friendUUID)
+                if let friend = newProfile.friends, !friend.contains(friendUUID) {
+                    newProfile.friends?.append(friendUUID)
+                }
+                return self.firestoreService.update(updatedData: newProfile, dataKey: .users)
+            }
+            .asCompletable()
+    }
+    
+    func addChatRoom(_ chatRoomUUID: String) -> Completable {
+        self.fetchMyProfile()
+            .flatMap { (myProfile: UserProfile) -> Single<UserProfile> in
+                var newProfile: UserProfile = myProfile
+                if let chat = newProfile.chatRooms, !chat.contains(chatRoomUUID) {
+                    newProfile.chatRooms?.append(chatRoomUUID)
+                }
                 return self.firestoreService.update(updatedData: newProfile, dataKey: .users)
             }
             .asCompletable()
@@ -79,6 +93,9 @@ final class DefaultProfileRepository: ProfileRepository {
                 guard let friendList: [String] = myProfile.friends else {
                     return Single.error(DefaultProfileRepositoryError.invalidUserProfile)
                 }
+                if friendList.isEmpty {
+                    return .just([])
+                }
                 let query: [FirebaseQueryDTO] = [.init(key: "uuid", value: friendList, queryKey: .in)]
                 return self.firestoreService.fetchList(dataKey: .users, queryList: query)
             }
@@ -87,6 +104,11 @@ final class DefaultProfileRepository: ProfileRepository {
     func fetchProfileByUUID(_ uuid: String) -> Single<UserProfile> {
         let query: [FirebaseQueryDTO] = [.init(key: "uuid", value: uuid, queryKey: .isEqualTo)]
         return self.firestoreService.fetch(dataKey: .users, queryList: query)
+    }
+    
+    func fetchProfileByUUIDList(_ uuidList: [String]) -> Single<[UserProfile]> {
+        let query: [FirebaseQueryDTO] = [.init(key: "uuid", value: uuidList, queryKey: .in)]
+        return self.firestoreService.fetchList(dataKey: .users, queryList: query)
     }
     
     private func fetchProfileByEmail(_ email: String) -> Single<UserProfile> {
