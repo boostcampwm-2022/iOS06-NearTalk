@@ -104,9 +104,9 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
         if on {
             self.requestNotificationAuthorization()
         } else {
-            UIApplication.shared.unregisterForRemoteNotifications()
-//            UIApplication.shared.unregisterForRemoteNotifications()
-//            UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+            DispatchQueue.main.async {
+                UIApplication.shared.unregisterForRemoteNotifications()
+            }
             self.notificationOnOff.accept(false)
             UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
         }
@@ -119,11 +119,13 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
         result.subscribe { [weak self] accepted in
             if accepted {
                 self?.refreshNotificationAuthorization()
-                UIApplication.shared.registerForRemoteNotifications()
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             } else {
-                UIApplication.shared.unregisterForRemoteNotifications()
-//                UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-//                UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+                DispatchQueue.main.async {
+                    UIApplication.shared.unregisterForRemoteNotifications()
+                }
                 self?.notificationOnOff.accept(false)
                 UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
             }

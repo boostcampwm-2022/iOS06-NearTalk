@@ -13,19 +13,30 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
         case directMessage
     }
     
-    var roomType: RoomType = .group
-    
-    private var latitude: CLLocationDegrees = 0
-    private var longitude: CLLocationDegrees = 0
-    
+    let chatRoomInfo: ChatRoom
+    let roomType: RoomType
+    let latitude: CLLocationDegrees
+    let longitude: CLLocationDegrees
     @objc
     dynamic var coordinate: CLLocationCoordinate2D {
-        get {
-            return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        }
-        set {
-            self.latitude = newValue.latitude
-            self.longitude = newValue.longitude
-        }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    
+    init(chatRoomInfo: ChatRoom, roomType: RoomType, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        self.chatRoomInfo = chatRoomInfo
+        self.roomType = roomType
+        self.latitude = latitude
+        self.longitude = longitude
+    }
+    
+    static func create(with chatRoomInfo: ChatRoom) -> ChatRoomAnnotation? {
+        guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == "group" ? .group : .directMessage,
+              let latitude = chatRoomInfo.location?.latitude,
+              let longitude = chatRoomInfo.location?.longitude else { return nil }
+        
+        return ChatRoomAnnotation(chatRoomInfo: chatRoomInfo,
+                                  roomType: roomType,
+                                  latitude: latitude,
+                                  longitude: longitude)
     }
 }

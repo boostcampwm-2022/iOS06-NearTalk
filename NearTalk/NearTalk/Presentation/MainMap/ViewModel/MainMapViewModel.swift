@@ -22,14 +22,17 @@ final class MainMapViewModel {
     }
     
     struct Input {
-        let mapViewDidAppear: Observable<MKMapView>
-        let didUpdateUserLocation: Observable<MKMapView>
-        let didSelectMainMapAnnotation: Observable<MKAnnotationView>
+        let didTapMoveToCurrentLocationButton: Observable<Void>
+        let didTapCreateChatRoomButton: Observable<Void>
+        let currentUserMapRegion: Observable<NCMapRegion>
+        let didTapAnnotationView: Observable<MKAnnotation>
     }
     
     struct Output {
-        let accessibleAllChatRooms: PublishRelay<[ChatRoom]> = .init()
-        let annotationAllChatRooms: PublishRelay<[ChatRoom]> = .init()
+        let moveToCurrentLocationEvent: BehaviorRelay<Bool> = .init(value: false)
+        let showCreateChatRoomViewEvent: BehaviorRelay<Bool> = .init(value: false)
+        let showAccessibleChatRooms: PublishRelay<[ChatRoom]> = .init()
+        let showAnnotationChatRooms: PublishRelay<[ChatRoom]> = .init()
     }
     
     let actions: Actions
@@ -43,40 +46,38 @@ final class MainMapViewModel {
     
     func transform(input: Input) -> Output {
         let output = Output()
-        
-        input.mapViewDidAppear
-            .map { mapView in
-                let centerLocation = NCLocation(longitude: mapView.userLocation.coordinate.longitude,
-                                                latitude: mapView.userLocation.coordinate.latitude)
-                let radiusDistanceMeters = Double(2000)
-                
-                let latitudinalMeters = mapView.region.span.latitudeDelta * NCLocation.decimalDegreePerMeter
-                let longitudinalMeters = mapView.region.span.longitudeDelta * NCLocation.decimalDegreePerMeter
-                
-                return NCMapRegion(centerLocation: centerLocation,
-                                   radiusDistanceMeters: radiusDistanceMeters,
-                                   latitudinalMeters: latitudinalMeters,
-                                   longitudinalMeters: longitudinalMeters)
-            }
-            .flatMap { self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
-            .bind(to: output.accessibleAllChatRooms)
+        input.didTapMoveToCurrentLocationButton
+            .map { true }
+            .bind(to: output.moveToCurrentLocationEvent)
             .disposed(by: self.disposeBag)
         
-        input.didUpdateUserLocation
-            .map { mapView in
-                let centerLocation = NCLocation(longitude: mapView.userLocation.coordinate.longitude,
-                                                latitude: mapView.userLocation.coordinate.latitude)
-                let radiusDistanceMeters = Double(2000)
-                let latitudinalMeters = mapView.region.span.latitudeDelta * NCLocation.decimalDegreePerMeter
-                let longitudinalMeters = mapView.region.span.longitudeDelta * NCLocation.decimalDegreePerMeter
-                
-                return NCMapRegion(centerLocation: centerLocation,
-                                   radiusDistanceMeters: radiusDistanceMeters,
-                                   latitudinalMeters: latitudinalMeters,
-                                   longitudinalMeters: longitudinalMeters)
+        input.didTapCreateChatRoomButton
+            .map { true }
+            .bind(to: output.showCreateChatRoomViewEvent)
+            .disposed(by: self.disposeBag)
+        
+        input.currentUserMapRegion
+            .flatMap { _ in
+                let dummyChatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchDummyChatRooms()
+                return dummyChatRooms
             }
-            .flatMap { self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: $0) }
-            .bind(to: output.accessibleAllChatRooms)
+            .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
+            .disposed(by: self.disposeBag)
+        
+        input.didTapAnnotationView
+            .map {
+                if $0 is MKClusterAnnotation {
+                    let tmp1 = $0 as! MKClusterAnnotation
+                    return tmp1.memberAnnotations.map {
+                        let tmp2 = $0 as! ChatRoomAnnotation
+                        return tmp2.chatRoomInfo
+                    }
+                } else {
+                    let tmp3 = $0 as! ChatRoomAnnotation
+                    return [tmp3.chatRoomInfo]
+                }
+            }
+            .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
         
         return output

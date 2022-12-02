@@ -14,21 +14,10 @@ import UIKit
 
 final class ProfileSettingViewController: UIViewController {
     // MARK: - UI properties
-    private let profileImageView: UIImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
-        $0.isUserInteractionEnabled = true
-        $0.backgroundColor = .lightGray
-        $0.clipsToBounds = true
-    }
-
-    private let nicknameField: UITextField = UITextField().then {
-        $0.placeholder = "닉네임"
-        $0.font = UIFont.systemFont(ofSize: 30)
-    }
-    
-    private let messageField: UITextField = UITextField().then {
-        $0.placeholder = "상태 메세지"
-        $0.font = UIFont.systemFont(ofSize: 30)
+    private let rootView: ProfileSettingView = ProfileSettingView()
+    private let scrollView: UIScrollView = UIScrollView().then {
+        $0.keyboardDismissMode = .onDrag
+        $0.bounces = false
     }
     
     // MARK: - Properties
@@ -36,25 +25,35 @@ final class ProfileSettingViewController: UIViewController {
     private let viewModel: any ProfileSettingViewModel
 
     // MARK: - Lifecycles
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.scrollView.contentSize = .init(width: self.view.frame.width, height: self.rootView.height)
+        self.rootView.frame = .init(origin: .zero, size: self.scrollView.contentSize)
+        self.rootView.snp.makeConstraints { make in
+            make.edges.equalTo(self.scrollView.contentLayoutGuide)
+            make.width.equalToSuperview()
+            make.height.equalTo(self.scrollView.contentSize.height)
+        }
+    }
+    
+    override func loadView() {
+        self.view = self.scrollView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.addSubViews()
         self.configureNavigationBar()
-        self.configureView()
-        self.configureConstraint()
+        self.view.backgroundColor = .white
+        self.scrollView.addSubview(self.rootView)
         self.bindToViewModel()
     }
     
     init(viewModel: any ProfileSettingViewModel, neccesaryProfileComponent: NecessaryProfileComponent?) {
         self.viewModel = viewModel
-        if let neccesaryProfileComponent = neccesaryProfileComponent {
-            self.nicknameField.text = neccesaryProfileComponent.nickName
-            self.messageField.text = neccesaryProfileComponent.message
-            if let image = neccesaryProfileComponent.image {
-                self.profileImageView.image = UIImage(data: image)
-            }
-        }
         super.init(nibName: nil, bundle: nil)
+        if let neccesaryProfileComponent = neccesaryProfileComponent {
+            self.rootView.injectProfileData(profileData: neccesaryProfileComponent)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -64,39 +63,10 @@ final class ProfileSettingViewController: UIViewController {
 
 // MARK: - Helpers
 private extension ProfileSettingViewController {
-    func addSubViews() {
-        [profileImageView, nicknameField, messageField].forEach {
-            view.addSubview($0)
-        }
-    }
-    
-    func configureView() {
-        self.view.backgroundColor = .systemBackground
-    }
-    
     func configureNavigationBar() {
-        self.navigationController?.navigationBar.backgroundColor = .systemGray5
-        self.navigationController?.navigationBar.isTranslucent = false
         self.navigationItem.title = "프로필 설정"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "등록", style: .plain, target: self, action: nil)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]
-    }
-    
-    func configureConstraint() {
-        profileImageView.snp.makeConstraints { (make) in
-            make.horizontalEdges.top.equalTo(view.safeAreaLayoutGuide).inset(10)
-            make.height.equalTo(profileImageView.snp.width)
-        }
-        
-        nicknameField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(profileImageView.snp.bottom).offset(10)
-        }
-        
-        messageField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(20)
-            make.top.equalTo(nicknameField.snp.bottom).offset(10)
-        }
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     func bindToViewModel() {
@@ -107,41 +77,76 @@ private extension ProfileSettingViewController {
     }
     
     func bindNickNameField() {
-        self.nicknameField.rx.value
-            .orEmpty
+        self.rootView.nickNameText
             .bind(onNext: { [weak self] text in
                 self?.viewModel.editNickName(text)
-                
             })
+            .disposed(by: self.disposeBag)
+        self.viewModel.nickNameValidity
+            .asDriver()
+            .map { isValid in
+                isValid ? "사용 가능한 닉네임 입니다" : "5-16 자 사이의 영어 소문자, 숫자, -_ 기호만 사용하십시오"
+            }
+            .drive(self.rootView.nickNameValidityMessage)
+            .disposed(by: self.disposeBag)
+        self.viewModel.nickNameValidity
+            .asDriver()
+            .map { isValid in
+                isValid ? UIColor.green : UIColor.red
+            }
+            .drive(self.rootView.nickNameValidityColor)
+            .disposed(by: self.disposeBag)
+        self.rootView.keyboardWillShowOnNickNameField
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
+            .disposed(by: self.disposeBag)
+        self.rootView.keyboardWillDismissFromNickNameField
+            .filter { self.keyboardNotificationHandler($0) != nil }
+            .drive(onNext: { _ in self.moveKeyboardDown() })
             .disposed(by: self.disposeBag)
     }
     
     func bindMessageField() {
-        self.messageField.rx.value
-            .orEmpty
+        self.rootView.messageText
             .bind(onNext: { [weak self] text in
                 self?.viewModel.editStatusMessage(text)
             })
             .disposed(by: self.disposeBag)
+        self.viewModel.messageValidity
+            .asDriver()
+            .map { isValid in
+                isValid ? "사용 가능한 메세지 입니다" : "50자 이하로 작성하십시오"
+            }
+            .drive(self.rootView.messageValidityMessage)
+            .disposed(by: self.disposeBag)
+        self.viewModel.messageValidity
+            .asDriver()
+            .map { isValid in
+                isValid ? UIColor.green : UIColor.red
+            }
+            .drive(self.rootView.messageValidityColor)
+            .disposed(by: self.disposeBag)
+        self.rootView.keyboardWillShowOnMessageField
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
+            .disposed(by: self.disposeBag)
+        self.rootView.keyboardWillDismissFromMessageField
+            .filter { self.keyboardNotificationHandler($0) != nil }
+            .drive(onNext: { _ in self.moveKeyboardDown() })
+            .disposed(by: self.disposeBag)
     }
     
     func bindProfileTap() {
-        self.profileImageView.rx
-            .tapGesture()
-            .bind(onNext: { [weak self] gesture in
-                if gesture.state == .ended {
-                    self?.viewModel.editImage()
-                }
+        self.rootView.tapProfileEvent
+            .bind(onNext: { [weak self] _ in
+                self?.viewModel.editImage()
             })
             .disposed(by: self.disposeBag)
         self.viewModel.image
-            .compactMap {
-                $0
-            }
-            .compactMap {
-                UIImage(data: $0)
-            }
-            .subscribe(self.profileImageView.rx.image)
+            .asDriver()
+            .compactMap { $0 }
+            .map { UIImage(data: $0) }
+            .drive(self.rootView.profileImage)
             .disposed(by: self.disposeBag)
     }
     
@@ -157,5 +162,36 @@ private extension ProfileSettingViewController {
                 })
                 .disposed(by: self.disposeBag)
         }
+    }
+}
+
+extension UIViewController {
+    func keyboardNotificationHandler(_ notification: Notification) -> CGFloat? {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? CGRect else {
+            return nil
+        }
+        return keyboardFrame.height
+    }
+}
+
+private extension ProfileSettingViewController {
+    func moveKeyboardUp(keyboardHeight: CGFloat) {
+        self.scrollToUp(keyboardHeight: keyboardHeight)
+    }
+    
+    func moveKeyboardDown() {
+        self.scrollToDown()
+    }
+    
+    func scrollToUp(keyboardHeight: CGFloat) {
+        let inset: UIEdgeInsets = .init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        self.scrollView.contentInset = inset
+        self.scrollView.scrollIndicatorInsets = inset
+    }
+    
+    func scrollToDown() {
+        self.scrollView.contentInset = .zero
+        self.scrollView.scrollIndicatorInsets = .zero
     }
 }

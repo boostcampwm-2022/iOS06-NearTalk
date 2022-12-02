@@ -10,45 +10,25 @@ import RxCocoa
 import RxSwift
 
 protocol FetchChatRoomUseCase {
-    func getGroupChatList() -> Observable<[GroupChatRoomListData]>
-    func getDMChatList() -> Observable<[DMChatRoomListData]>
-    
     func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]>
     func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
+    func newGetChatRoomUUIDList()
 }
 
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     private let disposeBag: DisposeBag = .init()
     private let chatRoomListRepository: ChatRoomListRepository
-    private let chatRoom: Observable<[ChatRoom]>
-    private let userChatRoomModel: Observable<[UserChatRoomModel]>
     
     private var newChatRoomUUIDList: BehaviorRelay<[String]> = BehaviorRelay<[String]>(value: [])
     private lazy var newChatRoom: Observable<[ChatRoom]> = self.newGetChatRoomList()
     
     init(chatRoomListRepository: ChatRoomListRepository) {
         self.chatRoomListRepository = chatRoomListRepository
-        
-        self.chatRoom = self.chatRoomListRepository.fetchChatRoomList()
-        self.userChatRoomModel = self.chatRoomListRepository.fetchUserChatRoomModel()
-        
         self.newGetChatRoomUUIDList()
-    }
-    
-    func getGroupChatList() -> Observable<[GroupChatRoomListData]> {
-        return self.chatRoom
-            .map { $0.filter { $0.roomType == "group" } }
-            .map { $0.map { GroupChatRoomListData(data: $0) } }
-    }
-    
-    func getDMChatList() -> Observable<[DMChatRoomListData]> {
-        return self.chatRoom
-            .map { $0.filter { $0.roomType == "dm" } }
-            .map { $0.map { DMChatRoomListData(data: $0) } }
     }
     
     func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]> {
@@ -73,6 +53,16 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
         self.chatRoomListRepository.fetchUserChatRoomTicket(roomID)
+    }
+    
+    func newGetChatRoomUUIDList() {
+        self.chatRoomListRepository.fetchUserChatRoomUUIDList()
+            .subscribe { [weak self] (uuidList: [String]) in
+                guard let self else {
+                    return
+                }
+                self.newChatRoomUUIDList.accept(uuidList)
+            }.disposed(by: disposeBag)
     }
     
     // MARK: - Private

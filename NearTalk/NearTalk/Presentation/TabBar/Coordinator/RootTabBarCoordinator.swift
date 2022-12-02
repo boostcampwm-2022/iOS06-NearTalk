@@ -73,8 +73,8 @@ final class RootTabBarCoordinator: Coordinator {
         return self.embed(
             rootNav: navigationController,
             title: "친구",
-            inactivatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "person.3")?.withTintColor(.darkGray),
+            activatedImage: UIImage(systemName: "person.3.fill")?.withTintColor(.blue)
         )
     }
 
@@ -91,8 +91,8 @@ final class RootTabBarCoordinator: Coordinator {
         return self.embed(
             rootNav: navigationController,
             title: "마이페이지",
-            inactivatedImage: UIImage(systemName: "figure.wave")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "figure.wave")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "person")?.withTintColor(.darkGray),
+            activatedImage: UIImage(systemName: "person.fill")?.withTintColor(.blue)
         )
     }
     

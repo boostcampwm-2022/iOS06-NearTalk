@@ -14,7 +14,8 @@ struct FriendListViewModelActions {
 }
 
 protocol FriendListViewModelInput {
-    func didSelectItem(at index: Int)
+    func reload()
+    func didSelectItem(userUUID: String)
     func addFriend(uuid: String) -> Completable
 }
 
@@ -45,9 +46,20 @@ final class DefaultFriendListViewModel: FriendListViewModel {
     }
     
     // MARK: - INPUT
-    // TODO: - userID 수정
-    func didSelectItem(at index: Int) {
-        actions?.showDetailFriend("userID")
+    
+    func reload() {
+        self.fetchFriendListUseCase.reload()
+        
+        self.fetchFriendListUseCase.getFriendsData()
+            .subscribe(onSuccess: { [weak self] (model: [Friend]) in
+                self?.friendsData.accept(model)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func didSelectItem(userUUID: String) {
+        print(userUUID)
+        self.actions?.showDetailFriend(userUUID)
     }
     
     func addFriend(uuid: String) -> Completable {
