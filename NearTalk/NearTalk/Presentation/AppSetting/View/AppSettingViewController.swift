@@ -9,6 +9,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 import UIKit
+import AuthenticationServices
 
 final class AppSettingViewController: UIViewController, UITableViewDelegate {
     private let tableView = UITableView()
@@ -124,5 +125,43 @@ private extension AppSettingViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(AppSettingItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
+    }
+}
+
+extension AppSettingViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+            guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
+#if DEBUG
+                print("Faile to fetch id token")
+#endif
+                return
+            }
+            self.viewModel.reauthenticate(token: idTokenString)
+        default:
+            break
+        }
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+#if DEBUG
+        print("apple authorization error: \(error)")
+#endif
+    }
+    
+    func presentReauthenticationViewController() {
+        let appleIDProvider: ASAuthorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
+        let request: ASAuthorizationAppleIDRequest = appleIDProvider.createRequest()
+        request.requestedScopes = [.email, .fullName]
+        
+        let authorizationController: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
     }
 }

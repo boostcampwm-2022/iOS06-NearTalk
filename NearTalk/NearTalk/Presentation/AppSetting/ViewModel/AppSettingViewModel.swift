@@ -25,12 +25,14 @@ protocol AppSettingAction {
     var presentLogoutResult: ((Bool) -> Void)? { get }
     var presentDropoutResult: ((Bool) -> Void)? { get }
     var presentNotificationPrompt: (() -> Single<Bool>)? { get }
+    var presentReauthenticateView: (() -> Void)? { get }
 }
 
 protocol AppSettingInput {
     func viewWillAppear()
     func tableRowSelected(item: AppSettingItem?)
     func notificationSwitchToggled(on: Bool)
+    func reauthenticate(token: String)
 }
 
 protocol AppSettingOutput {
@@ -90,7 +92,7 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
         case .logout:
             self.requestLogout()
         case .drop:
-            self.requestDropout()
+            self.action.presentReauthenticateView?()
         default:
             return
 //        case .developerInfo:
@@ -143,8 +145,21 @@ final class DefaultAppSettingViewModel: AppSettingViewModel {
             .disposed(by: self.disposeBag)
     }
     
+    func reauthenticate(token: String) {
+        self.dropoutUseCase.reauthenticate(token: token)
+            .subscribe { [weak self] in
+                self?.requestDropout()
+            } onError: { [weak self] error in
+                #if DEBUG
+                print(error)
+                #endif
+                self?.action.presentDropoutResult?(false)
+            }
+            .disposed(by: self.disposeBag)
+    }
+    
     private func requestDropout() {
-        self.dropoutUseCase.execute()
+        self.dropoutUseCase.dropout()
             .subscribe { [weak self] in
                 self?.action.presentDropoutResult?(true)
             } onError: { [weak self] _ in
