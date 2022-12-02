@@ -21,4 +21,20 @@ struct ChatRoom: BaseEntity {
     var recentMessageDate: Date?
     var maxNumberOfParticipants: Int?
     var messageCount: Int?
+    
+    init(uuid: String? = nil, userList: [String]? = [], roomImagePath: String? = nil, roomType: String? = nil, roomName: String? = nil, roomDescription: String? = nil, location: NCLocation? = nil, accessibleRadius: Double? = nil, recentMessageID: String? = nil, recentMessageText: String? = nil, recentMessageDate: Date? = nil, maxNumberOfParticipants: Int? = nil, messageCount: Int? = nil) {
+        self.uuid = uuid
+        self.userList = userList
+        self.roomImagePath = roomImagePath
+        self.roomType = roomType
+        self.roomName = roomName
+        self.roomDescription = roomDescription
+        self.location = location
+        self.accessibleRadius = accessibleRadius
+        self.recentMessageID = recentMessageID
+        self.recentMessageText = recentMessageText
+        self.recentMessageDate = recentMessageDate
+        self.maxNumberOfParticipants = maxNumberOfParticipants
+        self.messageCount = messageCount
+    }
 }
