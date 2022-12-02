@@ -719,7 +719,6 @@
 		1660D25B291DDD7D005F7B24 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				603FD396292A201E00687ED4 /* DTO */,
 				1660D26B291DE326005F7B24 /* Entities */,
 				1660D26C291DE32F005F7B24 /* UseCases */,
 				1660D26D291DE336005F7B24 /* Interfaces */,
@@ -750,6 +749,7 @@
 		1660D25D291DDD9C005F7B24 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				603FD396292A201E00687ED4 /* DTO */,
 				1660D26E291DE34E005F7B24 /* Repositories */,
 			);
 			path = Data;
@@ -759,6 +759,7 @@
 			isa = PBXGroup;
 			children = (
 				6028097829349D5F0025F3B8 /* UserDefaults */,
+				1660D262291DDEC6005F7B24 /* Coredata */,
 				60FD705829238CBB00A4C29A /* Network */,
 				1660D263291DDEE2005F7B24 /* Extensions */,
 				1660D261291DDEBE005F7B24 /* Utils */,
@@ -1115,7 +1116,6 @@
 				603FD387292914EB00687ED4 /* FirestoreService.swift */,
 				60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */,
 				603EDD6229261A2000BEE65C /* FirebaseKey.swift */,
-				1660D262291DDEC6005F7B24 /* Coredata */,
 				603FD389292928D000687ED4 /* FirebaseQueryKey.swift */,
 				60E749DB292C88F40048F877 /* AuthService.swift */,
 				608BD10D292F709B00CB676E /* FCMService.swift */,
