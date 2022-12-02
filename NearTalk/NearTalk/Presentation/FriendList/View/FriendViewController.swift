@@ -113,7 +113,7 @@ final class FriendListViewController: UIViewController {
     }
     
     func showAlert() {
-        let alert = UIAlertController(title: "친구추가", message: "UUDI를 입력해주세요", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "친구추가", message: "UUID를 입력해주세요", preferredStyle: UIAlertController.Style.alert)
         
         alert.addTextField()
         
