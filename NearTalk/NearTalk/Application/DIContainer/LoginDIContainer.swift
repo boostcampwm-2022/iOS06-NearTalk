@@ -15,6 +15,7 @@ final class LoginDIContainer {
         self.container = Container(parent: container)
         
         self.registerLoginUseCase()
+        self.registerVerifyUseCase()
         self.registerViewModel(loginAction: actions)
     }
     
@@ -24,11 +25,17 @@ final class LoginDIContainer {
         }
     }
     
+    private func registerVerifyUseCase() {
+        self.container.register(VerifyUserUseCase.self) { _ in
+            DefaultVerifyUserUseCase(authRepository: self.container.resolve(AuthRepository.self)!, profileRepository: self.container.resolve(ProfileRepository.self)!, userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!)
+        }
+    }
+    
     private func registerViewModel(loginAction: LoginAction) {
         self.container.register(LoginViewModel.self) { _ in
             DefaultLoginViewModel(
                 action: loginAction,
-                loginUseCase: self.container.resolve(LoginUseCase.self)!
+                loginUseCase: self.container.resolve(LoginUseCase.self)!, verifyUseCase: self.container.resolve(VerifyUserUseCase.self)!
             )
         }
     }
