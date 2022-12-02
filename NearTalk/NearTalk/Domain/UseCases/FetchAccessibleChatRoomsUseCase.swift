@@ -12,6 +12,7 @@ protocol FetchAccessibleChatRoomsUseCase {
     func fetchAccessibleAllChatRooms(in region: NCMapRegion) -> Observable<[ChatRoom]>
     func fetchAccessibleGroupChatRooms(in region: NCMapRegion) -> Observable<[GroupChatRoomListData]>
     func fetchAccessibleDMChatRooms(in region: NCMapRegion) -> Observable<[DMChatRoomListData]>
+    func fetchDummyChatRooms() -> Observable<[ChatRoom]>
 }
 
 final class DefaultFetchAccessibleChatRoomsUseCase: FetchAccessibleChatRoomsUseCase {
@@ -41,6 +42,12 @@ final class DefaultFetchAccessibleChatRoomsUseCase: FetchAccessibleChatRoomsUseC
     func fetchAccessibleDMChatRooms(in region: NCMapRegion) -> Observable<[DMChatRoomListData]> {
         return self.repositories.accessibleChatRoomsRepository
             .fetchAccessibleDMChatRooms(in: region)
+            .asObservable()
+    }
+    
+    func fetchDummyChatRooms() -> Observable<[ChatRoom]> {
+        return self.repositories.accessibleChatRoomsRepository
+            .fetchDummyChatRooms()
             .asObservable()
     }
 }

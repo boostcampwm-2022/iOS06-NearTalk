@@ -2042,7 +2042,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location GPS 권한 요청입니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2094,7 +2094,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location GPS 권한 요청입니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

@@ -9,14 +9,12 @@ import Foundation
 
 struct NCMapRegion {
     let centerLocation: NCLocation
-    let radiusDistanceMeters: Double
-    let latitudinalMeters: Double
-    let longitudinalMeters: Double
+    let latitudeDelta: Double
+    let longitudeDelta: Double
     
-    init(centerLocation: NCLocation, radiusDistanceMeters: Double, latitudinalMeters: Double, longitudinalMeters: Double) {
+    init(centerLocation: NCLocation, latitudeDelta: Double, longitudeDelta: Double) {
         self.centerLocation = centerLocation
-        self.radiusDistanceMeters = radiusDistanceMeters
-        self.latitudinalMeters = latitudinalMeters
-        self.longitudinalMeters = longitudinalMeters
+        self.latitudeDelta = latitudeDelta
+        self.longitudeDelta = longitudeDelta
     }
 }
