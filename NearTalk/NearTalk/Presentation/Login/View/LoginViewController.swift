@@ -42,15 +42,14 @@ private extension LoginViewController {
     }
     func configureConstraint() {
         self.logoView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(30)
-            make.height.width.equalTo(60)
-            make.centerX.equalToSuperview()
+            make.height.width.equalTo(240)
+            make.center.equalToSuperview()
         }
         
         self.loginButton.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(30)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(10)
-            make.height.equalTo(loginButton.snp.width).multipliedBy(0.1)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+            make.height.equalTo(loginButton.snp.width).multipliedBy(0.15)
         }
     }
     
