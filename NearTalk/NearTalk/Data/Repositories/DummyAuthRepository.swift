@@ -57,4 +57,11 @@ final class DummyAuthRepository: AuthRepository {
             return Disposables.create()
         }
     }
+    
+    func reauthenticate(token: String) -> Completable {
+        Completable.create { completable in
+            completable(.completed)
+            return Disposables.create()
+        }
+    }
 }

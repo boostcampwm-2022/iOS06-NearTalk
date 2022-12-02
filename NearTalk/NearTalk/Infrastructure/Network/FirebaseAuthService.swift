@@ -77,7 +77,16 @@ final class DefaultFirebaseAuthService: AuthService {
     /// 탈퇴
     func deleteCurrentUser() -> Completable {
         Completable.create { completable in
-            Auth.auth().currentUser?.delete { error in
+            guard let user: User = Auth.auth().currentUser else {
+                completable(.error(FirebaseAuthError.nilUser))
+                return Disposables.create()
+            }
+            do {
+                try Auth.auth().signOut()
+            } catch let error {
+                completable(.error(error))
+            }
+            user.delete { error in
                 if let error {
                     completable(.error(error))
                     return
@@ -87,8 +96,33 @@ final class DefaultFirebaseAuthService: AuthService {
             return Disposables.create()
         }
     }
+    
+    /// 재인증
+    func reauthenticateUser(idTokenString: String, nonce: String?) -> Completable {
+        Completable.create { completable in
+            let credential: OAuthCredential = OAuthProvider.credential(
+                withProviderID: "apple.com",
+                idToken: idTokenString,
+                rawNonce: nonce
+            )
+            Auth.auth().currentUser?.reauthenticate(with: credential, completion: { authResult, error in
+                if let error {
+                    completable(.error(error))
+                    return
+                }
+
+                guard (authResult?.user) != nil else {
+                    completable(.error(FirebaseAuthError.nilUser))
+                    return
+                }
+                completable(.completed)
+            })
+            return Disposables.create()
+        }
+    }
 }
 
 enum FirebaseAuthError: Error {
     case nilUser
+    case refreshTokenFailed
 }
