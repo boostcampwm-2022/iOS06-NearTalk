@@ -74,7 +74,7 @@ final class FriendListViewController: UIViewController {
         self.dataSource = UICollectionViewDiffableDataSource<Section, Friend>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FriendListCell.identifier, for: indexPath) as? FriendListCell
             else { return UICollectionViewCell() }
-            cell.configure(model: itemIdentifier)
+            cell.configure(model: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
     }
@@ -86,12 +86,6 @@ final class FriendListViewController: UIViewController {
                 snapshot.appendSections([.main])
                 snapshot.appendItems(model)
                 self?.dataSource?.apply(snapshot, animatingDifferences: true)
-            })
-            .disposed(by: disposeBag)
-        
-        self.collectionView.rx.itemSelected
-            .subscribe(onNext: { [weak self] event in
-                self?.viewModel.didSelectItem(at: event[1])
             })
             .disposed(by: disposeBag)
         

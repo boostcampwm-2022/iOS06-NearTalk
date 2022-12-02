@@ -136,13 +136,7 @@ final class ChatRoomListViewController: UIViewController {
             .bind(onNext: { [weak self] (model: [DMChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model.sorted(by: { first, second in
-                    guard let firstDate = first.recentMessageDate
-                    else { return false }
-                    guard let secondDate = second.recentMessageDate
-                    else { return false }
-                    return firstDate > secondDate
-                }))
+                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
@@ -151,13 +145,7 @@ final class ChatRoomListViewController: UIViewController {
             .bind(onNext: { [weak self] (model: [GroupChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model.sorted(by: { first, second in
-                    guard let firstDate = first.recentMessageDate
-                    else { return false }
-                    guard let secondDate = second.recentMessageDate
-                    else { return false }
-                    return firstDate > secondDate
-                }))
+                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)

@@ -85,6 +85,14 @@ class ChatRoomListCell: UICollectionViewCell {
     
     // MARK: - Lifecycles
     
+    override func prepareForReuse() {
+        self.name.text = nil
+        self.currentUserCount.text = nil
+        self.recentMessage.text = nil
+        self.date.text = nil
+        self.img.image = nil
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
