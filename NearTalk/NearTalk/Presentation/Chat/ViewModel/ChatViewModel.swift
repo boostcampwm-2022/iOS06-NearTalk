@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import RxSwift
 import RxRelay
+import RxSwift
 
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
@@ -24,15 +24,14 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 }
 
 class DefaultChatViewModel: ChatViewModel {
-    var userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     
     // MARK: - Propoties
+    
     private let chatRoomID: String
-    let chatRoom: BehaviorRelay<ChatRoom?> = .init(value: nil)
-    var myID: String?
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
     private let disposebag: DisposeBag = DisposeBag()
+    var userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
 
     private var fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
     private var messagingUseCase: MessagingUseCase
@@ -41,11 +40,13 @@ class DefaultChatViewModel: ChatViewModel {
     private var enterChatRoomUseCase: EnterChatRoomUseCase
     
     // MARK: - Ouputs
+    
+    let chatRoom: BehaviorRelay<ChatRoom?> = .init(value: nil)
     var chatMessages: Observable<ChatMessage>
+    var myID: String?
     
     // MARK: - LifeCycle
-    // - 채팅방의 참가자 UUID가 있으니까 → fetch → VM
-    // - 채팅방 정보를 Observe → 참가자 목록 변화 observe → 채팅방의 참가자 UUID가 있으니까 → fetch → VM
+
     init(chatRoomID: String,
          fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase,
          userDefaultUseCase: UserDefaultUseCase,
@@ -67,55 +68,52 @@ class DefaultChatViewModel: ChatViewModel {
         self.userProfileList = [:]
         self.userUUIDList = []
         
-        // 1. chatRoom
+        // TODO: - chatRoom 존재하지 않을때 예외처리
+        // 1. chatroom single fetch
+        // 2. 1번 성공시, myID를 chatRoom의 userUUIDList에 추가하기
+        // 3. 1번 성공시, userProfiles fetch 해오기
+        // 4. 1번 성공시, ticket 발급
+        // 5. 4번 성공시, chatroom observe
+        
+        // 1.
         self.fetchChatRoomInfoUseCase.fetchChatRoomInfo(chatRoomID: self.chatRoomID)
-            .subscribe(onSuccess: { [weak self] chatRoom in
+            .do(onSuccess: { [weak self] chatRoom in
                 guard let self = self,
                       let userUUIDList = chatRoom.userList,
-                    let myID = self.myID
+                      let myID = self.myID
                 else {
                     return
                 }
                 self.chatRoom.accept(chatRoom)
                 self.userUUIDList = userUUIDList
-                // 2. userUUIDList
-                // myID를 chatRoom의 userUUIDList에 추가하기
+
+                // 2.
                 if !userUUIDList.contains(myID) {
-                    print("~~~~~~~~~~~~~myID를 chatRoom의 userUUIDList에 추가하기", myID, userUUIDList)
                     self.userUUIDList.append(myID)
                     self.addUserInChatRoom(chatRoom: chatRoom, myID: myID)
                 }
                 
-                // 3. userProfile
+                // 3.
                 self.fetchUserProfiles(userUUIDList: self.userUUIDList)
-                
-                // 4.
-                self.enterChatRoom(myID: myID, chatRoom: chatRoom)
-                
+            }, onError: { error in
+                print("ERROR: chatRoom 가져오기 실패 ", error)
+            })
+            .subscribe(onSuccess: { [weak self] chatRoom in
+                guard let self = self,
+                    let myID = self.myID
+                else {
+                    return
+                }
+                // 4. UserChatRoomTicket 발급 및 업데이트
+                self.configureUserChatRoomTicket(myID: myID, chatRoom: chatRoom)
             })
             .disposed(by: disposebag)
-        // TODO: - chatRoom 존재하지 않을때 예외처리
-    }
-    
-    private func enterChatRoom(myID: String, chatRoom: ChatRoom) {
-        self.enterChatRoomUseCase.enterChatRoom(userID: myID, chatRoom: chatRoom)
-            .debug()
-            .subscribe(onSuccess: { [weak self] ticket in
-                print(ticket)
-                guard let self,
-                          let roomID = chatRoom.uuid else {
-                              return
-                          }
-                self.userChatRoomTicket.accept(ticket)
-                self.observeChatRoom(roomID: roomID)
-            }, onError: { error in
-                print(">>>>>", error)
+            
+        // 5. userChatRoomTicket 발급에 성공하면 chatRoom observe 시작
+        self.userChatRoomTicket
+            .flatMap({ _ in
+                return self.fetchChatRoomInfoUseCase.observrChatRoomInfo(chatRoomID: self.chatRoomID)
             })
-            .disposed(by: self.disposebag)
-    }
-    
-    private func observeChatRoom(roomID: String) {
-        self.fetchChatRoomInfoUseCase.observrChatRoomInfo(chatRoomID: roomID)
             .subscribe(onNext: { [weak self] chatRoom in
                 guard let self else {
                     return
@@ -124,63 +122,8 @@ class DefaultChatViewModel: ChatViewModel {
             })
             .disposed(by: self.disposebag)
         
-    }
-    
-    private func observeMessage() {
-        self.chatMessages
-            .subscribe(onNext: { [weak self] chatMessage in
-                guard let self,
-                let messageCount = self.chatRoom.value?.messageCount else {
-                    return
-                }
-                var newTicket = self.userChatRoomTicket.value
-                newTicket?.lastReadMessageID = chatMessage.uuid
-                newTicket?.lastRoomMessageCount = messageCount + 1
-                
-                if let newTicket {
-                    _ = self.enterChatRoomUseCase.upateUserChatRoomTicket(ticket: newTicket)
-                }
-                
-                guard chatMessage.senderID == self.myID else {
-                    return
-                }
-                
-                var newChatRoom = self.chatRoom.value
-                newChatRoom?.messageCount = messageCount + 1
-                newChatRoom?.recentMessageID = chatMessage.uuid
-                newChatRoom?.recentMessageDate = chatMessage.createdDate
-                newChatRoom?.recentMessageText = chatMessage.text
-                if let newChatRoom, let myID = self.myID {
-                    _ = self.messagingUseCase.updateChatRoom(chatRoom: newChatRoom, userID: myID)
-                }
-            })
-            .disposed(by: self.disposebag)
-    }
-    
-    private func addUserInChatRoom(chatRoom: ChatRoom, myID: String) {
-        self.messagingUseCase.updateChatRoom(chatRoom: chatRoom, userID: myID)
-            .subscribe {
-                print("addUserInChatRoom 성공", myID)
-            } onError: { error in
-                print("addUserInChatRoom 씰패", error)
-            }.disposed(by: self.disposebag)
-    }
-    
-    private func fetchUserProfiles(userUUIDList: [String]) {
-        userUUIDList.forEach {
-            self.fetchProfileUseCase.fetchUserInfo(with: $0)
-                .subscribe { [weak self] userProfile in
-                    guard let self = self,
-                          let uuid = userProfile.uuid
-                    else {
-                        return
-                    }
-                    self.userProfileList[uuid] = userProfile
-                } onFailure: { error in
-                    print("ERROR: ", error)
-                }
-                .disposed(by: self.disposebag)
-        }
+        // 메세지 송수신에 대한 userChatRoomTicket
+        self.observeMessage()
     }
         
     func sendMessage(_ message: String) {
@@ -225,6 +168,78 @@ class DefaultChatViewModel: ChatViewModel {
     }
 }
 
+private extension DefaultChatViewModel {
+    func configureUserChatRoomTicket(myID: String, chatRoom: ChatRoom) {
+        self.enterChatRoomUseCase.configureUserChatRoomTicket(userID: myID, chatRoom: chatRoom)
+            .subscribe(onSuccess: { [weak self] ticket in
+                guard let self else {
+                    return
+                }
+                self.userChatRoomTicket.accept(ticket)
+            }, onFailure: { error in
+                print("ERROR: ", error)
+            })
+            .disposed(by: self.disposebag)
+    }
+    
+    func observeMessage() {
+        self.chatMessages
+            .subscribe(onNext: { [weak self] chatMessage in
+                guard let self,
+                let messageCount = self.chatRoom.value?.messageCount else {
+                    return
+                }
+                var newTicket = self.userChatRoomTicket.value
+                newTicket?.lastReadMessageID = chatMessage.uuid
+                newTicket?.lastRoomMessageCount = messageCount + 1
+                
+                if let newTicket {
+                    _ = self.enterChatRoomUseCase.upateUserChatRoomTicket(ticket: newTicket)
+                }
+
+                guard chatMessage.senderID == self.myID else {
+                    return
+                }
+                
+                var newChatRoom = self.chatRoom.value
+                newChatRoom?.messageCount = messageCount + 1
+                newChatRoom?.recentMessageID = chatMessage.uuid
+                newChatRoom?.recentMessageDate = chatMessage.createdDate
+                newChatRoom?.recentMessageText = chatMessage.text
+                if let newChatRoom, let myID = self.myID {
+                    _ = self.messagingUseCase.updateChatRoom(chatRoom: newChatRoom, userID: myID)
+                }
+            })
+            .disposed(by: self.disposebag)
+    }
+    
+    func addUserInChatRoom(chatRoom: ChatRoom, myID: String) {
+        self.messagingUseCase.updateChatRoom(chatRoom: chatRoom, userID: myID)
+            .subscribe {
+                print("addUserInChatRoom 성공", myID)
+            } onError: { error in
+                print("addUserInChatRoom 씰패", error)
+            }.disposed(by: self.disposebag)
+    }
+    
+    private func fetchUserProfiles(userUUIDList: [String]) {
+        userUUIDList.forEach {
+            self.fetchProfileUseCase.fetchUserInfo(with: $0)
+                .subscribe { [weak self] userProfile in
+                    guard let self = self,
+                          let uuid = userProfile.uuid
+                    else {
+                        return
+                    }
+                    self.userProfileList[uuid] = userProfile
+                } onFailure: { error in
+                    print("ERROR: ", error)
+                }
+                .disposed(by: self.disposebag)
+        }
+    }
+}
+
 struct MessageItem: Hashable {
     var id: String // message uuid
     var userName: String // sender name
@@ -247,3 +262,46 @@ enum MyMessageType: String {
     case send
     case receive
 }
+
+
+
+// 나중에 정리할 예정
+// 1. chatRoom
+//        self.fetchChatRoomInfoUseCase.fetchChatRoomInfo(chatRoomID: self.chatRoomID)
+//            .subscribe(onSuccess: { [weak self] chatRoom in
+//                guard let self = self,
+//                      let userUUIDList = chatRoom.userList,
+//                    let myID = self.myID
+//                else {
+//                    return
+//                }
+//                self.chatRoom.accept(chatRoom)
+//                self.userUUIDList = userUUIDList
+//
+//                // 2. myID를 chatRoom의 userUUIDList에 추가하기
+//                if !userUUIDList.contains(myID) {
+//                    print("myID를 chatRoom의 userUUIDList에 추가하기", myID, userUUIDList)
+//                    self.userUUIDList.append(myID)
+//                    self.addUserInChatRoom(chatRoom: chatRoom, myID: myID)
+//                }
+//
+//                // 3. userProfile
+//                self.fetchUserProfiles(userUUIDList: self.userUUIDList)
+//
+//                // 4.
+//                self.enterChatRoom(myID: myID, chatRoom: chatRoom)
+//
+//            })
+//            .disposed(by: disposebag)
+
+//func observeChatRoom(roomID: String) {
+//    self.fetchChatRoomInfoUseCase.observrChatRoomInfo(chatRoomID: roomID)
+//        .subscribe(onNext: { [weak self] chatRoom in
+//            guard let self else {
+//                return
+//            }
+//            self.chatRoom.accept(chatRoom)
+//        })
+//        .disposed(by: self.disposebag)
+//
+//}

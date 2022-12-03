@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 protocol EnterChatRoomUseCase {
-    func enterChatRoom(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket>
+    func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket>
     func upateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
 }
 
@@ -33,14 +33,12 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
         return self.chatRoomListRepository.updateUserChatRoomTicket(ticket)
     }
     
-    func enterChatRoom(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket> {
-        print(#function)
+    func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket> {
         guard let roomID = chatRoom.uuid else {
             return .error(EnterChatRoomUseCaseError.faildToEnter)
         }
         
         return self.fetchUserChatRoomTicket(roomID: roomID)
-            .debug()
             .flatMap { userChatRoomTicket in
                 var newUserChatRoomTicket = userChatRoomTicket
                 newUserChatRoomTicket.lastReadMessageID = chatRoom.recentMessageID

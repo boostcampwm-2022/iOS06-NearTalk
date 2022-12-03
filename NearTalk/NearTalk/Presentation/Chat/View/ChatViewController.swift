@@ -103,11 +103,9 @@ class ChatViewController: UIViewController {
     
     private func scrolltoBottom() {
         let indexPath = IndexPath(item: messgeItems.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true) // animated 수정 필요
+        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
-    
-    // MARK: - Bind
-    
+        
     private func bind() {
         self.chatInputAccessoryView.sendButton.rx.tap
             .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
@@ -126,7 +124,6 @@ class ChatViewController: UIViewController {
                         return
                     }
                     let userProfile = self.viewModel.getUserProfile(userID: newMessage.senderID ?? "")
-                    print(userProfile, newMessage.senderID)
                     let messageItem = MessageItem(chatMessage: newMessage, myID: myID, userName: userProfile?.username)
                     self.messgeItems.append(messageItem)
                     self.applySnapshot()
