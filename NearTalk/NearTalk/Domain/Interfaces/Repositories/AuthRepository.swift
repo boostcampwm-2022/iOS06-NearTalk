@@ -12,5 +12,5 @@ protocol AuthRepository {
     func dropout() -> Completable
     func login(token: String) -> Completable
     func verify() -> Completable
-//    func fetchCurrentUserUID() -> Single<String>
+    func reauthenticate(token: String) -> Completable
 }

@@ -18,6 +18,10 @@ final class DefaultAuthRepository: AuthRepository {
         return self.authService.logout()
     }
     
+    func reauthenticate(token: String) -> Completable {
+        return self.authService.reauthenticateUser(idTokenString: token, nonce: NonceGenerator.randomNonceString())
+    }
+    
     func dropout() -> Completable {
         return self.authService.deleteCurrentUser()
     }
