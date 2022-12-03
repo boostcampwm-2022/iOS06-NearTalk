@@ -60,7 +60,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
     }
     
     // MARK: - UserChatRoomTicket
-    func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable {
+    func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         self.databaseService.createUserChatRoomTicket(ticket)
     }
     
@@ -86,7 +86,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
             }
     }
     
-    func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Completable {
+    func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         self.databaseService.updateUserChatRoomTicket(ticket)
     }
 }

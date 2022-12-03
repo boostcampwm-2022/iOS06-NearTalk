@@ -152,6 +152,7 @@
 		7C522E1F2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */; };
 		7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */; };
 		7C749851292F706F00FADA94 /* MessagingUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C749850292F706F00FADA94 /* MessagingUseCase.swift */; };
+		7C8197442939E79700A7DD8F /* EnterChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8197432939E79700A7DD8F /* EnterChatRoomUseCase.swift */; };
 		7CA4EA36292BA61300D8C757 /* RemoveFriendUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */; };
 		7CA4EA38292BA65000D8C757 /* FetchProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA37292BA65000D8C757 /* FetchProfileUseCase.swift */; };
 		7CA4EA3C292BE5FF00D8C757 /* ProfileDetailDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */; };
@@ -400,6 +401,7 @@
 		7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatRoomInfoUseCase.swift; sourceTree = "<group>"; };
 		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
 		7C749850292F706F00FADA94 /* MessagingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingUseCase.swift; sourceTree = "<group>"; };
+		7C8197432939E79700A7DD8F /* EnterChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterChatRoomUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveFriendUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA37292BA65000D8C757 /* FetchProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchProfileUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailDIContainer.swift; sourceTree = "<group>"; };
@@ -1129,6 +1131,7 @@
 				7C43C1EE2935F810008322FC /* UserDefaultUseCase.swift */,
 				7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */,
 				7C749850292F706F00FADA94 /* MessagingUseCase.swift */,
+				7C8197432939E79700A7DD8F /* EnterChatRoomUseCase.swift */,
 				7C254DA9292DB22B004D4CEC /* Coordinator */,
 				7C254DA8292DB21E004D4CEC /* ViewModel */,
 				7C254DA7292DB217004D4CEC /* View */,
@@ -1869,6 +1872,7 @@
 				830897DB292CC3830090EC18 /* ProfileSettingCoordinator.swift in Sources */,
 				83649769292D393C0002DDE5 /* AppSettingViewModel.swift in Sources */,
 				60E749DC292C88F40048F877 /* AuthService.swift in Sources */,
+				7C8197442939E79700A7DD8F /* EnterChatRoomUseCase.swift in Sources */,
 				16988877292E510200CEC7B9 /* MainMapDIContainer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,27 +9,34 @@ import UIKit
 
 protocol ProfileDetailCoordinatorDependency {
     func makeProfileDetailViewController(actions: ProfileDetailViewModelActions) -> ProfileDetailViewController
+    func makeChatDIContainer(chatRoomID: String) -> ChatDIContainer
 }
 
 final class ProfileDetailCoordinator {
     var navigationController: UINavigationController?
-    private let dependency: ProfileDetailCoordinatorDependency
+    private let dependencies: ProfileDetailCoordinatorDependency
     
     init(navigationController: UINavigationController,
          dependency: ProfileDetailCoordinatorDependency) {
         self.navigationController = navigationController
-        self.dependency = dependency
+        self.dependencies = dependency
     }
     
     func start() {
-        let actions = ProfileDetailViewModelActions()
+        let actions = ProfileDetailViewModelActions(showChatViewController: showChatViewController)
         
-        let viewController: ProfileDetailViewController = self.dependency.makeProfileDetailViewController(actions: actions)
+        let viewController: ProfileDetailViewController = self.dependencies.makeProfileDetailViewController(actions: actions)
         self.navigationController?.present(viewController, animated: true)
     }
     
-    func pushChatViewController(username: String) {
+    func showChatViewController(chatRoomID: String) {
         print(#function)
+        guard let navigationController = navigationController
+        else { return }
+        
+        let dicontainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
+        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        coordinator.start()
     }
     
     func pushAlertViewController(username: String) {

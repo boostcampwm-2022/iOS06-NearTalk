@@ -76,6 +76,11 @@ final class ProfileDetailDIContainer {
     func makeProfileDetailCoordinator(navigationController: UINavigationController) -> ProfileDetailCoordinator {
         return ProfileDetailCoordinator(navigationController: navigationController, dependency: self)
     }
+    
+    // MARK: - DI Container
+    func makeChatDIContainer(chatRoomID: String) -> ChatDIContainer {
+        return ChatDIContainer(chatRoomID: chatRoomID)
+    }
 }
 
 extension ProfileDetailDIContainer: ProfileDetailCoordinatorDependency {}

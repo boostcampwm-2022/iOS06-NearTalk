@@ -22,6 +22,6 @@ final class DefaultFetchProfileUseCase: FetchProfileUseCase {
     }
     
     func fetchUserInfo(with userID: String) -> Single<UserProfile> {
-        return  self.userProfileRepository.fetchProfileByUUID(userID)
+        return self.userProfileRepository.fetchProfileByUUID(userID)
     }
 }
