@@ -186,7 +186,6 @@
 		83649779292E1CA20002DDE5 /* DummyVerifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */; };
 		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
 		83808C0329371637002B78C0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0229371637002B78C0 /* OnboardingView.swift */; };
-		83808C0529371777002B78C0 /* OnboardingViewPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0429371777002B78C0 /* OnboardingViewPreview.swift */; };
 		83808C0729372C08002B78C0 /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0629372C08002B78C0 /* ProfileSettingView.swift */; };
 		8386B7CA292F59740095597D /* AppSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386B7C9292F59740095597D /* AppSettingCoordinator.swift */; };
 		8386B7CC292F5D1C0095597D /* AppSettingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */; };
@@ -431,7 +430,6 @@
 		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		83808C0229371637002B78C0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		83808C0429371777002B78C0 /* OnboardingViewPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewPreview.swift; sourceTree = "<group>"; };
 		83808C0629372C08002B78C0 /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		8386B7C9292F59740095597D /* AppSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingCoordinator.swift; sourceTree = "<group>"; };
 		8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingDIContainer.swift; sourceTree = "<group>"; };
@@ -1323,7 +1321,6 @@
 			children = (
 				8375F2222922B043004538AF /* OnboardingViewController.swift */,
 				83808C0229371637002B78C0 /* OnboardingView.swift */,
-				83808C0429371777002B78C0 /* OnboardingViewPreview.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1769,7 +1766,6 @@
 				6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
-				83808C0529371777002B78C0 /* OnboardingViewPreview.swift in Sources */,
 				162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
