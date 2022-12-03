@@ -22,6 +22,9 @@ final class ProfileSettingViewController: UIViewController {
     
     // MARK: - Properties
     private let disposeBag: DisposeBag = DisposeBag()
+    private let loadingViewController: UploadIndicatorViewController = UploadIndicatorViewController().then {
+        $0.modalPresentationStyle = .overCurrentContext
+    }
     private let viewModel: any ProfileSettingViewModel
 
     // MARK: - Lifecycles
@@ -74,6 +77,7 @@ private extension ProfileSettingViewController {
         self.bindMessageField()
         self.bindProfileTap()
         self.bindRegisterButton()
+        self.bindBackButton()
     }
     
     func bindNickNameField() {
@@ -83,14 +87,12 @@ private extension ProfileSettingViewController {
             })
             .disposed(by: self.disposeBag)
         self.viewModel.nickNameValidity
-            .asDriver()
             .map { isValid in
                 isValid ? "사용 가능한 닉네임 입니다" : "5-16 자 사이의 영어 소문자, 숫자, -_ 기호만 사용하십시오"
             }
             .drive(self.rootView.nickNameValidityMessage)
             .disposed(by: self.disposeBag)
         self.viewModel.nickNameValidity
-            .asDriver()
             .map { isValid in
                 isValid ? UIColor.green : UIColor.red
             }
@@ -113,14 +115,12 @@ private extension ProfileSettingViewController {
             })
             .disposed(by: self.disposeBag)
         self.viewModel.messageValidity
-            .asDriver()
             .map { isValid in
                 isValid ? "사용 가능한 메세지 입니다" : "50자 이하로 작성하십시오"
             }
             .drive(self.rootView.messageValidityMessage)
             .disposed(by: self.disposeBag)
         self.viewModel.messageValidity
-            .asDriver()
             .map { isValid in
                 isValid ? UIColor.green : UIColor.red
             }
@@ -153,7 +153,7 @@ private extension ProfileSettingViewController {
     func bindRegisterButton() {
         if let updateButton = self.navigationItem.rightBarButtonItem {
             self.viewModel.updateEnable
-                .bind(to: updateButton.rx.isEnabled)
+                .drive(updateButton.rx.isEnabled)
                 .disposed(by: self.disposeBag)
             updateButton.rx
                 .tap
@@ -162,6 +162,21 @@ private extension ProfileSettingViewController {
                 })
                 .disposed(by: self.disposeBag)
         }
+    }
+    
+    func bindBackButton() {
+        self.viewModel.goBackEnable
+            .drive(self.navigationItem.rx.hidesBackButton)
+            .disposed(by: self.disposeBag)
+        self.viewModel.goBackEnable
+            .drive { on in
+                if on {
+                    self.present(self.loadingViewController, animated: true)
+                } else {
+                    self.loadingViewController.dismiss(animated: true)
+                }
+            }
+            .disposed(by: self.disposeBag)
     }
 }
 

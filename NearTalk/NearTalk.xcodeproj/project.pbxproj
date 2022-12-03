@@ -190,6 +190,7 @@
 		8386B7CA292F59740095597D /* AppSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386B7C9292F59740095597D /* AppSettingCoordinator.swift */; };
 		8386B7CC292F5D1C0095597D /* AppSettingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */; };
 		839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D5BDC2922AD1000857FDD /* LoginViewController.swift */; };
+		83C6B683293B298000560C51 /* UploadingIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C6B682293B298000560C51 /* UploadingIndicatorViewController.swift */; };
 		83D354412925412400B9236A /* UserProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D354402925412400B9236A /* UserProfileRepository.swift */; };
 		83D354432925414F00B9236A /* DefaultUserProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D354422925414F00B9236A /* DefaultUserProfileRepository.swift */; };
 		83D354482925438C00B9236A /* UserUUIDRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D354472925438C00B9236A /* UserUUIDRepository.swift */; };
@@ -434,6 +435,7 @@
 		8386B7C9292F59740095597D /* AppSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingCoordinator.swift; sourceTree = "<group>"; };
 		8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingDIContainer.swift; sourceTree = "<group>"; };
 		839D5BDC2922AD1000857FDD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		83C6B682293B298000560C51 /* UploadingIndicatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadingIndicatorViewController.swift; sourceTree = "<group>"; };
 		83D3543929252F1A00B9236A /* MyProfileDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDIContainer.swift; sourceTree = "<group>"; };
 		83D3543C29252F5B00B9236A /* MyProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileCoordinator.swift; sourceTree = "<group>"; };
 		83D354402925412400B9236A /* UserProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileRepository.swift; sourceTree = "<group>"; };
@@ -1302,6 +1304,7 @@
 			children = (
 				8367AB632922AF6300678669 /* ProfileSettingViewController.swift */,
 				83808C0629372C08002B78C0 /* ProfileSettingView.swift */,
+				83C6B682293B298000560C51 /* UploadingIndicatorViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1785,6 +1788,7 @@
 				7CE80643292552BA00D828FF /* CreateGroupChatViewModel.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
+				83C6B683293B298000560C51 /* UploadingIndicatorViewController.swift in Sources */,
 				7C254DB1292DDA88004D4CEC /* ChatDIContainer.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
