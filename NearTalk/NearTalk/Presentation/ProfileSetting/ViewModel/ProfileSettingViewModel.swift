@@ -20,7 +20,7 @@ protocol ProfileSettingOutput {
     var messageValidity: Driver<Bool> { get }
     var image: Driver<Data?> { get }
     var updateEnable: Driver<Bool> { get }
-    var goBackEnable: Driver<Bool> { get }
+    var backButtonHidden: Driver<Bool> { get }
 }
 
 protocol ProfileSettingViewModel: ProfileSettingInput, ProfileSettingOutput {}
@@ -46,7 +46,7 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     private let messageValidityRelay: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
     private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     private let updateEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    private let goBackEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    private let backButtonHiddenRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
     var nickNameValidity: Driver<Bool> {
         self.nickNameValidityRelay
@@ -65,8 +65,8 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
         self.updateEnableRelay
             .asDriver()
     }
-    var goBackEnable: Driver<Bool> {
-        self.goBackEnableRelay
+    var backButtonHidden: Driver<Bool> {
+        self.backButtonHiddenRelay
             .asDriver()
     }
     
@@ -104,14 +104,14 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     }
     
     func update() {
-        self.goBackEnableRelay.accept(true)
+        self.backButtonHiddenRelay.accept(true)
         if let image = self.imageRelay.value {
             self.uploadImageUseCase.execute(image: image)
                 .subscribe(onSuccess: { [weak self] imagePath in
                     self?.updateProfile(imagePath: imagePath)
                 }, onFailure: { [weak self] _ in
                     self?.action.presentUpdateFailure?()
-                    self?.goBackEnableRelay.accept(false)
+                    self?.backButtonHiddenRelay.accept(false)
                 })
                 .disposed(by: self.disposeBag)
         } else {
@@ -132,10 +132,10 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
         self.updateProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.profile = newProfile
-                self?.goBackEnableRelay.accept(false)
+                self?.backButtonHiddenRelay.accept(false)
             }, onError: { [weak self] _ in
                 self?.action.presentUpdateFailure?()
-                self?.goBackEnableRelay.accept(false)
+                self?.backButtonHiddenRelay.accept(false)
             })
             .disposed(by: self.disposeBag)
     }

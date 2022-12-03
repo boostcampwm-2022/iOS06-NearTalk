@@ -165,12 +165,12 @@ private extension ProfileSettingViewController {
     }
     
     func bindBackButton() {
-        self.viewModel.goBackEnable
+        self.viewModel.backButtonHidden
             .drive(self.navigationItem.rx.hidesBackButton)
             .disposed(by: self.disposeBag)
-        self.viewModel.goBackEnable
-            .drive { on in
-                if on {
+        self.viewModel.backButtonHidden
+            .drive { loadingOn in
+                if loadingOn {
                     self.present(self.loadingViewController, animated: true)
                 } else {
                     self.loadingViewController.dismiss(animated: true)
