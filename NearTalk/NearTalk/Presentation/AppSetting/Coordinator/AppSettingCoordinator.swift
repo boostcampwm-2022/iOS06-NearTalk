@@ -30,7 +30,7 @@ final class AppSettingCoordinator: Coordinator {
         let viewController: AppSettingViewController = self.dependency.makeAppSettingViewController(
             action: Action(presentLogoutResult: self.presentLogoutResult(success:),
                            presentDropoutResult: self.presentDropoutResult(success:),
-                           presentNotificationPrompt: self.presentNotificationPrompt))
+                           presentNotificationPrompt: self.presentNotificationPrompt, presentReauthenticateView: self.presentAppleAuthenticateViewController))
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -38,6 +38,7 @@ final class AppSettingCoordinator: Coordinator {
         let presentLogoutResult: ((Bool) -> Void)?
         let presentDropoutResult: ((Bool) -> Void)?
         let presentNotificationPrompt: (() -> Single<Bool>)?
+        let presentReauthenticateView: (() -> Void)?
     }
     
     func presentLogoutResult(success: Bool) {
@@ -83,6 +84,10 @@ final class AppSettingCoordinator: Coordinator {
             self?.navigationController?.topViewController?.present(alert, animated: true)
             return Disposables.create()
         }
+    }
+    
+    func presentAppleAuthenticateViewController() {
+        (self.navigationController?.topViewController as? AppSettingViewController)?.presentReauthenticationViewController()
     }
     
     @MainActor

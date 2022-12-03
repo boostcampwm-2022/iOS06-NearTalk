@@ -14,5 +14,6 @@ protocol AuthService {
     func loginWithApple(token idTokenString: String, nonce: String) -> Completable
     func logout() -> Completable
     func deleteCurrentUser() -> Completable
+    func reauthenticateUser(idTokenString: String, nonce: String?) -> Completable
 //    func fetchCurrentUID() -> Single<String>
 }
