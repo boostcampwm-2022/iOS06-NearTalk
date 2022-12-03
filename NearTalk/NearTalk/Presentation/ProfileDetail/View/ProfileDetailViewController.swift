@@ -172,17 +172,3 @@ private extension ProfileDetailViewController {
             .disposed(by: disposeBag)
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ProfileDetailViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        let navigation = UINavigationController()
-        let diContainer = ProfileDetailDIContainer(userID: "1234")
-        let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigation)
-        coordinator.start()
-        return ProfileDetailViewController.create(with: ProfileDetailViewModel(userID: "", fetchProfileUseCase: DefaultFetchProfileUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), uploadChatRoomInfoUseCase: DefaultUploadChatRoomInfoUseCase(mediaRepository: DefaultMediaRepository(storageService: DefaultStorageService()), chatRoomRepository: DefaultChatRoomListRepository(dataTransferService: DefaultStorageService(), profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService()), databaseService: DefaultRealTimeDatabaseService(), firestoreService: DefaultFirestoreService())), removeFriendUseCase: DefaultRemoveFriendUseCase(profileRepository: DefaultProfileRepository(firestoreService: DefaultFirestoreService(), firebaseAuthService: DefaultFirebaseAuthService())), actions: ProfileDetailViewModelActions())) .showPreview(.iPhone14Pro)
-    }
-}
-#endif

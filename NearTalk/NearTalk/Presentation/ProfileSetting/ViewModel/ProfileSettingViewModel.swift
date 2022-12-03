@@ -5,7 +5,7 @@
 //  Created by Preston Kim on 2022/11/21.
 //
 
-import RxRelay
+import RxCocoa
 import RxSwift
 
 protocol ProfileSettingInput {
@@ -16,10 +16,11 @@ protocol ProfileSettingInput {
 }
 
 protocol ProfileSettingOutput {
-    var nickNameValidity: BehaviorRelay<Bool> { get }
-    var messageValidity: BehaviorRelay<Bool> { get }
-    var image: BehaviorRelay<Data?> { get }
-    var updateEnable: BehaviorRelay<Bool> { get }
+    var nickNameValidity: Driver<Bool> { get }
+    var messageValidity: Driver<Bool> { get }
+    var image: Driver<Data?> { get }
+    var updateEnable: Driver<Bool> { get }
+    var backButtonHidden: Driver<Bool> { get }
 }
 
 protocol ProfileSettingViewModel: ProfileSettingInput, ProfileSettingOutput {}
@@ -30,29 +31,87 @@ protocol ProfileSettingViewModelAction {
 }
 
 final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
+    private let updateProfileUseCase: any UpdateProfileUseCase
+    private let validateNickNameUseCase: any ValidateTextUseCase
+    private let validateStatusMessageUseCase: any ValidateTextUseCase
+    private let uploadImageUseCase: any UploadImageUseCase
+    private let action: any ProfileSettingViewModelAction
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    private var nickName: String?
+    private var message: String?
+    private var profile: UserProfile
+    
+    private let nickNameValidityRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    private let messageValidityRelay: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    private let updateEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    private let backButtonHiddenRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    
+    var nickNameValidity: Driver<Bool> {
+        self.nickNameValidityRelay
+            .asDriver()
+    }
+    var messageValidity: Driver<Bool> {
+        self.messageValidityRelay
+            .asDriver()
+    }
+    var image: Driver<Data?> {
+        self.imageRelay
+            .asDriver()
+    }
+    
+    var updateEnable: Driver<Bool> {
+        self.updateEnableRelay
+            .asDriver()
+    }
+    var backButtonHidden: Driver<Bool> {
+        self.backButtonHiddenRelay
+            .asDriver()
+    }
+    
+    init(updateProfileUseCase: any UpdateProfileUseCase,
+         validateNickNameUseCase: any ValidateTextUseCase,
+         validateStatusMessageUseCase: any ValidateTextUseCase,
+         uploadImageUseCase: any UploadImageUseCase,
+         action: any ProfileSettingViewModelAction,
+         profile: UserProfile) {
+        self.updateProfileUseCase = updateProfileUseCase
+        self.validateNickNameUseCase = validateNickNameUseCase
+        self.validateStatusMessageUseCase = validateStatusMessageUseCase
+        self.uploadImageUseCase = uploadImageUseCase
+        self.action = action
+        self.nickName = profile.username
+        self.message = profile.statusMessage
+        self.profile = profile
+        self.bind()
+    }
+    
     func editNickName(_ text: String) {
         self.nickName = text
-        self.nickNameValidity
+        self.nickNameValidityRelay
             .accept(self.validateNickNameUseCase.execute(text))
     }
     
     func editStatusMessage(_ text: String) {
         self.message = text
-        self.messageValidity
+        self.messageValidityRelay
             .accept(self.validateStatusMessageUseCase.execute(text))
     }
     
     func editImage() {
-        self.action.presentImagePicker?(self.image)
+        self.action.presentImagePicker?(self.imageRelay)
     }
     
     func update() {
-        if let image = self.image.value {
+        self.backButtonHiddenRelay.accept(true)
+        if let image = self.imageRelay.value {
             self.uploadImageUseCase.execute(image: image)
                 .subscribe(onSuccess: { [weak self] imagePath in
                     self?.updateProfile(imagePath: imagePath)
                 }, onFailure: { [weak self] _ in
                     self?.action.presentUpdateFailure?()
+                    self?.backButtonHiddenRelay.accept(false)
                 })
                 .disposed(by: self.disposeBag)
         } else {
@@ -73,50 +132,19 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
         self.updateProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.profile = newProfile
+                self?.backButtonHiddenRelay.accept(false)
             }, onError: { [weak self] _ in
                 self?.action.presentUpdateFailure?()
+                self?.backButtonHiddenRelay.accept(false)
             })
             .disposed(by: self.disposeBag)
     }
     
-    let nickNameValidity: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    let messageValidity: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    let image: RxRelay.BehaviorRelay<Data?> = BehaviorRelay(value: nil)
-    let updateEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    
-    private let updateProfileUseCase: any UpdateProfileUseCase
-    private let validateNickNameUseCase: any ValidateTextUseCase
-    private let validateStatusMessageUseCase: any ValidateTextUseCase
-    private let uploadImageUseCase: any UploadImageUseCase
-    private let action: any ProfileSettingViewModelAction
-    private let disposeBag: DisposeBag = DisposeBag()
-    
-    private var nickName: String?
-    private var message: String?
-    private var profile: UserProfile
-    
-    init(updateProfileUseCase: any UpdateProfileUseCase,
-         validateNickNameUseCase: any ValidateTextUseCase,
-         validateStatusMessageUseCase: any ValidateTextUseCase,
-         uploadImageUseCase: any UploadImageUseCase,
-         action: any ProfileSettingViewModelAction,
-         profile: UserProfile) {
-        self.updateProfileUseCase = updateProfileUseCase
-        self.validateNickNameUseCase = validateNickNameUseCase
-        self.validateStatusMessageUseCase = validateStatusMessageUseCase
-        self.uploadImageUseCase = uploadImageUseCase
-        self.action = action
-        self.nickName = profile.username
-        self.message = profile.statusMessage
-        self.profile = profile
-        self.bind()
-    }
-    
     private func bind() {
-        Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
+        Observable.combineLatest(self.nickNameValidityRelay, self.messageValidityRelay) {
             $0 && $1
         }
-        .bind(to: self.updateEnable)
+        .bind(to: self.updateEnableRelay)
         .disposed(by: self.disposeBag)
     }
 }

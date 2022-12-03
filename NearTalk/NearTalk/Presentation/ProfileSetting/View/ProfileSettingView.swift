@@ -70,7 +70,8 @@ final class ProfileSettingView: UIView {
 
 extension ProfileSettingView {    
     var height: CGFloat {
-        self.subviews.reduce(30 + 10 + 10 + 30 + 10 + 10) { partialResult, subView in
+        self.subviews
+            .reduce(30 + 10 + 10 + 30 + 10 + 10) { partialResult, subView in
             partialResult + subView.frame.height
         }
     }
