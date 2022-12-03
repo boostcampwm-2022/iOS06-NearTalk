@@ -112,51 +112,12 @@ extension OnboardingCoordinator: UIImagePickerControllerDelegate, UINavigationCo
         picker.dismiss(animated: true)
         if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             self.resizeImageByUIGraphics(image: image)
-//            self.resizeImage(image: image)
-//            self.cropImage(image: image)
         } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             self.resizeImageByUIGraphics(image: image)
-//            self.cropImage(image: image)
-//            self.resizeImage(image: image)
         } else {
             self.imagePublisher?.accept(nil)
             self.imagePublisher = nil
         }
-    }
-    
-    func cropImage(image: UIImage) {
-        let widthInPixel: CGFloat = image.scale * image.size.width
-        let heightInPixel: CGFloat = image.scale * image.size.height
-        let cropWidth: CGFloat = min(320, widthInPixel) / image.scale
-        let cropHeight: CGFloat = min(320, heightInPixel) / image.scale
-        
-        let xOrigin: CGFloat = (image.size.width - cropWidth) / 2.0
-        let yOrigin: CGFloat = (image.size.height - cropHeight) / 2.0
-        if let croppedImage: CGImage = image.cgImage?.cropping(to: .init(x: xOrigin, y: yOrigin, width: cropWidth, height: cropHeight)) {
-            let uiimage: UIImage = UIImage(cgImage: croppedImage)
-            self.imagePublisher?.accept(uiimage.jpegData(compressionQuality: 1.0) ?? uiimage.pngData())
-        }
-        self.imagePublisher = nil
-    }
-    
-    func resizeImage(image: UIImage) {
-        let options: [NSString: Any] = [
-            kCGImageSourceThumbnailMaxPixelSize: 320,
-            kCGImageSourceCreateThumbnailFromImageAlways: true,
-            kCGImagePropertyExifCompressedBitsPerPixel: 72
-        ]
-        guard let data = image.cgImage?.dataProvider?.data, let imageSource = CGImageSourceCreateWithData(data, options as CFDictionary) else {
-            self.imagePublisher = nil
-            return
-        }
-        
-        guard let scaledImage = CGImageSourceCreateImageAtIndex(imageSource, 0, options as CFDictionary) else {
-            self.imagePublisher = nil
-            return
-        }
-        let uiimage: UIImage = UIImage(cgImage: scaledImage)
-        self.imagePublisher?.accept(uiimage.pngData() ?? uiimage.jpegData(compressionQuality: 1.0))
-        self.imagePublisher = nil
     }
     
     func resizeImageByUIGraphics(image: UIImage) {
@@ -165,12 +126,7 @@ extension OnboardingCoordinator: UIImagePickerControllerDelegate, UINavigationCo
         let percentage: CGFloat = min(320.0 / (heightInPixel), min(1.0, 320.0 / (widthInPixel)))
         let newImage = image.resized(withPercentage: percentage)
         let data = newImage?.jpegData(compressionQuality: percentage)
-        if let bytes = data?.count, bytes > 24000 {
-            let resizedData: Data? = newImage?.resized()?.jpegData(compressionQuality: percentage)
-            self.imagePublisher?.accept(resizedData)
-        } else {
-            self.imagePublisher?.accept(data)
-        }
+        self.imagePublisher?.accept(data)
         self.imagePublisher = nil
     }
 }
