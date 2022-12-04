@@ -37,7 +37,6 @@ final class BottomSheetViewController: UIViewController {
     
     func loadData(with dataSource: [ChatRoom]) {
         self.dataSource = dataSource
-        self.chatRoomsTableView.reloadData()
     }
     
     private func addSubViews() {
@@ -61,7 +60,6 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureLayout() {
         self.view.backgroundColor = .systemOrange
-        
         self.modalPresentationStyle = .pageSheet
         
         if let sheet = self.sheetPresentationController {
@@ -82,7 +80,9 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath) as? BottomSheetTableViewCell ?? BottomSheetTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath) as? BottomSheetTableViewCell
+        else { return BottomSheetTableViewCell() }
+        
         cell.bind(to: self.dataSource[indexPath.row])
 
         return cell

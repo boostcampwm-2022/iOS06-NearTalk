@@ -13,16 +13,53 @@ final class BottomSheetTableViewCell: UITableViewCell {
     
     static let reuseIdentifier = String(describing: BottomSheetTableViewCell.self)
     
-    private let name = UILabel().then {
-        $0.font = UIFont(name: "text", size: 18)
-        $0.numberOfLines = 1
+//    private lazy var totalStackView = UIStackView().then {
+//        $0.axis = .horizontal
+//        $0.distribution = .fillProportionally
+//        $0.spacing = 4
+//        $0.addArrangedSubview(self.chatRoomImage)
+//        $0.addArrangedSubview(self.infoStackView)
+//        $0.addArrangedSubview(self.chatRoomEnterButton)
+//    }
+    
+    private let chatRoomImage = UIImageView().then {
+        $0.layer.cornerRadius = 10
+        $0.clipsToBounds = true
+        $0.image = UIImage(systemName: "photo")
     }
     
-    private lazy var stactView = UIStackView().then {
+    private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.distribution = .fillEqually
+        $0.distribution = .fillProportionally
         $0.spacing = 4
-        $0.addArrangedSubview(self.name)
+        $0.addArrangedSubview(self.infoHeaderView)
+        $0.addArrangedSubview(self.chatRoomDescription)
+    }
+    
+    private lazy var infoHeaderView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .equalSpacing
+        $0.addArrangedSubview(self.chatRoomName)
+        $0.addArrangedSubview(self.chatRoomDistance)
+    }
+    
+    private let chatRoomName = UILabel().then {
+        $0.textColor = .gray
+        $0.font = UIFont.systemFont(ofSize: 16)
+    }
+    
+    private let chatRoomDistance = UILabel().then {
+        $0.textColor = .gray
+        $0.font = UIFont.systemFont(ofSize: 16)
+    }
+    
+    private let chatRoomDescription = UILabel().then {
+        $0.textColor = .gray
+        $0.font = UIFont.systemFont(ofSize: 16)
+    }
+    
+    private let chatRoomEnterButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "arrow.right"), for: .normal)
     }
     
     // MARK: - Lifecycles
@@ -38,25 +75,40 @@ final class BottomSheetTableViewCell: UITableViewCell {
     }
     
     private func addSubviews() {
-        self.contentView.addSubview(stactView)
+        self.contentView.addSubview(self.chatRoomImage)
+        self.contentView.addSubview(self.infoStackView)
+        self.contentView.addSubview(self.chatRoomEnterButton)
     }
     
     private func configureConstraints() {
-        self.configureImg()
-    }
-    
-    private func configureImg() {
-        self.stactView.snp.makeConstraints { make in
-            make.trailing.equalTo(self.contentView).offset(-16)
+        self.chatRoomImage.snp.makeConstraints { make in
+            make.leading.equalTo(self.contentView).offset(16)
+            make.centerY.equalTo(self.contentView)
+            make.width.height.equalTo(60)
+        }
+        
+        self.chatRoomEnterButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.contentView).offset(16)
+            make.centerY.equalTo(self.contentView)
+            make.width.height.equalTo(40)
+        }
+        
+        self.infoStackView.snp.makeConstraints { make in
+            make.leading.equalTo(self.chatRoomImage.snp.trailing).offset(16)
+            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading)
             make.centerY.equalTo(self.contentView)
         }
     }
+    
+    private func configureImg() {
+    }
 }
 
-// MARK: - Utils
+// MARK: - Bind
 extension BottomSheetTableViewCell {
     public func bind(to data: ChatRoom) {
-        print("\(data.location?.longitude), \(data.location?.latitude)")
-        name.text = "\(data.location?.longitude), \(data.location?.latitude)"
+        self.chatRoomName.text = data.roomName ?? "Ronald Robertson"
+        self.chatRoomDistance.text = "1.5 km"
+        self.chatRoomDescription.text = data.roomDescription ?? "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum."
     }
 }
