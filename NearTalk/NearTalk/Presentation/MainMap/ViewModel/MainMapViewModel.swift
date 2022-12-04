@@ -65,16 +65,22 @@ final class MainMapViewModel {
             .disposed(by: self.disposeBag)
         
         input.didTapAnnotationView
-            .map {
-                if $0 is MKClusterAnnotation {
-                    let tmp1 = $0 as! MKClusterAnnotation
-                    return tmp1.memberAnnotations.map {
-                        let tmp2 = $0 as! ChatRoomAnnotation
-                        return tmp2.chatRoomInfo
+            .compactMap { annotation in
+                if annotation is MKClusterAnnotation {
+                    guard let clusterAnnotation = annotation as? MKClusterAnnotation
+                    else { return [] }
+                    
+                    return clusterAnnotation.memberAnnotations.compactMap {
+                        guard let chatRoomAnnotation = $0 as? ChatRoomAnnotation
+                        else { return nil }
+                        
+                        return chatRoomAnnotation.chatRoomInfo
                     }
                 } else {
-                    let tmp3 = $0 as! ChatRoomAnnotation
-                    return [tmp3.chatRoomInfo]
+                    guard let singleChatRoomAnnotation = annotation as? ChatRoomAnnotation
+                    else { return [] }
+                    
+                    return [singleChatRoomAnnotation.chatRoomInfo]
                 }
             }
             .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
