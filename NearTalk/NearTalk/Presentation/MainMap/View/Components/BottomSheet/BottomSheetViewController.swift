@@ -59,8 +59,8 @@ final class BottomSheetViewController: UIViewController {
     }
     
     private func configureLayout() {
+        self.chatRoomsTableView.estimatedRowHeight = 80.0
         self.view.backgroundColor = .systemOrange
-        self.modalPresentationStyle = .pageSheet
         
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -89,6 +89,6 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return UITableView.automaticDimension
     }
 }

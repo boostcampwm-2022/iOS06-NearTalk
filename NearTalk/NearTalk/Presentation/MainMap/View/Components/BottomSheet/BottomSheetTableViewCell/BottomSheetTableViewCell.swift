@@ -13,24 +13,14 @@ final class BottomSheetTableViewCell: UITableViewCell {
     
     static let reuseIdentifier = String(describing: BottomSheetTableViewCell.self)
     
-//    private lazy var totalStackView = UIStackView().then {
-//        $0.axis = .horizontal
-//        $0.distribution = .fillProportionally
-//        $0.spacing = 4
-//        $0.addArrangedSubview(self.chatRoomImage)
-//        $0.addArrangedSubview(self.infoStackView)
-//        $0.addArrangedSubview(self.chatRoomEnterButton)
-//    }
-    
     private let chatRoomImage = UIImageView().then {
-        $0.layer.cornerRadius = 10
-        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 30
         $0.image = UIImage(systemName: "photo")
     }
     
     private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.distribution = .fillProportionally
+        $0.distribution = .fill
         $0.spacing = 4
         $0.addArrangedSubview(self.infoHeaderView)
         $0.addArrangedSubview(self.chatRoomDescription)
@@ -56,10 +46,14 @@ final class BottomSheetTableViewCell: UITableViewCell {
     private let chatRoomDescription = UILabel().then {
         $0.textColor = .gray
         $0.font = UIFont.systemFont(ofSize: 16)
+        $0.numberOfLines = 0
     }
     
     private let chatRoomEnterButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "arrow.right"), for: .normal)
+        let buttonImageConfig = UIImage.SymbolConfiguration(pointSize: 24)
+        let buttonImage = UIImage(systemName: "arrow.right.circle",
+                                  withConfiguration: buttonImageConfig)
+        $0.setImage(buttonImage, for: .normal)
     }
     
     // MARK: - Lifecycles
@@ -88,15 +82,15 @@ final class BottomSheetTableViewCell: UITableViewCell {
         }
         
         self.chatRoomEnterButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.contentView).offset(16)
+            make.trailing.equalTo(self.contentView).offset(-16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(40)
         }
         
         self.infoStackView.snp.makeConstraints { make in
             make.leading.equalTo(self.chatRoomImage.snp.trailing).offset(16)
-            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading)
-            make.centerY.equalTo(self.contentView)
+            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-8)
+            make.top.bottom.equalTo(self.contentView).inset(8)
         }
     }
     
