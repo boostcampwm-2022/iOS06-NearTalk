@@ -40,7 +40,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
         return latitudeFilteredChatRooms
             .map {
                 $0.filter {
-                    guard let chatRoomLongitude = $0.location?.longitude else { return false }
+                    guard let chatRoomLongitude = $0.location?.longitude
+                    else { return false }
                     
                     return southWest.longitude < chatRoomLongitude && chatRoomLongitude < northEast.longitude
                 }

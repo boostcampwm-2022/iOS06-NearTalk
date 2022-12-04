@@ -237,6 +237,12 @@ extension MainMapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
+            let currentUserLocation = [
+                "longitude": location.coordinate.longitude,
+                "latitude": location.coordinate.latitude
+            ]
+            UserDefaults.standard.set(currentUserLocation, forKey: "CurrentUserLocation")
+            
             self.mapView.move(to: location)
         }
     }
