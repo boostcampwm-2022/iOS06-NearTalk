@@ -168,6 +168,7 @@
 		830897D8292CBD9B0090EC18 /* ProfileSettingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830897D7292CBD9B0090EC18 /* ProfileSettingDIContainer.swift */; };
 		830897DA292CC1E60090EC18 /* NecessaryProfileComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830897D9292CC1E60090EC18 /* NecessaryProfileComponent.swift */; };
 		830897DB292CC3830090EC18 /* ProfileSettingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830897D5292CB3760090EC18 /* ProfileSettingCoordinator.swift */; };
+		831ADB12293DA8E60070743C /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ADB11293DA8E60070743C /* ColorSet.swift */; };
 		833062262924A3BF000E786E /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062232924A3BF000E786E /* OnboardingCoordinator.swift */; };
 		833062272924A3BF000E786E /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062252924A3BF000E786E /* OnboardingViewModel.swift */; };
 		833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062282924A3D7000E786E /* OnboardingDIContainer.swift */; };
@@ -416,6 +417,7 @@
 		830897D5292CB3760090EC18 /* ProfileSettingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingCoordinator.swift; sourceTree = "<group>"; };
 		830897D7292CBD9B0090EC18 /* ProfileSettingDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingDIContainer.swift; sourceTree = "<group>"; };
 		830897D9292CC1E60090EC18 /* NecessaryProfileComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NecessaryProfileComponent.swift; sourceTree = "<group>"; };
+		831ADB11293DA8E60070743C /* ColorSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSet.swift; sourceTree = "<group>"; };
 		833062232924A3BF000E786E /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		833062252924A3BF000E786E /* OnboardingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		833062282924A3D7000E786E /* OnboardingDIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingDIContainer.swift; sourceTree = "<group>"; };
@@ -788,6 +790,7 @@
 				60FD70612923927C00A4C29A /* NonceGenerator.swift */,
 				608BD110292FD59700CB676E /* Environment.swift */,
 				5553B7C529347C7A0054F68C /* PaddingLabel.swift */,
+				831ADB11293DA8E60070743C /* ColorSet.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1439,8 +1442,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */;
 			buildPhases = (
-				6878474B40FEFF81756C9BCA /* [CP] Check Pods Manifest.lock */,
 				1660D270291DEE01005F7B24 /* SwiftLint Script */,
+				ED3B21A8C256062DAB6C66A5 /* [CP] Check Pods Manifest.lock */,
 				1660D220291DDB37005F7B24 /* Sources */,
 				1660D221291DDB37005F7B24 /* Frameworks */,
 				1660D222291DDB37005F7B24 /* Resources */,
@@ -1806,6 +1809,7 @@
 				6001DA92292DC86A0062EAD0 /* DefaultChatMessageRepository.swift in Sources */,
 				7C254DAD292DB263004D4CEC /* ChatCollectionViewCell.swift in Sources */,
 				1698887C292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift in Sources */,
+				831ADB12293DA8E60070743C /* ColorSet.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
 				83649771292DE1B50002DDE5 /* LoginViewModel.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
