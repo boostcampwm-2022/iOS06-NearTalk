@@ -6,8 +6,8 @@
 //
 
 import MapKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 extension MKMapView: HasDelegate {
     public typealias Delegate = MKMapViewDelegate

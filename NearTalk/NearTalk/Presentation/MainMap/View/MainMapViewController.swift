@@ -122,15 +122,6 @@ final class MainMapViewController: UIViewController {
             })
             .disposed(by: self.disposeBag)
         
-        output.showCreateChatRoomViewEvent
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 == true }
-            .drive(onNext: { [weak self] _ in
-                // TODO: - 채팅방 생성 뷰로 이동
-                print("Create chatroom!")
-            })
-            .disposed(by: self.disposeBag)
-        
         output.showAccessibleChatRooms
             .map { chatRooms in
                 chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
