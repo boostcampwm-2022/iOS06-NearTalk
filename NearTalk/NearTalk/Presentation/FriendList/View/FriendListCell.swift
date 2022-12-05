@@ -14,6 +14,15 @@ final class FriendListCell: UICollectionViewCell {
     
     static let identifier = String(describing: ChatRoomListCell.self)
     private var viewModel: FriendListViewModel?
+    private var uuid: String?
+    
+    override var isSelected: Bool {
+        didSet {
+            if let uuid = self.uuid, isSelected {
+                self.viewModel?.didSelectItem(userUUID: uuid)
+            }
+        }
+    }
     
     // MARK: - UI properties
     private let img = UIImageView().then {
@@ -53,7 +62,9 @@ final class FriendListCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(model: Friend) {
+    func configure(model: Friend, viewModel: FriendListViewModel) {
+        self.viewModel = viewModel
+        self.uuid = model.userID
         self.name.text = model.username
         self.userDescription.text = model.statusMessage
         self.imageLoad(path: model.profileImagePath)
@@ -67,7 +78,7 @@ final class FriendListCell: UICollectionViewCell {
             return
         }
         
-        img.kf.setImage(with: URL(string: "주소: \(url)"))
+        img.kf.setImage(with: url)
         if img.image == nil {
             img.image = UIImage(systemName: "photo")
         }
@@ -98,31 +109,3 @@ final class FriendListCell: UICollectionViewCell {
     }
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct FriendListCellPreview: PreviewProvider {
-    static var previews: some View {
-        let width: CGFloat = 393
-        let height: CGFloat = width * 0.20
-        
-        //        let viewModel: FriendListViewModel = DefaultFriendListViewModel(
-        //            fetchFriendListUseCase: DefaultFetchFriendListUseCase(
-        //                profileRepository: DefaultProfileRepository(
-        //                    firestoreService: DefaultFirestoreService(),
-        //                    firebaseAuthService: DefaultFirebaseAuthService()
-        //                )
-        //            ),
-        //            imageUseCase: DefaultImageUseCase(
-        //                imageRepository: DefaultImageRepository()
-        //            )
-        //        )
-        
-        UIViewPreview {
-            let cell = FriendListCell(frame: .zero)
-            cell.configure(model: Friend(userID: "1234", username: "라이언", statusMessage: "NSCollectionLayoutItem을 이용합니다. Collection View의 가장 기본 컴포넌트입니다. Item은 크기, 개별 content의 size, space, arragnge를 어떻게 할지에 대한 blueprint입니다", profileImagePath: ""))
-            return cell
-        }.previewLayout(.fixed(width: width, height: height))
-    }
-}
-#endif

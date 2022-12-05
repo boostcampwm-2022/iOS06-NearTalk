@@ -14,8 +14,9 @@ struct FriendListViewModelActions {
 }
 
 protocol FriendListViewModelInput {
-    func didSelectItem(at index: Int)
-    func addFriend()
+    func reload()
+    func didSelectItem(userUUID: String)
+    func addFriend(uuid: String) -> Completable
 }
 
 protocol FriendListViewModelOutput {
@@ -38,17 +39,31 @@ final class DefaultFriendListViewModel: FriendListViewModel {
         self.actions = actions
         
         self.fetchFriendListUseCase.getFriendsData()
-            .bind(to: self.friendsData)
-            .disposed(by: self.disposeBag)
+            .subscribe(onSuccess: { [weak self] (model: [Friend]) in
+                self?.friendsData.accept(model)
+            })
+            .disposed(by: disposeBag)
     }
     
     // MARK: - INPUT
-    func didSelectItem(at index: Int) {
-        actions?.showDetailFriend("userID")
+    
+    func reload() {
+        self.fetchFriendListUseCase.reload()
+        
+        self.fetchFriendListUseCase.getFriendsData()
+            .subscribe(onSuccess: { [weak self] (model: [Friend]) in
+                self?.friendsData.accept(model)
+            })
+            .disposed(by: disposeBag)
     }
     
-    func addFriend() {
-        
+    func didSelectItem(userUUID: String) {
+        print(userUUID)
+        self.actions?.showDetailFriend(userUUID)
+    }
+    
+    func addFriend(uuid: String) -> Completable {
+        return self.fetchFriendListUseCase.addFriend(uuid: uuid)
     }
     
 }
