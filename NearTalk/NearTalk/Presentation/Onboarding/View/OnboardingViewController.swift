@@ -14,6 +14,7 @@ final class OnboardingViewController: UIViewController {
     // MARK: - UI properties
     private let rootView: OnboardingView = OnboardingView()
     private let scrollView: UIScrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
         $0.keyboardDismissMode = .onDrag
         $0.bounces = false
     }
@@ -32,37 +33,47 @@ final class OnboardingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func loadView() {
-        self.view = self.scrollView
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.rootView)
-        self.view.backgroundColor = .white
+        self.configureScrollViewConstraint()
+        self.configureRootViewConstraint()
+        self.configureNavigationBar()
         self.bindToViewModel()
-        self.navigationController?.navigationBar.isHidden = true
-    }
-    
-    override func viewWillLayoutSubviews() {
-        self.rootView.makeProfileViewRounded()
-        super.viewWillLayoutSubviews()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.scrollView.contentSize = .init(width: self.view.frame.width, height: self.rootView.height)
-        self.rootView.frame = .init(origin: .zero, size: self.scrollView.contentSize)
-        self.rootView.snp.makeConstraints { make in
-            make.edges.equalTo(self.scrollView.contentLayoutGuide)
-            make.width.equalToSuperview()
-            make.height.equalTo(self.scrollView.contentSize.height)
-        }
     }
 }
 
-// MARK: - Helpers
 private extension OnboardingViewController {
+    // MARK: - Helpers
+    func configureNavigationBar() {
+        let newNavBarAppearance = UINavigationBarAppearance()
+        newNavBarAppearance.configureWithOpaqueBackground()
+        newNavBarAppearance.backgroundColor = .systemGray6
+        
+        self.navigationItem.title = "프로필 등록"
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.standardAppearance = newNavBarAppearance
+        self.navigationItem.compactAppearance = newNavBarAppearance
+        self.navigationItem.scrollEdgeAppearance = newNavBarAppearance
+        self.navigationItem.compactScrollEdgeAppearance = newNavBarAppearance
+    }
+    
+    func configureScrollViewConstraint() {
+        self.scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(self.view.safeAreaLayoutGuide)
+            make.width.height.equalTo(self.view)
+        }
+    }
+    
+    func configureRootViewConstraint() {
+        self.rootView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.height.equalToSuperview()
+        }
+    }
+    
     func bindToViewModel() {
         self.bindNickNameField()
         self.bindMessageField()
@@ -76,6 +87,7 @@ private extension OnboardingViewController {
                 self?.viewModel.editNickName(text)
             })
             .disposed(by: self.disposeBag)
+        
         self.viewModel.nickNameValidity
             .asDriver()
             .map { isValid in
@@ -83,6 +95,7 @@ private extension OnboardingViewController {
             }
             .drive(self.rootView.nickNameValidityMessage)
             .disposed(by: self.disposeBag)
+        
         self.viewModel.nickNameValidity
             .asDriver()
             .map { isValid in
@@ -90,13 +103,15 @@ private extension OnboardingViewController {
             }
             .drive(self.rootView.nickNameValidityColor)
             .disposed(by: self.disposeBag)
+        
         self.rootView.keyboardWillShowOnNickNameField
             .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
+            .drive(onNext: { self.moveKeyboardUp(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
+        
         self.rootView.keyboardWillDismissFromNickNameField
-            .filter { self.keyboardNotificationHandler($0) != nil }
-            .drive(onNext: { _ in self.moveKeyboardDown() })
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardDown(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
     }
     
@@ -106,6 +121,7 @@ private extension OnboardingViewController {
                 self?.viewModel.editStatusMessage(text)
             })
             .disposed(by: self.disposeBag)
+        
         self.viewModel.messageValidity
             .asDriver()
             .map { isValid in
@@ -113,6 +129,7 @@ private extension OnboardingViewController {
             }
             .drive(self.rootView.messageValidityMessage)
             .disposed(by: self.disposeBag)
+        
         self.viewModel.messageValidity
             .asDriver()
             .map { isValid in
@@ -120,13 +137,15 @@ private extension OnboardingViewController {
             }
             .drive(self.rootView.messageValidityColor)
             .disposed(by: self.disposeBag)
+        
         self.rootView.keyboardWillShowOnMessageField
             .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
+            .drive(onNext: { self.moveKeyboardUp(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
+        
         self.rootView.keyboardWillDismissFromMessageField
-            .filter { self.keyboardNotificationHandler($0) != nil }
-            .drive(onNext: { _ in self.moveKeyboardDown() })
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardDown(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
     }
     
@@ -158,20 +177,21 @@ private extension OnboardingViewController {
 }
 
 private extension OnboardingViewController {
-    func moveKeyboardUp(keyboardHeight: CGFloat) {
-        self.scrollToUp(keyboardHeight: keyboardHeight)
+    func moveKeyboardUp(keyboardPopInfo: KeyboardPopInfo) {
+        self.scrollToUp(keyboardPopInfo: keyboardPopInfo)
     }
     
-    func moveKeyboardDown() {
+    func moveKeyboardDown(keyboardPopInfo: KeyboardPopInfo) {
         self.scrollToDown()
     }
     
-    func scrollToUp(keyboardHeight: CGFloat) {
+    func scrollToUp(keyboardPopInfo: KeyboardPopInfo) {
+        let keyboardHeight: CGFloat = keyboardPopInfo.frame.height
         let inset: UIEdgeInsets = .init(top: 0, left: 0, bottom: keyboardHeight, right: 0)
         self.scrollView.contentInset = inset
         self.scrollView.scrollIndicatorInsets = inset
     }
-    
+
     func scrollToDown() {
         self.scrollView.contentInset = .zero
         self.scrollView.scrollIndicatorInsets = .zero
