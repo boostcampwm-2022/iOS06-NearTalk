@@ -22,6 +22,12 @@ final class ChatRoomListViewController: UIViewController {
         $0.register(ChatRoomListCell.self, forCellWithReuseIdentifier: ChatRoomListCell.identifier)
     }
     
+    private lazy var chatTypeSegment = UISegmentedControl(items: ["Group Chat", "DM"]).then {
+        $0.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], for: .normal)
+        $0.backgroundColor = .systemGray5
+        $0.tintColor = .white
+    }
+    
     // MARK: - Properties
     private var groupDataSource: UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>?
     private var dmDataSource: UICollectionViewDiffableDataSource<Section, DMChatRoomListData>?
@@ -64,34 +70,41 @@ final class ChatRoomListViewController: UIViewController {
     
     // MARK: - Configure views
     func addSubviews() {
-        self.view.addSubview(dmCollectionView)
-        self.view.addSubview(groupCollectionView)
+        self.view.addSubview(self.chatTypeSegment)
+        self.view.addSubview(self.dmCollectionView)
+        self.view.addSubview(self.groupCollectionView)
     }
     
     func configureConstraints() {
-        dmCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+        
+        self.chatTypeSegment.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.centerX.equalTo(self.view)
+            make.width.equalTo(300)
+            make.height.equalTo(32)
+        }
+        
+        self.dmCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.chatTypeSegment.snp.bottom).offset(12)
             make.bottom.trailing.leading.equalTo(view)
         }
         
-        groupCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+        self.groupCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.chatTypeSegment.snp.bottom).offset(12)
             make.bottom.trailing.leading.equalTo(view)
         }
     }
     
     private func configureView() {
         self.view.backgroundColor = .systemBackground
+        self.chatTypeSegment.selectedSegmentIndex = ChatType.group.rawValue
         self.dmCollectionView.isHidden = true
     }
     
     private func configureNavigation() {
-        let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: nil)
-        let groupChatButton: UIBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: nil)
         let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
-        
-        self.navigationItem.leftBarButtonItems = [groupChatButton, dmChatButton]
         self.navigationItem.rightBarButtonItem = createGroupChatButton
+        self.navigationItem.title = "채팅 목록"
     }
     
     private func configureDatasource() {
@@ -136,7 +149,7 @@ final class ChatRoomListViewController: UIViewController {
             .bind(onNext: { [weak self] (model: [DMChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
+                snapshot.appendItems(model.sorted { $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
@@ -145,20 +158,21 @@ final class ChatRoomListViewController: UIViewController {
             .bind(onNext: { [weak self] (model: [GroupChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
+                snapshot.appendItems(model.sorted { $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.leftBarButtonItems?[ChatType.dm.rawValue].rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.didDMChatRoomList()
-            })
-            .disposed(by: disposeBag)
-        
-        self.navigationItem.leftBarButtonItems?[ChatType.group.rawValue].rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.didGroupChatRoomList()
+        self.chatTypeSegment.rx.selectedSegmentIndex
+            .subscribe(onNext: { [weak self] (index: Int) in
+                switch index {
+                case ChatType.group.rawValue:
+                    self?.viewModel.didGroupChatRoomList()
+                case ChatType.dm.rawValue:
+                    self?.viewModel.didDMChatRoomList()
+                default:
+                    break
+                }
             })
             .disposed(by: disposeBag)
         
