@@ -37,7 +37,6 @@ final class BottomSheetViewController: UIViewController {
     
     func loadData(with dataSource: [ChatRoom]) {
         self.dataSource = dataSource
-        self.chatRoomsTableView.reloadData()
     }
     
     private func addSubViews() {
@@ -60,9 +59,8 @@ final class BottomSheetViewController: UIViewController {
     }
     
     private func configureLayout() {
+        self.chatRoomsTableView.estimatedRowHeight = 80.0
         self.view.backgroundColor = .systemOrange
-        
-        self.modalPresentationStyle = .pageSheet
         
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -82,13 +80,15 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath) as? BottomSheetTableViewCell ?? BottomSheetTableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath) as? BottomSheetTableViewCell
+        else { return BottomSheetTableViewCell() }
+        
         cell.bind(to: self.dataSource[indexPath.row])
 
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        return UITableView.automaticDimension
     }
 }
