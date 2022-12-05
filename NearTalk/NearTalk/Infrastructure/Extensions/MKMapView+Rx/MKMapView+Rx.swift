@@ -6,8 +6,8 @@
 //
 
 import MapKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 func castOrThrow<T>(_ resultType: T.Type, _ object: Any) throws -> T {
     guard let returnValue = object as? T else {
@@ -26,8 +26,8 @@ extension Reactive where Base: MKMapView {
     public var regionWillChangeAnimated: ControlEvent<Bool> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:regionWillChangeAnimated:)))
-            .map { a in
-                return try castOrThrow(Bool.self, a[1])
+            .map { event in
+                return try castOrThrow(Bool.self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -35,8 +35,8 @@ extension Reactive where Base: MKMapView {
     public var regionDidChangeAnimated: ControlEvent<Bool> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:regionDidChangeAnimated:)))
-            .map { a in
-                return try castOrThrow(Bool.self, a[1])
+            .map { event in
+                return try castOrThrow(Bool.self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -77,8 +77,8 @@ extension Reactive where Base: MKMapView {
     public var didFailLoadingMap: Observable<NSError> {
         return delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapViewDidFailLoadingMap(_:withError:)))
-            .map { a in
-                return try castOrThrow(NSError.self, a[1])
+            .map { event in
+                return try castOrThrow(NSError.self, event[1])
             }
     }
 
@@ -95,8 +95,8 @@ extension Reactive where Base: MKMapView {
     public var didFinishRenderingMap: ControlEvent<Bool> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapViewDidFinishRenderingMap(_:fullyRendered:)))
-            .map { a in
-                return try castOrThrow(Bool.self, a[1])
+            .map { event in
+                return try castOrThrow(Bool.self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -123,8 +123,8 @@ extension Reactive where Base: MKMapView {
     public var didUpdateUserLocation: ControlEvent<MKUserLocation> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:didUpdate:)))
-            .map { a in
-                return try castOrThrow(MKUserLocation.self, a[1])
+            .map { event in
+                return try castOrThrow(MKUserLocation.self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -132,17 +132,17 @@ extension Reactive where Base: MKMapView {
     public var didFailToLocateUserWithError: Observable<NSError> {
         return delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:didFailToLocateUserWithError:)))
-            .map { a in
-                return try castOrThrow(NSError.self, a[1])
+            .map { event in
+                return try castOrThrow(NSError.self, event[1])
             }
     }
 
     public var didChangeUserTrackingMode: ControlEvent<(mode: MKUserTrackingMode, animated: Bool)> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:didChange:animated:)))
-            .map { a in
-                return (mode: try castOrThrow(Int.self, a[1]),
-                    animated: try castOrThrow(Bool.self, a[2]))
+            .map { event in
+                return (mode: try castOrThrow(Int.self, event[1]),
+                    animated: try castOrThrow(Bool.self, event[2]))
             }
             .map { (mode, animated) in
                 return (mode: MKUserTrackingMode(rawValue: mode)!,
@@ -167,19 +167,8 @@ extension Reactive where Base: MKMapView {
         #endif
         let source = delegate
             .methodInvoked(selector)
-            .map { a in
-                return try castOrThrow([MKAnnotationView].self, a[1])
-            }
-        return ControlEvent(events: source)
-    }
-
-    public var annotationViewCalloutAccessoryControlTapped:
-        ControlEvent<(view: MKAnnotationView, control: UIControl)> {
-        let source = delegate
-            .methodInvoked(#selector(MKMapViewDelegate.mapView(_:annotationView:calloutAccessoryControlTapped:)))
-            .map { a in
-                return (view: try castOrThrow(MKAnnotationView.self, a[1]),
-                    control: try castOrThrow(UIControl.self, a[2]))
+            .map { event in
+                return try castOrThrow([MKAnnotationView].self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -188,8 +177,8 @@ extension Reactive where Base: MKMapView {
     public var didSelectAnnotationView: ControlEvent<MKAnnotationView> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:didSelect:)))
-            .map { a in
-                return try castOrThrow(MKAnnotationView.self, a[1])
+            .map { event in
+                return try castOrThrow(MKAnnotationView.self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -197,8 +186,8 @@ extension Reactive where Base: MKMapView {
     public var didDeselectAnnotationView: ControlEvent<MKAnnotationView> {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapView(_:didDeselect:)))
-            .map { a in
-                return try castOrThrow(MKAnnotationView.self, a[1])
+            .map { event in
+                return try castOrThrow(MKAnnotationView.self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -208,22 +197,6 @@ extension Reactive where Base: MKMapView {
     #else
         public typealias AnnotationViewDragState = MKAnnotationViewDragState
     #endif
-
-    public var didChangeState: ControlEvent<(view: MKAnnotationView, newState: AnnotationViewDragState, oldState: AnnotationViewDragState)> {
-        let source = delegate
-            .methodInvoked(#selector(MKMapViewDelegate.mapView(_:annotationView:didChange:fromOldState:)))
-            .map { a in
-                return (view: try castOrThrow(MKAnnotationView.self, a[1]),
-                    newState: try castOrThrow(UInt.self, a[2]),
-                    oldState: try castOrThrow(UInt.self, a[3]))
-            }
-            .map { (view, newState, oldState) in
-                return (view: view,
-                    newState: AnnotationViewDragState(rawValue: newState)!,
-                    oldState: AnnotationViewDragState(rawValue: oldState)!)
-            }
-        return ControlEvent(events: source)
-    }
 
     // MARK: Managing the Display of Overlays
     public var didAddOverlayRenderers: ControlEvent<[MKOverlayRenderer]> {
@@ -242,8 +215,8 @@ extension Reactive where Base: MKMapView {
         #endif
         let source = delegate
             .methodInvoked(selector)
-            .map { a in
-                return try castOrThrow([MKOverlayRenderer].self, a[1])
+            .map { event in
+                return try castOrThrow([MKOverlayRenderer].self, event[1])
             }
         return ControlEvent(events: source)
     }
@@ -305,4 +278,3 @@ extension Reactive where Base: MKMapView {
         return RxMKMapViewDelegateProxy.installForwardDelegate(delegate, retainDelegate: false, onProxyForObject: self.base)
     }
 }
-
