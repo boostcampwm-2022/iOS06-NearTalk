@@ -42,6 +42,13 @@ final class ChatRoomListViewController: UIViewController {
     enum ChatType: Int {
         case group = 0
         case dm = 1
+        
+        var index: Int {
+            switch self {
+            case .group: return 0
+            case .dm: return 1
+            }
+        }
     }
     
     // MARK: - Lifecycle
@@ -86,12 +93,12 @@ final class ChatRoomListViewController: UIViewController {
         
         self.dmCollectionView.snp.makeConstraints { make in
             make.top.equalTo(self.chatTypeSegment.snp.bottom).offset(12)
-            make.bottom.trailing.leading.equalTo(view)
+            make.bottom.trailing.leading.equalTo(self.view)
         }
         
         self.groupCollectionView.snp.makeConstraints { make in
             make.top.equalTo(self.chatTypeSegment.snp.bottom).offset(12)
-            make.bottom.trailing.leading.equalTo(view)
+            make.bottom.trailing.leading.equalTo(self.view)
         }
     }
     
@@ -166,9 +173,9 @@ final class ChatRoomListViewController: UIViewController {
         self.chatTypeSegment.rx.selectedSegmentIndex
             .subscribe(onNext: { [weak self] (index: Int) in
                 switch index {
-                case ChatType.group.rawValue:
+                case ChatType.group.index:
                     self?.viewModel.didGroupChatRoomList()
-                case ChatType.dm.rawValue:
+                case ChatType.dm.index:
                     self?.viewModel.didDMChatRoomList()
                 default:
                     break

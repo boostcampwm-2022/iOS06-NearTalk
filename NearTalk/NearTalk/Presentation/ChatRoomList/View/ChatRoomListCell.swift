@@ -46,7 +46,8 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private let recentMessage = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 12)
+        
+        $0.font = UIFont.systemFont(ofSize: 13)
         $0.numberOfLines = 2
     }
     
@@ -57,30 +58,12 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then {
         $0.isHidden = true
-        $0.backgroundColor = #colorLiteral(red: 0.8102046251, green: 0, blue: 0, alpha: 1)
+        $0.backgroundColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
         $0.font = .systemFont(ofSize: 16, weight: .semibold)
         $0.textColor = .white
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10
+        $0.layer.cornerRadius = 12
         $0.textAlignment = .center
-    }
-    
-    private lazy var stackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fill
-        $0.alignment = .bottom
-        $0.spacing = 8
-        $0.addArrangedSubview(self.name)
-        $0.addArrangedSubview(self.currentUserCount)
-    }
-    
-    private lazy var stackView2 = UIStackView().then {
-        $0.axis = .vertical
-        $0.distribution = .fill
-        $0.alignment = .leading
-        $0.spacing = 6
-        $0.addArrangedSubview(self.stackView)
-        $0.addArrangedSubview(self.recentMessage)
     }
     
     // MARK: - Lifecycles
@@ -128,7 +111,8 @@ class ChatRoomListCell: UICollectionViewCell {
     // MARK: - Configure views
     private func addSubviews() {
         self.contentView.addSubview(self.img)
-        self.contentView.addSubview(self.stackView2)
+        self.contentView.addSubview(self.name)
+        self.contentView.addSubview(self.recentMessage)
         self.contentView.addSubview(self.date)
         self.contentView.addSubview(self.unreadMessageCount)
     }
@@ -141,10 +125,9 @@ class ChatRoomListCell: UICollectionViewCell {
         }
         
         self.date.snp.makeConstraints { make in
-            make.top.equalTo(self.img.snp.top).offset(6)
+            make.top.equalTo(self.img.snp.top).offset(3)
             make.trailing.equalTo(self.contentView).offset(-16)
             make.width.equalTo(68)
-            
         }
         
         self.unreadMessageCount.snp.makeConstraints { make in
@@ -152,10 +135,17 @@ class ChatRoomListCell: UICollectionViewCell {
             make.trailing.equalTo(self.contentView).offset(-16)
         }
         
-        self.stackView2.snp.makeConstraints { make in
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
+        self.name.snp.makeConstraints { make in
+            make.top.equalTo(self.img.snp.top).offset(3)
+            make.leading.equalTo(self.img.snp.trailing).offset(8)
             make.trailing.equalTo(self.date.snp.leading)
-            make.centerY.equalTo(self.contentView)
+            make.height.equalTo(18)
+        }
+        
+        self.recentMessage.snp.makeConstraints { make in
+            make.top.equalTo(self.name.snp.bottom).offset(4)
+            make.leading.equalTo(self.img.snp.trailing).offset(8)
+            make.trailing.equalTo(self.date.snp.leading)
         }
         
         self.currentUserCount.snp.makeConstraints { make in
@@ -229,13 +219,13 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private func imageLoad(path: String?) {
         guard let path = path, let url = URL(string: path) else {
-            img.image = UIImage(systemName: "photo")
+            img.image = UIImage(named: "nearTalkLogo")
             return
         }
         
         img.kf.setImage(with: url)
         if img.image == nil {
-            img.image = UIImage(systemName: "photo")
+            img.image = UIImage(named: "nearTalkLogo")
         }
     }
     
@@ -259,7 +249,7 @@ struct ChatRoomListCellPreview: PreviewProvider {
                                     roomImagePath: "",
                                     roomName: "테스트트방테스트방",
                                     accessibleRadius: 0,
-                                    recentMessageText: "테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중",
+                                    recentMessageText: "테스트중테스트중테스트중테스트중",
                                     recentMessageDate: Calendar.current.date(byAdding: .year, value: -1, to: Date()),
                                     messageCount: 2222)
                                     
