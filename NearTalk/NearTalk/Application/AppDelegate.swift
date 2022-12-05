@@ -26,9 +26,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UNUserNotificationCenter
             .current()
             .requestAuthorization(
-                options: authOptions,completionHandler: { (_, _) in }
+                options: authOptions,completionHandler: { (result, error) in
+                    if let error {
+                        print(error)
+                        return
+                    }
+
+                    if result {
+                        DispatchQueue.main.async {
+                            application.registerForRemoteNotifications()
+                        }
+                    }
+                }
             )
-        application.registerForRemoteNotifications()
         return true
     }
 

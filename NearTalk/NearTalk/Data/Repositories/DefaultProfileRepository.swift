@@ -57,7 +57,21 @@ final class DefaultProfileRepository: ProfileRepository {
         self.fetchMyProfile()
             .flatMap { (myProfile: UserProfile) -> Single<UserProfile> in
                 var newProfile: UserProfile = myProfile
-                newProfile.friends?.append(friendUUID)
+                if let friend = newProfile.friends, !friend.contains(friendUUID) {
+                    newProfile.friends?.append(friendUUID)
+                }
+                return self.firestoreService.update(updatedData: newProfile, dataKey: .users)
+            }
+            .asCompletable()
+    }
+    
+    func addChatRoom(_ chatRoomUUID: String) -> Completable {
+        self.fetchMyProfile()
+            .flatMap { (myProfile: UserProfile) -> Single<UserProfile> in
+                var newProfile: UserProfile = myProfile
+                if let chat = newProfile.chatRooms, !chat.contains(chatRoomUUID) {
+                    newProfile.chatRooms?.append(chatRoomUUID)
+                }
                 return self.firestoreService.update(updatedData: newProfile, dataKey: .users)
             }
             .asCompletable()
@@ -78,6 +92,9 @@ final class DefaultProfileRepository: ProfileRepository {
             .flatMap { (myProfile: UserProfile) in
                 guard let friendList: [String] = myProfile.friends else {
                     return Single.error(DefaultProfileRepositoryError.invalidUserProfile)
+                }
+                if friendList.isEmpty {
+                    return .just([])
                 }
                 let query: [FirebaseQueryDTO] = [.init(key: "uuid", value: friendList, queryKey: .in)]
                 return self.firestoreService.fetchList(dataKey: .users, queryList: query)

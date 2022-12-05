@@ -33,12 +33,22 @@ final class ChatRoomListViewController: UIViewController {
         case main
     }
     
+    enum ChatType: Int {
+        case group = 0
+        case dm = 1
+    }
+    
     // MARK: - Lifecycle
     // todo: - 이미지 레파지토리 추가
     static func create(with viewModel: ChatRoomListViewModel) -> ChatRoomListViewController {
         let view = ChatRoomListViewController()
         view.viewModel = viewModel
         return view
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.viewWillAppear()
     }
     
     override func viewDidLoad() {
@@ -72,42 +82,47 @@ final class ChatRoomListViewController: UIViewController {
     
     private func configureView() {
         self.view.backgroundColor = .systemBackground
-        self.groupCollectionView.isHidden = true
+        self.dmCollectionView.isHidden = true
     }
     
     private func configureNavigation() {
         let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: nil)
-        
         let groupChatButton: UIBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: nil)
         let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
         
-        self.navigationItem.leftBarButtonItems = [dmChatButton, groupChatButton]
+        self.navigationItem.leftBarButtonItems = [groupChatButton, dmChatButton]
         self.navigationItem.rightBarButtonItem = createGroupChatButton
     }
     
     private func configureDatasource() {
         
-        self.groupDataSource = UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>(collectionView: self.groupCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        self.groupDataSource = UICollectionViewDiffableDataSource<Section, GroupChatRoomListData>(
+            collectionView: self.groupCollectionView,
+            cellProvider: { collectionView, indexPath, itemIdentifier in
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatRoomListCell.identifier,
                 for: indexPath) as? ChatRoomListCell else {
                 return UICollectionViewCell()
             }
-            
-            cell.configure(groupData: itemIdentifier)
+
+            cell.configure(groupData: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
         
         self.groupCollectionView.dataSource = self.groupDataSource
         
-        self.dmDataSource = UICollectionViewDiffableDataSource<Section, DMChatRoomListData>(collectionView: self.dmCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+        self.dmDataSource = UICollectionViewDiffableDataSource<Section, DMChatRoomListData>(
+            collectionView: self.dmCollectionView,
+            cellProvider: { collectionView, indexPath, itemIdentifier in
+                
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatRoomListCell.identifier,
                 for: indexPath) as? ChatRoomListCell else {
                 return UICollectionViewCell()
             }
             
-            cell.configure(dmData: itemIdentifier)
+            cell.configure(dmData: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
         
@@ -117,49 +132,37 @@ final class ChatRoomListViewController: UIViewController {
     // MARK: - bind
     private func bind() {
         
-        self.dmCollectionView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
-            })
-            .disposed(by: disposeBag)
-        
-        self.groupCollectionView.rx.itemSelected
-            .subscribe(onNext: { event in
-                self.viewModel.didSelectItem(at: event[1])
-            })
-            .disposed(by: disposeBag)
-        
         self.viewModel.dmChatRoomData
-            .bind(onNext: { [weak self] model in
+            .bind(onNext: { [weak self] (model: [DMChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model)
+                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
         self.viewModel.groupChatRoomData
-            .bind(onNext: { [weak self] model in
+            .bind(onNext: { [weak self] (model: [GroupChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model)
+                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.leftBarButtonItems?[0].rx.tap
+        self.navigationItem.leftBarButtonItems?[ChatType.dm.rawValue].rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.didDMChatRoomList()
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.leftBarButtonItems?[1].rx.tap
+        self.navigationItem.leftBarButtonItems?[ChatType.group.rawValue].rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.didGroupChatRoomList()
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.rightBarButtonItems?[0].rx.tap
+        self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.didCreateChatRoom()
             })
@@ -168,20 +171,17 @@ final class ChatRoomListViewController: UIViewController {
     
     private func createBasicListLayout() -> UICollectionViewLayout {
         let itemHeight = self.view.frame.width * 0.20
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .fractionalHeight(1.0))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .absolute(itemHeight))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitems: [item])
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(itemHeight))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-
+    
 }
 
 #if canImport(SwiftUI) && DEBUG

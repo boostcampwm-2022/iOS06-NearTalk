@@ -31,8 +31,10 @@ final class RootTabBarCoordinator: Coordinator {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
-        self.navigationController?.popViewController(animated: false)
+//        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        viewcontroller.modalPresentationStyle = .fullScreen
+        self.navigationController?.topViewController?.present(viewcontroller, animated: false)
+//        self.navigationController?.popViewController(animated: false)
         self.navigationController?.navigationBar.isHidden = true
     }
         
@@ -67,11 +69,12 @@ final class RootTabBarCoordinator: Coordinator {
         let diContainer: FriendListDIContainer = .init()
         let coordinator: FriendListCoordinator = diContainer.makeFriendListCoordinator(navigationController: navigationController)
         coordinator.start()
+        
         return self.embed(
             rootNav: navigationController,
             title: "친구",
-            inactivatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "figure.2.arms.open")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "person.3")?.withTintColor(.darkGray),
+            activatedImage: UIImage(systemName: "person.3.fill")?.withTintColor(.blue)
         )
     }
 
@@ -80,14 +83,16 @@ final class RootTabBarCoordinator: Coordinator {
         let diContainer: MyProfileDIContainer = .init()
         let coordinator: MyProfileCoordinator = diContainer.makeCoordinator(
             navigationController: navigationController,
-            parent: self
+            parent: self,
+            backToLoginView: self.rootTabBarDIContainer.resolveBackToLoginView()
         )
         coordinator.start()
+        
         return self.embed(
             rootNav: navigationController,
             title: "마이페이지",
-            inactivatedImage: UIImage(systemName: "figure.wave")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "figure.wave")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "person")?.withTintColor(.darkGray),
+            activatedImage: UIImage(systemName: "person.fill")?.withTintColor(.blue)
         )
     }
     

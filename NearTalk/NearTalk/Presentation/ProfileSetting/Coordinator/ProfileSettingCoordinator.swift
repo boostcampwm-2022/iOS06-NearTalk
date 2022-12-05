@@ -15,7 +15,7 @@ protocol ProfileSettingCoordinatorDependency {
     func makeProfileSettingViewController(action: ProfileSettingViewModelAction) -> ProfileSettingViewController
 }
 
-final class ProfileSettingCoordinator: Coordinator {
+final class ProfileSettingCoordinator: NSObject, Coordinator {
     private let dependency: any ProfileSettingCoordinatorDependency
     var navigationController: UINavigationController?
     var parentCoordinator: Coordinator?
@@ -67,47 +67,7 @@ extension ProfileSettingCoordinator {
     }
 }
 
-extension ProfileSettingCoordinator: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
-        guard let itemProvider = results.first?.itemProvider else {
-            return
-        }
-        if itemProvider.canLoadObject(ofClass: UIImage.self) {
-            itemProvider.loadObject(
-                ofClass: UIImage.self,
-                completionHandler: { [weak self] image, _ in
-                    let uiImage: UIImage? = image as? UIImage
-                    let imageData: Data? = uiImage?.resized()?.jpegData(compressionQuality: 1.0) ?? uiImage?.pngData()
-                    self?.imageObserver?.accept(imageData)
-                    self?.imageObserver = nil
-            })
-        } else {
-            #if DEBUG
-            print("Cannot Import Photo")
-            #endif
-        }
-    }
-    
-    func showPHPickerViewController() {
-        PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorization in
-            switch authorization {
-            case .authorized, .limited:
-                Task {
-                    await self.presentPHPickerViewController()
-                }
-            default:
-                #if DEBUG
-                print("Photo 접근 권한 없어용")
-                #endif
-                self.imageObserver = nil
-                Task {
-                    await self.goAuthorizationSettingPage()
-                }
-            }
-        }
-    }
-    
+extension ProfileSettingCoordinator {
     @MainActor
     private func goAuthorizationSettingPage() {
         guard let appName = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String else {
@@ -128,14 +88,57 @@ extension ProfileSettingCoordinator: PHPickerViewControllerDelegate {
         
         self.navigationController?.topViewController?.present(alert, animated: true)
     }
-    
+}
+
+extension ProfileSettingCoordinator {
+    func showPHPickerViewController() {
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorization in
+            switch authorization {
+            case .authorized, .limited:
+                Task {
+                    await self.presentUIImagePickerViewController()
+                }
+            default:
+                #if DEBUG
+                print("Photo 접근 권한 없어용")
+                #endif
+                Task {
+                    await self.goAuthorizationSettingPage()
+                }
+            }
+        }
+    }
+}
+
+extension ProfileSettingCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @MainActor
-    private func presentPHPickerViewController() {
-        var config: PHPickerConfiguration = PHPickerConfiguration()
-        config.filter = .images
-        config.selectionLimit = 1
-        let vc: PHPickerViewController = PHPickerViewController(configuration: config)
-        vc.delegate = self
-        self.navigationController?.topViewController?.present(vc, animated: true)
+    private func presentUIImagePickerViewController() {
+        let imagePicker: UIImagePickerController = UIImagePickerController()
+        imagePicker.sourceType = .savedPhotosAlbum
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        self.navigationController?.topViewController?.present(imagePicker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        picker.dismiss(animated: true)
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.resizeImageByUIGraphics(image: image)
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            self.resizeImageByUIGraphics(image: image)
+        } else {
+            self.imageObserver?.accept(nil)
+            self.imageObserver = nil
+        }
+    }
+    
+    func resizeImageByUIGraphics(image: UIImage) {
+        let widthInPixel: CGFloat = image.scale * image.size.width
+        let heightInPixel: CGFloat = image.scale * image.size.height
+        let percentage: CGFloat = min(320.0 / (heightInPixel), min(1.0, 320.0 / (widthInPixel)))
+        let newImage = image.resized(withPercentage: percentage)
+        let data = newImage?.jpegData(compressionQuality: percentage)
+        self.imageObserver?.accept(data)
+        self.imageObserver = nil
     }
 }

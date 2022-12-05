@@ -31,11 +31,7 @@ final class AppCoordinator: Coordinator {
                 presentOnboardingView: self.showOnboardingView,
                 presentLoginFailure: { print(#function) }
             ),
-            onboardingActions: .init(
-                presentImagePicker: nil,
-                showMainViewController: self.showMainViewController,
-                presentRegisterFailure: nil
-            )
+            showMainViewController: self.showMainViewController
         )
     }
     
@@ -66,7 +62,8 @@ extension AppCoordinator: LoginCoordinatorDependency {
         guard let appDIContainer else {
             return
         }
-        self.navigationController?.popViewController(animated: false)
+//        self.navigationController?.popViewController(animated: false)
+        appDIContainer.registerBackToLoginClosure(self.backToLoginView)
         let diContainer: RootTabBarDIContainer = appDIContainer.resolveRootTabBarDIContainer()
         let rootTabBarCoordinator: RootTabBarCoordinator = .init(navigationController: self.navigationController, container: diContainer)
         rootTabBarCoordinator.start()
@@ -82,5 +79,10 @@ extension AppCoordinator: LoginCoordinatorDependency {
             navigationController: self.navigationController
         )
         onboardingCoordinator.start()
+    }
+    
+    func backToLoginView() {
+        self.navigationController?.dismiss(animated: false)
+        self.navigationController?.popToRootViewController(animated: false)
     }
 }
