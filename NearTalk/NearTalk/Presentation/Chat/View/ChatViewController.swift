@@ -107,8 +107,14 @@ class ChatViewController: UIViewController {
     }
         
     private func bind() {
+        self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
+            .map { !$0.isEmpty }
+            .bind(to: chatInputAccessoryView.sendButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
         self.chatInputAccessoryView.sendButton.rx.tap
             .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
+            .filter { !$0.isEmpty }
             .bind { [weak self] message in
                 self?.viewModel.sendMessage(message)
                 self?.chatInputAccessoryView.messageInputTextField.text = nil
