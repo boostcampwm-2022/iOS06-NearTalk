@@ -56,6 +56,10 @@ final class MainMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.locationManagerDidChangeAuthorization(self.locationManager)
+        
+        if let userLocation = self.locationManager.location {
+            self.mapView.move(to: userLocation)
+        }
     }
     
     // MARK: - Methods
@@ -227,14 +231,24 @@ extension MainMapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            let currentUserLocation = [
-                "longitude": location.coordinate.longitude,
-                "latitude": location.coordinate.latitude
-            ]
-            UserDefaults.standard.set(currentUserLocation, forKey: "CurrentUserLocation")
-            
-            self.mapView.move(to: location)
+        guard let currentUserLocation = locations.last
+        else { return }
+        
+        let currentUserLatitude = Double(currentUserLocation.coordinate.latitude)
+        let currentUserLongitude = Double(currentUserLocation.coordinate.longitude)
+        
+        UserDefaults.standard.set(["latitude": currentUserLatitude, "longitude": currentUserLongitude], forKey: "CurrentUserLocation")
+        
+        guard let cameraBoundary = self.mapView.cameraBoundary
+        else { return }
+        
+        let southWest = NCLocation(longitude: cameraBoundary.region.center.longitude - (cameraBoundary.region.span.longitudeDelta / 2),
+                                   latitude: cameraBoundary.region.center.latitude - (cameraBoundary.region.span.latitudeDelta / 2))
+        let northEast = NCLocation(longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2),
+                                   latitude: cameraBoundary.region.center.latitude + (cameraBoundary.region.span.latitudeDelta / 2))
+
+        if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
+            self.mapView.move(to: currentUserLocation)
         }
     }
 }
