@@ -32,7 +32,7 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
             .flatMapCompletable { chatRoom in
                 var newChatRoom: ChatRoom = chatRoom
                 newChatRoom.recentMessageID = message.chatRoomID
-                newChatRoom.recentMessageDate = message.createdDate
+                newChatRoom.recentMessageDate = message.createdAt
                 newChatRoom.recentMessageText = message.text
                 return self.databaseService.updateChatRoom(newChatRoom).asCompletable()
             }

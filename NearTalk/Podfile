@@ -11,6 +11,7 @@ target 'NearTalk' do
   pod 'RxSwift', '~> 6.5.0'
   pod 'RxCocoa', '~> 6.5.0'
   pod 'RxGesture', '~> 4.0.0'
+  pod 'RxBlocking', '~> 6.5'
   
   # UI
   pod 'SnapKit', '~> 5.6.0'

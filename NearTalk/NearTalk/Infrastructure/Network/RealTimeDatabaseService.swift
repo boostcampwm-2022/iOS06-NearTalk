@@ -28,6 +28,8 @@ protocol RealTimeDatabaseService {
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
+    #warning("func observeUserChatRoomTicketList(_ userID: String)")
+//    func observeUserChatRoomTicketList(_ userID: String)
 }
 
 /// Firestore RealTimeDatabase 저장소를 관리하는 서비스
