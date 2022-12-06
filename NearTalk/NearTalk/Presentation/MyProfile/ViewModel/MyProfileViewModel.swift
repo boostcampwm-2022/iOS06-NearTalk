@@ -109,6 +109,7 @@ private extension DefaultMyProfileViewModel {
     
     func downloadImage(path: String?) {
         guard let path = path else {
+            self.imageRelay.accept(nil)
             return
         }
         self.mediaRepository.fetchImage(path: path)
