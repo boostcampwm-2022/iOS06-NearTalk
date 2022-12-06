@@ -113,6 +113,7 @@ extension BottomSheetTableViewCell {
         
         let userLocation = NCLocation(latitude: userLatitude, longitude: userLongitude)
         let distance = chatRoomLocation.distance(from: userLocation)
+        
         return String(format: "%.2f", distance / 1000) + " km"
     }
     

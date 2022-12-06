@@ -236,7 +236,6 @@ extension MainMapViewController: CLLocationManagerDelegate {
         
         let currentUserLatitude = Double(currentUserLocation.coordinate.latitude)
         let currentUserLongitude = Double(currentUserLocation.coordinate.longitude)
-        
         UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
         UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
         
