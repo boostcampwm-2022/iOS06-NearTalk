@@ -12,7 +12,7 @@ import UIKit
 
 final class OnboardingViewController: UIViewController {
     // MARK: - UI properties
-    private let rootView: OnboardingView = OnboardingView()
+    private let rootView: UserProfileInputView = OnboardingView()
     private let scrollView: UIScrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
         $0.keyboardDismissMode = .onDrag
