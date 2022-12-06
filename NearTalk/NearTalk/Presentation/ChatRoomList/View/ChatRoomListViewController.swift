@@ -19,13 +19,14 @@ final class ChatRoomListViewController: UIViewController {
     }
     
     private(set) lazy var groupCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.backgroundColor = UIColor.primaryBackground
         $0.register(ChatRoomListCell.self, forCellWithReuseIdentifier: ChatRoomListCell.identifier)
     }
     
     private lazy var chatTypeSegment = UISegmentedControl(items: ["Group Chat", "DM"]).then {
         $0.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], for: .normal)
-        $0.backgroundColor = .systemGray5
-        $0.tintColor = .white
+        $0.backgroundColor = .tertiaryLabel
+        $0.tintColor = .label
     }
     
     // MARK: - Properties
@@ -62,6 +63,7 @@ final class ChatRoomListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.viewModel.viewWillAppear()
+        self.groupCollectionView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -103,13 +105,14 @@ final class ChatRoomListViewController: UIViewController {
     }
     
     private func configureView() {
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .primaryBackground
         self.chatTypeSegment.selectedSegmentIndex = ChatType.group.rawValue
         self.dmCollectionView.isHidden = true
     }
     
     private func configureNavigation() {
         let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        createGroupChatButton.tintColor = .label
         self.navigationItem.rightBarButtonItem = createGroupChatButton
         self.navigationItem.title = "채팅 목록"
     }
@@ -202,7 +205,6 @@ final class ChatRoomListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-    
 }
 
 #if canImport(SwiftUI) && DEBUG

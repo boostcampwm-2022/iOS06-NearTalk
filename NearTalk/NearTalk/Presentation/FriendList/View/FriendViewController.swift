@@ -13,6 +13,7 @@ import UIKit
 final class FriendListViewController: UIViewController {
     // MARK: - UI properties
     private lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.backgroundColor = UIColor.primaryBackground
         $0.register(FriendListCell.self, forCellWithReuseIdentifier: FriendListCell.identifier)
     }
     
@@ -54,7 +55,7 @@ final class FriendListViewController: UIViewController {
     }
     
     private func configureView() {
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = UIColor.primaryBackground
     }
     
     private func configureTableView() {
@@ -67,6 +68,7 @@ final class FriendListViewController: UIViewController {
     private func configureNavigation() {
         self.navigationItem.title = "친구 목록"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        self.navigationItem.rightBarButtonItems?[0].tintColor = .label
     }
     
     // 데이터소스 세팅

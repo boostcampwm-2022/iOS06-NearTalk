@@ -14,6 +14,7 @@ struct ChatRoomListViewModelActions {
     let showCreateChatRoom: () -> Void
     let showDMChatRoomList: () -> Void
     let showGroupChatRoomList: () -> Void
+    let showAlert: () -> Void
 }
 
 protocol ChatRoomListViewModelInput {
@@ -42,6 +43,7 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> = BehaviorRelay<[GroupChatRoomListData]>(value: [])
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
     var userChatRoomTicket: UserChatRoomTicket?
+    var verifyDistance: BehaviorRelay<Bool> = BehaviorRelay<Bool>(value: true)
     
     init(useCase: FetchChatRoomUseCase, actions: ChatRoomListViewModelActions? = nil) {
         self.chatRoomListUseCase = useCase
@@ -59,7 +61,6 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
         self.chatRoomListUseCase.getUserChatRoomTicket(roomID: roomID)
     }
-
 }
 
 // MARK: - Input
@@ -77,7 +78,11 @@ extension DefaultChatRoomListViewModel {
     }
     
     func didSelectItem(at roomID: String) {
-        actions?.showChatRoom(roomID)
+//        if roomID == "" {
+            actions?.showChatRoom(roomID)
+//        } else {
+//            actions?.showAlert()
+//        }
     }
     
     // 체팅방 생성 클릭시 이동

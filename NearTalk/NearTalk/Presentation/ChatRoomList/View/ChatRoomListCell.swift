@@ -5,6 +5,7 @@
 //  Created by 김영욱 on 2022/11/14.
 //
 
+import CoreLocation
 import Kingfisher
 import RxCocoa
 import RxSwift
@@ -18,7 +19,7 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
-    private var disposebag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
     override var isSelected: Bool {
         didSet {
@@ -29,8 +30,19 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     // MARK: - UI properties
+    
+    private let view = UIView().then {
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = UIColor.tertiaryLabel?.withAlphaComponent(0.5)
+    }
+    
+    private let lockIcon = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40.0))).then { symbol in
+        symbol.tintColor = .label
+    }
+    
     private let img = UIImageView().then {
-        $0.layer.cornerRadius = 20
+        $0.layer.cornerRadius = 18
         $0.clipsToBounds = true
         $0.image = UIImage(systemName: "photo")
     }
@@ -56,22 +68,25 @@ class ChatRoomListCell: UICollectionViewCell {
         $0.font = UIFont.systemFont(ofSize: 12)
     }
     
-    private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then {
-        $0.isHidden = true
-        $0.backgroundColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
-        $0.font = .systemFont(ofSize: 16, weight: .semibold)
-        $0.textColor = .white
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 12
-        $0.textAlignment = .center
+    private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then { label in
+        label.backgroundColor = UIColor(named: "primaryColor")
+        label.isHidden = true
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .white
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 12
+        label.textAlignment = .center
     }
     
     // MARK: - Lifecycles
     
     override func prepareForReuse() {
+        self.view.isHidden = true
+        self.lockIcon.isHidden = true
         self.name.text = nil
         self.currentUserCount.text = nil
         self.recentMessage.text = nil
+        self.unreadMessageCount.isHidden = true
         self.date.text = nil
         self.img.image = nil
     }
@@ -115,42 +130,55 @@ class ChatRoomListCell: UICollectionViewCell {
         self.contentView.addSubview(self.recentMessage)
         self.contentView.addSubview(self.date)
         self.contentView.addSubview(self.unreadMessageCount)
+        self.contentView.addSubview(self.view)
+        self.contentView.addSubview(self.lockIcon)
     }
     
     private func configureConstraints() {
         self.img.snp.makeConstraints { make in
-            make.leading.equalTo(self.contentView).offset(12)
+            make.leading.equalTo(self.contentView).offset(16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
         self.date.snp.makeConstraints { make in
             make.top.equalTo(self.img.snp.top).offset(3)
-            make.trailing.equalTo(self.contentView).offset(-16)
+            make.trailing.equalTo(self.contentView).offset(-24)
             make.width.equalTo(68)
         }
         
         self.unreadMessageCount.snp.makeConstraints { make in
-            make.centerY.equalTo(self.contentView).offset(6)
-            make.trailing.equalTo(self.contentView).offset(-16)
+            make.trailing.equalTo(self.contentView).offset(-24)
+            make.bottom.equalTo(self.img.snp.bottom).offset(-8)
+            make.height.equalTo(28)
         }
         
         self.name.snp.makeConstraints { make in
             make.top.equalTo(self.img.snp.top).offset(3)
-            make.leading.equalTo(self.img.snp.trailing).offset(8)
+            make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
             make.height.equalTo(18)
         }
         
         self.recentMessage.snp.makeConstraints { make in
             make.top.equalTo(self.name.snp.bottom).offset(4)
-            make.leading.equalTo(self.img.snp.trailing).offset(8)
+            make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
         }
         
         self.currentUserCount.snp.makeConstraints { make in
             make.width.equalTo(40)
         }
+        
+        self.view.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.contentView).inset(4)
+            make.leading.trailing.equalTo(self.contentView).inset(12)
+        }
+        
+        self.lockIcon.snp.makeConstraints { make in
+            make.center.equalTo(self.contentView)
+        }
+        
     }
     
     private func dateOperate(date: Date?) {
@@ -209,24 +237,32 @@ class ChatRoomListCell: UICollectionViewCell {
                         self.unreadMessageCount.text = String(number - lastRoomMessageCount)
                         self.unreadMessageCount.isHidden = false
                     }
-
+                    
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
-            .disposed(by: disposebag)
+            .disposed(by: disposeBag)
     }
     
     private func imageLoad(path: String?) {
         guard let path = path, let url = URL(string: path) else {
-            img.image = UIImage(named: "nearTalkLogo")
+            img.image = UIImage(named: "ChatLogo")
             return
         }
         
         img.kf.setImage(with: url)
         if img.image == nil {
-            img.image = UIImage(named: "nearTalkLogo")
+            img.image = UIImage(named: "ChatLogo")
         }
+    }
+    
+    private func distanceOperate(distance: Double) {
+        UserDefaults.standard.rx
+            .observe(String.self, "CurrentUserLocation")
+            .subscribe(onNext: { (value) in
+            })
+            .disposed(by: disposeBag)
     }
     
 }
@@ -241,18 +277,19 @@ struct ChatRoomListCellPreview: PreviewProvider {
             actions: ChatRoomListViewModelActions(showChatRoom: { _ in },
                                                   showCreateChatRoom: {},
                                                   showDMChatRoomList: {},
-                                                  showGroupChatRoomList: {})
+                                                  showGroupChatRoomList: {},
+                                                  showAlert: {})
         )
-
+        
         let chatRoomData = ChatRoom(uuid: "123",
-                                    userList: ["1", "2", "3", "4", "5", "6", "6", "6", "6", "6", "6", "6", "6", "6", "6"],
+                                    userList: ["1"],
                                     roomImagePath: "",
                                     roomName: "테스트트방테스트방",
                                     accessibleRadius: 0,
                                     recentMessageText: "테스트중테스트중테스트중테스트중",
                                     recentMessageDate: Calendar.current.date(byAdding: .year, value: -1, to: Date()),
-                                    messageCount: 2222)
-                                    
+                                    messageCount: 4)
+        
         let groupData = GroupChatRoomListData(data: chatRoomData)
         
         UIViewPreview {
