@@ -7,7 +7,6 @@
 
 import Foundation
 import RxCocoa
-import RxRelay
 import RxSwift
 
 protocol MyProfileViewModelAction {
@@ -16,8 +15,6 @@ protocol MyProfileViewModelAction {
 }
 
 protocol MyProfileInput {
-    func moveToAppSettingView()
-    func moveToProfileSettingView()
     func viewWillAppear()
     func selectRow(menu: MyProfileItem?)
 }
@@ -39,7 +36,27 @@ enum MyProfileItem: String, Hashable, Sendable, CaseIterable {
     case appSetting = "앱 설정"
 }
 
-final class DefaultMyProfileViewModel: MyProfileViewModel {
+final class DefaultMyProfileViewModel {
+    private let nickNameRelay: BehaviorRelay<String?> = BehaviorRelay(value: nil)
+    private let messageRelay: BehaviorRelay<String?> = BehaviorRelay(value: nil)
+    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    
+    private let profileRepository: any ProfileRepository
+    private let mediaRepository: any MediaRepository
+    private let action: any MyProfileViewModelAction
+    private var profile: UserProfile = UserProfile()
+    private let disposeBag: DisposeBag = DisposeBag()
+
+    init(profileRepository: any ProfileRepository,
+         mediaRepository: any MediaRepository,
+         action: any MyProfileViewModelAction) {
+        self.profileRepository = profileRepository
+        self.mediaRepository = mediaRepository
+        self.action = action
+    }
+}
+
+extension DefaultMyProfileViewModel: MyProfileViewModel {
     var nickName: Driver<String?> {
         self.nickNameRelay.asDriver()
     }
@@ -52,33 +69,16 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
         self.imageRelay.asDriver()
     }
     
-    func moveToAppSettingView() {
-        self.action.showAppSettingView?()
-    }
-    
-    func moveToProfileSettingView() {
-        self.action.showProfileSettingView?(self.profile,
-            .init(nickName: self.nickNameRelay.value,
-                  message: self.messageRelay.value,
-                  image: self.imageRelay.value))
-    }
-    
-    private let nickNameRelay: BehaviorRelay<String?> = BehaviorRelay(value: nil)
-    private let messageRelay: BehaviorRelay<String?> = BehaviorRelay(value: nil)
-    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
-    
-    private let profileRepository: any ProfileRepository
-    private let mediaRepository: any MediaRepository
-    private let action: any MyProfileViewModelAction
-    private var profile: UserProfile = UserProfile()
-    private let disposeBag: DisposeBag = DisposeBag()
-    
-    init(profileRepository: any ProfileRepository,
-         mediaRepository: any MediaRepository,
-         action: any MyProfileViewModelAction) {
-        self.profileRepository = profileRepository
-        self.mediaRepository = mediaRepository
-        self.action = action
+    func selectRow(menu: MyProfileItem?) {
+        guard let menu = menu else {
+            return
+        }
+        switch menu {
+        case .profileSetting:
+            self.moveToProfileSettingView()
+        case .appSetting:
+            self.moveToAppSettingView()
+        }
     }
     
     func viewWillAppear() {
@@ -93,9 +93,24 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
             })
             .disposed(by: self.disposeBag)
     }
+}
+
+private extension DefaultMyProfileViewModel {
+    func moveToAppSettingView() {
+        self.action.showAppSettingView?()
+    }
     
-    private func downloadImage(path: String?) {
-        guard let path = path else { return }
+    func moveToProfileSettingView() {
+        self.action.showProfileSettingView?(self.profile,
+            .init(nickName: self.nickNameRelay.value,
+                  message: self.messageRelay.value,
+                  image: self.imageRelay.value))
+    }
+    
+    func downloadImage(path: String?) {
+        guard let path = path else {
+            return
+        }
         self.mediaRepository.fetchImage(path: path)
             .subscribe { [weak self] image in
                 self?.imageRelay.accept(image)
@@ -103,17 +118,5 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
                 self?.imageRelay.accept(nil)
             }
             .disposed(by: self.disposeBag)
-    }
-    
-    func selectRow(menu: MyProfileItem?) {
-        guard let menu = menu else {
-            return
-        }
-        switch menu {
-        case .profileSetting:
-            self.moveToProfileSettingView()
-        case .appSetting:
-            self.moveToAppSettingView()
-        }
     }
 }
