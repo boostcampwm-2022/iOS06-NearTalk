@@ -15,6 +15,17 @@ final class DefaultMediaRepository: MediaRepository {
         self.storageService = storageService
     }
     
+    func fetchImage(path: String) -> Single<Data?> {
+        Single<Data?>.create { single in
+            guard let url = URL(string: path) else {
+                single(.failure(StorageError.failedToGetDownloadUrl))
+                return Disposables.create()
+            }
+            single(.success(try? Data(contentsOf: url)))
+            return Disposables.create()
+        }
+    }
+    
     func uploadImage(_ imageData: Data) -> RxSwift.Single<String> {
         self.storageService.uploadData(data: imageData, fileName: "\(UUID().uuidString).jpg", dataType: .images)
     }
