@@ -21,6 +21,4 @@ final class DefaultUserDefaultUseCase: UserDefaultUseCase {
     func fetchUserUUID() -> String? {
         return self.userDefaultsRepository.fetchUserProfile()?.uuid
     }
-    
-    
 }

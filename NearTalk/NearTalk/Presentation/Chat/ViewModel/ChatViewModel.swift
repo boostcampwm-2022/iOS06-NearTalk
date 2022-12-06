@@ -64,6 +64,10 @@ class DefaultChatViewModel: ChatViewModel {
         self.myID = self.userDefaultUseCase.fetchUserUUID()
         
         self.chatMessages = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
+//            .map({ chatMessage in
+//                let userProfile = self.getUserProfile(userID: message.senderID ?? "")
+//                return MessageItem(chatMessage: chatMessage, myID: self.myID ?? "", userName: userProfile)
+//            })
         
         self.userProfileList = [:]
         self.userUUIDList = []
