@@ -100,7 +100,7 @@ final class MainMapViewController: UIViewController {
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             currentUserMapRegion: self.mapView.rx.region.map { region in
-                let centerLocation: NCLocation = .init(longitude: region.center.longitude, latitude: region.center.latitude)
+                let centerLocation: NCLocation = .init(latitude: region.center.latitude, longitude: region.center.longitude)
                 let latitudeDelta: Double = region.span.latitudeDelta
                 let longitudeDelta: Double = region.span.longitudeDelta
                 

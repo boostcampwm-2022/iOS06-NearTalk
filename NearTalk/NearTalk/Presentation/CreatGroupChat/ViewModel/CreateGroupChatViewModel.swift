@@ -103,7 +103,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            location: NCLocation(longitude: 37.3596093566472, latitude: 127.1056219310272), // 임시 위치
+            location: NCLocation(latitude: 37.3596093566472, longitude: 127.1056219310272), // 임시 위치
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
             maxNumberOfParticipants: self.maxParticipant,
