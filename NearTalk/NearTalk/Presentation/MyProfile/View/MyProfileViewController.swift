@@ -5,11 +5,9 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
-import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
-import Then
 import UIKit
 
 final class MyProfileViewController: UIViewController, UITableViewDelegate {
