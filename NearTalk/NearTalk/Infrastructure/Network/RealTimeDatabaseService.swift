@@ -28,8 +28,7 @@ protocol RealTimeDatabaseService {
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
-    #warning("func observeUserChatRoomTicketList(_ userID: String)")
-//    func observeUserChatRoomTicketList(_ userID: String)
+    func observeUserChatRoomTicketList(_ userID: String) -> Observable<UserChatRoomTicket>
 }
 
 /// Firestore RealTimeDatabase 저장소를 관리하는 서비스
@@ -300,7 +299,6 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
-            
             self.ref
                 .child(FirebaseKey.RealtimeDB.users.rawValue)
                 .child(userID)
@@ -311,7 +309,26 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                         single(.success(userChatRoomTicket))
                     }
                 }
-            
+            return Disposables.create()
+        }
+    }
+    
+    func observeUserChatRoomTicketList(_ userID: String) -> Observable<UserChatRoomTicket> {
+        Observable<UserChatRoomTicket>.create { [weak self] observable in
+            guard let self else {
+                observable.onError(DatabaseError.failedToFetch)
+                return Disposables.create()
+            }
+            self.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(userID)
+                .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
+                .observe(.value) { snapshot in
+                    if let value: [String: Any] = snapshot.value as? [String: Any],
+                       let ticket: UserChatRoomTicket = try? UserChatRoomTicket.decode(dictionary: value) {
+                        observable.onNext(ticket)
+                    }
+                }
             return Disposables.create()
         }
     }
