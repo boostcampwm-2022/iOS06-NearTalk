@@ -13,43 +13,7 @@ import Then
 import UIKit
 
 final class MyProfileViewController: UIViewController, UITableViewDelegate {
-    private let myProfileView = UIView()
-    
-    private let profileImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
-        $0.isUserInteractionEnabled = true
-    }
-    
-    private let fieldStack = UIStackView().then {
-        $0.distribution = .fillProportionally
-        $0.alignment = .fill
-        $0.axis = .vertical
-    }
-    
-    private let nicknameTitleLabel: UILabel = UILabel().then { label in
-        label.textAlignment = .natural
-        label.text = "닉네임"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-    }
-    
-    private let nicknameLabel = UILabel().then {
-        $0.textAlignment = .natural
-        $0.text = "닉네임"
-        $0.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-    }
-    
-    private let messageTitleLabel: UILabel = UILabel().then { label in
-        label.textAlignment = .natural
-        label.text = "상태 메세지"
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
-    }
-    
-    private let messageLabel = UILabel().then {
-        $0.textAlignment = .natural
-        $0.text = "상태 메세지"
-        $0.font = UIFont.systemFont(ofSize: 24)
-    }
-    
+    private let myProfileView: MyProfileView = MyProfileView()
     private let tableView: UITableView = UITableView()
     
     private lazy var dataSource: UITableViewDiffableDataSource<MyProfileSection, MyProfileItem> = {
@@ -60,7 +24,7 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
             config.textProperties.alignment = .natural
             config.textProperties.font = UIFont.systemFont(ofSize: 16)
             cell.contentConfiguration = config
-            cell.backgroundColor = .systemGray6
+            cell.backgroundColor = .secondaryBackground
             cell.selectionStyle = .none
             return cell
         }
@@ -80,7 +44,6 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     
     override func viewWillLayoutSubviews() {
         configureTableView()
-        self.profileImageView.makeRounded()
         super.viewWillLayoutSubviews()
     }
     
@@ -96,7 +59,6 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        self.profileImageView.makeRounded()
         self.viewModel.viewWillAppear()
         super.viewWillAppear(animated)
     }
@@ -111,36 +73,16 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let menu = self.dataSource.itemIdentifier(for: indexPath) else {
-            return
-        }
-        
-        switch menu {
-        case .profileSetting:
-            self.viewModel.moveToProfileSettingView(
-                necessaryProfileComponent: .init(
-                    nickName: self.nicknameLabel.text,
-                    message: self.messageLabel.text,
-                    image: self.profileImageView.image?.pngData() ?? self.profileImageView.image?.jpegData(compressionQuality: 1.0)))
-        case .appSetting:
-            self.viewModel.moveToAppSettingView()
-        }
+        self.viewModel.selectRow(menu: self.dataSource.itemIdentifier(for: indexPath))
     }
 }
 
 private extension MyProfileViewController {
     func configureUI() {
         configureNavigationBar()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .primaryBackground
         view.addSubview(myProfileView)
         view.addSubview(tableView)
-        
-        myProfileView.addSubview(profileImageView)
-        myProfileView.addSubview(fieldStack)
-        fieldStack.addArrangedSubview(nicknameTitleLabel)
-        fieldStack.addArrangedSubview(nicknameLabel)
-        fieldStack.addArrangedSubview(messageTitleLabel)
-        fieldStack.addArrangedSubview(messageLabel)
     }
     
     func configureTableView() {
@@ -152,30 +94,28 @@ private extension MyProfileViewController {
     
     func configureConstraint() {
         myProfileView.snp.makeConstraints { make in
-            make.horizontalEdges.equalToSuperview().inset(10)
-            make.top.equalToSuperview().offset(20)
+            make.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+            make.top.equalTo(self.view.safeAreaLayoutGuide).offset(20)
             make.height.equalTo(96)
         }
         
         tableView.snp.makeConstraints { make in
             make.top.equalTo(myProfileView.snp.bottom).offset(20)
-            make.bottom.horizontalEdges.equalToSuperview().inset(10)
-        }
-        
-        profileImageView.snp.makeConstraints { (make) in
-            make.leading.verticalEdges.equalToSuperview()
-            make.width.equalTo(profileImageView.snp.height)
-        }
-        
-        fieldStack.snp.makeConstraints { (make) in
-            make.verticalEdges.trailing.equalToSuperview()
-            make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+            make.bottom.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(10)
         }
     }
     
     func configureNavigationBar() {
-        navigationController?.navigationBar.isTranslucent = false
-        navigationItem.title = "내 프로필"
+        let newNavBarAppearance = UINavigationBarAppearance()
+        newNavBarAppearance.configureWithOpaqueBackground()
+        newNavBarAppearance.backgroundColor = .systemGray6
+        
+        self.navigationItem.title = "마이 프로필"
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.standardAppearance = newNavBarAppearance
+        self.navigationItem.compactAppearance = newNavBarAppearance
+        self.navigationItem.scrollEdgeAppearance = newNavBarAppearance
+        self.navigationItem.compactScrollEdgeAppearance = newNavBarAppearance
     }
     
     func setTableView() {
@@ -193,34 +133,20 @@ private extension MyProfileViewController {
     
     func bindViewModel() {
         self.viewModel.nickName
-            .subscribe(self.nicknameLabel.rx.text)
+            .drive(self.myProfileView.nickName)
             .disposed(by: self.disposeBag)
         self.viewModel.message
-            .subscribe(self.messageLabel.rx.text)
+            .drive(self.myProfileView.message)
             .disposed(by: self.disposeBag)
         self.viewModel.image
-            .compactMap { $0 }
-            .compactMap { URL(string: $0) }
-            .bind(onNext: { url in
-                self.profileImageView.backgroundColor = .clear
-                self.profileImageView.kf.setImage(with: url)
-            })
-            .disposed(by: self.disposeBag)
-        self.viewModel.image
-            .filter { $0 == nil }
-            .bind(onNext: { _ in
-                self.profileImageView.backgroundColor = .lightGray
-                self.profileImageView.image = nil
-            })
+            .map { imageBinary in
+                if let binary = imageBinary {
+                    return UIImage(data: binary)
+                } else {
+                    return MyProfileView.defaultProfileImage
+                }
+            }
+            .drive(self.myProfileView.image)
             .disposed(by: self.disposeBag)
     }
-}
-
-enum MyProfileSection: Hashable, Sendable {
-    case main
-}
-
-enum MyProfileItem: String, Hashable, Sendable, CaseIterable {
-    case profileSetting = "프로필 수정"
-    case appSetting = "앱 설정"
 }
