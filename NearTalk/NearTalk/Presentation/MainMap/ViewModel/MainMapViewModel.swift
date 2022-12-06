@@ -14,7 +14,6 @@ import RxSwift
 final class MainMapViewModel {
     struct Actions {
         let showCreateChatRoomView: () -> Void
-        let showBottomSheetView: () -> Void
     }
     
     struct UseCases {

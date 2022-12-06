@@ -30,6 +30,7 @@ final class MainMapViewController: UIViewController {
     }
 
     // MARK: - Properties
+    private var coordinator: MainMapCoordinator?
     private var viewModel: MainMapViewModel!
     private let disposeBag: DisposeBag = .init()
     private let locationManager: CLLocationManager = .init().then {
@@ -37,9 +38,10 @@ final class MainMapViewController: UIViewController {
     }
     
     // MARK: - LifeCycles
-    static func create(with viewModel: MainMapViewModel) -> MainMapViewController {
+    static func create(with viewModel: MainMapViewModel, coordinator: MainMapCoordinator) -> MainMapViewController {
         let mainMapVC = MainMapViewController()
         mainMapVC.viewModel = viewModel
+        mainMapVC.coordinator = coordinator
         
         return mainMapVC
     }
@@ -126,6 +128,14 @@ final class MainMapViewController: UIViewController {
             })
             .disposed(by: self.disposeBag)
         
+        output.showCreateChatRoomViewEvent
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 == true }
+            .drive(onNext: { [weak self] _ in
+                self?.coordinator?.showCreateChatRoomView()
+            })
+            .disposed(by: self.disposeBag)
+        
         output.showAccessibleChatRooms
             .map { chatRooms in
                 chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
@@ -139,11 +149,11 @@ final class MainMapViewController: UIViewController {
         
         output.showAnnotationChatRooms
             .asDriver(onErrorJustReturn: [])
-            .drive(onNext: {
+            .drive(onNext: { [weak self] chatRooms in
                 let bottomSheet = BottomSheetViewController()
-                bottomSheet.loadData(with: $0)
+                bottomSheet.loadData(with: chatRooms)
                 
-                self.present(bottomSheet, animated: true)
+                self?.present(bottomSheet, animated: true)
             })
             .disposed(by: self.disposeBag)
     }
