@@ -17,30 +17,55 @@ protocol MyProfileViewModelAction {
 
 protocol MyProfileInput {
     func moveToAppSettingView()
-    func moveToProfileSettingView(necessaryProfileComponent: NecessaryProfileComponent)
+    func moveToProfileSettingView()
     func viewWillAppear()
+    func selectRow(menu: MyProfileItem?)
 }
 
 protocol MyProfileOutput {
-    var nickName: BehaviorRelay<String?> { get }
-    var message: BehaviorRelay<String?> { get }
-    var image: BehaviorRelay<String?> { get }
+    var nickName: Driver<String?> { get }
+    var message: Driver<String?> { get }
+    var image: Driver<Data?> { get }
 }
 
 protocol MyProfileViewModel: MyProfileInput, MyProfileOutput {}
 
+enum MyProfileSection: Hashable, Sendable {
+    case main
+}
+
+enum MyProfileItem: String, Hashable, Sendable, CaseIterable {
+    case profileSetting = "프로필 수정"
+    case appSetting = "앱 설정"
+}
+
 final class DefaultMyProfileViewModel: MyProfileViewModel {
+    var nickName: Driver<String?> {
+        self.nickNameRelay.asDriver()
+    }
+    
+    var message: Driver<String?> {
+        self.messageRelay.asDriver()
+    }
+    
+    var image: Driver<Data?> {
+        self.imageRelay.asDriver()
+    }
+    
     func moveToAppSettingView() {
         self.action.showAppSettingView?()
     }
     
-    func moveToProfileSettingView(necessaryProfileComponent: NecessaryProfileComponent) {
-        self.action.showProfileSettingView?(self.profile, necessaryProfileComponent)
+    func moveToProfileSettingView() {
+        self.action.showProfileSettingView?(self.profile,
+            .init(nickName: self.nickNameRelay.value,
+                  message: self.messageRelay.value,
+                  image: self.imageRelay.value))
     }
     
-    let nickName: BehaviorRelay<String?> = BehaviorRelay(value: nil)
-    let message: BehaviorRelay<String?> = BehaviorRelay(value: nil)
-    let image: BehaviorRelay<String?> = BehaviorRelay(value: nil)
+    private let nickNameRelay: BehaviorRelay<String?> = BehaviorRelay(value: nil)
+    private let messageRelay: BehaviorRelay<String?> = BehaviorRelay(value: nil)
+    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     
     private let profileRepository: any ProfileRepository
     private let mediaRepository: any MediaRepository
@@ -59,8 +84,8 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
     func viewWillAppear() {
         self.profileRepository.fetchMyProfile()
             .subscribe(onSuccess: { [weak self] profile in
-                self?.nickName.accept(profile.username)
-                self?.message.accept(profile.statusMessage)
+                self?.nickNameRelay.accept(profile.username)
+                self?.messageRelay.accept(profile.statusMessage)
                 self?.downloadImage(path: profile.profileImagePath)
                 self?.profile = profile
             }, onFailure: {
@@ -70,16 +95,25 @@ final class DefaultMyProfileViewModel: MyProfileViewModel {
     }
     
     private func downloadImage(path: String?) {
-        self.image.accept(path)
-//        guard let path = path else {
-//            self.image.accept(nil)
-//            return
-//        }
-//
-//        self.imageRepository.fetch(path: path)
-//            .subscribe(onSuccess: { [weak self] imageData in
-//                self?.image.accept(imageData)
-//            })
-//            .disposed(by: self.disposeBag)
+        guard let path = path else { return }
+        self.mediaRepository.fetchImage(path: path)
+            .subscribe { [weak self] image in
+                self?.imageRelay.accept(image)
+            } onFailure: { [weak self] _ in
+                self?.imageRelay.accept(nil)
+            }
+            .disposed(by: self.disposeBag)
+    }
+    
+    func selectRow(menu: MyProfileItem?) {
+        guard let menu = menu else {
+            return
+        }
+        switch menu {
+        case .profileSetting:
+            self.moveToProfileSettingView()
+        case .appSetting:
+            self.moveToAppSettingView()
+        }
     }
 }
