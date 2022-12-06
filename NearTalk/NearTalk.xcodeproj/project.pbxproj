@@ -22,7 +22,6 @@
 		1648BAAF292387020076AC35 /* GroupChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */; };
 		1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */; };
 		1648BAB3292389920076AC35 /* ChatRoomClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */; };
-		1648BAB6292391940076AC35 /* DummyData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1648BAB5292391940076AC35 /* DummyData.plist */; };
 		1648BABC2925CDDE0076AC35 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */; };
 		1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */; };
 		16530574291E17A50026B815 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530573291E17A40026B815 /* DeviceType.swift */; };
@@ -261,7 +260,6 @@
 		1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DmChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomClusterAnnotationView.swift; sourceTree = "<group>"; };
-		1648BAB5292391940076AC35 /* DummyData.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DummyData.plist; sourceTree = "<group>"; };
 		1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTableViewCell.swift; sourceTree = "<group>"; };
 		16530573291E17A40026B815 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
@@ -546,7 +544,6 @@
 		1648BA932921D7240076AC35 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				1648BAB429238DA40076AC35 /* DummyData */,
 				1648BA962921D73E0076AC35 /* MainMapViewModel.swift */,
 			);
 			path = ViewModel;
@@ -576,14 +573,6 @@
 				1648BABA2925CD9F0076AC35 /* BottomSheet */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		1648BAB429238DA40076AC35 /* DummyData */ = {
-			isa = PBXGroup;
-			children = (
-				1648BAB5292391940076AC35 /* DummyData.plist */,
-			);
-			path = DummyData;
 			sourceTree = "<group>";
 		};
 		1648BAB92925CD8C0076AC35 /* Annotations */ = {
@@ -1440,7 +1429,6 @@
 			buildConfigurationList = 1660D251291DDB3A005F7B24 /* Build configuration list for PBXNativeTarget "NearTalk" */;
 			buildPhases = (
 				1660D270291DEE01005F7B24 /* SwiftLint Script */,
-				ED3B21A8C256062DAB6C66A5 /* [CP] Check Pods Manifest.lock */,
 				1660D220291DDB37005F7B24 /* Sources */,
 				1660D221291DDB37005F7B24 /* Frameworks */,
 				1660D222291DDB37005F7B24 /* Resources */,
@@ -1556,7 +1544,6 @@
 				1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */,
 				603FD3692928D40300687ED4 /* .FirebaseAuthBinary.version in Resources */,
 				603FD3622928D40300687ED4 /* .FirebaseDatabaseBinary.version in Resources */,
-				1648BAB6292391940076AC35 /* DummyData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1595,28 +1582,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		6878474B40FEFF81756C9BCA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NearTalk-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
 		};
 		ACA4784B274F4E07F40B819F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
