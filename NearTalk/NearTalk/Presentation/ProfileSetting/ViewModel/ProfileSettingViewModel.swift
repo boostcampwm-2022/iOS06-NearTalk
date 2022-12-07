@@ -11,7 +11,7 @@ import RxSwift
 protocol ProfileSettingInput {
     func editNickName(_ text: String)
     func editStatusMessage(_ text: String)
-    func editImage()
+    func editImage(_ binary: Data?)
     func update()
 }
 
@@ -26,7 +26,6 @@ protocol ProfileSettingOutput {
 protocol ProfileSettingViewModel: ProfileSettingInput, ProfileSettingOutput {}
 
 protocol ProfileSettingViewModelAction {
-    var presentImagePicker: ((BehaviorRelay<Data?>) -> Void)? { get }
     var presentUpdateFailure: (() -> Void)? { get }
 }
 
@@ -75,7 +74,8 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
          validateStatusMessageUseCase: any ValidateTextUseCase,
          uploadImageUseCase: any UploadImageUseCase,
          action: any ProfileSettingViewModelAction,
-         profile: UserProfile) {
+         profile: UserProfile,
+         neccesaryProfileComponent: NecessaryProfileComponent?) {
         self.updateProfileUseCase = updateProfileUseCase
         self.validateNickNameUseCase = validateNickNameUseCase
         self.validateStatusMessageUseCase = validateStatusMessageUseCase
@@ -85,6 +85,7 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
         self.message = profile.statusMessage
         self.profile = profile
         self.bind()
+        self.editImage(neccesaryProfileComponent?.image)
     }
     
     func editNickName(_ text: String) {
@@ -99,8 +100,8 @@ final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
             .accept(self.validateStatusMessageUseCase.execute(text))
     }
     
-    func editImage() {
-        self.action.presentImagePicker?(self.imageRelay)
+    func editImage(_ binary: Data?) {
+        self.imageRelay.accept(binary)
     }
     
     func update() {

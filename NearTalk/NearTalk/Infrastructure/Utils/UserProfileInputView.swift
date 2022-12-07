@@ -14,7 +14,7 @@ import UIKit
 class UserProfileInputView: UIView {
     // MARK: - UI Space Constants
     private let profileImageSpace: CGFloat = 20.0
-    private let profileImageRadius: CGFloat = 150.0
+    private let profileImageRadius: CGFloat = 75.0
     private let labelSpace: CGFloat = 5.0
     private let labelInset: UIEdgeInsets = .init(top: 0, left: 20.0, bottom: 0, right: 20.0)
     
@@ -77,19 +77,23 @@ class UserProfileInputView: UIView {
         $0.frame = CGRect(origin: .zero, size: $0.intrinsicContentSize)
     }
     
-    convenience init(buttonTitle: String) {
-        self.init()
-        self.registerButton.setTitle(buttonTitle, for: .normal)
-    }
-    
     // MARK: - UIView Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .primaryBackground
         self.addSubViews()
         self.bringSubviewToFront(pencilSymbol)
         self.configureFonts()
         self.configureConstraints()
+    }
+    
+    convenience init(inputData: NecessaryProfileComponent) {
+        self.init()
+        self.nicknameField.text = inputData.nickName
+        self.messageField.text = inputData.message
+        if let imageData = inputData.image, let image = UIImage(data: imageData) {
+            self.profileImageView.image = image
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -202,6 +206,10 @@ extension UserProfileInputView {
         self.messageValidityMessageLabel.rx.textColor
             .asObserver()
     }
+    
+    func setButtonTitle(buttonTitle: String) {
+        self.registerButton.setTitle(buttonTitle, for: .normal)
+    }
 }
 
 private extension UserProfileInputView {
@@ -234,8 +242,9 @@ private extension UserProfileInputView {
     
     func configurePencilSymbol() {
         pencilSymbol.snp.makeConstraints { (make) in
-            make.centerX.equalTo(self.profileImageView.snp.centerX).offset(50.0)
-            make.centerY.equalTo(self.profileImageView.snp.centerY).offset(50.0)
+            let offset: Float = sqrtf(powf(Float(self.profileImageRadius), 2) / 2)
+            make.centerX.equalTo(self.profileImageView.snp.centerX).offset(offset)
+            make.centerY.equalTo(self.profileImageView.snp.centerY).offset(offset)
         }
     }
     
@@ -243,7 +252,7 @@ private extension UserProfileInputView {
         profileImageView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
             make.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
-            make.width.height.equalTo(self.profileImageRadius)
+            make.width.height.equalTo(self.profileImageRadius * 2)
         }
     }
     
