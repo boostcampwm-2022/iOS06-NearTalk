@@ -15,7 +15,7 @@ struct ChatMessage: BaseEntity {
     var messageType: String?
     var mediaPath: String?
     var mediaType: String?
-    var createdDate: Date?
+    var createdAt: Date?
 }
 
 enum MessageType: String {

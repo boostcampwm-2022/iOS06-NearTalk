@@ -44,10 +44,13 @@ final class MainMapDIContainer {
     }
     
     // MARK: - ViewControllers
-    func makeMainMapViewController(actions: MainMapViewModel.Actions) -> MainMapViewController {
+    func makeMainMapViewController(actions: MainMapViewModel.Actions, navigationController: UINavigationController) -> MainMapViewController {
         let mainMapVM = self.makeMainMapViewModel(actions: actions)
         
-        return MainMapViewController.create(with: mainMapVM)
+        return MainMapViewController.create(
+            with: mainMapVM,
+            coordinator: self.makeMainMapCoordinator(navigationController: navigationController)
+        )
     }
     
     func makeBottomSheetViewController() -> BottomSheetViewController {
@@ -56,10 +59,8 @@ final class MainMapDIContainer {
     
     // MARK: - Coordinators
     func makeMainMapCoordinator(navigationController: UINavigationController?) -> MainMapCoordinator {
-        return MainMapCoordinator(
-            navigationController: navigationController,
-            dependencies: self
-        )
+        return MainMapCoordinator(navigationController: navigationController,
+                                  dependencies: self)
     }
 }
 
