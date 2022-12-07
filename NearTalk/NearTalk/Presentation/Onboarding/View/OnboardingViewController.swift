@@ -96,13 +96,7 @@ final class OnboardingViewController: UserProfileInputViewController {
     }
     
     override func imagePicked(_ image: UIImage?) {
-        let imageBinary: Data?
-
-        if let image = image {
-            imageBinary = self.resizeImageByUIGraphics(image: image)
-        } else {
-            imageBinary = nil
-        }
+        let imageBinary: Data? = image != nil ? self.resizeImageByUIGraphics(image: image!) : nil
         self.viewModel.editImage(imageBinary)
     }
     
