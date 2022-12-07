@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NCLocation: Codable {
+struct NCLocation: Codable, Hashable {
     // 미터 당 위경도
     static let decimalDegreePerMeter: Double = 0.000009009 // 도/m
     static let meterPerDecimalDegree: Double = 111000 // m/도

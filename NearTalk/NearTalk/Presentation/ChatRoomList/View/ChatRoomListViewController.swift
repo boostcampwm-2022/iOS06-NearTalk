@@ -15,11 +15,19 @@ final class ChatRoomListViewController: UIViewController {
     
     // MARK: - UI properties
     private(set) lazy var dmCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.backgroundColor = UIColor.primaryBackground
         $0.register(ChatRoomListCell.self, forCellWithReuseIdentifier: ChatRoomListCell.identifier)
     }
     
     private(set) lazy var groupCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.backgroundColor = UIColor.primaryBackground
         $0.register(ChatRoomListCell.self, forCellWithReuseIdentifier: ChatRoomListCell.identifier)
+    }
+    
+    private lazy var chatTypeSegment = UISegmentedControl(items: ["Group Chat", "DM"]).then {
+        $0.setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 17)], for: .normal)
+        $0.backgroundColor = .tertiaryLabel
+        $0.tintColor = .label
     }
     
     // MARK: - Properties
@@ -36,6 +44,13 @@ final class ChatRoomListViewController: UIViewController {
     enum ChatType: Int {
         case group = 0
         case dm = 1
+        
+        var index: Int {
+            switch self {
+            case .group: return 0
+            case .dm: return 1
+            }
+        }
     }
     
     // MARK: - Lifecycle
@@ -64,34 +79,42 @@ final class ChatRoomListViewController: UIViewController {
     
     // MARK: - Configure views
     func addSubviews() {
-        self.view.addSubview(dmCollectionView)
-        self.view.addSubview(groupCollectionView)
+        self.view.addSubview(self.chatTypeSegment)
+        self.view.addSubview(self.dmCollectionView)
+        self.view.addSubview(self.groupCollectionView)
     }
     
     func configureConstraints() {
-        dmCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.trailing.leading.equalTo(view)
+        
+        self.chatTypeSegment.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.centerX.equalTo(self.view)
+            make.width.equalTo(300)
+            make.height.equalTo(32)
         }
         
-        groupCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.trailing.leading.equalTo(view)
+        self.dmCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.chatTypeSegment.snp.bottom).offset(12)
+            make.bottom.trailing.leading.equalTo(self.view)
+        }
+        
+        self.groupCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.chatTypeSegment.snp.bottom).offset(12)
+            make.bottom.trailing.leading.equalTo(self.view)
         }
     }
     
     private func configureView() {
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .primaryBackground
+        self.chatTypeSegment.selectedSegmentIndex = ChatType.group.rawValue
         self.dmCollectionView.isHidden = true
     }
     
     private func configureNavigation() {
-        let dmChatButton: UIBarButtonItem = UIBarButtonItem(title: "DM", style: .plain, target: self, action: nil)
-        let groupChatButton: UIBarButtonItem = UIBarButtonItem(title: "Group", style: .plain, target: self, action: nil)
         let createGroupChatButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
-        
-        self.navigationItem.leftBarButtonItems = [groupChatButton, dmChatButton]
+        createGroupChatButton.tintColor = .label
         self.navigationItem.rightBarButtonItem = createGroupChatButton
+        self.navigationItem.title = "채팅 목록"
     }
     
     private func configureDatasource() {
@@ -136,7 +159,7 @@ final class ChatRoomListViewController: UIViewController {
             .bind(onNext: { [weak self] (model: [DMChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, DMChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
+                snapshot.appendItems(model.sorted { $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.dmDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
@@ -145,20 +168,21 @@ final class ChatRoomListViewController: UIViewController {
             .bind(onNext: { [weak self] (model: [GroupChatRoomListData]) in
                 var snapshot = NSDiffableDataSourceSnapshot<Section, GroupChatRoomListData>()
                 snapshot.appendSections([.main])
-                snapshot.appendItems(model.sorted{ $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
+                snapshot.appendItems(model.sorted { $0.recentMessageDate ?? Date() > $1.recentMessageDate ?? Date() })
                 self?.groupDataSource?.apply(snapshot, animatingDifferences: true)
             })
             .disposed(by: disposeBag)
         
-        self.navigationItem.leftBarButtonItems?[ChatType.dm.rawValue].rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.didDMChatRoomList()
-            })
-            .disposed(by: disposeBag)
-        
-        self.navigationItem.leftBarButtonItems?[ChatType.group.rawValue].rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.didGroupChatRoomList()
+        self.chatTypeSegment.rx.selectedSegmentIndex
+            .subscribe(onNext: { [weak self] (index: Int) in
+                switch index {
+                case ChatType.group.index:
+                    self?.viewModel.didGroupChatRoomList()
+                case ChatType.dm.index:
+                    self?.viewModel.didDMChatRoomList()
+                default:
+                    break
+                }
             })
             .disposed(by: disposeBag)
         
@@ -181,21 +205,5 @@ final class ChatRoomListViewController: UIViewController {
         let layout = UICollectionViewCompositionalLayout(section: section)
         return layout
     }
-    
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChatRoomListViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        let navigation = UINavigationController()
-        
-        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
-        let coordinator = diContainer.makeChatRoomListCoordinator(navigationController: navigation)
-        coordinator.start()
-        
-        return navigation.showPreview(.iPhone14Pro)
-    }
-}
-#endif
