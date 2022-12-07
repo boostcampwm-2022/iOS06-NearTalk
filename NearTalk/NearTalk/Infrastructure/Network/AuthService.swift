@@ -15,5 +15,4 @@ protocol AuthService {
     func logout() -> Completable
     func deleteCurrentUser() -> Completable
     func reauthenticateUser(idTokenString: String, nonce: String?) -> Completable
-//    func fetchCurrentUID() -> Single<String>
 }

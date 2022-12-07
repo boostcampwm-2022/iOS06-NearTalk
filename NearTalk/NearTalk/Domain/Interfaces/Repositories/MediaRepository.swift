@@ -11,4 +11,5 @@ import RxSwift
 protocol MediaRepository {
     func uploadImage(_ imageData: Data) -> Single<String>
     func uploadVideo(_ videoData: Data) -> Single<String>
+    func fetchImage(path: String) -> Single<Data?>
 }

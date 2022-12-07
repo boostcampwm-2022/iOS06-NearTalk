@@ -142,7 +142,7 @@ class DefaultChatViewModel: ChatViewModel {
             messageType: MessageType.text.rawValue,
             mediaPath: nil,
             mediaType: nil,
-            createdDate: Date()
+            createdAt: Date()
         )
         
         self.messagingUseCase.sendMessage(
@@ -204,7 +204,7 @@ private extension DefaultChatViewModel {
                 var newChatRoom = self.chatRoom.value
                 newChatRoom?.messageCount = messageCount + 1
                 newChatRoom?.recentMessageID = chatMessage.uuid
-                newChatRoom?.recentMessageDate = chatMessage.createdDate
+                newChatRoom?.recentMessageDate = chatMessage.createdAt
                 newChatRoom?.recentMessageText = chatMessage.text
                 if let newChatRoom, let myID = self.myID {
                     _ = self.messagingUseCase.updateChatRoom(chatRoom: newChatRoom, userID: myID)
@@ -254,7 +254,7 @@ struct MessageItem: Hashable {
         self.message = chatMessage.text
         self.type = chatMessage.senderID == myID ? MyMessageType.send : MyMessageType.receive
         self.imagePath = chatMessage.mediaPath ?? "이미지없음"
-        self.createdDate = chatMessage.createdDate ?? Date()
+        self.createdDate = chatMessage.createdAt ?? Date()
     }
 }
 
