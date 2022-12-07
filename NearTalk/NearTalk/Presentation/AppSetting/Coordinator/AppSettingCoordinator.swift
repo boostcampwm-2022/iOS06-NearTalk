@@ -49,11 +49,11 @@ final class AppSettingCoordinator: Coordinator {
         let alert: UIAlertController = success
         ? UIAlertController(
             title: "로그아웃",
-            message: "로그 아웃되었습니다.",
+            message: "로그아웃되었습니다.",
             preferredStyle: .alert)
         : UIAlertController(
             title: "로그아웃",
-            message: "로그 아웃에 실패했습니다. 다시 해보세요.",
+            message: "로그아웃에 실패했습니다. 다시 해보세요.",
             preferredStyle: .alert)
         
         let action: UIAlertAction = success
@@ -73,11 +73,11 @@ final class AppSettingCoordinator: Coordinator {
         let alert: UIAlertController = success
         ? UIAlertController(
             title: "회원탈퇴",
-            message: "회원 탈퇴되었습니다.",
+            message: "회원탈퇴되었습니다.",
             preferredStyle: .alert)
         : UIAlertController(
-            title: "회원 탈퇴",
-            message: "회원 탈퇴에 실패했습니다. 다시 해보세요.",
+            title: "회원탈퇴",
+            message: "회원탈퇴에 실패했습니다. 다시 해보세요.",
             preferredStyle: .alert)
         
         let action: UIAlertAction = success
