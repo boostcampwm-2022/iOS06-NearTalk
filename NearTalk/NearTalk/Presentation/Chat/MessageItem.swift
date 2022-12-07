@@ -21,7 +21,7 @@ struct MessageItem: Hashable {
         self.message = chatMessage.text
         self.type = chatMessage.senderID == myID ? MyMessageType.send : MyMessageType.receive
         self.imagePath = userProfile?.profileImagePath ?? "이미지없음"
-        self.createdDate = chatMessage.createdDate ?? Date()
+        self.createdDate = chatMessage.createdAt ?? Date()
     }
 }
 

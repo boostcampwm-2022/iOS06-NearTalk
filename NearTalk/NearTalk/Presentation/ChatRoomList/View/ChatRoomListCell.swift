@@ -269,7 +269,7 @@ class ChatRoomListCell: UICollectionViewCell {
                       let latitude = value?["latitude"] else { return }
                 
                 // TODO: 채팅방 longitude, latitude 변경
-                let newNCLocation: NCLocation = NCLocation(longitude: latitude, latitude: longitude)
+                let newNCLocation: NCLocation = NCLocation(latitude: longitude, longitude: latitude)
                 let distance = location.distance(from: newNCLocation)
                 
 //                print("\(self.name.text) 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
