@@ -180,7 +180,7 @@ private extension ChatViewController {
     func applySnapshot(animatingDifferences: Bool = true) {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messgeItems.sorted { $0.createdDate < $1.createdDate })
+        snapshot.appendItems(messgeItems.sorted { $0.createdAt < $1.createdAt })
         
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }

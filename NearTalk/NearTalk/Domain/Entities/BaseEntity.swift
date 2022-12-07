@@ -9,4 +9,5 @@ import Foundation
 
 protocol BaseEntity: Codable {
     var uuid: String? { get set }
+    var createdAt: Date? { get set }
 }
