@@ -32,12 +32,14 @@ class ChatRoomListCell: UICollectionViewCell {
     // MARK: - UI properties
     
     private let view = UIView().then {
+        $0.isHidden = true
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
         $0.backgroundColor = UIColor.tertiaryLabel?.withAlphaComponent(0.5)
     }
     
     private let lockIcon = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40.0))).then { symbol in
+        symbol.isHidden = true
         symbol.tintColor = .label
     }
     
@@ -103,6 +105,7 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
+        print(groupData.roomName, "유저티켓")
         self.viewModel = viewModel
         self.uuid = groupData.uuid
         self.name.text = groupData.roomName
@@ -216,13 +219,9 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private func unreadMessageCheck(roomID: String, number: Int?) {
-        guard let viewModel = self.viewModel else {
-            self.unreadMessageCount.isHidden = true
-            return
-        }
         
-        viewModel.getUserChatRoomTicket(roomID: roomID)
-            .subscribe { event in
+        self.viewModel?.getUserChatRoomTicket(roomID: roomID)
+            .subscribe { [weak self] event in
                 switch event {
                 case .success(let ticket):
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
@@ -230,14 +229,14 @@ class ChatRoomListCell: UICollectionViewCell {
                           number > lastRoomMessageCount else {
                         
                         DispatchQueue.main.async {
-                            self.unreadMessageCount.isHidden = true
+                            self?.unreadMessageCount.isHidden = true
                         }
                         
                         return
                     }
                     DispatchQueue.main.async {
-                        self.unreadMessageCount.text = String(number - lastRoomMessageCount)
-                        self.unreadMessageCount.isHidden = false
+                        self?.unreadMessageCount.text = String(number - lastRoomMessageCount)
+                        self?.unreadMessageCount.isHidden = false
                     }
                     
                 case .failure(let error):
@@ -272,6 +271,8 @@ class ChatRoomListCell: UICollectionViewCell {
                 // TODO: 채팅방 longitude, latitude 변경
                 let newNCLocation: NCLocation = NCLocation(longitude: latitude, latitude: longitude)
                 let distance = location.distance(from: newNCLocation)
+                
+//                print("\(self.name.text) 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
                 
                 if distance <= accessibleRadius * 1000 {
                     self.inArea = true
