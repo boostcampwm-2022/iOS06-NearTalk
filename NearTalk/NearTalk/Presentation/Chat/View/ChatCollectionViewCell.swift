@@ -7,6 +7,7 @@
 
 import SnapKit
 import UIKit
+import Kingfisher
 
 class ChatCollectionViewCell: UICollectionViewCell {
     // MARK: - Proporty
@@ -70,13 +71,14 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.profileImageView.image = nil
     }
 
-    func configure(isInComing: Bool, message: String, name: String? = nil, completion: (() -> Void)? = nil) {
-        self.textView.text = message
+    func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
+        let isInComing = messageItem.type == .receive ? true : false
+        self.textView.text = messageItem.message
         self.textView.backgroundColor = isInComing ? .darkGray : .systemGray
-        self.namelabel.text = isInComing ? name : ""
-        self.profileImageView.image = isInComing ? UIImage(systemName: "heart") : nil
+        self.namelabel.text = isInComing ? messageItem.userName : ""
         
         if isInComing {
+            self.setImage(path: messageItem.imagePath)
             self.textView.snp.makeConstraints { make in
                 make.leading.equalTo(profileImageView.snp.trailing)
                 make.top.equalTo(namelabel.snp.bottom)
@@ -109,6 +111,20 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.textView.snp.makeConstraints { make in
             make.width.lessThanOrEqualTo(250)
             make.bottom.equalToSuperview()
+        }
+    }
+    
+    private func setImage(path: String?) {
+        guard let path = path,
+              let url = URL(string: path)
+        else {
+            profileImageView.image = UIImage(systemName: "photo")
+            return
+        }
+        
+        profileImageView.kf.setImage(with: url)
+        if profileImageView.image == nil {
+            profileImageView.image = UIImage(systemName: "photo")
         }
     }
 }

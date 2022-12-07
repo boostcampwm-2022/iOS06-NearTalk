@@ -158,21 +158,20 @@ private extension ChatViewController {
     }
     
     func makeDataSource() -> DataSource {
-        let datasource = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, itemIdentifier in
+        let datasource = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
             
             guard let self,
                   let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatCollectionViewCell.identifier,
-                for: indexPath) as? ChatCollectionViewCell,
-                  let newMessage = itemIdentifier.message
+                for: indexPath) as? ChatCollectionViewCell
             else {
                 return UICollectionViewCell()
             }
-            
-            let messageType = itemIdentifier.type
-            cell.configure(isInComing: messageType == .receive ? true : false, message: newMessage, name: itemIdentifier.userName) {
+        
+            cell.configure(messageItem: item) {
                 var snapshot = self.dataSource.snapshot()
-                snapshot.reloadItems([itemIdentifier])
+                snapshot.reloadItems([item])
+                collectionView.reloadItems(at: [indexPath])
             }
             return cell
         }
