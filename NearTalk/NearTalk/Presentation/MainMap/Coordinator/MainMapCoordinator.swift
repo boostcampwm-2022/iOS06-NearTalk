@@ -46,7 +46,7 @@ final class MainMapCoordinator: Coordinator {
         let diContainer: MainMapDIContainer = .init()
         let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
         let bottomSheet: BottomSheetViewController = BottomSheetViewController.create(coordinator: coordinator)
-        bottomSheet.loadData(with: chatRooms)
+        bottomSheet.fetch(with: chatRooms)
     
         mainMapVC.present(bottomSheet, animated: true)
     }

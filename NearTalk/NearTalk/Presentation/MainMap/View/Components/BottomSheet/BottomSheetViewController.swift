@@ -47,7 +47,7 @@ final class BottomSheetViewController: UIViewController {
     }
     
     // MARK: - Methods
-    func loadData(with dataSource: [ChatRoom]) {
+    func fetch(with dataSource: [ChatRoom]) {
         self.dataSource = dataSource
     }
     
@@ -96,7 +96,7 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier, for: indexPath) as? BottomSheetTableViewCell
         else { return BottomSheetTableViewCell() }
         
-        cell.bind(to: self.dataSource[indexPath.row])
+        cell.fetch(with: self.dataSource[indexPath.row])
 
         return cell
     }

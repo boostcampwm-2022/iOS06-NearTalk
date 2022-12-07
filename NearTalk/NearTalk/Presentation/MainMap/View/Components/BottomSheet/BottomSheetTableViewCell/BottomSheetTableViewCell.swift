@@ -94,11 +94,19 @@ final class BottomSheetTableViewCell: UITableViewCell {
 
 // MARK: - Bind
 extension BottomSheetTableViewCell {
-    public func bind(to data: ChatRoom) {
+    public func fetch(with data: ChatRoom) {
         self.chatRoomName.text = data.roomName
         self.chatRoomDistance.text = self.calcChatRoomDistance(with: data.location)
         self.chatRoomDescription.text = data.roomDescription
-        self.fetchImage(path: data.roomImagePath)
+        self.fetch(path: data.roomImagePath)
+    }
+    
+    private func fetch(path imagePath: String?) {
+        guard let path = imagePath,
+              let url = URL(string: path)
+        else { return }
+        
+        self.chatRoomImage.kf.setImage(with: url)
     }
     
     private func calcChatRoomDistance(with chatRoomLocation: NCLocation?) -> String {
@@ -111,13 +119,5 @@ extension BottomSheetTableViewCell {
         let distance = chatRoomLocation.distance(from: userLocation)
         
         return String(format: "%.2f", distance / 1000) + " km"
-    }
-    
-    private func fetchImage(path: String?) {
-        guard let path = path,
-              let url = URL(string: path)
-        else { return }
-        
-        self.chatRoomImage.kf.setImage(with: url)
     }
 }
