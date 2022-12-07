@@ -22,7 +22,7 @@ protocol ChatRoomListViewModelInput {
     func didDMChatRoomList()
     func didGroupChatRoomList()
     func didCreateChatRoom()
-    func didSelectItem(at roomID: String)
+    func didSelectItem(at roomID: String, accessibleRadius: Bool)
     func viewWillAppear()
 }
 
@@ -56,10 +56,15 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase.newObserveDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
+        
     }
     
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
         self.chatRoomListUseCase.getUserChatRoomTicket(roomID: roomID)
+    }
+    
+    func distanceOperate(distance: Double) {
+        
     }
 }
 
@@ -77,12 +82,12 @@ extension DefaultChatRoomListViewModel {
         actions?.showGroupChatRoomList()
     }
     
-    func didSelectItem(at roomID: String) {
-//        if roomID == "" {
+    func didSelectItem(at roomID: String, accessibleRadius: Bool) {
+        if accessibleRadius {
             actions?.showChatRoom(roomID)
-//        } else {
-//            actions?.showAlert()
-//        }
+        } else {
+            actions?.showAlert()
+        }
     }
     
     // 체팅방 생성 클릭시 이동

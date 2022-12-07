@@ -20,11 +20,12 @@ class ChatRoomListCell: UICollectionViewCell {
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
     private var disposeBag = DisposeBag()
+    private var accessibleRadius: Bool = true
     
     override var isSelected: Bool {
         didSet {
             if let uuid = self.uuid, isSelected {
-                self.viewModel?.didSelectItem(at: uuid)
+                self.viewModel?.didSelectItem(at: uuid, accessibleRadius: accessibleRadius)
             }
         }
     }
@@ -71,10 +72,10 @@ class ChatRoomListCell: UICollectionViewCell {
     private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then { label in
         label.backgroundColor = UIColor(named: "primaryColor")
         label.isHidden = true
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .white
         label.clipsToBounds = true
-        label.layer.cornerRadius = 12
+        label.layer.cornerRadius = 11.5
         label.textAlignment = .center
     }
     
@@ -111,6 +112,8 @@ class ChatRoomListCell: UICollectionViewCell {
         self.recentMessage.text = groupData.recentMessageText == nil ? "새로 생성된 방입니다" : groupData.recentMessageText
         self.unreadMessageCheck(roomID: groupData.uuid ?? "", number: groupData.messageCount)
         self.dateOperate(date: groupData.recentMessageDate)
+        self.accessibleRadiusCheck(location: groupData.location, accessibleRadius: groupData.accessibleRadius)
+        
     }
     
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
@@ -150,7 +153,7 @@ class ChatRoomListCell: UICollectionViewCell {
         self.unreadMessageCount.snp.makeConstraints { make in
             make.trailing.equalTo(self.contentView).offset(-24)
             make.bottom.equalTo(self.img.snp.bottom).offset(-8)
-            make.height.equalTo(28)
+            make.height.equalTo(22)
         }
         
         self.name.snp.makeConstraints { make in
@@ -257,14 +260,41 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
-    private func distanceOperate(distance: Double) {
+    private func accessibleRadiusCheck(location: NCLocation?, accessibleRadius: Double?) {
+        guard let location, let accessibleRadius
+        else { return }
+        
         UserDefaults.standard.rx
-            .observe(String.self, "CurrentUserLocation")
-            .subscribe(onNext: { (value) in
+            .observe([String: CLLocationDegrees].self, "CurrentUserLocation")
+            .subscribe(onNext: { (value: [String: CLLocationDegrees]?) in
+                guard let longitude = value?["longitude"],
+                      let latitude = value?["latitude"] else { return }
+                
+                print("채팅방 \t\t longitude: \(location.latitude) latitude:\(location.longitude)")
+                print("UserDefaults longitude: \(longitude) latitude:\(latitude)")
+                
+                let newNCLocation: NCLocation = NCLocation(longitude: latitude, latitude: longitude)
+                let distance = location.distance(from: newNCLocation)
+                print("거리: \(distance)m")
+                print()
+                
+                if distance <= accessibleRadius * 1000 {
+                    self.accessibleRadius = true
+                    DispatchQueue.main.async {
+                        self.lockIcon.isHidden = true
+                        self.view.isHidden = true
+                    }
+                } else {
+                    self.accessibleRadius = false
+                    DispatchQueue.main.async {
+                        self.lockIcon.isHidden = false
+                        self.view.isHidden = false
+                    }
+                }
+                
             })
             .disposed(by: disposeBag)
     }
-    
 }
 
 #if canImport(SwiftUI) && DEBUG
