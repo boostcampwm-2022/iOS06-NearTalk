@@ -12,6 +12,8 @@ protocol MainMapCoordinatorDependencies {
 }
 
 final class MainMapCoordinator: Coordinator {
+    
+    // MARK: - Properties
     var navigationController: UINavigationController?
     private let dependencies: MainMapCoordinatorDependencies
     
@@ -20,6 +22,7 @@ final class MainMapCoordinator: Coordinator {
         self.dependencies = dependencies
     }
     
+    // MARK: - Methods
     func start() {
         guard let navigationController = navigationController
         else { return }
@@ -29,7 +32,7 @@ final class MainMapCoordinator: Coordinator {
         self.navigationController?.pushViewController(mainMapVC, animated: true)
     }
     
-    // MARK: - Actions
+    // MARK: - View Actions
     func showCreateChatRoomView() {
         guard let navigationController = navigationController
         else { return }

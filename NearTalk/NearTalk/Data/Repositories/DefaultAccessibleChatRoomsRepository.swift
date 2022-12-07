@@ -38,8 +38,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
         let latitudeFilteredChatRooms: Single<[ChatRoom]> = service.fetchList(dataKey: .chatRoom, queryList: queryList)
         
         return latitudeFilteredChatRooms
-            .map {
-                $0.filter {
+            .map { chatRooms in
+                chatRooms.filter {
                     guard let chatRoomLongitude = $0.location?.longitude
                     else { return false }
                     

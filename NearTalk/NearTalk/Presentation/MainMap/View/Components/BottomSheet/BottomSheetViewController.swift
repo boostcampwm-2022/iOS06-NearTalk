@@ -13,19 +13,21 @@ import UIKit
 
 final class BottomSheetViewController: UIViewController {
     
+    // MARK: - Properties
+    private var coordinator: MainMapCoordinator?
+    private var dataSource: [ChatRoom] = []
+    
+    // MARK: - UI Components
     static let roomTypeItems: [String] = ["전체 채팅방 목록", "입장 가능한 목록"]
     private let roomTypeSegmentedControl = UISegmentedControl(items: BottomSheetViewController.roomTypeItems).then {
         $0.backgroundColor = .red
     }
-    
     private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(BottomSheetTableViewCell.self,
                     forCellReuseIdentifier: BottomSheetTableViewCell.reuseIdentifier)
         $0.delegate = self
         $0.dataSource = self
     }
-    private var coordinator: MainMapCoordinator?
-    private var dataSource: [ChatRoom] = []
     
     // MARK: - Lifecycles
     static func create(with dataSource: [ChatRoom] = [], coordinator: MainMapCoordinator) -> BottomSheetViewController {
@@ -44,6 +46,7 @@ final class BottomSheetViewController: UIViewController {
         self.configureLayout()
     }
     
+    // MARK: - Methods
     func loadData(with dataSource: [ChatRoom]) {
         self.dataSource = dataSource
     }
@@ -83,6 +86,7 @@ final class BottomSheetViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions
 extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataSource.count
