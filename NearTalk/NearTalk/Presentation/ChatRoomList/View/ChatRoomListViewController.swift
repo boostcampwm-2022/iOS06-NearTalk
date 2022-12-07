@@ -15,6 +15,7 @@ final class ChatRoomListViewController: UIViewController {
     
     // MARK: - UI properties
     private(set) lazy var dmCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
+        $0.backgroundColor = UIColor.primaryBackground
         $0.register(ChatRoomListCell.self, forCellWithReuseIdentifier: ChatRoomListCell.identifier)
     }
     
