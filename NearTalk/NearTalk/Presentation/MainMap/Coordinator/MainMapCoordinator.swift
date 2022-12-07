@@ -35,18 +35,24 @@ final class MainMapCoordinator: Coordinator {
         else { return }
 
         let diContainer: CreateGroupChatDiContainer = .init()
-        let createGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
-        createGroupChatCoordinator.start()
+        let coordinator: CreateGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+        coordinator.start()
     }
     
     func showBottomSheet(mainMapVC: MainMapViewController, chatRooms: [ChatRoom]) {
-        let bottomSheet = BottomSheetViewController()
+        let diContainer: MainMapDIContainer = .init()
+        let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
+        let bottomSheet: BottomSheetViewController = BottomSheetViewController.create(coordinator: coordinator)
         bottomSheet.loadData(with: chatRooms)
-        
+    
         mainMapVC.present(bottomSheet, animated: true)
     }
     
-    func showChatRoom(chatRoomID: String) {
+    func closeBottomSheet(bottomSheetVC: BottomSheetViewController) {
+        bottomSheetVC.dismiss(animated: true)
+    }
+    
+    func showChatRoomView(chatRoomID: String) {
         guard let navigationController = navigationController
         else { return }
         

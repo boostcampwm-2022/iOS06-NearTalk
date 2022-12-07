@@ -24,8 +24,17 @@ final class BottomSheetViewController: UIViewController {
         $0.delegate = self
         $0.dataSource = self
     }
-    
+    private var coordinator: MainMapCoordinator?
     private var dataSource: [ChatRoom] = []
+    
+    // MARK: - Lifecycles
+    static func create(with dataSource: [ChatRoom] = [], coordinator: MainMapCoordinator) -> BottomSheetViewController {
+        let bottomSheetVC = BottomSheetViewController()
+        bottomSheetVC.dataSource = dataSource
+        bottomSheetVC.coordinator = coordinator
+        
+        return bottomSheetVC
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +102,11 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(self.dataSource[indexPath.row])
+        let chatRoom = self.dataSource[indexPath.row]
+        
+        if let chatRoomID = chatRoom.uuid {
+            self.coordinator?.closeBottomSheet(bottomSheetVC: self)
+            self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
+        }
     }
 }
