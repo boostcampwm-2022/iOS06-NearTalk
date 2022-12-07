@@ -5,7 +5,6 @@
 //  Created by 김영욱 on 2022/11/14.
 //
 
-import CoreLocation
 import Kingfisher
 import RxCocoa
 import RxSwift
@@ -20,12 +19,12 @@ class ChatRoomListCell: UICollectionViewCell {
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
     private var disposeBag = DisposeBag()
-    private var accessibleRadius: Bool = true
+    private var isInside: Bool = true
     
     override var isSelected: Bool {
         didSet {
             if let uuid = self.uuid, isSelected {
-                self.viewModel?.didSelectItem(at: uuid, accessibleRadius: accessibleRadius)
+                self.viewModel?.didSelectItem(at: uuid, isInside: isInside)
             }
         }
     }
@@ -42,7 +41,7 @@ class ChatRoomListCell: UICollectionViewCell {
         symbol.tintColor = .label
     }
     
-    private let img = UIImageView().then {
+    private let profileImageView = UIImageView().then {
         $0.layer.cornerRadius = 18
         $0.clipsToBounds = true
         $0.image = UIImage(systemName: "photo")
@@ -89,7 +88,7 @@ class ChatRoomListCell: UICollectionViewCell {
         self.recentMessage.text = nil
         self.unreadMessageCount.isHidden = true
         self.date.text = nil
-        self.img.image = nil
+        self.profileImageView.image = nil
     }
     
     override init(frame: CGRect) {
@@ -128,7 +127,7 @@ class ChatRoomListCell: UICollectionViewCell {
     
     // MARK: - Configure views
     private func addSubviews() {
-        self.contentView.addSubview(self.img)
+        self.contentView.addSubview(self.profileImageView)
         self.contentView.addSubview(self.name)
         self.contentView.addSubview(self.recentMessage)
         self.contentView.addSubview(self.date)
@@ -138,34 +137,34 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private func configureConstraints() {
-        self.img.snp.makeConstraints { make in
+        self.profileImageView.snp.makeConstraints { make in
             make.leading.equalTo(self.contentView).offset(16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
         self.date.snp.makeConstraints { make in
-            make.top.equalTo(self.img.snp.top).offset(3)
+            make.top.equalTo(self.profileImageView.snp.top).offset(3)
             make.trailing.equalTo(self.contentView).offset(-24)
             make.width.equalTo(68)
         }
         
         self.unreadMessageCount.snp.makeConstraints { make in
             make.trailing.equalTo(self.contentView).offset(-24)
-            make.bottom.equalTo(self.img.snp.bottom).offset(-8)
+            make.bottom.equalTo(self.profileImageView.snp.bottom).offset(-8)
             make.height.equalTo(22)
         }
         
         self.name.snp.makeConstraints { make in
-            make.top.equalTo(self.img.snp.top).offset(3)
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
+            make.top.equalTo(self.profileImageView.snp.top).offset(3)
+            make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
             make.height.equalTo(18)
         }
         
         self.recentMessage.snp.makeConstraints { make in
             make.top.equalTo(self.name.snp.bottom).offset(4)
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
+            make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
         }
         
@@ -250,13 +249,13 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private func imageLoad(path: String?) {
         guard let path = path, let url = URL(string: path) else {
-            img.image = UIImage(named: "ChatLogo")
+            profileImageView.image = UIImage(named: "ChatLogo")
             return
         }
         
-        img.kf.setImage(with: url)
-        if img.image == nil {
-            img.image = UIImage(named: "ChatLogo")
+        profileImageView.kf.setImage(with: url)
+        if profileImageView.image == nil {
+            profileImageView.image = UIImage(named: "ChatLogo")
         }
     }
     
@@ -265,8 +264,8 @@ class ChatRoomListCell: UICollectionViewCell {
         else { return }
         
         UserDefaults.standard.rx
-            .observe([String: CLLocationDegrees].self, "CurrentUserLocation")
-            .subscribe(onNext: { (value: [String: CLLocationDegrees]?) in
+            .observe([String: Double].self, "CurrentUserLocation")
+            .subscribe(onNext: { (value: [String: Double]?) in
                 guard let longitude = value?["longitude"],
                       let latitude = value?["latitude"] else { return }
                 
@@ -275,13 +274,13 @@ class ChatRoomListCell: UICollectionViewCell {
                 let distance = location.distance(from: newNCLocation)
                 
                 if distance <= accessibleRadius * 1000 {
-                    self.accessibleRadius = true
+                    self.isInside = true
                     DispatchQueue.main.async {
                         self.lockIcon.isHidden = true
                         self.view.isHidden = true
                     }
                 } else {
-                    self.accessibleRadius = false
+                    self.isInside = false
                     DispatchQueue.main.async {
                         self.lockIcon.isHidden = false
                         self.view.isHidden = false
@@ -292,37 +291,3 @@ class ChatRoomListCell: UICollectionViewCell {
             .disposed(by: disposeBag)
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChatRoomListCellPreview: PreviewProvider {
-    static var previews: some View {
-        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
-        let viewModel = diContainer.makeChatRoomListViewModel(
-            actions: ChatRoomListViewModelActions(showChatRoom: { _ in },
-                                                  showCreateChatRoom: {},
-                                                  showDMChatRoomList: {},
-                                                  showGroupChatRoomList: {},
-                                                  showAlert: {})
-        )
-        
-        let chatRoomData = ChatRoom(uuid: "123",
-                                    userList: ["1"],
-                                    roomImagePath: "",
-                                    roomName: "테스트트방테스트방",
-                                    accessibleRadius: 0,
-                                    recentMessageText: "테스트중테스트중테스트중테스트중",
-                                    recentMessageDate: Calendar.current.date(byAdding: .year, value: -1, to: Date()),
-                                    messageCount: 4)
-        
-        let groupData = GroupChatRoomListData(data: chatRoomData)
-        
-        UIViewPreview {
-            let cell = ChatRoomListCell(frame: .zero)
-            cell.configure(groupData: groupData, viewModel: viewModel)
-            return cell
-        }.previewLayout(.fixed(width: 393, height: 393 * 0.2))
-    }
-}
-#endif

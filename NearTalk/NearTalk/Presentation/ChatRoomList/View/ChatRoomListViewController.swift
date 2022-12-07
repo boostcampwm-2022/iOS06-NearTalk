@@ -208,18 +208,3 @@ final class ChatRoomListViewController: UIViewController {
     }
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChatRoomListViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        let navigation = UINavigationController()
-        
-        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
-        let coordinator = diContainer.makeChatRoomListCoordinator(navigationController: navigation)
-        coordinator.start()
-        
-        return navigation.showPreview(.iPhone14Pro)
-    }
-}
-#endif

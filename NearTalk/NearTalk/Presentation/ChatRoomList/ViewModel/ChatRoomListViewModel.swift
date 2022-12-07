@@ -22,7 +22,7 @@ protocol ChatRoomListViewModelInput {
     func didDMChatRoomList()
     func didGroupChatRoomList()
     func didCreateChatRoom()
-    func didSelectItem(at roomID: String, accessibleRadius: Bool)
+    func didSelectItem(at roomID: String, isInside: Bool)
     func viewWillAppear()
 }
 
@@ -49,11 +49,11 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        self.chatRoomListUseCase.newObserveGroupChatList()
+        self.chatRoomListUseCase.createObservableGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
         
-        self.chatRoomListUseCase.newObserveDMChatList()
+        self.chatRoomListUseCase.createObservableDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
         
@@ -82,8 +82,8 @@ extension DefaultChatRoomListViewModel {
         actions?.showGroupChatRoomList()
     }
     
-    func didSelectItem(at roomID: String, accessibleRadius: Bool) {
-        if accessibleRadius {
+    func didSelectItem(at roomID: String, isInside: Bool) {
+        if isInside {
             actions?.showChatRoom(roomID)
         } else {
             actions?.showAlert()

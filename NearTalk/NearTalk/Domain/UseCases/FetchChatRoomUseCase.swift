@@ -8,8 +8,8 @@ import Foundation
 import RxCocoa
 import RxSwift
 protocol FetchChatRoomUseCase {
-    func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]>
-    func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
+    func createObservableGroupChatList() -> Observable<[GroupChatRoomListData]>
+    func createObservableDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
@@ -25,13 +25,13 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
         self.newGetChatRoomUUIDList()
     }
     
-    func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]> {
+    func createObservableGroupChatList() -> Observable<[GroupChatRoomListData]> {
         self.newGetChatRoomList()
             .map { $0.filter { $0.roomType == "group" } }
             .map { $0.map { GroupChatRoomListData(data: $0) } }
     }
     
-    func newObserveDMChatList() -> Observable<[DMChatRoomListData]> {
+    func createObservableDMChatList() -> Observable<[DMChatRoomListData]> {
         self.newGetChatRoomList()
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
