@@ -31,7 +31,8 @@ final class ChatRoomListCoordinator: Coordinator {
             showChatRoom: self.showChatRoom,
             showCreateChatRoom: self.showCreateChatRoom,
             showDMChatRoomList: self.showDMChatRoomList,
-            showGroupChatRoomList: self.showGroupChatRoomList
+            showGroupChatRoomList: self.showGroupChatRoomList,
+            showAlert: self.showAlert
         )
         
         let viewController = dependencies.makeChatRoomListViewController(actions: actions)
@@ -52,11 +53,11 @@ final class ChatRoomListCoordinator: Coordinator {
     private func showGroupChatRoomList() {
         guard let chatRoomListViewController = chatRoomListViewController
         else { return }
-
+        
         chatRoomListViewController.dmCollectionView.isHidden = true
         chatRoomListViewController.groupCollectionView.isHidden = false
     }
-
+    
     private func showChatRoom(chatRoomID: String) {
         guard let navigationController = navigationController
         else { return }
@@ -73,6 +74,14 @@ final class ChatRoomListCoordinator: Coordinator {
         let diContainer = dependencies.makeCreateGroupChatDIContainer()
         let coordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
         coordinator.start()
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "채팅방 입장 불가", message: "채팅방 입장가능 범위 밖입니다.", preferredStyle: UIAlertController.Style.alert)
+        let action =  UIAlertAction(title: "확인", style: UIAlertAction.Style.default)
+        alert.addAction(action)
+        
+        self.navigationController?.present(alert, animated: true)
     }
     
 }
