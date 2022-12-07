@@ -26,8 +26,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
     
     func fetchAccessibleAllChatRooms(in region: NCMapRegion) -> Single<[ChatRoom]> {
         let centerLocation = region.centerLocation
-        let southWest = centerLocation.add(longitudeDelta: -(region.longitudeDelta / 2), latitudeDelta: -(region.latitudeDelta / 2))
-        let northEast = centerLocation.add(longitudeDelta: (region.longitudeDelta / 2), latitudeDelta: (region.latitudeDelta / 2))
+        let southWest = centerLocation.add(latitudeDelta: -(region.latitudeDelta / 2), longitudeDelta: -(region.longitudeDelta / 2))
+                let northEast = centerLocation.add(latitudeDelta: (region.latitudeDelta / 2), longitudeDelta: (region.longitudeDelta / 2))
 
         let service = self.dependencies.firestoreService
         let queryList: [FirebaseQueryDTO] = [

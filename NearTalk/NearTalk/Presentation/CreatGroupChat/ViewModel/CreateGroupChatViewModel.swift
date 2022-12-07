@@ -111,8 +111,8 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             latitude: currentLat,
             longitude: currentLong
         ).add(
-            longitudeMeters: randomLongitudeMeters,
-            latitudeMeters: randomLatitudeMeters
+            latitudeMeters: randomLongitudeMeters,
+            longitudeMeters: randomLatitudeMeters
         )
         
         let chatRoomUUID = UUID().uuidString
