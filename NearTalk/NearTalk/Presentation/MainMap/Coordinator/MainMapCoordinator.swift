@@ -12,6 +12,8 @@ protocol MainMapCoordinatorDependencies {
 }
 
 final class MainMapCoordinator: Coordinator {
+    
+    // MARK: - Properties
     var navigationController: UINavigationController?
     private let dependencies: MainMapCoordinatorDependencies
     
@@ -20,6 +22,7 @@ final class MainMapCoordinator: Coordinator {
         self.dependencies = dependencies
     }
     
+    // MARK: - Methods
     func start() {
         guard let navigationController = navigationController
         else { return }
@@ -29,24 +32,30 @@ final class MainMapCoordinator: Coordinator {
         self.navigationController?.pushViewController(mainMapVC, animated: true)
     }
     
-    // MARK: - Actions
+    // MARK: - View Actions
     func showCreateChatRoomView() {
         guard let navigationController = navigationController
         else { return }
 
         let diContainer: CreateGroupChatDiContainer = .init()
-        let createGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
-        createGroupChatCoordinator.start()
+        let coordinator: CreateGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+        coordinator.start()
     }
     
     func showBottomSheet(mainMapVC: MainMapViewController, chatRooms: [ChatRoom]) {
-        let bottomSheet = BottomSheetViewController()
-        bottomSheet.loadData(with: chatRooms)
-        
+        let diContainer: MainMapDIContainer = .init()
+        let coordinator: MainMapCoordinator = diContainer.makeMainMapCoordinator(navigationController: navigationController)
+        let bottomSheet: BottomSheetViewController = BottomSheetViewController.create(coordinator: coordinator)
+        bottomSheet.fetch(with: chatRooms)
+    
         mainMapVC.present(bottomSheet, animated: true)
     }
     
-    func showChatRoom(chatRoomID: String) {
+    func closeBottomSheet(bottomSheetVC: BottomSheetViewController) {
+        bottomSheetVC.dismiss(animated: true)
+    }
+    
+    func showChatRoomView(chatRoomID: String) {
         guard let navigationController = navigationController
         else { return }
         

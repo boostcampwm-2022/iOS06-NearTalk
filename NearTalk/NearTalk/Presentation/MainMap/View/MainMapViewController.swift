@@ -135,16 +135,13 @@ final class MainMapViewController: UIViewController {
                 self?.coordinator?.showCreateChatRoomView()
             })
             .disposed(by: self.disposeBag)
-        
+
         output.showAccessibleChatRooms
+            .asDriver(onErrorJustReturn: [])
             .map { chatRooms in
                 chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
             }
-            .asDriver(onErrorJustReturn: [])
-            .drive(onNext: { annotations in
-                self.mapView.removeAnnotations(self.mapView.annotations)
-                self.mapView.addAnnotations(annotations)
-            })
+            .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
@@ -181,8 +178,8 @@ private extension MKMapView {
     func move(to location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(
             center: location.coordinate,
-            latitudinalMeters: 10000,
-            longitudinalMeters: 10000
+            latitudinalMeters: 5000,
+            longitudinalMeters: 5000
         )
 
         setCameraBoundary(region: coordinateRegion)
@@ -191,12 +188,12 @@ private extension MKMapView {
         self.setRegion(coordinateRegion, animated: true)
     }
     
-    private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 10000) {
+    private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 5000) {
         let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: coordinateRegion)
         self.setCameraBoundary(cameraBoundary, animated: true)
     }
     
-    private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 10000) {
+    private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 5000) {
         let zoomRange = MKMapView.CameraZoomRange(
             minCenterCoordinateDistance: minDistance,
             maxCenterCoordinateDistance: maxDistance
