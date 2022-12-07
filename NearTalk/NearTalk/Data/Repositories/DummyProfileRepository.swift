@@ -66,7 +66,7 @@ final class DummyProfileRepository: ProfileRepository {
     
     func updateMyProfile(_ userProfile: UserProfile) -> Single<UserProfile> {
         return Single.create { single in
-            guard let _ = UserDefaults.standard.object(forKey: "MyProfile") as? Data else {
+            guard UserDefaults.standard.object(forKey: "MyProfile") as? Data != nil else {
                 single(.failure(DummyProfileRepoError.notFound))
                 return Disposables.create()
             }
@@ -82,7 +82,7 @@ final class DummyProfileRepository: ProfileRepository {
     
     func deleteMyProfile() -> Completable {
         return Completable.create { completable in
-            guard let _ = UserDefaults.standard.object(forKey: "MyProfile") as? Data else {
+            guard UserDefaults.standard.object(forKey: "MyProfile") as? Data != nil else {
                 completable(.error(DummyProfileRepoError.notFound))
                 return Disposables.create()
             }
