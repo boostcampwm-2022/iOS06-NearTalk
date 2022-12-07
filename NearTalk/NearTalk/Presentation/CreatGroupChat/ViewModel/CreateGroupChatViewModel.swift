@@ -97,9 +97,23 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     
     func createChatButtonDIdTapped() {
         // TODO: - ChatRoom 내부 수정 필요
-        guard let userUUID = userDefaultUseCase.fetchUserUUID() else {
+        guard let userUUID = userDefaultUseCase.fetchUserUUID(),
+              let randomLatitudeMeters = (1...500).randomElement().map({Double($0)}),
+              let randomLongitudeMeters = (1...500).randomElement().map({Double($0)})
+        else {
             return
         }
+        
+        let currentLat = 37.3596093566472
+        let currentLong = 127.1056219310272
+        
+        let randomLocation = NCLocation(
+            latitude: currentLat,
+            longitude: currentLong
+        ).add(
+            longitudeMeters: randomLongitudeMeters,
+            latitudeMeters: randomLatitudeMeters
+        )
         
         let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
@@ -109,15 +123,15 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            location: NCLocation(latitude: 37.3596093566472, longitude: 127.1056219310272), // 임시 위치
-            latitude: 37.3596093566472,
-            longitude: 127.1056219310272,
+            location: randomLocation,
+            latitude: randomLocation.latitude,
+            longitude: randomLocation.longitude,
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
             maxNumberOfParticipants: self.maxParticipant,
             messageCount: 0
         )
-        print(#function, chatRoom, self.title)
+        print(#function, chatRoom, chatRoom.latitude, chatRoom.longitude)
         self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
             .subscribe(onCompleted: { [weak self] in
                 guard let self else {
