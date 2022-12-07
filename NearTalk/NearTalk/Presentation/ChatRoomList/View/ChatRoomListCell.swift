@@ -19,6 +19,7 @@ class ChatRoomListCell: UICollectionViewCell {
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
     private var disposeBag = DisposeBag()
+    private var userDefaults: DisposeBag = .init()
     private var inArea: Bool = true
     
     override var isSelected: Bool {
@@ -91,6 +92,8 @@ class ChatRoomListCell: UICollectionViewCell {
         self.unreadMessageCount.isHidden = true
         self.date.text = nil
         self.profileImageView.image = nil
+        
+        self.disposeBag = DisposeBag()
     }
     
     override init(frame: CGRect) {
@@ -105,7 +108,6 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
-        print(groupData.roomName, "유저티켓")
         self.viewModel = viewModel
         self.uuid = groupData.uuid
         self.name.text = groupData.roomName
@@ -272,7 +274,7 @@ class ChatRoomListCell: UICollectionViewCell {
                 let newNCLocation: NCLocation = NCLocation(longitude: latitude, latitude: longitude)
                 let distance = location.distance(from: newNCLocation)
                 
-//                print("\(self.name.text) 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
+                print("\(self.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
                 
                 if distance <= accessibleRadius * 1000 {
                     self.inArea = true
