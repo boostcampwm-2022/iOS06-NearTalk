@@ -19,6 +19,7 @@ class RxMKMapViewDelegateProxy: DelegateProxy<MKMapView, MKMapViewDelegate>, Del
 
     public init(mapView: ParentObject) {
         self.mapView = mapView
+        
         super.init(parentObject: mapView, delegateProxy: RxMKMapViewDelegateProxy.self)
     }
 
