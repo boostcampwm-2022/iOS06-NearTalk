@@ -93,6 +93,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 make.leading.equalTo(self.textView.snp.trailing)
             }
         } else {
+            self.profileImageView.image = nil
+            
             self.textView.snp.makeConstraints { make in
                 make.trailing.equalToSuperview().inset(10)
                 make.top.equalToSuperview()
