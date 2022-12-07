@@ -12,9 +12,10 @@ import RxRelay
 import RxSwift
 
 final class MainMapViewModel {
+    
+    // MARK: - Dependencies
     struct Actions {
         let showCreateChatRoomView: () -> Void
-        let showBottomSheetView: () -> Void
     }
     
     struct UseCases {
@@ -35,6 +36,7 @@ final class MainMapViewModel {
         let showAnnotationChatRooms: PublishRelay<[ChatRoom]> = .init()
     }
     
+    // MARK: - Properties
     let actions: Actions
     let useCases: UseCases
     let disposeBag: DisposeBag = .init()
@@ -44,6 +46,7 @@ final class MainMapViewModel {
         self.useCases = useCases
     }
     
+    // MARK: - VC Binding
     func transform(input: Input) -> Output {
         let output = Output()
         input.didTapMoveToCurrentLocationButton

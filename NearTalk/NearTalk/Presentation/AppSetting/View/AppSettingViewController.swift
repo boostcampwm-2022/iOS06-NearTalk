@@ -5,11 +5,11 @@
 //  Created by Preston Kim on 2022/11/14.
 //
 
+import AuthenticationServices
 import RxCocoa
 import RxSwift
 import SnapKit
 import UIKit
-import AuthenticationServices
 
 final class AppSettingViewController: UIViewController, UITableViewDelegate {
     private let tableView = UITableView()
@@ -21,59 +21,55 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
             if item == .alarmOnOff {
                 let notiCell = AppSettingTableViewCell()
                 self.viewModel.notificationOnOffSwitch
-                    .bind(to: notiCell.toggleSwitch.rx.isOn)
+                    .drive(notiCell.toggleSwitch.rx.isOn)
                     .disposed(by: self.disposeBag)
-                notiCell.toggleSwitch.rx.value.changed.bind { [weak self] toggle in
+                
+                notiCell.toggleSwitch.rx
+                    .value
+                    .changed
+                    .bind { [weak self] toggle in
                     self?.viewModel.notificationSwitchToggled(on: toggle)
                 }
                 .disposed(by: self.disposeBag)
+                
                 cell = notiCell
-            } else {
-                cell = UITableViewCell()
-            }
+            } else { cell = UITableViewCell() }
 
-            var config = cell.defaultContentConfiguration()
+            var config: UIListContentConfiguration = cell.defaultContentConfiguration()
             config.text = item.rawValue
             config.textProperties.alignment = .natural
             config.textProperties.font = UIFont.systemFont(ofSize: 16)
             cell.contentConfiguration = config
-            cell.backgroundColor = .systemGray6
+            cell.backgroundColor = .secondaryBackground
             cell.selectionStyle = .none
+            
             return cell
         }
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         configureUI()
         configureConstraint()
         initDataSource()
-        setTableView()
+        configureTableView()
+        configureNavigationBar()
     }
     
     override func viewDidLayoutSubviews() {
         self.viewModel.viewWillAppear()
         super.viewDidLayoutSubviews()
-        tableView.snp.remakeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(15)
-            make.top.equalToSuperview().inset(30)
-            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
+        
+        tableView.snp.remakeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(15)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).inset(30)
+            $0.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
                 partialResult + cell.frame.height
             }))
         }
     }
-    
-//    override func viewDidAppear(_ animated: Bool) {
-//        tableView.snp.remakeConstraints { (make) in
-//            make.horizontalEdges.equalToSuperview().inset(15)
-//            make.top.equalToSuperview().inset(30)
-//            make.height.equalTo(self.tableView.visibleCells.reduce(0, { partialResult, cell in
-//                partialResult + cell.frame.height
-//            }))
-//        }
-//        super.viewDidAppear(animated)
-//    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         self.viewModel.viewWillAppear()
         super.viewWillAppear(animated)
@@ -100,28 +96,46 @@ private extension AppSettingViewController {
     func configureUI() {
         navigationItem.title = "앱 설정"
         view.addSubview(tableView)
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .primaryBackground
+    }
+    
+    func configureNavigationBar() {
+        let newNavBarAppearance = UINavigationBarAppearance()
+        newNavBarAppearance.configureWithOpaqueBackground()
+        newNavBarAppearance.backgroundColor = .secondaryBackground
+        
+        self.navigationController?.navigationBar.tintColor = .label
+        self.navigationItem.standardAppearance = newNavBarAppearance
+        self.navigationItem.compactAppearance = newNavBarAppearance
+        self.navigationItem.scrollEdgeAppearance = newNavBarAppearance
+        self.navigationItem.compactScrollEdgeAppearance = newNavBarAppearance
     }
     
     func configureConstraint() {
-        tableView.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalToSuperview().inset(15)
-            make.top.equalToSuperview().inset(30)
-            make.bottom.equalToSuperview()
+        tableView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(15)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).inset(30)
+            $0.bottom.equalToSuperview()
         }
     }
     
-    func setTableView() {
+    func configureTableView() {
         tableView.delegate = self
-        tableView.register(AppSettingTableViewCell.self, forCellReuseIdentifier: AppSettingTableViewCell.identifier)
+        tableView.register(
+            AppSettingTableViewCell.self,
+            forCellReuseIdentifier: AppSettingTableViewCell.identifier)
         tableView.dataSource = self.dataSource
         tableView.separatorInset = .zero
         tableView.layer.cornerRadius = 5.0
         self.tableView.isScrollEnabled = false
+        
+        self.viewModel.interactionEnable
+            .drive(self.tableView.rx.isUserInteractionEnabled)
+            .disposed(by: self.disposeBag)
     }
     
     func initDataSource() {
-        var snapshot = self.dataSource.snapshot()
+        var snapshot: NSDiffableDataSourceSnapshot = self.dataSource.snapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(AppSettingItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
@@ -133,15 +147,20 @@ extension AppSettingViewController: ASAuthorizationControllerDelegate, ASAuthori
         return self.view.window!
     }
     
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
+            guard let userIdentifier = appleIDCredential.identityToken,
+                  let idTokenString = String(data: userIdentifier, encoding: .utf8)
+            else {
 #if DEBUG
                 print("Faile to fetch id token")
 #endif
                 return
             }
+            
             self.viewModel.reauthenticate(token: idTokenString)
         default:
             break

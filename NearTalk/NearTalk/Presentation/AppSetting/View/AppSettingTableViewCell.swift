@@ -11,7 +11,7 @@ import UIKit
 final class AppSettingTableViewCell: UITableViewCell {
     static let identifier: String = String(describing: AppSettingTableViewCell.self)
     
-    let toggleSwitch = UISwitch()
+    let toggleSwitch: UISwitch = UISwitch()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,14 +30,14 @@ final class AppSettingTableViewCell: UITableViewCell {
     private func configureToggleSwitch() {
         self.addSubview(self.toggleSwitch)
         toggleSwitch.isUserInteractionEnabled = true
-        toggleSwitch.snp.makeConstraints { (make) in
-            make.trailing.equalToSuperview().inset(10)
-            make.centerY.equalToSuperview()
+        toggleSwitch.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(10)
+            $0.centerY.equalToSuperview()
         }
     }
     
     func setUpCell(text: String) {
-        var configuration = self.defaultContentConfiguration()
+        var configuration: UIListContentConfiguration = self.defaultContentConfiguration()
         configuration.text = text
         self.contentConfiguration = configuration
     }

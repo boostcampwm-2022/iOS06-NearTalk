@@ -16,10 +16,10 @@ final class DefaultProfileSettingDIContainer: ProfileSettingCoordinatorDependenc
             validateStatusMessageUseCase: dependency.validateStatusMessageUseCase,
             uploadImageUseCase: dependency.uploadImageUseCase,
             action: action,
-            profile: self.dependency.profile)
+            profile: self.dependency.profile,
+            neccesaryProfileComponent: self.dependency.necessaryProfileComponent)
         return ProfileSettingViewController(
-            viewModel: viewModel,
-            neccesaryProfileComponent: dependency.necessaryProfileComponent)
+            viewModel: viewModel, neccesaryProfileComponent: self.dependency.necessaryProfileComponent)
     }
     
     struct Dependency {
