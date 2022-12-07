@@ -8,17 +8,12 @@
 import UIKit
 
 protocol MainMapCoordinatorDependencies {
-    func makeMainMapViewController(actions: MainMapViewModel.Actions) -> MainMapViewController
-    func makeBottomSheetViewController() -> BottomSheetViewController
+    func makeMainMapViewController(actions: MainMapViewModel.Actions, navigationController: UINavigationController) -> MainMapViewController
 }
 
 final class MainMapCoordinator: Coordinator {
     var navigationController: UINavigationController?
-    var parentCoordinator: Coordinator?
     private let dependencies: MainMapCoordinatorDependencies
-    
-    private weak var mainMapVC: MainMapViewController?
-    private weak var bottomSheetVC: BottomSheetViewController?
     
     init(navigationController: UINavigationController? = nil, dependencies: MainMapCoordinatorDependencies) {
         self.navigationController = navigationController
@@ -26,29 +21,37 @@ final class MainMapCoordinator: Coordinator {
     }
     
     func start() {
-        let actions = MainMapViewModel.Actions(showCreateChatRoomView: self.showCreateChatRoomView,
-                                               showBottomSheetView: self.showBottomSheetView)
+        guard let navigationController = navigationController
+        else { return }
         
-        self.bottomSheetVC = dependencies.makeBottomSheetViewController()
-        
-        let mainMapVC = dependencies.makeMainMapViewController(actions: actions)
-        self.mainMapVC = mainMapVC
+        let actions = MainMapViewModel.Actions(showCreateChatRoomView: self.showCreateChatRoomView)
+        let mainMapVC = dependencies.makeMainMapViewController(actions: actions, navigationController: navigationController)
         self.navigationController?.pushViewController(mainMapVC, animated: true)
     }
     
     // MARK: - Actions
-    private func showCreateChatRoomView() {
-        // TODO: - 채팅방 생성 뷰 보여주는 로직 추가
-        print(#function)
-        // CreateGroupChatCoordinator.start()
+    func showCreateChatRoomView() {
+        guard let navigationController = navigationController
+        else { return }
+
+        let diContainer: CreateGroupChatDiContainer = .init()
+        let createGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+        createGroupChatCoordinator.start()
     }
     
-    private func showBottomSheetView() {
-        guard let mainMapVC = self.mainMapVC,
-              let bottomSheetVC = self.bottomSheetVC else { return }
+    func showBottomSheet(mainMapVC: MainMapViewController, chatRooms: [ChatRoom]) {
+        let bottomSheet = BottomSheetViewController()
+        bottomSheet.loadData(with: chatRooms)
         
-        // TODO: - BottomSheet 데이터 주입
+        mainMapVC.present(bottomSheet, animated: true)
+    }
+    
+    func showChatRoom(chatRoomID: String) {
+        guard let navigationController = navigationController
+        else { return }
         
-        mainMapVC.present(bottomSheetVC, animated: true)
+        let diContainer: ChatDIContainer = ChatRoomListDIContainer().makeChatDIContainer(chatRoomID: chatRoomID)
+        let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
+        coordinator.start()
     }
 }

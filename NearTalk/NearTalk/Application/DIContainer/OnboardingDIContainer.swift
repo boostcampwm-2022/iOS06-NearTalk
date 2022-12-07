@@ -28,8 +28,8 @@ final class DefaultOnboardingDIContainer {
 
     // MARK: - Repository
     private func registerRepository() {
-        self.container.register(MediaRepository.self) { _ in
-            DefaultMediaRepository(storageService: self.container.resolve(StorageService.self)!)
+        self.container.register(MediaRepository.self) { resolver in
+            DefaultMediaRepository(storageService: resolver.resolve(StorageService.self)!)
         }
     }
 
@@ -43,31 +43,31 @@ final class DefaultOnboardingDIContainer {
             ValidateTextUseCase.self,
             name: OnboardingDependencyName.statusMessage.rawValue
         ) { _ in ValidateStatusMessageUseCase() }
-        self.container.register(UploadImageUseCase.self) { _ in
-            DefaultUploadImageUseCase(mediaRepository: self.container.resolve(MediaRepository.self)!)
+        self.container.register(UploadImageUseCase.self) { resolver in
+            DefaultUploadImageUseCase(mediaRepository: resolver.resolve(MediaRepository.self)!)
         }
-        self.container.register(CreateProfileUseCase.self) { _ in
+        self.container.register(CreateProfileUseCase.self) { resolver in
             DefaultCreateProfileUseCase(
-                profileRepository: self.container.resolve(ProfileRepository.self)!,
-                userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!
+                profileRepository: resolver.resolve(ProfileRepository.self)!,
+                userDefaultsRepository: resolver.resolve(UserDefaultsRepository.self)!
             )
         }
     }
     
     // MARK: - ViewModel
     func registerViewModel(action: OnboardingViewModelAction) {
-        self.container.register(OnboardingViewModel.self) { _ in
+        self.container.register(OnboardingViewModel.self) { resolver in
             DefaultOnboardingViewModel(
-                validateNickNameUseCase: self.container.resolve(
+                validateNickNameUseCase: resolver.resolve(
                     ValidateTextUseCase.self,
                     name: OnboardingDependencyName.nickname.rawValue
                 )!,
-                validateStatusMessageUseCase: self.container.resolve(
+                validateStatusMessageUseCase: resolver.resolve(
                     ValidateTextUseCase.self,
                     name: OnboardingDependencyName.statusMessage.rawValue
                 )!,
-                uploadImageUseCase: self.container.resolve(UploadImageUseCase.self)!,
-                createProfileUseCase: self.container.resolve(CreateProfileUseCase.self)!,
+                uploadImageUseCase: resolver.resolve(UploadImageUseCase.self)!,
+                createProfileUseCase: resolver.resolve(CreateProfileUseCase.self)!,
                 action: action
             )
         }

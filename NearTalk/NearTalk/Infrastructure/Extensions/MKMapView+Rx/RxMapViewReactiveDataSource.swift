@@ -7,8 +7,8 @@
 
 import Foundation
 import MapKit
-import RxSwift
 import RxCocoa
+import RxSwift
 
 public class RxMapViewReactiveAnnotationDataSource<S: MKAnnotation>: RxMapViewDataSourceType {
     public typealias Element = S
@@ -30,20 +30,20 @@ public class RxMapViewReactiveAnnotationDataSource<S: MKAnnotation>: RxMapViewDa
 }
 
 public class RxMapViewReactiveOverlayDataSource<S: MKOverlay>: RxMapViewDataSourceType {
-  public typealias Element = S
-  
-  var currentOverlay: [S] = []
-  
-  public func mapView(_ mapView: MKMapView, observedEvent: Event<[S]>) {
-    Binder(self) { _, newOverlays in
-      DispatchQueue.main.async {
-        let diff = Diff.calculateFrom(
-          previous: self.currentOverlay,
-          next: newOverlays)
-        self.currentOverlay = newOverlays
-        mapView.addOverlays(diff.added)
-        mapView.removeOverlays(diff.removed)
-      }
-      }.on(observedEvent)
-  }
+    public typealias Element = S
+    
+    var currentOverlay: [S] = []
+    
+    public func mapView(_ mapView: MKMapView, observedEvent: Event<[S]>) {
+        Binder(self) { _, newOverlays in
+            DispatchQueue.main.async {
+                let diff = Diff.calculateFrom(
+                    previous: self.currentOverlay,
+                    next: newOverlays)
+                self.currentOverlay = newOverlays
+                mapView.addOverlays(diff.added)
+                mapView.removeOverlays(diff.removed)
+            }
+        }.on(observedEvent)
+    }
 }

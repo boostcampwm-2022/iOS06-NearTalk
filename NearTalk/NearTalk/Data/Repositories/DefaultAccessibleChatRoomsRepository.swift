@@ -27,8 +27,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
     
     func fetchAccessibleAllChatRooms(in region: NCMapRegion) -> Single<[ChatRoom]> {
         let centerLocation = region.centerLocation
-        let southWest = centerLocation.add(longitudeDelta: -(region.longitudeDelta / 2), latitudeDelta: -(region.latitudeDelta / 2))
-        let northEast = centerLocation.add(longitudeDelta: region.longitudeDelta / 2, latitudeDelta: region.latitudeDelta / 2)
+        let southWest = centerLocation.add(latitudeDelta: -(region.latitudeDelta / 2), longitudeDelta: -(region.longitudeDelta / 2))
+        let northEast = centerLocation.add(latitudeDelta: (region.latitudeDelta / 2), longitudeDelta: (region.longitudeDelta / 2))
 
         let service = self.dependencies.firestoreService
         let queryList: [FirebaseQueryDTO] = [
@@ -69,7 +69,9 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "group",
                      roomName: "1번방",
                      roomDescription: "1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다",
-                     location: NCLocation(longitude: 127.091, latitude: 37.32),
+                     location: NCLocation(latitude: 37.32, longitude: 127.091),
+                     latitude: 37.3596093566472,
+                     longitude: 127.1056219310272,
                      accessibleRadius: 1,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -82,7 +84,9 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "group",
                      roomName: "2번방",
                      roomDescription: "2번방 입니다",
-                     location: NCLocation(longitude: 127.0912, latitude: 37.324),
+                     location: NCLocation(latitude: 37.324, longitude: 127.0912),
+                     latitude: 37.3596093566472,
+                     longitude: 127.1056219310272,
                      accessibleRadius: 2,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -95,7 +99,9 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "group",
                      roomName: "3번방",
                      roomDescription: "3번방 입니다",
-                     location: NCLocation(longitude: 127.0913, latitude: 37.325),
+                     location: NCLocation(latitude: 37.325, longitude: 127.0913),
+                     latitude: 37.3596093566472,
+                     longitude: 127.1056219310272,
                      accessibleRadius: 3,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -108,7 +114,9 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "dm",
                      roomName: "4번방",
                      roomDescription: "4번방 입니다",
-                     location: NCLocation(longitude: 127.0911, latitude: 37.321),
+                     location: NCLocation(latitude: 37.321, longitude: 127.0911),
+                     latitude: 37.3596093566472,
+                     longitude: 127.1056219310272,
                      accessibleRadius: 4,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -121,7 +129,9 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "dm",
                      roomName: "5번방",
                      roomDescription: "5번방 입니다",
-                     location: NCLocation(longitude: 127.0913, latitude: 37.323),
+                     location: NCLocation(latitude: 37.323, longitude: 127.0913),
+                     latitude: 37.3596093566472,
+                     longitude: 127.1056219310272,
                      accessibleRadius: 5,
                      recentMessageID: nil,
                      recentMessageText: nil,
