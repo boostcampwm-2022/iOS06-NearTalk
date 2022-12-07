@@ -310,6 +310,7 @@
 		556EE2502926402000EEA145 /* ChatRoomListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatRoomListCell.swift; sourceTree = "<group>"; };
 		5576AC232938746B009A906A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5576AC272938BF2F009A906A /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
+		55B25CD3293F6C3D009F7963 /* textMoveGPS.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = textMoveGPS.gpx; sourceTree = "<group>"; };
 		55C620D4292E10ED003D9E9C /* CreateGroupChatDiContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupChatDiContainer.swift; sourceTree = "<group>"; };
 		6001DA86292CB70B0062EAD0 /* NearTalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NearTalk.entitlements; sourceTree = "<group>"; };
 		6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatRoomTicket.swift; sourceTree = "<group>"; };
@@ -1098,6 +1099,7 @@
 			isa = PBXGroup;
 			children = (
 				603FD398292B421D00687ED4 /* naver.gpx */,
+				55B25CD3293F6C3D009F7963 /* textMoveGPS.gpx */,
 			);
 			path = GPSPoints;
 			sourceTree = "<group>";
