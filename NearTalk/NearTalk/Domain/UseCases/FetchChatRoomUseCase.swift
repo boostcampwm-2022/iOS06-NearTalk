@@ -8,8 +8,8 @@ import Foundation
 import RxCocoa
 import RxSwift
 protocol FetchChatRoomUseCase {
-    func createObservableGroupChatList() -> Observable<[GroupChatRoomListData]>
-    func createObservableDMChatList() -> Observable<[DMChatRoomListData]>
+    func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]>
+    func newObserveDMChatList() -> Observable<[DMChatRoomListData]>
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
@@ -19,36 +19,30 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     private let disposeBag: DisposeBag = .init()
     private let chatRoomListRepository: ChatRoomListRepository
     private var newChatRoomUUIDList: PublishRelay<[String]> = .init()
-    
+    private lazy var newChatRoom: Observable<[ChatRoom]> = self.newGetChatRoomList()
     init(chatRoomListRepository: ChatRoomListRepository) {
         self.chatRoomListRepository = chatRoomListRepository
         self.newGetChatRoomUUIDList()
     }
-    
-    func createObservableGroupChatList() -> Observable<[GroupChatRoomListData]> {
-        self.newGetChatRoomList()
+    func newObserveGroupChatList() -> Observable<[GroupChatRoomListData]> {
+        self.newChatRoom
             .map { $0.filter { $0.roomType == "group" } }
             .map { $0.map { GroupChatRoomListData(data: $0) } }
     }
-    
-    func createObservableDMChatList() -> Observable<[DMChatRoomListData]> {
-        self.newGetChatRoomList()
+    func newObserveDMChatList() -> Observable<[DMChatRoomListData]> {
+        self.newChatRoom
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
     }
-    
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {
         self.chatRoomListRepository.fetchChatRoomListWithCoordinates(southWest: southWest, northEast: northEast)
     }
-    
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]> {
         self.chatRoomListRepository.fetchUserChatRoomTickets()
     }
-    
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
         self.chatRoomListRepository.fetchUserChatRoomTicket(roomID)
     }
-    
     func newGetChatRoomUUIDList() {
         self.chatRoomListRepository.fetchUserChatRoomUUIDList()
             .subscribe { [weak self] (uuidList: [String]) in

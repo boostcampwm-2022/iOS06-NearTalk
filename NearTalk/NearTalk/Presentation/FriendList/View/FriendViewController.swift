@@ -13,7 +13,6 @@ import UIKit
 final class FriendListViewController: UIViewController {
     // MARK: - UI properties
     private lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: createBasicListLayout()).then {
-        $0.backgroundColor = UIColor.primaryBackground
         $0.register(FriendListCell.self, forCellWithReuseIdentifier: FriendListCell.identifier)
     }
     
@@ -55,7 +54,7 @@ final class FriendListViewController: UIViewController {
     }
     
     private func configureView() {
-        self.view.backgroundColor = UIColor.primaryBackground
+        self.view.backgroundColor = .systemBackground
     }
     
     private func configureTableView() {
@@ -68,7 +67,6 @@ final class FriendListViewController: UIViewController {
     private func configureNavigation() {
         self.navigationItem.title = "친구 목록"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
-        self.navigationItem.rightBarButtonItems?[0].tintColor = .label
     }
     
     // 데이터소스 세팅
@@ -145,3 +143,17 @@ final class FriendListViewController: UIViewController {
     }
     
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct FriendsListViewControllerPreview: PreviewProvider {
+    static var previews: some View {
+        let navigation = UINavigationController()
+        let diContainer = FriendListDIContainer()
+        let coordinator = diContainer.makeFriendListCoordinator(navigationController: navigation)
+        coordinator.start()
+        return navigation.showPreview(.iPhone14Pro)
+    }
+}
+#endif

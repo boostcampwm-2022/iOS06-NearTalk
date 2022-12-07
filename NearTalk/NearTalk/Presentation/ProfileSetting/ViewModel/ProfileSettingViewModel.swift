@@ -11,7 +11,7 @@ import RxSwift
 protocol ProfileSettingInput {
     func editNickName(_ text: String)
     func editStatusMessage(_ text: String)
-    func editImage(_ binary: Data?)
+    func editImage()
     func update()
 }
 
@@ -26,10 +26,11 @@ protocol ProfileSettingOutput {
 protocol ProfileSettingViewModel: ProfileSettingInput, ProfileSettingOutput {}
 
 protocol ProfileSettingViewModelAction {
+    var presentImagePicker: ((BehaviorRelay<Data?>) -> Void)? { get }
     var presentUpdateFailure: (() -> Void)? { get }
 }
 
-final class DefaultProfileSettingViewModel {
+final class DefaultProfileSettingViewModel: ProfileSettingViewModel {
     private let updateProfileUseCase: any UpdateProfileUseCase
     private let validateNickNameUseCase: any ValidateTextUseCase
     private let validateStatusMessageUseCase: any ValidateTextUseCase
@@ -37,37 +38,16 @@ final class DefaultProfileSettingViewModel {
     private let action: any ProfileSettingViewModelAction
     private let disposeBag: DisposeBag = DisposeBag()
     
+    private var nickName: String?
+    private var message: String?
+    private var profile: UserProfile
+    
     private let nickNameValidityRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     private let messageValidityRelay: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
     private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     private let updateEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     private let backButtonHiddenRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
-    private var nickName: String?
-    private var message: String?
-    private var profile: UserProfile
-    
-    init(updateProfileUseCase: any UpdateProfileUseCase,
-         validateNickNameUseCase: any ValidateTextUseCase,
-         validateStatusMessageUseCase: any ValidateTextUseCase,
-         uploadImageUseCase: any UploadImageUseCase,
-         action: any ProfileSettingViewModelAction,
-         profile: UserProfile,
-         neccesaryProfileComponent: NecessaryProfileComponent?) {
-        self.updateProfileUseCase = updateProfileUseCase
-        self.validateNickNameUseCase = validateNickNameUseCase
-        self.validateStatusMessageUseCase = validateStatusMessageUseCase
-        self.uploadImageUseCase = uploadImageUseCase
-        self.action = action
-        self.nickName = profile.username
-        self.message = profile.statusMessage
-        self.profile = profile
-        self.bind()
-        self.editImage(neccesaryProfileComponent?.image)
-    }
-}
-
-extension DefaultProfileSettingViewModel: ProfileSettingViewModel {
     var nickNameValidity: Driver<Bool> {
         self.nickNameValidityRelay
             .asDriver()
@@ -90,6 +70,23 @@ extension DefaultProfileSettingViewModel: ProfileSettingViewModel {
             .asDriver()
     }
     
+    init(updateProfileUseCase: any UpdateProfileUseCase,
+         validateNickNameUseCase: any ValidateTextUseCase,
+         validateStatusMessageUseCase: any ValidateTextUseCase,
+         uploadImageUseCase: any UploadImageUseCase,
+         action: any ProfileSettingViewModelAction,
+         profile: UserProfile) {
+        self.updateProfileUseCase = updateProfileUseCase
+        self.validateNickNameUseCase = validateNickNameUseCase
+        self.validateStatusMessageUseCase = validateStatusMessageUseCase
+        self.uploadImageUseCase = uploadImageUseCase
+        self.action = action
+        self.nickName = profile.username
+        self.message = profile.statusMessage
+        self.profile = profile
+        self.bind()
+    }
+    
     func editNickName(_ text: String) {
         self.nickName = text
         self.nickNameValidityRelay
@@ -102,8 +99,8 @@ extension DefaultProfileSettingViewModel: ProfileSettingViewModel {
             .accept(self.validateStatusMessageUseCase.execute(text))
     }
     
-    func editImage(_ binary: Data?) {
-        self.imageRelay.accept(binary)
+    func editImage() {
+        self.action.presentImagePicker?(self.imageRelay)
     }
     
     func update() {
@@ -121,10 +118,8 @@ extension DefaultProfileSettingViewModel: ProfileSettingViewModel {
             self.updateProfile(imagePath: nil)
         }
     }
-}
-
-private extension DefaultProfileSettingViewModel {
-    func updateProfile(imagePath: String?) {
+    
+    private func updateProfile(imagePath: String?) {
         let newProfile: UserProfile = UserProfile(
             uuid: self.profile.uuid,
             username: self.nickName,
@@ -134,7 +129,6 @@ private extension DefaultProfileSettingViewModel {
             friends: self.profile.friends,
             chatRooms: self.profile.chatRooms
         )
-
         self.updateProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.profile = newProfile
@@ -146,12 +140,11 @@ private extension DefaultProfileSettingViewModel {
             .disposed(by: self.disposeBag)
     }
     
-    func bind() {
-        Observable
-            .combineLatest(
-                self.nickNameValidityRelay,
-                self.messageValidityRelay) { $0 && $1 }
-            .bind(to: self.updateEnableRelay)
-            .disposed(by: self.disposeBag)
+    private func bind() {
+        Observable.combineLatest(self.nickNameValidityRelay, self.messageValidityRelay) {
+            $0 && $1
+        }
+        .bind(to: self.updateEnableRelay)
+        .disposed(by: self.disposeBag)
     }
 }

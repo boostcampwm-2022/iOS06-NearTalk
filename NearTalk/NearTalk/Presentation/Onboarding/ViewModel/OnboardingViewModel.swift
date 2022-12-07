@@ -6,35 +6,36 @@
 //
 
 import Foundation
-import RxCocoa
+import RxRelay
 import RxSwift
 
 protocol OnboardingInput {
     func editNickName(_ text: String)
     func editStatusMessage(_ text: String)
-    func editImage(_ binary: Data?)
+    func editImage()
     func register()
 }
 
 protocol OnboardingOutput {
-    var nickNameValidity: Driver<Bool> { get }
-    var messageValidity: Driver<Bool> { get }
-    var image: Driver<Data?> { get }
-    var registerEnable: Driver<Bool> { get }
+    var nickNameValidity: BehaviorRelay<Bool> { get }
+    var messageValidity: BehaviorRelay<Bool> { get }
+    var image: BehaviorRelay<Data?> { get }
+    var registerEnable: BehaviorRelay<Bool> { get }
 }
 
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
 
 protocol OnboardingViewModelAction {
+    var presentImagePicker: ((BehaviorRelay<Data?>) -> Void)? { get }
     var showMainViewController: (() -> Void)? { get }
     var presentRegisterFailure: (() -> Void)? { get }
 }
 
-final class DefaultOnboardingViewModel {
-    private let nickNameValidityRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    private let messageValidityRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
-    private let registerEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+final class DefaultOnboardingViewModel: OnboardingViewModel {
+    let nickNameValidity: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let messageValidity: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let image: RxRelay.BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    let registerEnable: RxRelay.BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
     private let validateNickNameUseCase: any ValidateTextUseCase
     private let validateStatusMessageUseCase: any ValidateTextUseCase
@@ -58,45 +59,35 @@ final class DefaultOnboardingViewModel {
         self.uploadImageUseCase = uploadImageUseCase
         self.createProfileUseCase = createProfileUseCase
         self.action = action
-        self.bindRegisterEnable()
-    }
-}
-
-extension DefaultOnboardingViewModel: OnboardingViewModel {
-    var image: Driver<Data?> {
-        self.imageRelay.asDriver()
+        self.bind()
     }
     
-    var nickNameValidity: Driver<Bool> {
-        self.nickNameValidityRelay.asDriver()
-    }
-    
-    var messageValidity: Driver<Bool> {
-        self.messageValidityRelay.asDriver()
-    }
-    
-    var registerEnable: Driver<Bool> {
-        self.registerEnableRelay.asDriver()
+    private func bind() {
+        Observable.combineLatest(self.nickNameValidity.asObservable(), self.messageValidity.asObservable()) {
+            $0 && $1
+        }
+        .bind(to: self.registerEnable)
+        .disposed(by: self.disposeBag)
     }
     
     func editNickName(_ text: String) {
         self.nickName = text
-        self.nickNameValidityRelay
+        self.nickNameValidity
             .accept(self.validateNickNameUseCase.execute(text))
     }
     
     func editStatusMessage(_ text: String) {
         self.message = text
-        self.messageValidityRelay
+        self.messageValidity
             .accept(self.validateStatusMessageUseCase.execute(text))
     }
     
-    func editImage(_ binary: Data?) {
-        self.imageRelay.accept(binary)
+    func editImage() {
+        self.action.presentImagePicker?(self.image)
     }
     
     func register() {
-        if let image = self.imageRelay.value {
+        if let image = self.image.value {
             self.uploadImageUseCase.execute(image: image)
                 .subscribe(onSuccess: { [weak self] imagePath in
                     self?.registerProfile(imagePath: imagePath)
@@ -108,19 +99,8 @@ extension DefaultOnboardingViewModel: OnboardingViewModel {
             self.registerProfile(imagePath: nil)
         }
     }
-}
-
-private extension DefaultOnboardingViewModel {
-    func bindRegisterEnable() {
-        Observable
-            .combineLatest(
-                self.nickNameValidityRelay,
-                self.messageValidityRelay) { $0 && $1 }
-            .bind(to: self.registerEnableRelay)
-            .disposed(by: self.disposeBag)
-    }
     
-    func registerProfile(imagePath: String?) {
+    private func registerProfile(imagePath: String?) {
         let newProfile: UserProfile = UserProfile(
             uuid: UUID().uuidString,
             username: self.nickName,
@@ -128,7 +108,6 @@ private extension DefaultOnboardingViewModel {
             statusMessage: self.message,
             profileImagePath: imagePath
         )
-
         self.createProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.action.showMainViewController?()
@@ -137,4 +116,5 @@ private extension DefaultOnboardingViewModel {
             })
             .disposed(by: self.disposeBag)
     }
+    
 }

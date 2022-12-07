@@ -20,27 +20,22 @@ final class LoginDIContainer {
     }
     
     private func registerLoginUseCase() {
-        self.container.register(LoginUseCase.self) { resolver in
-            DefaultLoginUseCase(authRepository: resolver.resolve(AuthRepository.self)!)
+        self.container.register(LoginUseCase.self) { _ in
+            DefaultLoginUseCase(authRepository: self.container.resolve(AuthRepository.self)!)
         }
     }
     
     private func registerVerifyUseCase() {
-        self.container.register(VerifyUserUseCase.self) { resolver in
-            DefaultVerifyUserUseCase(
-                authRepository: resolver.resolve(AuthRepository.self)!,
-                profileRepository: resolver.resolve(ProfileRepository.self)!,
-                userDefaultsRepository: resolver.resolve(UserDefaultsRepository.self)!
-            )
+        self.container.register(VerifyUserUseCase.self) { _ in
+            DefaultVerifyUserUseCase(authRepository: self.container.resolve(AuthRepository.self)!, profileRepository: self.container.resolve(ProfileRepository.self)!, userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!)
         }
     }
     
     private func registerViewModel(loginAction: LoginAction) {
-        self.container.register(LoginViewModel.self) { resolver in
+        self.container.register(LoginViewModel.self) { _ in
             DefaultLoginViewModel(
                 action: loginAction,
-                loginUseCase: resolver.resolve(LoginUseCase.self)!,
-                verifyUseCase: resolver.resolve(VerifyUserUseCase.self)!
+                loginUseCase: self.container.resolve(LoginUseCase.self)!, verifyUseCase: self.container.resolve(VerifyUserUseCase.self)!
             )
         }
     }

@@ -23,19 +23,19 @@ final class LaunchScreenDIContainer {
     }
     
     private func registerUseCase() {
-        self.container.register(VerifyUserUseCase.self) { resolver in
+        self.container.register(VerifyUserUseCase.self) { _ in
             DefaultVerifyUserUseCase(
-                authRepository: resolver.resolve(AuthRepository.self)!,
-                profileRepository: resolver.resolve(ProfileRepository.self)!,
-                userDefaultsRepository: resolver.resolve(UserDefaultsRepository.self)!
+                authRepository: self.container.resolve(AuthRepository.self)!,
+                profileRepository: self.container.resolve(ProfileRepository.self)!,
+                userDefaultsRepository: self.container.resolve(UserDefaultsRepository.self)!
             )
         }
     }
     
     private func registerViewModel(actions: LaunchScreenViewModelActions) {
-        self.container.register(LaunchScreenViewModel.self) { resolver in
+        self.container.register(LaunchScreenViewModel.self) { _ in
             DefaultLaunchScreenViewModel(
-                useCase: resolver.resolve(VerifyUserUseCase.self)!,
+                useCase: self.container.resolve(VerifyUserUseCase.self)!,
                 actions: actions
             )
         }

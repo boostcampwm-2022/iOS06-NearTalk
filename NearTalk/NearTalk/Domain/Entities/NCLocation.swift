@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NCLocation: Codable, Hashable {
+struct NCLocation: Codable {
     // 미터 당 위경도
     static let decimalDegreePerMeter: Double = 0.000009009 // 도/m
     static let meterPerDecimalDegree: Double = 111000 // m/도
@@ -16,18 +16,14 @@ struct NCLocation: Codable, Hashable {
     var longitude: Double
     
     /// http://wiki.gis.com/wiki/index.php/Decimal_degrees
-    func add(longitudeMeters: Double, latitudeMeters: Double) -> NCLocation {
-        return NCLocation(
-            latitude: self.latitude + (latitudeMeters * Self.decimalDegreePerMeter),
-            longitude: self.longitude + (longitudeMeters * Self.decimalDegreePerMeter)
-        )
+    func add(latitudeMeters: Double, longitudeMeters: Double) -> NCLocation {
+        return NCLocation(latitude: self.latitude + (latitudeMeters * Self.decimalDegreePerMeter),
+                          longitude: self.longitude + (longitudeMeters * Self.decimalDegreePerMeter))
     }
     
-    func add(longitudeDelta: Double, latitudeDelta: Double) -> NCLocation {
-        return NCLocation(
-            latitude: self.latitude + latitudeDelta,
-            longitude: self.longitude + longitudeDelta
-        )
+    func add(latitudeDelta: Double, longitudeDelta: Double) -> NCLocation {
+        return NCLocation(latitude: self.latitude + latitudeDelta,
+                          longitude: self.longitude + longitudeDelta)
     }
     
     func distance(from location: NCLocation) -> Double {

@@ -89,18 +89,6 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         self.databaseService.updateUserChatRoomTicket(ticket)
     }
-    
-    func observeUserChatRoomTicketList() -> Observable<UserChatRoomTicket> {
-        self.profileRepository.fetchMyProfile()
-            .asObservable()
-            .flatMap { [weak self] (profile: UserProfile) in
-                guard let self,
-                      let uuid: String = profile.uuid else {
-                    throw ChatRoomListRepositoryError.failedToFetch
-                }
-                return self.databaseService.observeUserChatRoomTicketList(uuid)
-            }
-    }
 }
 
 enum ChatRoomListRepositoryError: Error {

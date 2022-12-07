@@ -30,9 +30,8 @@ final class RootTabBarController: UITabBarController {
     
     // MARK: - Helpers
     private func configureTabBar() {
-        self.view.backgroundColor = .secondaryBackground
-        self.tabBar.backgroundColor = .secondaryBackground
-        self.tabBar.tintColor = .label
+        self.view.backgroundColor = .secondarySystemBackground
+        self.tabBar.barTintColor = .secondarySystemBackground
         self.tabBar.isTranslucent = false
     }
 }

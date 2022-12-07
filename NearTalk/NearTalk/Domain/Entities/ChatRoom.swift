@@ -15,8 +15,6 @@ struct ChatRoom: BaseEntity {
     var roomName: String?
     var roomDescription: String?
     var location: NCLocation?
-    var latitude: Double?
-    var longitude: Double?
     var accessibleRadius: Double?
     var recentMessageID: String?
     var recentMessageText: String?
@@ -24,23 +22,7 @@ struct ChatRoom: BaseEntity {
     var maxNumberOfParticipants: Int?
     var messageCount: Int?
     
-    init(
-        uuid: String? = nil,
-        userList: [String]? = [],
-        roomImagePath: String? = nil,
-        roomType: String? = nil,
-        roomName: String? = nil,
-        roomDescription: String? = nil,
-        location: NCLocation? = nil,
-        latitude: Double?,
-        longitude: Double?,
-        accessibleRadius: Double? = nil,
-        recentMessageID: String? = nil,
-        recentMessageText: String? = nil,
-        recentMessageDate: Date? = nil,
-        maxNumberOfParticipants: Int? = nil,
-        messageCount: Int? = nil
-    ) {
+    init(uuid: String? = nil, userList: [String]? = [], roomImagePath: String? = nil, roomType: String? = nil, roomName: String? = nil, roomDescription: String? = nil, location: NCLocation? = nil, accessibleRadius: Double? = nil, recentMessageID: String? = nil, recentMessageText: String? = nil, recentMessageDate: Date? = nil, maxNumberOfParticipants: Int? = nil, messageCount: Int? = nil) {
         self.uuid = uuid
         self.userList = userList
         self.roomImagePath = roomImagePath
@@ -48,8 +30,6 @@ struct ChatRoom: BaseEntity {
         self.roomName = roomName
         self.roomDescription = roomDescription
         self.location = location
-        self.latitude = latitude
-        self.longitude = longitude
         self.accessibleRadius = accessibleRadius
         self.recentMessageID = recentMessageID
         self.recentMessageText = recentMessageText
