@@ -31,10 +31,8 @@ final class RootTabBarCoordinator: Coordinator {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-//        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
         viewcontroller.modalPresentationStyle = .fullScreen
         self.navigationController?.topViewController?.present(viewcontroller, animated: false)
-//        self.navigationController?.popViewController(animated: false)
         self.navigationController?.navigationBar.isHidden = true
     }
         
@@ -46,8 +44,8 @@ final class RootTabBarCoordinator: Coordinator {
         return self.embed(
             rootNav: navigationController,
             title: "홈",
-            inactivatedImage: UIImage(systemName: "house")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "house.fill")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "house")?.withTintColor(.label!),
+            activatedImage: UIImage(systemName: "house.fill")?.withTintColor(.label!)
         )
     }
     
@@ -59,8 +57,8 @@ final class RootTabBarCoordinator: Coordinator {
         return self.embed(
             rootNav: navigationController,
             title: "채팅",
-            inactivatedImage: UIImage(systemName: "message")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "message.fill")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "message")?.withTintColor(.label!),
+            activatedImage: UIImage(systemName: "message.fill")?.withTintColor(.label!)
         )
     }
 
@@ -73,8 +71,8 @@ final class RootTabBarCoordinator: Coordinator {
         return self.embed(
             rootNav: navigationController,
             title: "친구",
-            inactivatedImage: UIImage(systemName: "person.3")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "person.3.fill")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "person.3")?.withTintColor(.label!),
+            activatedImage: UIImage(systemName: "person.3.fill")?.withTintColor(.label!)
         )
     }
 
@@ -91,8 +89,8 @@ final class RootTabBarCoordinator: Coordinator {
         return self.embed(
             rootNav: navigationController,
             title: "마이페이지",
-            inactivatedImage: UIImage(systemName: "person")?.withTintColor(.darkGray),
-            activatedImage: UIImage(systemName: "person.fill")?.withTintColor(.blue)
+            inactivatedImage: UIImage(systemName: "person")?.withTintColor(.label!),
+            activatedImage: UIImage(systemName: "person.fill")?.withTintColor(.label!)
         )
     }
     
