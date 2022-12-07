@@ -75,7 +75,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
         let isInComing = messageItem.type == .receive ? true : false
         
-        self.textView.backgroundColor = isInComing ? .systemOrange : .systemGray
+        self.textView.backgroundColor = isInComing ? .secondaryLabel : .primaryColor
         self.textView.text = messageItem.message
         self.namelabel.text = isInComing ? messageItem.userName : ""
         self.timelabel.text = self.convertDateToString(with: messageItem.createdDate)

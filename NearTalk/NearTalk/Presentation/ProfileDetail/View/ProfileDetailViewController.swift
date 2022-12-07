@@ -42,7 +42,7 @@ class ProfileDetailViewController: UIViewController {
         $0.spacing = Matric.stackViewSpacing
     }
     
-    private lazy var thumnailImageView: UIImageView = UIImageView().then {
+    private lazy var thumbnailImageView: UIImageView = UIImageView().then {
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.clipsToBounds = true
         $0.backgroundColor = .systemOrange
@@ -101,7 +101,7 @@ class ProfileDetailViewController: UIViewController {
 
 private extension ProfileDetailViewController {
     func addSubviews() {
-        [thumnailImageView, nameLabel, statusMessage].forEach {
+        [thumbnailImageView, nameLabel, statusMessage].forEach {
             self.profileStackView.addArrangedSubview($0)
         }
         
@@ -127,7 +127,7 @@ private extension ProfileDetailViewController {
     }
     
     func configureImageView() {
-        self.thumnailImageView.snp.makeConstraints {
+        self.thumbnailImageView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(24)
             $0.height.equalTo(view.bounds.width - Matric.stackViewLeftRightInset * 2)
         }
