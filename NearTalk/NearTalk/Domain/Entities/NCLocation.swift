@@ -31,9 +31,9 @@ struct NCLocation: Codable {
     }
     
     func distance(from location: NCLocation) -> Double {
-        let longitudeDeltaMeters = abs(self.longitude - location.longitude) * Self.meterPerDecimalDegree
         let latitudeDeltaMeters = abs(self.latitude - location.latitude) * Self.meterPerDecimalDegree
+        let longitudeDeltaMeters = abs(self.longitude - location.longitude) * Self.meterPerDecimalDegree
         
-        return sqrt(pow(longitudeDeltaMeters, 2) + pow(latitudeDeltaMeters, 2))
+        return sqrt(pow(latitudeDeltaMeters, 2) + pow(longitudeDeltaMeters, 2))
     }
 }

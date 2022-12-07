@@ -273,8 +273,7 @@ extension Reactive where Base: MKMapView {
       }
   }
 
-    public func setDelegate(_ delegate: MKMapViewDelegate)
-        -> Disposable {
+    public func setDelegate(_ delegate: MKMapViewDelegate) -> Disposable {
         return RxMKMapViewDelegateProxy.installForwardDelegate(delegate, retainDelegate: false, onProxyForObject: self.base)
     }
 }

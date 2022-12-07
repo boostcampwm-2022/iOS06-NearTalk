@@ -1,3 +1,10 @@
+//
+//  LoginViewController.swift
+//  NearTalk
+//
+//  Created by Preston Kim on 2022/11/23.
+//
+
 import AuthenticationServices
 import RxCocoa
 import RxGesture
@@ -8,13 +15,13 @@ import UIKit
 
 final class LoginViewController: UIViewController {
     private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
-    private let loginButton = ASAuthorizationAppleIDButton(type: .default, style: .black).then {
+    private let loginButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline).then {
         $0.cornerRadius = 5
     }
     private let disposeBag: DisposeBag = DisposeBag()
-    private let viewModel: LoginViewModel
+    private let viewModel: any LoginViewModel
     
-    init(viewModel: LoginViewModel) {
+    init(viewModel: any LoginViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -27,16 +34,22 @@ final class LoginViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureConstraint()
-        view.backgroundColor = .white
         self.bindToLoginButton()
     }
     
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.view.window!
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.viewWillAppear()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.viewModel.viewWillDisappear()
+        super.viewWillDisappear(animated)
     }
 }
 private extension LoginViewController {
     func configureUI() {
+        self.view.backgroundColor = .systemBackground
         view.addSubview(logoView)
         view.addSubview(loginButton)
     }
@@ -52,19 +65,12 @@ private extension LoginViewController {
             make.height.equalTo(loginButton.snp.width).multipliedBy(0.15)
         }
     }
-    
-    func loginPressed() {
-        let appleIDProvider: ASAuthorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
-        let request: ASAuthorizationAppleIDRequest = appleIDProvider.createRequest()
-        request.requestedScopes = [.email, .fullName]
-        
-        let authorizationController: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [request])
-        authorizationController.delegate = self
-        authorizationController.presentationContextProvider = self
-        authorizationController.performRequests()
-    }
 
     func bindToLoginButton() {
+        self.viewModel.loginEnable
+            .drive(self.loginButton.rx.isEnabled)
+            .disposed(by: self.disposeBag)
+        
         loginButton.rx.tapGesture()
             .bind {
                 if $0.state == .ended {
@@ -73,27 +79,34 @@ private extension LoginViewController {
             }
             .disposed(by: disposeBag)
     }
+    
+    func loginPressed() {
+        let request: ASAuthorizationAppleIDRequest = self.viewModel.requestAppleLogin()
+        
+        let authorizationController: ASAuthorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
 }
 
 extension LoginViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        switch authorization.credential {
-        case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
-#if DEBUG
-                print("Faile to fetch id token")
-#endif
-                return
-            }
-            self.viewModel.requestFireBaseLogin(token: idTokenString)
-        default:
-            break
-        }
+        #if DEBUG
+        print(#function)
+        #endif
+        self.viewModel.receiveAppleLoginResult(authorization: authorization)
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
 #if DEBUG
+        print(#function)
         print("apple authorization error: \(error)")
 #endif
+        self.viewModel.receiveAppleLoginFailure()
+    }
+    
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.view.window!
     }
 }

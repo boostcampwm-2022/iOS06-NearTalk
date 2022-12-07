@@ -22,7 +22,6 @@
 		1648BAAF292387020076AC35 /* GroupChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */; };
 		1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */; };
 		1648BAB3292389920076AC35 /* ChatRoomClusterAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */; };
-		1648BAB6292391940076AC35 /* DummyData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1648BAB5292391940076AC35 /* DummyData.plist */; };
 		1648BABC2925CDDE0076AC35 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */; };
 		1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */; };
 		16530574291E17A50026B815 /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16530573291E17A40026B815 /* DeviceType.swift */; };
@@ -211,6 +210,7 @@
 		83649775292DF0590002DDE5 /* LoginDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649774292DF0590002DDE5 /* LoginDIContainer.swift */; };
 		83649777292E15A50002DDE5 /* DummyAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649776292E15A50002DDE5 /* DummyAuthRepository.swift */; };
 		83649779292E1CA20002DDE5 /* DummyVerifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */; };
+		836A50EA293E262700C9DD25 /* UIViewController+KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836A50E9293E262700C9DD25 /* UIViewController+KeyboardHandler.swift */; };
 		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
 		83808C0329371637002B78C0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0229371637002B78C0 /* OnboardingView.swift */; };
 		83808C0729372C08002B78C0 /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0629372C08002B78C0 /* ProfileSettingView.swift */; };
@@ -283,7 +283,6 @@
 		1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DmChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomClusterAnnotationView.swift; sourceTree = "<group>"; };
-		1648BAB5292391940076AC35 /* DummyData.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = DummyData.plist; sourceTree = "<group>"; };
 		1648BABB2925CDDE0076AC35 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		1648BABF2925F48F0076AC35 /* BottomSheetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetTableViewCell.swift; sourceTree = "<group>"; };
 		16530573291E17A40026B815 /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
@@ -460,6 +459,7 @@
 		83649776292E15A50002DDE5 /* DummyAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyAuthRepository.swift; sourceTree = "<group>"; };
 		83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyVerifyUseCase.swift; sourceTree = "<group>"; };
 		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
+		836A50E9293E262700C9DD25 /* UIViewController+KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KeyboardHandler.swift"; sourceTree = "<group>"; };
 		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		83808C0229371637002B78C0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		83808C0629372C08002B78C0 /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
@@ -571,7 +571,6 @@
 		1648BA932921D7240076AC35 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				1648BAB429238DA40076AC35 /* DummyData */,
 				1648BA962921D73E0076AC35 /* MainMapViewModel.swift */,
 			);
 			path = ViewModel;
@@ -601,14 +600,6 @@
 				1648BABA2925CD9F0076AC35 /* BottomSheet */,
 			);
 			path = Components;
-			sourceTree = "<group>";
-		};
-		1648BAB429238DA40076AC35 /* DummyData */ = {
-			isa = PBXGroup;
-			children = (
-				1648BAB5292391940076AC35 /* DummyData.plist */,
-			);
-			path = DummyData;
 			sourceTree = "<group>";
 		};
 		1648BAB92925CD8C0076AC35 /* Annotations */ = {
@@ -845,6 +836,7 @@
 				83D3544B2925623600B9236A /* UIImageView+Rounded.swift */,
 				6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */,
 				608BD112292FD72600CB676E /* UIImage+Resize.swift */,
+				836A50E9293E262700C9DD25 /* UIViewController+KeyboardHandler.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1592,7 +1584,6 @@
 				1660D234291DDB39005F7B24 /* Assets.xcassets in Resources */,
 				603FD3692928D40300687ED4 /* .FirebaseAuthBinary.version in Resources */,
 				603FD3622928D40300687ED4 /* .FirebaseDatabaseBinary.version in Resources */,
-				1648BAB6292391940076AC35 /* DummyData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1867,6 +1858,7 @@
 				1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */,
 				608BD115292FFEFC00CB676E /* FCMNotificationDTO.swift in Sources */,
 				603FD388292914EB00687ED4 /* FirestoreService.swift in Sources */,
+				836A50EA293E262700C9DD25 /* UIViewController+KeyboardHandler.swift in Sources */,
 				83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */,
 				5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */,
 				60DA6329293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */,

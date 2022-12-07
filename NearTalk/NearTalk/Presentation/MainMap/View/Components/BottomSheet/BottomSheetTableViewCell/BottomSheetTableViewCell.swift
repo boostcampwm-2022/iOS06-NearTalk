@@ -5,6 +5,7 @@
 //  Created by lymchgmk on 2022/11/17.
 //
 
+import Kingfisher
 import SnapKit
 import Then
 import UIKit
@@ -93,16 +94,34 @@ final class BottomSheetTableViewCell: UITableViewCell {
             make.top.bottom.equalTo(self.contentView).inset(8)
         }
     }
-    
-    private func configureImg() {
-    }
 }
 
 // MARK: - Bind
 extension BottomSheetTableViewCell {
     public func bind(to data: ChatRoom) {
-        self.chatRoomName.text = data.roomName ?? "Ronald Robertson"
-        self.chatRoomDistance.text = "1.5 km"
-        self.chatRoomDescription.text = data.roomDescription ?? "An suas viderer pro. Vis cu magna altera, ex his vivendo atomorum."
+        self.chatRoomName.text = data.roomName
+        self.chatRoomDistance.text = self.calcChatRoomDistance(with: data.location)
+        self.chatRoomDescription.text = data.roomDescription
+        self.fetchImage(path: data.roomImagePath)
+    }
+    
+    private func calcChatRoomDistance(with chatRoomLocation: NCLocation?) -> String {
+        guard let chatRoomLocation = chatRoomLocation,
+              let userLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
+              let userLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double
+        else { return "입장불가" }
+        
+        let userLocation = NCLocation(latitude: userLatitude, longitude: userLongitude)
+        let distance = chatRoomLocation.distance(from: userLocation)
+        
+        return String(format: "%.2f", distance / 1000) + " km"
+    }
+    
+    private func fetchImage(path: String?) {
+        guard let path = path,
+              let url = URL(string: path)
+        else { return }
+        
+        self.chatRoomImage.kf.setImage(with: url)
     }
 }
