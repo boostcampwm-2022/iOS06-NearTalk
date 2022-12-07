@@ -150,10 +150,10 @@ final class MainMapViewController: UIViewController {
         output.showAnnotationChatRooms
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] chatRooms in
-                let bottomSheet = BottomSheetViewController()
-                bottomSheet.loadData(with: chatRooms)
+                guard let mainMapVC = self
+                else { return }
                 
-                self?.present(bottomSheet, animated: true)
+                self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
             })
             .disposed(by: self.disposeBag)
     }

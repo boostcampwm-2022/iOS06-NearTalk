@@ -15,9 +15,6 @@ final class MainMapCoordinator: Coordinator {
     var navigationController: UINavigationController?
     private let dependencies: MainMapCoordinatorDependencies
     
-    private weak var mainMapVC: MainMapViewController?
-    private weak var bottomSheetVC: BottomSheetViewController?
-    
     init(navigationController: UINavigationController? = nil, dependencies: MainMapCoordinatorDependencies) {
         self.navigationController = navigationController
         self.dependencies = dependencies
@@ -29,7 +26,6 @@ final class MainMapCoordinator: Coordinator {
         
         let actions = MainMapViewModel.Actions(showCreateChatRoomView: self.showCreateChatRoomView)
         let mainMapVC = dependencies.makeMainMapViewController(actions: actions, navigationController: navigationController)
-        self.mainMapVC = mainMapVC
         self.navigationController?.pushViewController(mainMapVC, animated: true)
     }
     
@@ -39,7 +35,23 @@ final class MainMapCoordinator: Coordinator {
         else { return }
 
         let diContainer: CreateGroupChatDiContainer = .init()
-        let coordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+        let createGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
+        createGroupChatCoordinator.start()
+    }
+    
+    func showBottomSheet(mainMapVC: MainMapViewController, chatRooms: [ChatRoom]) {
+        let bottomSheet = BottomSheetViewController()
+        bottomSheet.loadData(with: chatRooms)
+        
+        mainMapVC.present(bottomSheet, animated: true)
+    }
+    
+    func showChatRoom(chatRoomID: String) {
+        guard let navigationController = navigationController
+        else { return }
+        
+        let diContainer: ChatDIContainer = ChatRoomListDIContainer().makeChatDIContainer(chatRoomID: chatRoomID)
+        let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
         coordinator.start()
     }
 }
