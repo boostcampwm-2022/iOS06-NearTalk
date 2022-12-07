@@ -18,7 +18,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     private let textView: UITextView = {
         let view = UITextView()
-        view.font = .systemFont(ofSize: 18.0)
+        view.font = .systemFont(ofSize: 16.0)
         view.text = "message"
         view.textContainer.maximumNumberOfLines = 0
         view.textColor = .black
@@ -27,7 +27,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         view.layer.masksToBounds = false
         view.isEditable = false
         view.isScrollEnabled = false
-        view.textContainerInset = .init(top: 16, left: 16, bottom: 16, right: 16)
+        view.textContainerInset = .init(top: 15, left: 15, bottom: 15, right: 15)
         view.sizeToFit()
         return view
     }()
@@ -39,7 +39,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     private let timelabel: UILabel = UILabel().then { label in
         label.text = "timelabel"
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 8)
     }
     
     private lazy var profileImageView: UIImageView = {
@@ -68,14 +68,17 @@ class ChatCollectionViewCell: UICollectionViewCell {
             make.bottom.equalToSuperview()
         }
         self.namelabel.text = ""
+        self.timelabel.text = ""
         self.profileImageView.image = nil
     }
 
     func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
         let isInComing = messageItem.type == .receive ? true : false
+        
         self.textView.text = messageItem.message
-        self.textView.backgroundColor = isInComing ? .darkGray : .systemGray
+        self.textView.backgroundColor = isInComing ? .systemOrange : .systemGray
         self.namelabel.text = isInComing ? messageItem.userName : ""
+        self.timelabel.text = "12:11" // messageItem.createdDate
         
         if isInComing {
             self.setImage(path: messageItem.imagePath)
@@ -83,16 +86,26 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 make.leading.equalTo(profileImageView.snp.trailing)
                 make.top.equalTo(namelabel.snp.bottom)
             }
+            
+            self.timelabel.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.leading.equalTo(self.textView.snp.trailing)
+            }
         } else {
             self.textView.snp.makeConstraints { make in
                 make.trailing.equalToSuperview()
                 make.top.equalToSuperview()
             }
+            
+            self.timelabel.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.trailing.equalTo(self.textView.snp.leading)
+            }
         }
     }
     
     private func addViews() {
-        [namelabel, profileImageView, textView].forEach {
+        [namelabel, profileImageView, textView, timelabel].forEach {
             self.contentView.addSubview($0)
         }
         
@@ -112,19 +125,27 @@ class ChatCollectionViewCell: UICollectionViewCell {
             make.width.lessThanOrEqualTo(250)
             make.bottom.equalToSuperview()
         }
+        
+        self.timelabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+        }
     }
     
     private func setImage(path: String?) {
         guard let path = path,
               let url = URL(string: path)
         else {
-            profileImageView.image = UIImage(systemName: "photo")
             return
         }
-        
         profileImageView.kf.setImage(with: url)
-        if profileImageView.image == nil {
-            profileImageView.image = UIImage(systemName: "photo")
-        }
+    }
+    
+    private func setDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddHHmm"
+        
+        let convertDate = dateFormatter.string(from: date)
+        dateFormatter.dateFormat = "HH:mm"
+        return dateFormatter.string(from: date)
     }
 }
