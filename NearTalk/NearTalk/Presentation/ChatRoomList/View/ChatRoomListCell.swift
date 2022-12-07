@@ -19,12 +19,12 @@ class ChatRoomListCell: UICollectionViewCell {
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
     private var disposeBag = DisposeBag()
-    private var isInside: Bool = true
+    private var inArea: Bool = true
     
     override var isSelected: Bool {
         didSet {
             if let uuid = self.uuid, isSelected {
-                self.viewModel?.didSelectItem(at: uuid, isInside: isInside)
+                self.viewModel?.didSelectItem(at: uuid, inArea: inArea)
             }
         }
     }
@@ -274,13 +274,13 @@ class ChatRoomListCell: UICollectionViewCell {
                 let distance = location.distance(from: newNCLocation)
                 
                 if distance <= accessibleRadius * 1000 {
-                    self.isInside = true
+                    self.inArea = true
                     DispatchQueue.main.async {
                         self.lockIcon.isHidden = true
                         self.view.isHidden = true
                     }
                 } else {
-                    self.isInside = false
+                    self.inArea = false
                     DispatchQueue.main.async {
                         self.lockIcon.isHidden = false
                         self.view.isHidden = false
