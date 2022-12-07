@@ -54,6 +54,7 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         configureConstraint()
         initDataSource()
         configureTableView()
+        configureNavigationBar()
     }
     
     override func viewDidLayoutSubviews() {
@@ -96,6 +97,18 @@ private extension AppSettingViewController {
         navigationItem.title = "앱 설정"
         view.addSubview(tableView)
         view.backgroundColor = .primaryBackground
+    }
+    
+    func configureNavigationBar() {
+        let newNavBarAppearance = UINavigationBarAppearance()
+        newNavBarAppearance.configureWithOpaqueBackground()
+        newNavBarAppearance.backgroundColor = .secondaryBackground
+        
+        self.navigationController?.navigationBar.tintColor = .label
+        self.navigationItem.standardAppearance = newNavBarAppearance
+        self.navigationItem.compactAppearance = newNavBarAppearance
+        self.navigationItem.scrollEdgeAppearance = newNavBarAppearance
+        self.navigationItem.compactScrollEdgeAppearance = newNavBarAppearance
     }
     
     func configureConstraint() {
