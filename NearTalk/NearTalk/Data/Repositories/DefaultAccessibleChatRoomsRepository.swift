@@ -38,8 +38,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
         let latitudeFilteredChatRooms: Single<[ChatRoom]> = service.fetchList(dataKey: .chatRoom, queryList: queryList)
         
         return latitudeFilteredChatRooms
-            .map {
-                $0.filter {
+            .map { chatRooms in
+                chatRooms.filter {
                     guard let chatRoomLongitude = $0.location?.longitude
                     else { return false }
                     
@@ -69,9 +69,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "group",
                      roomName: "1번방",
                      roomDescription: "1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다1번방 입니다",
-                     location: NCLocation(latitude: 37.32, longitude: 127.091),
-                     latitude: 37.3596093566472,
-                     longitude: 127.1056219310272,
+                     latitude: 37.358,
+                     longitude: 127.1045,
                      accessibleRadius: 1,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -84,9 +83,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "group",
                      roomName: "2번방",
                      roomDescription: "2번방 입니다",
-                     location: NCLocation(latitude: 37.324, longitude: 127.0912),
-                     latitude: 37.3596093566472,
-                     longitude: 127.1056219310272,
+                     latitude: 37.359,
+                     longitude: 127.1050,
                      accessibleRadius: 2,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -99,9 +97,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "group",
                      roomName: "3번방",
                      roomDescription: "3번방 입니다",
-                     location: NCLocation(latitude: 37.325, longitude: 127.0913),
-                     latitude: 37.3596093566472,
-                     longitude: 127.1056219310272,
+                     latitude: 37.3585,
+                     longitude: 127.1050,
                      accessibleRadius: 3,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -114,9 +111,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "dm",
                      roomName: "4번방",
                      roomDescription: "4번방 입니다",
-                     location: NCLocation(latitude: 37.321, longitude: 127.0911),
-                     latitude: 37.3596093566472,
-                     longitude: 127.1056219310272,
+                     latitude: 37.3595,
+                     longitude: 127.1060,
                      accessibleRadius: 4,
                      recentMessageID: nil,
                      recentMessageText: nil,
@@ -129,9 +125,8 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      roomType: "dm",
                      roomName: "5번방",
                      roomDescription: "5번방 입니다",
-                     location: NCLocation(latitude: 37.323, longitude: 127.0913),
-                     latitude: 37.3596093566472,
-                     longitude: 127.1056219310272,
+                     latitude: 37.35,
+                     longitude: 127.1059,
                      accessibleRadius: 5,
                      recentMessageID: nil,
                      recentMessageText: nil,

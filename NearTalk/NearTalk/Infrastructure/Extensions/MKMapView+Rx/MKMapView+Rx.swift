@@ -13,6 +13,7 @@ func castOrThrow<T>(_ resultType: T.Type, _ object: Any) throws -> T {
     guard let returnValue = object as? T else {
         throw RxCocoaError.castingError(object: object, targetType: resultType)
     }
+    
     return returnValue
 }
 
@@ -29,6 +30,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow(Bool.self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -38,6 +40,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow(Bool.self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -52,6 +55,7 @@ extension Reactive where Base: MKMapView {
         let source = delegate
             .methodInvoked(#selector(MKMapViewDelegate.mapViewDidChangeVisibleRegion(_:)))
             .map { _ in }
+        
         return ControlEvent(events: source)
     }
 
@@ -62,6 +66,7 @@ extension Reactive where Base: MKMapView {
             .map { _ in
                 return()
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -71,6 +76,7 @@ extension Reactive where Base: MKMapView {
             .map { _ in
                 return()
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -89,6 +95,7 @@ extension Reactive where Base: MKMapView {
             .map { _ in
                 return()
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -98,6 +105,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow(Bool.self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -108,6 +116,7 @@ extension Reactive where Base: MKMapView {
             .map { _ in
                 return()
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -117,6 +126,7 @@ extension Reactive where Base: MKMapView {
             .map { _ in
                 return()
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -126,6 +136,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow(MKUserLocation.self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -148,6 +159,7 @@ extension Reactive where Base: MKMapView {
                 return (mode: MKUserTrackingMode(rawValue: mode)!,
                     animated: animated)
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -170,6 +182,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow([MKAnnotationView].self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -180,6 +193,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow(MKAnnotationView.self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -189,6 +203,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow(MKAnnotationView.self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
@@ -218,6 +233,7 @@ extension Reactive where Base: MKMapView {
             .map { event in
                 return try castOrThrow([MKOverlayRenderer].self, event[1])
             }
+        
         return ControlEvent(events: source)
     }
 
