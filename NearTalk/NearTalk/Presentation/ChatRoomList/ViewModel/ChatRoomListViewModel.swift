@@ -22,7 +22,7 @@ protocol ChatRoomListViewModelInput {
     func didDMChatRoomList()
     func didGroupChatRoomList()
     func didCreateChatRoom()
-    func didSelectItem(at roomID: String, isInside: Bool)
+    func didSelectItem(at roomID: String, inArea: Bool)
     func viewWillAppear()
 }
 
@@ -82,8 +82,8 @@ extension DefaultChatRoomListViewModel {
         actions?.showGroupChatRoomList()
     }
     
-    func didSelectItem(at roomID: String, isInside: Bool) {
-        if isInside {
+    func didSelectItem(at roomID: String, inArea: Bool) {
+        if inArea {
             actions?.showChatRoom(roomID)
         } else {
             actions?.showAlert()
