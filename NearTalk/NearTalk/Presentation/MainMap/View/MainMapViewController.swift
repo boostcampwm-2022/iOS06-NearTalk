@@ -30,6 +30,7 @@ final class MainMapViewController: UIViewController {
     }
 
     // MARK: - Properties
+    private var coordinator: MainMapCoordinator?
     private var viewModel: MainMapViewModel!
     private let disposeBag: DisposeBag = .init()
     private let locationManager: CLLocationManager = .init().then {
@@ -37,9 +38,10 @@ final class MainMapViewController: UIViewController {
     }
     
     // MARK: - LifeCycles
-    static func create(with viewModel: MainMapViewModel) -> MainMapViewController {
+    static func create(with viewModel: MainMapViewModel, coordinator: MainMapCoordinator) -> MainMapViewController {
         let mainMapVC = MainMapViewController()
         mainMapVC.viewModel = viewModel
+        mainMapVC.coordinator = coordinator
         
         return mainMapVC
     }
@@ -56,6 +58,10 @@ final class MainMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.locationManagerDidChangeAuthorization(self.locationManager)
+        
+        if let userLocation = self.locationManager.location {
+            self.mapView.move(to: userLocation)
+        }
     }
     
     // MARK: - Methods
@@ -100,7 +106,7 @@ final class MainMapViewController: UIViewController {
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             currentUserMapRegion: self.mapView.rx.region.map { region in
-                let centerLocation: NCLocation = .init(longitude: region.center.longitude, latitude: region.center.latitude)
+                let centerLocation: NCLocation = .init(latitude: region.center.latitude, longitude: region.center.longitude)
                 let latitudeDelta: Double = region.span.latitudeDelta
                 let longitudeDelta: Double = region.span.longitudeDelta
                 
@@ -122,24 +128,29 @@ final class MainMapViewController: UIViewController {
             })
             .disposed(by: self.disposeBag)
         
+        output.showCreateChatRoomViewEvent
+            .asDriver(onErrorJustReturn: false)
+            .filter { $0 == true }
+            .drive(onNext: { [weak self] _ in
+                self?.coordinator?.showCreateChatRoomView()
+            })
+            .disposed(by: self.disposeBag)
+
         output.showAccessibleChatRooms
+            .asDriver(onErrorJustReturn: [])
             .map { chatRooms in
                 chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
             }
-            .asDriver(onErrorJustReturn: [])
-            .drive(onNext: { annotations in
-                self.mapView.removeAnnotations(self.mapView.annotations)
-                self.mapView.addAnnotations(annotations)
-            })
+            .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
             .asDriver(onErrorJustReturn: [])
-            .drive(onNext: {
-                let bottomSheet = BottomSheetViewController()
-                bottomSheet.loadData(with: $0)
+            .drive(onNext: { [weak self] chatRooms in
+                guard let mainMapVC = self
+                else { return }
                 
-                self.present(bottomSheet, animated: true)
+                self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
             })
             .disposed(by: self.disposeBag)
     }
@@ -167,8 +178,8 @@ private extension MKMapView {
     func move(to location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(
             center: location.coordinate,
-            latitudinalMeters: 10000,
-            longitudinalMeters: 10000
+            latitudinalMeters: 5000,
+            longitudinalMeters: 5000
         )
 
         setCameraBoundary(region: coordinateRegion)
@@ -177,12 +188,12 @@ private extension MKMapView {
         self.setRegion(coordinateRegion, animated: true)
     }
     
-    private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 10000) {
+    private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 5000) {
         let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: coordinateRegion)
         self.setCameraBoundary(cameraBoundary, animated: true)
     }
     
-    private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 10000) {
+    private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 5000) {
         let zoomRange = MKMapView.CameraZoomRange(
             minCenterCoordinateDistance: minDistance,
             maxCenterCoordinateDistance: maxDistance
@@ -227,14 +238,24 @@ extension MainMapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            let currentUserLocation = [
-                "longitude": location.coordinate.longitude,
-                "latitude": location.coordinate.latitude
-            ]
-            UserDefaults.standard.set(currentUserLocation, forKey: "CurrentUserLocation")
-            
-            self.mapView.move(to: location)
+        guard let currentUserLocation = locations.last
+        else { return }
+        
+        let currentUserLatitude = Double(currentUserLocation.coordinate.latitude)
+        let currentUserLongitude = Double(currentUserLocation.coordinate.longitude)
+        UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
+        UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
+        
+        guard let cameraBoundary = self.mapView.cameraBoundary
+        else { return }
+        
+        let southWest = NCLocation(latitude: cameraBoundary.region.center.latitude - (cameraBoundary.region.span.latitudeDelta / 2),
+                                   longitude: cameraBoundary.region.center.longitude - (cameraBoundary.region.span.longitudeDelta / 2))
+        let northEast = NCLocation(latitude: cameraBoundary.region.center.latitude + (cameraBoundary.region.span.latitudeDelta / 2),
+                                   longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2))
+
+        if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
+            self.mapView.move(to: currentUserLocation)
         }
     }
 }
