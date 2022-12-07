@@ -18,19 +18,33 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
-    private var disposebag = DisposeBag()
+    private var disposeBag = DisposeBag()
+    private var inArea: Bool = true
     
     override var isSelected: Bool {
         didSet {
             if let uuid = self.uuid, isSelected {
-                self.viewModel?.didSelectItem(at: uuid)
+                self.viewModel?.didSelectItem(at: uuid, inArea: inArea)
             }
         }
     }
     
     // MARK: - UI properties
-    private let img = UIImageView().then {
-        $0.layer.cornerRadius = 20
+    
+    private let view = UIView().then {
+        $0.isHidden = true
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = UIColor.tertiaryLabel?.withAlphaComponent(0.5)
+    }
+    
+    private let lockIcon = UIImageView(image: UIImage(systemName: "lock.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 40.0))).then { symbol in
+        symbol.isHidden = true
+        symbol.tintColor = .label
+    }
+    
+    private let profileImageView = UIImageView().then {
+        $0.layer.cornerRadius = 18
         $0.clipsToBounds = true
         $0.image = UIImage(systemName: "photo")
     }
@@ -46,7 +60,8 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private let recentMessage = UILabel().then {
-        $0.font = UIFont.systemFont(ofSize: 12)
+        
+        $0.font = UIFont.systemFont(ofSize: 13)
         $0.numberOfLines = 2
     }
     
@@ -55,42 +70,27 @@ class ChatRoomListCell: UICollectionViewCell {
         $0.font = UIFont.systemFont(ofSize: 12)
     }
     
-    private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then {
-        $0.isHidden = true
-        $0.backgroundColor = #colorLiteral(red: 0.8102046251, green: 0, blue: 0, alpha: 1)
-        $0.font = .systemFont(ofSize: 16, weight: .semibold)
-        $0.textColor = .white
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 10
-        $0.textAlignment = .center
-    }
-    
-    private lazy var stackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fill
-        $0.alignment = .bottom
-        $0.spacing = 8
-        $0.addArrangedSubview(self.name)
-        $0.addArrangedSubview(self.currentUserCount)
-    }
-    
-    private lazy var stackView2 = UIStackView().then {
-        $0.axis = .vertical
-        $0.distribution = .fill
-        $0.alignment = .leading
-        $0.spacing = 6
-        $0.addArrangedSubview(self.stackView)
-        $0.addArrangedSubview(self.recentMessage)
+    private let unreadMessageCount = BasePaddingLabel(padding: UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)).then { label in
+        label.backgroundColor = UIColor(named: "primaryColor")
+        label.isHidden = true
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
+        label.textColor = .white
+        label.clipsToBounds = true
+        label.layer.cornerRadius = 11.5
+        label.textAlignment = .center
     }
     
     // MARK: - Lifecycles
     
     override func prepareForReuse() {
+        self.view.isHidden = true
+        self.lockIcon.isHidden = true
         self.name.text = nil
         self.currentUserCount.text = nil
         self.recentMessage.text = nil
+        self.unreadMessageCount.isHidden = true
         self.date.text = nil
-        self.img.image = nil
+        self.profileImageView.image = nil
     }
     
     override init(frame: CGRect) {
@@ -105,6 +105,7 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
+        print(groupData.roomName, "유저티켓")
         self.viewModel = viewModel
         self.uuid = groupData.uuid
         self.name.text = groupData.roomName
@@ -113,6 +114,8 @@ class ChatRoomListCell: UICollectionViewCell {
         self.recentMessage.text = groupData.recentMessageText == nil ? "새로 생성된 방입니다" : groupData.recentMessageText
         self.unreadMessageCheck(roomID: groupData.uuid ?? "", number: groupData.messageCount)
         self.dateOperate(date: groupData.recentMessageDate)
+        self.accessibleRadiusCheck(location: groupData.location, accessibleRadius: groupData.accessibleRadius)
+        
     }
     
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
@@ -127,40 +130,60 @@ class ChatRoomListCell: UICollectionViewCell {
     
     // MARK: - Configure views
     private func addSubviews() {
-        self.contentView.addSubview(self.img)
-        self.contentView.addSubview(self.stackView2)
+        self.contentView.addSubview(self.profileImageView)
+        self.contentView.addSubview(self.name)
+        self.contentView.addSubview(self.recentMessage)
         self.contentView.addSubview(self.date)
         self.contentView.addSubview(self.unreadMessageCount)
+        self.contentView.addSubview(self.view)
+        self.contentView.addSubview(self.lockIcon)
     }
     
     private func configureConstraints() {
-        self.img.snp.makeConstraints { make in
-            make.leading.equalTo(self.contentView).offset(12)
+        self.profileImageView.snp.makeConstraints { make in
+            make.leading.equalTo(self.contentView).offset(16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
         self.date.snp.makeConstraints { make in
-            make.top.equalTo(self.img.snp.top).offset(6)
-            make.trailing.equalTo(self.contentView).offset(-16)
+            make.top.equalTo(self.profileImageView.snp.top).offset(3)
+            make.trailing.equalTo(self.contentView).offset(-24)
             make.width.equalTo(68)
-            
         }
         
         self.unreadMessageCount.snp.makeConstraints { make in
-            make.centerY.equalTo(self.contentView).offset(6)
-            make.trailing.equalTo(self.contentView).offset(-16)
+            make.trailing.equalTo(self.contentView).offset(-24)
+            make.bottom.equalTo(self.profileImageView.snp.bottom).offset(-8)
+            make.height.equalTo(22)
         }
         
-        self.stackView2.snp.makeConstraints { make in
-            make.leading.equalTo(self.img.snp.trailing).offset(16)
+        self.name.snp.makeConstraints { make in
+            make.top.equalTo(self.profileImageView.snp.top).offset(3)
+            make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
             make.trailing.equalTo(self.date.snp.leading)
-            make.centerY.equalTo(self.contentView)
+            make.height.equalTo(18)
+        }
+        
+        self.recentMessage.snp.makeConstraints { make in
+            make.top.equalTo(self.name.snp.bottom).offset(4)
+            make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
+            make.trailing.equalTo(self.date.snp.leading)
         }
         
         self.currentUserCount.snp.makeConstraints { make in
             make.width.equalTo(40)
         }
+        
+        self.view.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.contentView).inset(4)
+            make.leading.trailing.equalTo(self.contentView).inset(12)
+        }
+        
+        self.lockIcon.snp.makeConstraints { make in
+            make.center.equalTo(self.contentView)
+        }
+        
     }
     
     private func dateOperate(date: Date?) {
@@ -196,13 +219,9 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private func unreadMessageCheck(roomID: String, number: Int?) {
-        guard let viewModel = self.viewModel else {
-            self.unreadMessageCount.isHidden = true
-            return
-        }
         
-        viewModel.getUserChatRoomTicket(roomID: roomID)
-            .subscribe { event in
+        self.viewModel?.getUserChatRoomTicket(roomID: roomID)
+            .subscribe { [weak self] event in
                 switch event {
                 case .success(let ticket):
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
@@ -210,66 +229,66 @@ class ChatRoomListCell: UICollectionViewCell {
                           number > lastRoomMessageCount else {
                         
                         DispatchQueue.main.async {
-                            self.unreadMessageCount.isHidden = true
+                            self?.unreadMessageCount.isHidden = true
                         }
                         
                         return
                     }
                     DispatchQueue.main.async {
-                        self.unreadMessageCount.text = String(number - lastRoomMessageCount)
-                        self.unreadMessageCount.isHidden = false
+                        self?.unreadMessageCount.text = String(number - lastRoomMessageCount)
+                        self?.unreadMessageCount.isHidden = false
                     }
-
+                    
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
             }
-            .disposed(by: disposebag)
+            .disposed(by: disposeBag)
     }
     
     private func imageLoad(path: String?) {
         guard let path = path, let url = URL(string: path) else {
-            img.image = UIImage(systemName: "photo")
+            profileImageView.image = UIImage(named: "ChatLogo")
             return
         }
         
-        img.kf.setImage(with: url)
-        if img.image == nil {
-            img.image = UIImage(systemName: "photo")
+        profileImageView.kf.setImage(with: url)
+        if profileImageView.image == nil {
+            profileImageView.image = UIImage(named: "ChatLogo")
         }
     }
     
-}
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct ChatRoomListCellPreview: PreviewProvider {
-    static var previews: some View {
-        let diContainer: ChatRoomListDIContainer = ChatRoomListDIContainer()
-        let viewModel = diContainer.makeChatRoomListViewModel(
-            actions: ChatRoomListViewModelActions(showChatRoom: { _ in },
-                                                  showCreateChatRoom: {},
-                                                  showDMChatRoomList: {},
-                                                  showGroupChatRoomList: {})
-        )
-
-        let chatRoomData = ChatRoom(uuid: "123",
-                                    userList: ["1", "2", "3", "4", "5", "6", "6", "6", "6", "6", "6", "6", "6", "6", "6"],
-                                    roomImagePath: "",
-                                    roomName: "테스트트방테스트방",
-                                    accessibleRadius: 0,
-                                    recentMessageText: "테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중",
-                                    recentMessageDate: Calendar.current.date(byAdding: .year, value: -1, to: Date()),
-                                    messageCount: 2222)
-                                    
-        let groupData = GroupChatRoomListData(data: chatRoomData)
+    private func accessibleRadiusCheck(location: NCLocation?, accessibleRadius: Double?) {
+        guard let location, let accessibleRadius
+        else { return }
         
-        UIViewPreview {
-            let cell = ChatRoomListCell(frame: .zero)
-            cell.configure(groupData: groupData, viewModel: viewModel)
-            return cell
-        }.previewLayout(.fixed(width: 393, height: 393 * 0.2))
+        UserDefaults.standard.rx
+            .observe([String: Double].self, "CurrentUserLocation")
+            .subscribe(onNext: { (value: [String: Double]?) in
+                guard let longitude = value?["longitude"],
+                      let latitude = value?["latitude"] else { return }
+                
+                // TODO: 채팅방 longitude, latitude 변경
+                let newNCLocation: NCLocation = NCLocation(longitude: latitude, latitude: longitude)
+                let distance = location.distance(from: newNCLocation)
+                
+//                print("\(self.name.text) 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
+                
+                if distance <= accessibleRadius * 1000 {
+                    self.inArea = true
+                    DispatchQueue.main.async {
+                        self.lockIcon.isHidden = true
+                        self.view.isHidden = true
+                    }
+                } else {
+                    self.inArea = false
+                    DispatchQueue.main.async {
+                        self.lockIcon.isHidden = false
+                        self.view.isHidden = false
+                    }
+                }
+                
+            })
+            .disposed(by: disposeBag)
     }
 }
-#endif
