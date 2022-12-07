@@ -47,7 +47,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "photo")
+        imageView.image = UIImage(systemName: "heart")
     }
     
     // MARK: - LifeCycle
@@ -84,8 +84,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
             self.setImage(path: messageItem.imagePath)
             
             self.textView.snp.makeConstraints { make in
-                make.leading.equalTo(profileImageView.snp.trailing)
-                make.top.equalTo(namelabel.snp.bottom)
+                make.leading.equalTo(profileImageView.snp.trailing).inset(-5)
+                make.top.equalTo(namelabel.snp.bottom).inset(-2)
             }
             
             self.timelabel.snp.remakeConstraints { make in
@@ -118,7 +118,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.profileImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)
             make.left.equalToSuperview().inset(10)
-            make.right.equalTo(namelabel.snp.left)
+            make.right.equalTo(namelabel.snp.left).inset(-5)
             make.top.equalToSuperview()
         }
         
@@ -136,7 +136,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
         guard let path = path,
               let url = URL(string: path)
         else {
-            self.profileImageView.image = UIImage(systemName: "heart")
             return
         }
         

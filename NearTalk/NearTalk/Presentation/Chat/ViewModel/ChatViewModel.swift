@@ -247,8 +247,8 @@ private extension DefaultChatViewModel {
 struct MessageItem: Hashable {
     var id: String // message uuid
     var userName: String // sender name
-    var message: String? // message text
-    var type: MyMessageType // message Type
+    var message: String?
+    var type: MyMessageType
     var imagePath: String?
     var createdDate: Date
     

@@ -277,23 +277,3 @@ extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataS
         print(self.pickerComponentList[row])
     }
 }
-
-/// scenedelegate에서 테스트시 필요한 코드 - 삭제 예정
-//guard let windowScene = (scene as? UIWindowScene) else { return }
-//window = UIWindow(windowScene: windowScene)
-//window = UIWindow(windowScene: windowScene)
-//window?.backgroundColor = .white
-//
-//let vm = DefaultCreateGroupChatViewModel(
-//    createGroupChatUseCase: CreateGroupChatUseCase(
-//        chatRoomListRepository: DefaultChatRoomListRepository(
-//            dataTransferService: DefaultStorageService(),
-//            profileRepository: DefaultProfileRepository(
-//                firestoreService: DefaultFirestoreService(),
-//                firebaseAuthService: DefaultFirebaseAuthService()),
-//            databaseService: DefaultRealTimeDatabaseService(),
-//            firestoreService: DefaultFirestoreService()
-//        )), actions: CreateGroupChatViewModelActions(showChatViewController: {print("showChatViewController")}))
-//let navigationController = CreateGroupChatViewController(viewModel: vm)
-//window?.rootViewController = navigationController
-//window?.makeKeyAndVisible()
