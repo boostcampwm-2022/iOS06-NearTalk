@@ -96,14 +96,13 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     }
     
     func createChatButtonDIdTapped() {
-        // TODO: - ChatRoom 내부 수정 필요
         guard let userUUID = userDefaultUseCase.fetchUserUUID(),
-              let randomLatitudeMeters = (1...500).randomElement().map({Double($0)}),
-              let randomLongitudeMeters = (1...500).randomElement().map({Double($0)})
+              let randomLatitudeMeters = ((-500)...500).randomElement().map({Double($0)}),
+              let randomLongitudeMeters = ((-500)...500).randomElement().map({Double($0)})
         else {
             return
         }
-        
+        print(randomLatitudeMeters, randomLongitudeMeters)
         let currentLat = 37.3596093566472
         let currentLong = 127.1056219310272
         
@@ -131,7 +130,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             maxNumberOfParticipants: self.maxParticipant,
             messageCount: 0
         )
-        print(#function, chatRoom, chatRoom.latitude, chatRoom.longitude)
+
         self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
             .subscribe(onCompleted: { [weak self] in
                 guard let self else {
