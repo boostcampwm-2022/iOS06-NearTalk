@@ -34,17 +34,17 @@ final class AppDIContainer {
     }
     
     private func registerRepository() {
-        self.container.register(ProfileRepository.self) { resolver in
+        self.container.register(ProfileRepository.self) { _ in
             DefaultProfileRepository(
-                firestoreService: resolver.resolve(FirestoreService.self)!,
-                firebaseAuthService: resolver.resolve(AuthService.self)!
+                firestoreService: self.container.resolve(FirestoreService.self)!,
+                firebaseAuthService: self.container.resolve(AuthService.self)!
             )
         }
-        self.container.register(AuthRepository.self) { resolver in
-            DefaultAuthRepository(authService: resolver.resolve(AuthService.self)!)
+        self.container.register(AuthRepository.self) { _ in
+            DefaultAuthRepository(authService: self.container.resolve(AuthService.self)!)
         }
-        self.container.register(UserDefaultsRepository.self) { resolver in
-            DefaultUserDefaultsRepository(userDefaultsService: resolver.resolve(UserDefaultService.self)!)
+        self.container.register(UserDefaultsRepository.self) { _ in
+            DefaultUserDefaultsRepository(userDefaultsService: self.container.resolve(UserDefaultService.self)!)
         }
     }
     

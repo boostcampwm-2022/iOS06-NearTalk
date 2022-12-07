@@ -34,8 +34,8 @@ private extension UploadIndicatorViewController {
     
     func configureIndicator() {
         self.view.addSubview(indicator)
-        self.indicator.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        self.indicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
     }
 }

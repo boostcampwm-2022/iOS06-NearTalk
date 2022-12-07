@@ -14,7 +14,6 @@ struct ChatRoomListViewModelActions {
     let showCreateChatRoom: () -> Void
     let showDMChatRoomList: () -> Void
     let showGroupChatRoomList: () -> Void
-    let showAlert: () -> Void
 }
 
 protocol ChatRoomListViewModelInput {
@@ -22,7 +21,7 @@ protocol ChatRoomListViewModelInput {
     func didDMChatRoomList()
     func didGroupChatRoomList()
     func didCreateChatRoom()
-    func didSelectItem(at roomID: String, inArea: Bool)
+    func didSelectItem(at roomID: String)
     func viewWillAppear()
 }
 
@@ -43,29 +42,24 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
     var groupChatRoomData: BehaviorRelay<[GroupChatRoomListData]> = BehaviorRelay<[GroupChatRoomListData]>(value: [])
     var dmChatRoomData: BehaviorRelay<[DMChatRoomListData]> = BehaviorRelay<[DMChatRoomListData]>(value: [])
     var userChatRoomTicket: UserChatRoomTicket?
-    var verifyDistance: BehaviorRelay<Bool> = BehaviorRelay<Bool>(value: true)
     
     init(useCase: FetchChatRoomUseCase, actions: ChatRoomListViewModelActions? = nil) {
         self.chatRoomListUseCase = useCase
         self.actions = actions
         
-        self.chatRoomListUseCase.createObservableGroupChatList()
+        self.chatRoomListUseCase.newObserveGroupChatList()
             .bind(to: groupChatRoomData)
             .disposed(by: self.disposeBag)
         
-        self.chatRoomListUseCase.createObservableDMChatList()
+        self.chatRoomListUseCase.newObserveDMChatList()
             .bind(to: dmChatRoomData)
             .disposed(by: self.disposeBag)
-        
     }
     
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
         self.chatRoomListUseCase.getUserChatRoomTicket(roomID: roomID)
     }
-    
-    func distanceOperate(distance: Double) {
-        
-    }
+
 }
 
 // MARK: - Input
@@ -82,12 +76,8 @@ extension DefaultChatRoomListViewModel {
         actions?.showGroupChatRoomList()
     }
     
-    func didSelectItem(at roomID: String, inArea: Bool) {
-        if inArea {
-            actions?.showChatRoom(roomID)
-        } else {
-            actions?.showAlert()
-        }
+    func didSelectItem(at roomID: String) {
+        actions?.showChatRoom(roomID)
     }
     
     // 체팅방 생성 클릭시 이동

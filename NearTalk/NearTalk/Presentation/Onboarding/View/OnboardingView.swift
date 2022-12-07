@@ -1,8 +1,8 @@
 //
-//  UserProfileInputView.swift
+//  OnboardingView.swift
 //  NearTalk
 //
-//  Created by Preston Kim on 2022/12/06.
+//  Created by Preston Kim on 2022/11/30.
 //
 
 import RxCocoa
@@ -11,10 +11,10 @@ import RxSwift
 import SnapKit
 import UIKit
 
-class UserProfileInputView: UIView {
+final class OnboardingView: UIView {
     // MARK: - UI Space Constants
     private let profileImageSpace: CGFloat = 20.0
-    private let profileImageRadius: CGFloat = 75.0
+    private let profileImageRadius: CGFloat = 150.0
     private let labelSpace: CGFloat = 5.0
     private let labelInset: UIEdgeInsets = .init(top: 0, left: 20.0, bottom: 0, right: 20.0)
     
@@ -25,11 +25,8 @@ class UserProfileInputView: UIView {
     private let registerBtnFont: UIFont = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
     
     // MARK: - UI Properties
-    private let pencilSymbol: UIImageView = UIImageView(
-        image: UIImage(
-            systemName: "pencil.circle.fill",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 50.0))).then {
-        $0.tintColor = .label
+    private let pencilSymbol = UIImageView(image: UIImage(systemName: "pencil.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 50.0))).then { symbol in
+        symbol.tintColor = .label
     }
     
     private let profileImageView: UIImageView = UIImageView().then {
@@ -76,6 +73,7 @@ class UserProfileInputView: UIView {
         $0.setTitleColor(.whiteLabel, for: .normal)
         $0.backgroundColor = .primaryColor
         $0.isEnabled = false
+        $0.setTitle("프로필 등록", for: .normal)
         $0.setContentHuggingPriority(.defaultHigh, for: .vertical)
         $0.frame = CGRect(origin: .zero, size: $0.intrinsicContentSize)
     }
@@ -83,22 +81,11 @@ class UserProfileInputView: UIView {
     // MARK: - UIView Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .primaryBackground
+        self.backgroundColor = .systemBackground
         self.addSubViews()
         self.bringSubviewToFront(pencilSymbol)
         self.configureFonts()
         self.configureConstraints()
-    }
-    
-    convenience init(inputData: NecessaryProfileComponent) {
-        self.init()
-        self.nicknameField.text = inputData.nickName
-        self.messageField.text = inputData.message
-        
-        if let imageData = inputData.image,
-           let image = UIImage(data: imageData) {
-            self.profileImageView.image = image
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -111,7 +98,7 @@ class UserProfileInputView: UIView {
     }
 }
 
-extension UserProfileInputView {
+extension OnboardingView {
     // MARK: - UI Properties Observables
     var nickNameText: Observable<String> {
         self.nicknameField.rx.text
@@ -211,13 +198,9 @@ extension UserProfileInputView {
         self.messageValidityMessageLabel.rx.textColor
             .asObserver()
     }
-    
-    func setButtonTitle(buttonTitle: String) {
-        self.registerButton.setTitle(buttonTitle, for: .normal)
-    }
 }
 
-private extension UserProfileInputView {
+private extension OnboardingView {
     // MARK: - Helpers
     func addSubViews() {
         [pencilSymbol, profileImageView, nickNameLabel, nicknameField, nickNameValidityMessageLabel, messageLabel, messageField, messageValidityMessageLabel, registerButton].forEach {
@@ -246,60 +229,59 @@ private extension UserProfileInputView {
     }
     
     func configurePencilSymbol() {
-        pencilSymbol.snp.makeConstraints {
-            let offset: Float = sqrtf(powf(Float(self.profileImageRadius), 2) / 2)
-            $0.centerX.equalTo(self.profileImageView.snp.centerX).offset(offset)
-            $0.centerY.equalTo(self.profileImageView.snp.centerY).offset(offset)
+        pencilSymbol.snp.makeConstraints { (make) in
+            make.centerX.equalTo(self.profileImageView.snp.centerX).offset(50.0)
+            make.centerY.equalTo(self.profileImageView.snp.centerY).offset(50.0)
         }
     }
     
     func configureProfileImageView() {
-        profileImageView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
-            $0.width.height.equalTo(self.profileImageRadius * 2)
+        profileImageView.snp.makeConstraints { (make) in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
+            make.width.height.equalTo(self.profileImageRadius)
         }
     }
     
     func configureNickNameSection() {
-        nickNameLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
-            $0.top.equalTo(self.profileImageView.snp.bottom).offset(self.profileImageSpace)
+        nickNameLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
+            make.top.equalTo(self.profileImageView.snp.bottom).offset(self.profileImageSpace)
         }
         
-        nicknameField.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(nickNameLabel)
-            $0.top.equalTo(nickNameLabel.snp.bottom).offset(self.labelSpace)
+        nicknameField.snp.makeConstraints { (make) in
+            make.horizontalEdges.equalTo(nickNameLabel)
+            make.top.equalTo(nickNameLabel.snp.bottom).offset(self.labelSpace)
         }
                 
-        nickNameValidityMessageLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(nickNameLabel)
-            $0.top.equalTo(nicknameField.snp.bottom).offset(self.labelSpace)
+        nickNameValidityMessageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(nickNameLabel)
+            make.top.equalTo(nicknameField.snp.bottom).offset(self.labelSpace)
         }
     }
     
     func configureMessageSection() {
-        messageLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
-            $0.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(10)
+        messageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
+            make.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(10)
         }
         
-        messageField.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(messageLabel)
-            $0.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
+        messageField.snp.makeConstraints { (make) in
+            make.horizontalEdges.equalTo(messageLabel)
+            make.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
         }
         
-        messageValidityMessageLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(messageLabel)
-            $0.top.equalTo(messageField.snp.bottom).offset(self.labelSpace)
+        messageValidityMessageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(messageLabel)
+            make.top.equalTo(messageField.snp.bottom).offset(self.labelSpace)
         }
     }
     
     func configureRegisterButton() {
-        registerButton.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(self.messageField)
-            $0.top.equalTo(self.messageValidityMessageLabel).offset(60)
-            $0.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
+        registerButton.snp.makeConstraints { (make) in
+            make.horizontalEdges.equalTo(self.messageField)
+            make.top.equalTo(self.messageValidityMessageLabel).offset(60)
+            make.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
         }
     }
 }
