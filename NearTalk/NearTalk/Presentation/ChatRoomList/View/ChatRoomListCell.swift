@@ -258,6 +258,8 @@ struct ChatRoomListCellPreview: PreviewProvider {
                                     userList: ["1", "2", "3", "4", "5", "6", "6", "6", "6", "6", "6", "6", "6", "6", "6"],
                                     roomImagePath: "",
                                     roomName: "테스트트방테스트방",
+                                    latitude: 37.3596093566472,
+                                    longitude: 127.1056219310272,
                                     accessibleRadius: 0,
                                     recentMessageText: "테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중테스트중",
                                     recentMessageDate: Calendar.current.date(byAdding: .year, value: -1, to: Date()),
