@@ -10,10 +10,13 @@ import RxSwift
 import SnapKit
 import UIKit
 
-final class MyProfileViewController: UIViewController, UITableViewDelegate {
+final class MyProfileViewController: UIViewController {
+    // MARK: - UI properties
     private let myProfileView: MyProfileView = MyProfileView()
+    
     private let tableView: UITableView = UITableView()
     
+    // MARK: - Properties
     private lazy var dataSource: UITableViewDiffableDataSource<MyProfileSection, MyProfileItem> = {
         UITableViewDiffableDataSource<MyProfileSection, MyProfileItem>(tableView: self.tableView) { _, _, item in
             let cell = UITableViewCell()
@@ -29,7 +32,18 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
     }()
     
     private let viewModel: any MyProfileViewModel
+    
     private let disposeBag: DisposeBag = DisposeBag()
+    
+    // MARK: - Lifecycles
+    init(viewModel: any MyProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,22 +74,16 @@ final class MyProfileViewController: UIViewController, UITableViewDelegate {
         self.viewModel.viewWillAppear()
         super.viewWillAppear(animated)
     }
-    
-    init(viewModel: any MyProfileViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+}
+
+extension MyProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.viewModel.selectRow(menu: self.dataSource.itemIdentifier(for: indexPath))
     }
 }
 
 private extension MyProfileViewController {
+    // MARK: - Helpers
     func configureUI() {
         configureNavigationBar()
         view.backgroundColor = .primaryBackground
@@ -91,23 +99,29 @@ private extension MyProfileViewController {
     }
     
     func configureConstraint() {
-        myProfileView.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(10)
-            make.top.equalTo(self.view.safeAreaLayoutGuide).offset(20)
-            make.height.equalTo(96)
+        myProfileView.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(20)
+            $0.height.equalTo(96)
         }
         
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(myProfileView.snp.bottom).offset(20)
-            make.bottom.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+        tableView.snp.makeConstraints {
+            $0.top.equalTo(myProfileView.snp.bottom).offset(20)
+            $0.bottom.horizontalEdges.equalTo(self.view.safeAreaLayoutGuide).inset(10)
         }
     }
     
     func configureNavigationBar() {
-        let newNavBarAppearance = UINavigationBarAppearance()
+        let newNavBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
+
         newNavBarAppearance.configureWithOpaqueBackground()
-        newNavBarAppearance.backgroundColor = .systemGray6
+        newNavBarAppearance.backgroundColor = .secondaryBackground
         
+        self.navigationController?
+            .navigationBar
+            .topItem?
+            .backButtonDisplayMode = .minimal
+
         self.navigationItem.title = "마이 프로필"
         self.navigationItem.hidesBackButton = true
         self.navigationItem.standardAppearance = newNavBarAppearance
@@ -123,7 +137,7 @@ private extension MyProfileViewController {
     }
     
     func initDataSource() {
-        var snapshot = self.dataSource.snapshot()
+        var snapshot: NSDiffableDataSourceSnapshot<MyProfileSection, MyProfileItem> = self.dataSource.snapshot()
         snapshot.appendSections([.main])
         snapshot.appendItems(MyProfileItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
@@ -133,9 +147,11 @@ private extension MyProfileViewController {
         self.viewModel.nickName
             .drive(self.myProfileView.nickName)
             .disposed(by: self.disposeBag)
+        
         self.viewModel.message
             .drive(self.myProfileView.message)
             .disposed(by: self.disposeBag)
+        
         self.viewModel.image
             .map { imageBinary in
                 if let binary = imageBinary {

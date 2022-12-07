@@ -13,12 +13,17 @@ import UIKit
 class UserProfileInputViewController: PhotoImagePickerViewController {
     // MARK: - UI properties
     let rootView: UserProfileInputView
+
     private let scrollView: UIScrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
         $0.keyboardDismissMode = .onDrag
         $0.bounces = false
     }
     
+    // MARK: - Properties
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    // MARK: - Lifecycles
     init(inputData: NecessaryProfileComponent) {
         self.rootView = UserProfileInputView(inputData: inputData)
         super.init(nibName: nil, bundle: nil)
@@ -33,10 +38,6 @@ class UserProfileInputViewController: PhotoImagePickerViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Properties
-    private let disposeBag: DisposeBag = DisposeBag()
-    
-    // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -48,6 +49,7 @@ class UserProfileInputViewController: PhotoImagePickerViewController {
         self.bindToViewModel()
     }
     
+    // MARK: - Helpers
     func bindDisposable(_ disposable: any Disposable...) {
         self.disposeBag.insert(disposable)
     }
@@ -56,7 +58,6 @@ class UserProfileInputViewController: PhotoImagePickerViewController {
         self.navigationItem.title = title
     }
     
-    // MARK: - Helpers
     func configureNavigationBar() {
         let newNavBarAppearance = UINavigationBarAppearance()
         newNavBarAppearance.configureWithOpaqueBackground()

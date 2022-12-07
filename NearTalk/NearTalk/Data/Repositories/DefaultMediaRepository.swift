@@ -17,11 +17,13 @@ final class DefaultMediaRepository: MediaRepository {
     
     func fetchImage(path: String) -> Single<Data?> {
         Single<Data?>.create { single in
-            guard let url = URL(string: path) else {
+            guard let url = URL(string: path)
+            else {
                 single(.failure(StorageError.failedToGetDownloadUrl))
                 return Disposables.create()
             }
             single(.success(try? Data(contentsOf: url)))
+
             return Disposables.create()
         }
     }

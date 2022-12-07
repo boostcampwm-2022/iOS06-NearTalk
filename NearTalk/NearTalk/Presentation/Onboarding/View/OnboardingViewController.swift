@@ -8,8 +8,10 @@
 import UIKit
 
 final class OnboardingViewController: UserProfileInputViewController {
+    // MARK: - Properties
     private let viewModel: any OnboardingViewModel
     
+    // MARK: - Lifecycles
     init(viewModel: any OnboardingViewModel) {
         self.viewModel = viewModel
         super.init()
@@ -21,27 +23,33 @@ final class OnboardingViewController: UserProfileInputViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.rootView.setButtonTitle(buttonTitle: "프로필 등록")
     }
     
+    // MARK: - Helpers
     override func configureNavigationBar() {
         super.configureNavigationBar()
+
         self.navigationItem.hidesBackButton = true
         self.navigationItem.title = "프로필 등록"
     }
     
     override func bindNickNameField() {
         super.bindNickNameField()
+        
         super.bindDisposable(
             self.rootView.nickNameText
                 .bind(onNext: { [weak self] text in
                 self?.viewModel.editNickName(text)
                 }),
+            
             self.viewModel.nickNameValidity
                 .map { isValid in
                     isValid ? "사용 가능한 닉네임 입니다" : "5-16 자 사이의 영어 소문자, 숫자, -_ 기호만 사용하십시오"
                 }
                 .drive(self.rootView.nickNameValidityMessage),
+            
             self.viewModel.nickNameValidity
                 .map { isValid in
                     isValid ? UIColor.green : UIColor.red
@@ -52,16 +60,19 @@ final class OnboardingViewController: UserProfileInputViewController {
     
     override func bindMessageField() {
         super.bindMessageField()
+        
         super.bindDisposable(
             self.rootView.messageText
                 .bind(onNext: { [weak self] text in
                     self?.viewModel.editStatusMessage(text)
                 }),
+            
             self.viewModel.messageValidity
                 .map { isValid in
                     isValid ? "사용 가능한 메세지 입니다" : "50자 이하로 작성하십시오"
                 }
                 .drive(self.rootView.messageValidityMessage),
+            
             self.viewModel.messageValidity
                 .map { isValid in
                     isValid ? UIColor.green : UIColor.red
@@ -76,6 +87,7 @@ final class OnboardingViewController: UserProfileInputViewController {
                 .bind(onNext: { [weak self] _ in
                     self?.showPHPickerViewController()
                 }),
+            
             self.viewModel.image
                 .compactMap { $0 }
                 .map { UIImage(data: $0) }
@@ -85,6 +97,7 @@ final class OnboardingViewController: UserProfileInputViewController {
     
     override func imagePicked(_ image: UIImage?) {
         let imageBinary: Data?
+
         if let image = image {
             imageBinary = self.resizeImageByUIGraphics(image: image)
         } else {
@@ -97,6 +110,7 @@ final class OnboardingViewController: UserProfileInputViewController {
         super.bindDisposable(
             self.viewModel.registerEnable
                 .drive(self.rootView.registerEnable),
+
             self.rootView.registerBtnClickEvent
                 .bind(onNext: { [weak self] _ in
                     self?.viewModel.register()

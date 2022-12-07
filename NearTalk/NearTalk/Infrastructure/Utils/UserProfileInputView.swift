@@ -25,8 +25,11 @@ class UserProfileInputView: UIView {
     private let registerBtnFont: UIFont = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
     
     // MARK: - UI Properties
-    private let pencilSymbol = UIImageView(image: UIImage(systemName: "pencil.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 50.0))).then { symbol in
-        symbol.tintColor = .label
+    private let pencilSymbol: UIImageView = UIImageView(
+        image: UIImage(
+            systemName: "pencil.circle.fill",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 50.0))).then {
+        $0.tintColor = .label
     }
     
     private let profileImageView: UIImageView = UIImageView().then {
@@ -91,7 +94,9 @@ class UserProfileInputView: UIView {
         self.init()
         self.nicknameField.text = inputData.nickName
         self.messageField.text = inputData.message
-        if let imageData = inputData.image, let image = UIImage(data: imageData) {
+        
+        if let imageData = inputData.image,
+           let image = UIImage(data: imageData) {
             self.profileImageView.image = image
         }
     }
@@ -241,60 +246,60 @@ private extension UserProfileInputView {
     }
     
     func configurePencilSymbol() {
-        pencilSymbol.snp.makeConstraints { (make) in
+        pencilSymbol.snp.makeConstraints {
             let offset: Float = sqrtf(powf(Float(self.profileImageRadius), 2) / 2)
-            make.centerX.equalTo(self.profileImageView.snp.centerX).offset(offset)
-            make.centerY.equalTo(self.profileImageView.snp.centerY).offset(offset)
+            $0.centerX.equalTo(self.profileImageView.snp.centerX).offset(offset)
+            $0.centerY.equalTo(self.profileImageView.snp.centerY).offset(offset)
         }
     }
     
     func configureProfileImageView() {
-        profileImageView.snp.makeConstraints { (make) in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
-            make.width.height.equalTo(self.profileImageRadius * 2)
+        profileImageView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
+            $0.width.height.equalTo(self.profileImageRadius * 2)
         }
     }
     
     func configureNickNameSection() {
-        nickNameLabel.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
-            make.top.equalTo(self.profileImageView.snp.bottom).offset(self.profileImageSpace)
+        nickNameLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
+            $0.top.equalTo(self.profileImageView.snp.bottom).offset(self.profileImageSpace)
         }
         
-        nicknameField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalTo(nickNameLabel)
-            make.top.equalTo(nickNameLabel.snp.bottom).offset(self.labelSpace)
+        nicknameField.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(nickNameLabel)
+            $0.top.equalTo(nickNameLabel.snp.bottom).offset(self.labelSpace)
         }
                 
-        nickNameValidityMessageLabel.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(nickNameLabel)
-            make.top.equalTo(nicknameField.snp.bottom).offset(self.labelSpace)
+        nickNameValidityMessageLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(nickNameLabel)
+            $0.top.equalTo(nicknameField.snp.bottom).offset(self.labelSpace)
         }
     }
     
     func configureMessageSection() {
-        messageLabel.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
-            make.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(10)
+        messageLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
+            $0.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(10)
         }
         
-        messageField.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalTo(messageLabel)
-            make.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
+        messageField.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(messageLabel)
+            $0.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
         }
         
-        messageValidityMessageLabel.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(messageLabel)
-            make.top.equalTo(messageField.snp.bottom).offset(self.labelSpace)
+        messageValidityMessageLabel.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(messageLabel)
+            $0.top.equalTo(messageField.snp.bottom).offset(self.labelSpace)
         }
     }
     
     func configureRegisterButton() {
-        registerButton.snp.makeConstraints { (make) in
-            make.horizontalEdges.equalTo(self.messageField)
-            make.top.equalTo(self.messageValidityMessageLabel).offset(60)
-            make.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
+        registerButton.snp.makeConstraints {
+            $0.horizontalEdges.equalTo(self.messageField)
+            $0.top.equalTo(self.messageValidityMessageLabel).offset(60)
+            $0.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
         }
     }
 }

@@ -112,11 +112,12 @@ extension DefaultOnboardingViewModel: OnboardingViewModel {
 
 private extension DefaultOnboardingViewModel {
     func bindRegisterEnable() {
-        Observable.combineLatest(self.nickNameValidityRelay, self.messageValidityRelay) {
-            $0 && $1
-        }
-        .bind(to: self.registerEnableRelay)
-        .disposed(by: self.disposeBag)
+        Observable
+            .combineLatest(
+                self.nickNameValidityRelay,
+                self.messageValidityRelay) { $0 && $1 }
+            .bind(to: self.registerEnableRelay)
+            .disposed(by: self.disposeBag)
     }
     
     func registerProfile(imagePath: String?) {
@@ -127,6 +128,7 @@ private extension DefaultOnboardingViewModel {
             statusMessage: self.message,
             profileImagePath: imagePath
         )
+
         self.createProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.action.showMainViewController?()

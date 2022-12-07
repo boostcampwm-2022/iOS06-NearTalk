@@ -9,39 +9,41 @@ import RxSwift
 import UIKit
 
 final class MyProfileView: UIView {
-    static let defaultProfileImage: UIImage? = UIImage(systemName: "person.crop.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 96))
+    static let defaultProfileImage: UIImage? = UIImage(
+        systemName: "person.crop.circle",
+        withConfiguration: UIImage.SymbolConfiguration(pointSize: 96))
     
-    private let profileImageView = UIImageView(image: MyProfileView.defaultProfileImage).then {
+    private let profileImageView: UIImageView = UIImageView(image: MyProfileView.defaultProfileImage).then {
         $0.tintColor = .secondaryLabel
         $0.contentMode = .scaleAspectFill
         $0.isUserInteractionEnabled = false
     }
     
-    private let fieldStack = UIStackView().then {
+    private let fieldStack: UIStackView = UIStackView().then {
         $0.distribution = .fillProportionally
         $0.alignment = .fill
         $0.axis = .vertical
     }
     
-    private let nicknameTitleLabel: UILabel = UILabel().then { label in
-        label.textAlignment = .natural
-        label.text = "닉네임"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+    private let nicknameTitleLabel: UILabel = UILabel().then {
+        $0.textAlignment = .natural
+        $0.text = "닉네임"
+        $0.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
-    private let nicknameLabel = UILabel().then {
+    private let nicknameLabel: UILabel = UILabel().then {
         $0.textAlignment = .natural
         $0.text = "닉네임"
         $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
     }
     
-    private let messageTitleLabel: UILabel = UILabel().then { label in
-        label.textAlignment = .natural
-        label.text = "상태 메세지"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+    private let messageTitleLabel: UILabel = UILabel().then {
+        $0.textAlignment = .natural
+        $0.text = "상태 메세지"
+        $0.font = UIFont.systemFont(ofSize: 12, weight: .bold)
     }
     
-    private let messageLabel = UILabel().then {
+    private let messageLabel: UILabel = UILabel().then {
         $0.textAlignment = .natural
         $0.text = "상태 메세지"
         $0.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -49,6 +51,7 @@ final class MyProfileView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         self.addSubviews()
         self.configureConstraint()
     }
@@ -59,6 +62,7 @@ final class MyProfileView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+
         self.profileImageView.makeRounded()
     }
 }
@@ -92,14 +96,14 @@ private extension MyProfileView {
     }
     
     func configureConstraint() {
-        profileImageView.snp.makeConstraints { (make) in
-            make.leading.verticalEdges.equalToSuperview()
-            make.width.equalTo(profileImageView.snp.height)
+        profileImageView.snp.makeConstraints {
+            $0.leading.verticalEdges.equalToSuperview()
+            $0.width.equalTo(profileImageView.snp.height)
         }
         
-        fieldStack.snp.makeConstraints { (make) in
-            make.verticalEdges.trailing.equalToSuperview()
-            make.leading.equalTo(profileImageView.snp.trailing).offset(10)
+        fieldStack.snp.makeConstraints {
+            $0.verticalEdges.trailing.equalToSuperview()
+            $0.leading.equalTo(profileImageView.snp.trailing).offset(10)
         }
     }
 }
