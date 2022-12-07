@@ -186,6 +186,7 @@
 		83649775292DF0590002DDE5 /* LoginDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649774292DF0590002DDE5 /* LoginDIContainer.swift */; };
 		83649777292E15A50002DDE5 /* DummyAuthRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649776292E15A50002DDE5 /* DummyAuthRepository.swift */; };
 		83649779292E1CA20002DDE5 /* DummyVerifyUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */; };
+		836A50EA293E262700C9DD25 /* UIViewController+KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836A50E9293E262700C9DD25 /* UIViewController+KeyboardHandler.swift */; };
 		8375F2232922B043004538AF /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8375F2222922B043004538AF /* OnboardingViewController.swift */; };
 		83808C0329371637002B78C0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0229371637002B78C0 /* OnboardingView.swift */; };
 		83808C0729372C08002B78C0 /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83808C0629372C08002B78C0 /* ProfileSettingView.swift */; };
@@ -434,6 +435,7 @@
 		83649776292E15A50002DDE5 /* DummyAuthRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyAuthRepository.swift; sourceTree = "<group>"; };
 		83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyVerifyUseCase.swift; sourceTree = "<group>"; };
 		8367AB632922AF6300678669 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
+		836A50E9293E262700C9DD25 /* UIViewController+KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KeyboardHandler.swift"; sourceTree = "<group>"; };
 		8375F2222922B043004538AF /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		83808C0229371637002B78C0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		83808C0629372C08002B78C0 /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
@@ -813,6 +815,7 @@
 				83D3544B2925623600B9236A /* UIImageView+Rounded.swift */,
 				6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */,
 				608BD112292FD72600CB676E /* UIImage+Resize.swift */,
+				836A50E9293E262700C9DD25 /* UIViewController+KeyboardHandler.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1812,6 +1815,7 @@
 				1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */,
 				608BD115292FFEFC00CB676E /* FCMNotificationDTO.swift in Sources */,
 				603FD388292914EB00687ED4 /* FirestoreService.swift in Sources */,
+				836A50EA293E262700C9DD25 /* UIViewController+KeyboardHandler.swift in Sources */,
 				83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */,
 				5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */,
 				1648BAAF292387020076AC35 /* GroupChatRoomAnnotationView.swift in Sources */,

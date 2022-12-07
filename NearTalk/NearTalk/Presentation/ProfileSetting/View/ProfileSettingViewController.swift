@@ -100,11 +100,11 @@ private extension ProfileSettingViewController {
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillShowOnNickNameField
             .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
+            .drive(onNext: { self.moveKeyboardUp(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillDismissFromNickNameField
-            .filter { self.keyboardNotificationHandler($0) != nil }
-            .drive(onNext: { _ in self.moveKeyboardDown() })
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: { self.moveKeyboardDown(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
     }
     
@@ -128,11 +128,11 @@ private extension ProfileSettingViewController {
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillShowOnMessageField
             .compactMap { self.keyboardNotificationHandler($0) }
-            .drive(onNext: { self.moveKeyboardUp(keyboardHeight: $0) })
+            .drive(onNext: { self.moveKeyboardUp(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
         self.rootView.keyboardWillDismissFromMessageField
-            .filter { self.keyboardNotificationHandler($0) != nil }
-            .drive(onNext: { _ in self.moveKeyboardDown() })
+            .compactMap { self.keyboardNotificationHandler($0) }
+            .drive(onNext: {self.moveKeyboardDown(keyboardPopInfo: $0) })
             .disposed(by: self.disposeBag)
     }
     
@@ -180,23 +180,27 @@ private extension ProfileSettingViewController {
     }
 }
 
-extension UIViewController {
-    func keyboardNotificationHandler(_ notification: Notification) -> CGFloat? {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey]  as? CGRect else {
-            return nil
-        }
-        return keyboardFrame.height
-    }
-}
-
 private extension ProfileSettingViewController {
-    func moveKeyboardUp(keyboardHeight: CGFloat) {
-        self.scrollToUp(keyboardHeight: keyboardHeight)
+    func moveKeyboardUp(keyboardPopInfo: KeyboardPopInfo) {
+        let keyboardSize = keyboardPopInfo.frame.size
+        let keyboardHeight = keyboardSize.height
+        
+        let animator = UIViewPropertyAnimator(duration: keyboardPopInfo.duration, curve: keyboardPopInfo.curve) { [weak self] in
+            let transform2D = CGAffineTransform(translationX: 0, y: keyboardHeight)
+            self?.view.layer.setAffineTransform(transform2D)
+        }
+        
+        animator.startAnimation()
     }
     
-    func moveKeyboardDown() {
-        self.scrollToDown()
+    func moveKeyboardDown(keyboardPopInfo: KeyboardPopInfo) {
+        let animator = UIViewPropertyAnimator(duration: keyboardPopInfo.duration, curve: keyboardPopInfo.curve) { [weak self] in
+            let transform2D = CGAffineTransform(translationX: 0, y: 0)
+            self?.view.layer.setAffineTransform(transform2D)
+        }
+        
+        animator.startAnimation()
+//        self.scrollToDown()
     }
     
     func scrollToUp(keyboardHeight: CGFloat) {
