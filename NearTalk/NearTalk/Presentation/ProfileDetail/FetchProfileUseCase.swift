@@ -11,6 +11,7 @@ import RxSwift
 
 protocol FetchProfileUseCase {
     func fetchUserInfo(with userID: String) -> Single<UserProfile>
+    func updateUserProfile(userProfile: UserProfile)
 }
 
 final class DefaultFetchProfileUseCase: FetchProfileUseCase {
@@ -23,5 +24,9 @@ final class DefaultFetchProfileUseCase: FetchProfileUseCase {
     
     func fetchUserInfo(with userID: String) -> Single<UserProfile> {
         return self.userProfileRepository.fetchProfileByUUID(userID)
+    }
+    
+    func updateUserProfile(userProfile: UserProfile) {
+        _ = self.userProfileRepository.updateMyProfile(userProfile)
     }
 }

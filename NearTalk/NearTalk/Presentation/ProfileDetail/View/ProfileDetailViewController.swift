@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Kingfisher
 import RxCocoa
 import RxSwift
 
@@ -170,5 +171,22 @@ private extension ProfileDetailViewController {
                 self.statusMessage.text = statusMessage
             })
             .disposed(by: disposeBag)
+        
+        self.viewModel.profileImageURL
+            .asDriver()
+            .drive(onNext: {
+                self.setImage(path: $0)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setImage(path: String?) {
+        guard let path = path,
+              let url = URL(string: path)
+        else {
+            return
+        }
+        
+        self.thumbnailImageView.kf.setImage(with: url)
     }
 }

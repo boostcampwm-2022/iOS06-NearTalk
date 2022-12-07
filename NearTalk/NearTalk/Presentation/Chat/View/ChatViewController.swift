@@ -176,7 +176,6 @@ private extension ChatViewController {
             cell.configure(messageItem: item) {
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems([item])
-                collectionView.reloadItems(at: [indexPath])
             }
             return cell
         }

@@ -95,6 +95,7 @@ class DefaultChatViewModel: ChatViewModel {
                 if !userUUIDList.contains(myID) {
                     self.userUUIDList.append(myID)
                     self.addUserInChatRoom(chatRoom: chatRoom, myID: myID)
+                    self.updateUserProfile(userID: myID)
                 }
                 
                 // 3.
@@ -198,7 +199,11 @@ private extension DefaultChatViewModel {
                 newTicket?.lastRoomMessageCount = messageCount + 1
                 
                 if let newTicket {
-                    _ = self.enterChatRoomUseCase.upateUserChatRoomTicket(ticket: newTicket)
+                    self.enterChatRoomUseCase.upateUserChatRoomTicket(ticket: newTicket)
+                        .subscribe(onSuccess: { _ in
+                            print("newTicket------------")
+                        })
+                        .disposed(by: self.disposebag)
                 }
 
                 guard chatMessage.senderID == self.myID else {
@@ -241,5 +246,22 @@ private extension DefaultChatViewModel {
                 }
                 .disposed(by: self.disposebag)
         }
+    }
+    
+    private func updateUserProfile(userID: String) {
+        self.fetchProfileUseCase.fetchUserInfo(with: userID)
+            .subscribe { [weak self] userProfile in
+                guard let self,
+                      userProfile.chatRooms?.contains(userID) == false
+                else {
+                    return
+                }
+                var newUserProfile = userProfile
+                newUserProfile.chatRooms?.append(self.chatRoomID)
+                self.fetchProfileUseCase.updateUserProfile(userProfile: newUserProfile)
+            } onFailure: { error in
+                print("ERROR: ", error)
+            }
+            .disposed(by: self.disposebag)
     }
 }
