@@ -13,7 +13,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class CreateGroupChatViewController: UIViewController {
+final class CreateGroupChatViewController: PhotoImagePickerViewController {
     
     // MARK: - Proporties
     private let pickerComponentList: [Int] = Array((10...100))
@@ -40,9 +40,6 @@ final class CreateGroupChatViewController: UIViewController {
         $0.layer.cornerRadius = Matric.cornerRadius
         $0.clipsToBounds = true
         $0.backgroundColor = .systemOrange
-        
-        let tapGR = UITapGestureRecognizer(target: self, action: #selector(self.addImageButtonAction))
-        $0.addGestureRecognizer(tapGR)
         $0.isUserInteractionEnabled = true
     }
 
@@ -106,6 +103,18 @@ final class CreateGroupChatViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         view.addGestureRecognizer(tapGesture)
     }
+    
+    override func imagePicked(_ image: UIImage?) {
+        let imageBinary: Data?
+
+        if let image = image {
+            imageBinary = self.resizeImageByUIGraphics(image: image)
+        } else {
+            imageBinary = nil
+        }
+        
+        self.viewModel.setThumbnailImage(imageBinary)
+    }
 }
 
 // MARK: - Private
@@ -116,6 +125,23 @@ private extension CreateGroupChatViewController {
         view.endEditing(true)
     }
     func binding() {
+        self.thumnailImageView.rx
+            .tapGesture()
+            .when(.ended)
+            .map({ _ in () })
+            .bind(onNext: { [weak self] _ in
+                self?.showPHPickerViewController()
+            })
+            .disposed(by: disposbag)
+        
+        self.viewModel.thumbnailImage
+            .compactMap({$0})
+            .map({UIImage(data: $0)})
+            .drive(onNext: { [weak self] image in
+                self?.thumnailImageView.image = image
+            })
+            .disposed(by: disposbag)
+                
         self.titleTextField.rx.text
             .orEmpty
             .bind { [weak self] in
@@ -236,17 +262,6 @@ private extension CreateGroupChatViewController {
             $0.centerX.equalToSuperview()
             $0.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(20)
         }
-    }
-    
-    @objc
-    func addImageButtonAction() {
-        var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = 1
-        configuration.filter = .images
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        present(picker, animated: true, completion: nil)
     }
 }
 

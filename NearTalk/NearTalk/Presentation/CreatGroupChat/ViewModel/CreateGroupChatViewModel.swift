@@ -20,17 +20,23 @@ protocol CreateGroupChatViewModelInput {
     func maxParticipantDidChanged(_ numOfParticipant: Int)
     func maxRangeDidChanged(_ range: Int)
     func createChatButtonDIdTapped()
+    func setThumbnailImage(_ binary: Data?)
 }
 
 protocol CreateGroupChatViewModelOutput {
     var maxRangeLabel: Driver<String> { get }
     var createChatButtonIsEnabled: Driver<Bool> { get }
+    var thumbnailImage: Driver<Data?> { get }
 }
 
 protocol CreateGroupChatViewModel: CreateGroupChatViewModelInput, CreateGroupChatViewModelOutput {
 }
 
 final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
+    var thumbnailImage: RxCocoa.Driver<Data?> {
+        self.imageRelay.asDriver()
+    }
+    
     var maxRangeLabel: Driver<String>
     var createChatButtonIsEnabled: Driver<Bool>
 
@@ -98,12 +104,12 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
             uuid: chatRoomUUID,
-            userList: [userUUID], // 임시 ID - userdefault에 저장된 값 사용 예정
+            userList: [userUUID],
             roomImagePath: nil,
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            location: NCLocation(longitude: 37.3596093566472, latitude: 127.1056219310272), // 임시 위치
+            location: NCLocation(longitude: 127.1056219310272, latitude: 37.3596093566472), // 임시 위치
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
             maxNumberOfParticipants: self.maxParticipant,
@@ -112,17 +118,22 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         print(#function, chatRoom, self.title)
         self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
             .subscribe(onCompleted: { [weak self] in
-                guard let chatRoomName = self?.title else {
+                guard let self else {
                     return
                 }
-                print("onCompleted", chatRoomName)
-                self?.createGroupChatUseCase.addChatRoom(chatRoomUUID: chatRoomUUID)
+                self.createGroupChatUseCase.addChatRoom(chatRoomUUID: chatRoomUUID)
                     .subscribe(onCompleted: {
-                        self?.actions.showChatViewController(chatRoomUUID)
+                        self.actions.showChatViewController(chatRoomUUID)
                     })
-            }, onError: { _ in
-                print("onError")
+                    .disposed(by: self.disposeBag)
+            }, onError: { error in
+                print("Error: ", error)
             })
             .disposed(by: self.disposeBag)
+    }
+    
+    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    func setThumbnailImage(_ binary: Data?) {
+        self.imageRelay.accept(binary)
     }
 }
