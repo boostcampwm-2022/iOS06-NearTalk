@@ -151,7 +151,6 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            location: randomLocation,
             latitude: randomLocation.latitude,
             longitude: randomLocation.longitude,
             accessibleRadius: Double(self.maxRange),
