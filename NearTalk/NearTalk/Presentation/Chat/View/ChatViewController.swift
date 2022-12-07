@@ -126,7 +126,11 @@ final class ChatViewController: UIViewController {
                     return
                 }
                 let userProfile = self.viewModel.getUserProfile(userID: message.senderID ?? "")
-                let messageItem = MessageItem(chatMessage: message, myID: myID, userName: userProfile?.username)
+                let messageItem = MessageItem(
+                    chatMessage: message,
+                    myID: myID,
+                    userProfile: userProfile
+                )
                 self.messgeItems.append(messageItem)
                 let snapshot = self.appendSnapshot(items: self.messgeItems)
                 self.dataSource.apply(snapshot, animatingDifferences: false) {

@@ -252,12 +252,12 @@ struct MessageItem: Hashable {
     var imagePath: String?
     var createdDate: Date
     
-    init(chatMessage: ChatMessage, myID: String, userName: String?) {
+    init(chatMessage: ChatMessage, myID: String, userProfile: UserProfile?) {
         self.id = chatMessage.uuid ?? UUID().uuidString
-        self.userName = userName  ?? "알수없음"
+        self.userName = userProfile?.username  ?? "알수없음"
         self.message = chatMessage.text
         self.type = chatMessage.senderID == myID ? MyMessageType.send : MyMessageType.receive
-        self.imagePath = chatMessage.mediaPath ?? "이미지없음"
+        self.imagePath = userProfile?.profileImagePath ?? "이미지없음"
         self.createdDate = chatMessage.createdDate ?? Date()
     }
 }
