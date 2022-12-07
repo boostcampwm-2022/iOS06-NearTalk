@@ -131,6 +131,14 @@
 		608BD113292FD72600CB676E /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD112292FD72600CB676E /* UIImage+Resize.swift */; };
 		608BD115292FFEFC00CB676E /* FCMNotificationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD114292FFEFC00CB676E /* FCMNotificationDTO.swift */; };
 		608BD1192931F3E800CB676E /* AppDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD1182931F3E800CB676E /* AppDIContainer.swift */; };
+		6094B9E829406F63008FC01B /* CDUserChatRoomTicket+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E029406F63008FC01B /* CDUserChatRoomTicket+CoreDataClass.swift */; };
+		6094B9E929406F63008FC01B /* CDChatMessage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E129406F63008FC01B /* CDChatMessage+CoreDataClass.swift */; };
+		6094B9EA29406F63008FC01B /* CDUserProfile+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E229406F63008FC01B /* CDUserProfile+CoreDataProperties.swift */; };
+		6094B9EB29406F63008FC01B /* CDChatMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E329406F63008FC01B /* CDChatMessage+CoreDataProperties.swift */; };
+		6094B9EC29406F63008FC01B /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E429406F63008FC01B /* CDUserChatRoomTicket+CoreDataProperties.swift */; };
+		6094B9ED29406F63008FC01B /* CDUserProfile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E529406F63008FC01B /* CDUserProfile+CoreDataClass.swift */; };
+		6094B9EE29406F63008FC01B /* CDChatRoom+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E629406F63008FC01B /* CDChatRoom+CoreDataProperties.swift */; };
+		6094B9EF29406F63008FC01B /* CDChatRoom+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6094B9E729406F63008FC01B /* CDChatRoom+CoreDataClass.swift */; };
 		609B46E1293B06C70021E8FA /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609B46E0293B06C70021E8FA /* CoreDataService.swift */; };
 		60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */; };
 		60DA630A293D20A1003CA3E5 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */; };
@@ -145,22 +153,6 @@
 		60DA631D293D21D4003CA3E5 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD706B2924081000A4C29A /* ChatRoom.swift */; };
 		60DA631E293D21D4003CA3E5 /* UserChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDDA22926C01D00BEE65C /* UserChatModel.swift */; };
 		60DA631F293D21D4003CA3E5 /* NCMapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B6B2935176D004724D9 /* NCMapRegion.swift */; };
-		60DA6328293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6327293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift */; };
-		60DA6329293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6327293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift */; };
-		60DA632A293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6323293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift */; };
-		60DA632B293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6323293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift */; };
-		60DA632C293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6320293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift */; };
-		60DA632D293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6320293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift */; };
-		60DA632E293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6326293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift */; };
-		60DA632F293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6326293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift */; };
-		60DA6330293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6322293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift */; };
-		60DA6331293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6322293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift */; };
-		60DA6332293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6321293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift */; };
-		60DA6333293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6321293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift */; };
-		60DA6334293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6325293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift */; };
-		60DA6335293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6325293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift */; };
-		60DA6336293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6324293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift */; };
-		60DA6337293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DA6324293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift */; };
 		60DCAAF42928B9610087A63D /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60DCAAF32928B9610087A63D /* Cartfile */; };
 		60E749DC292C88F40048F877 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E749DB292C88F40048F877 /* AuthService.swift */; };
 		60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705929238CBB00A4C29A /* StorageService.swift */; };
@@ -402,17 +394,17 @@
 		608BD112292FD72600CB676E /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 		608BD114292FFEFC00CB676E /* FCMNotificationDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMNotificationDTO.swift; sourceTree = "<group>"; };
 		608BD1182931F3E800CB676E /* AppDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDIContainer.swift; sourceTree = "<group>"; };
+		6094B9E029406F63008FC01B /* CDUserChatRoomTicket+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDUserChatRoomTicket+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6094B9E129406F63008FC01B /* CDChatMessage+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDChatMessage+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6094B9E229406F63008FC01B /* CDUserProfile+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDUserProfile+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6094B9E329406F63008FC01B /* CDChatMessage+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDChatMessage+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6094B9E429406F63008FC01B /* CDUserChatRoomTicket+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDUserChatRoomTicket+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6094B9E529406F63008FC01B /* CDUserProfile+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDUserProfile+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6094B9E629406F63008FC01B /* CDChatRoom+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDChatRoom+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6094B9E729406F63008FC01B /* CDChatRoom+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CDChatRoom+CoreDataClass.swift"; sourceTree = "<group>"; };
 		609B46E0293B06C70021E8FA /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
 		60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
-		60DA6320293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDChatMessage+CoreDataProperties.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDChatMessage+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
-		60DA6321293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDChatRoom+CoreDataProperties.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDChatRoom+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
-		60DA6322293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDUserChatRoomTicket+CoreDataClass.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDUserChatRoomTicket+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		60DA6323293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDChatMessage+CoreDataClass.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDChatMessage+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		60DA6324293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDUserProfile+CoreDataProperties.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDUserProfile+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
-		60DA6325293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDChatRoom+CoreDataClass.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDChatRoom+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		60DA6326293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDUserProfile+CoreDataClass.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDUserProfile+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		60DA6327293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDUserChatRoomTicket+CoreDataProperties.swift"; path = "/Users/kobyunghak/Documents/xcode_workspace/boostcamp/Membership/iOS06-NearTalk/NearTalk/NearTalk/Infrastructure/Coredata/CDUserChatRoomTicket+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		60E749DB292C88F40048F877 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		60FD705929238CBB00A4C29A /* StorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
@@ -821,14 +813,14 @@
 		1660D262291DDEC6005F7B24 /* Coredata */ = {
 			isa = PBXGroup;
 			children = (
-				60DA6325293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift */,
-				60DA6321293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift */,
-				60DA6322293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift */,
-				60DA6327293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift */,
-				60DA6326293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift */,
-				60DA6324293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift */,
-				60DA6323293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift */,
-				60DA6320293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift */,
+				6094B9E129406F63008FC01B /* CDChatMessage+CoreDataClass.swift */,
+				6094B9E329406F63008FC01B /* CDChatMessage+CoreDataProperties.swift */,
+				6094B9E729406F63008FC01B /* CDChatRoom+CoreDataClass.swift */,
+				6094B9E629406F63008FC01B /* CDChatRoom+CoreDataProperties.swift */,
+				6094B9E029406F63008FC01B /* CDUserChatRoomTicket+CoreDataClass.swift */,
+				6094B9E429406F63008FC01B /* CDUserChatRoomTicket+CoreDataProperties.swift */,
+				6094B9E529406F63008FC01B /* CDUserProfile+CoreDataClass.swift */,
+				6094B9E229406F63008FC01B /* CDUserProfile+CoreDataProperties.swift */,
 				1660D230291DDB38005F7B24 /* NearTalk.xcdatamodeld */,
 				609B46E0293B06C70021E8FA /* CoreDataService.swift */,
 			);
@@ -1753,6 +1745,7 @@
 				555A6B3A29238C9B001336ED /* FetchChatRoomUseCase.swift in Sources */,
 				6001DA8E292DBF400062EAD0 /* MediaRepository.swift in Sources */,
 				1648BAB1292387100076AC35 /* DmChatRoomAnnotationView.swift in Sources */,
+				6094B9E829406F63008FC01B /* CDUserChatRoomTicket+CoreDataClass.swift in Sources */,
 				162B1B662933E022004724D9 /* RxMapViewDataSourceType.swift in Sources */,
 				555A6B482924BE65001336ED /* UserProfile.swift in Sources */,
 				608BD113292FD72600CB676E /* UIImage+Resize.swift in Sources */,
@@ -1780,11 +1773,11 @@
 				83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */,
 				7C749851292F706F00FADA94 /* MessagingUseCase.swift in Sources */,
 				603EDD6329261A2000BEE65C /* FirebaseKey.swift in Sources */,
+				6094B9EA29406F63008FC01B /* CDUserProfile+CoreDataProperties.swift in Sources */,
 				555A6B2B29236D51001336ED /* FriendListCell.swift in Sources */,
 				605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */,
 				1648BABC2925CDDE0076AC35 /* BottomSheetViewController.swift in Sources */,
 				603EDDB12926C87700BEE65C /* RootTabBarController.swift in Sources */,
-				60DA6335293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift in Sources */,
 				8386B7CC292F5D1C0095597D /* AppSettingDIContainer.swift in Sources */,
 				162B1B642933E00F004724D9 /* RxMKMapViewDelegateProxy.swift in Sources */,
 				603EDDA32926C01D00BEE65C /* UserChatModel.swift in Sources */,
@@ -1820,10 +1813,13 @@
 				7C254DB5292DDABF004D4CEC /* ChatViewModel.swift in Sources */,
 				830897DA292CC1E60090EC18 /* NecessaryProfileComponent.swift in Sources */,
 				7CA4EA38292BA65000D8C757 /* FetchProfileUseCase.swift in Sources */,
+				6094B9EE29406F63008FC01B /* CDChatRoom+CoreDataProperties.swift in Sources */,
 				1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */,
 				162B1B682933E036004724D9 /* RxMapViewReactiveDataSource.swift in Sources */,
 				16988882292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift in Sources */,
+				6094B9EC29406F63008FC01B /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */,
 				7CE80643292552BA00D828FF /* CreateGroupChatViewModel.swift in Sources */,
+				6094B9E929406F63008FC01B /* CDChatMessage+CoreDataClass.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
 				83C6B683293B298000560C51 /* UploadingIndicatorViewController.swift in Sources */,
@@ -1836,14 +1832,11 @@
 				83D5ECCE292BE81D00AD1781 /* MyProfileViewController.swift in Sources */,
 				83649766292D33B90002DDE5 /* AppSettingTableViewCell.swift in Sources */,
 				7CFC7D6C2923710200A249E7 /* RangeZoneView.swift in Sources */,
-				60DA632D293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift in Sources */,
 				6001DA92292DC86A0062EAD0 /* DefaultChatMessageRepository.swift in Sources */,
 				7C254DAD292DB263004D4CEC /* ChatCollectionViewCell.swift in Sources */,
 				1698887C292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift in Sources */,
-				60DA6331293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift in Sources */,
 				831ADB12293DA8E60070743C /* ColorSet.swift in Sources */,
 				1660D228291DDB37005F7B24 /* AppDelegate.swift in Sources */,
-				60DA632F293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift in Sources */,
 				83649771292DE1B50002DDE5 /* LoginViewModel.swift in Sources */,
 				1660D266291DE092005F7B24 /* AppCoordinator.swift in Sources */,
 				830897D8292CBD9B0090EC18 /* ProfileSettingDIContainer.swift in Sources */,
@@ -1851,9 +1844,7 @@
 				7CE806412925528F00D828FF /* CreateGroupChatUseCase.swift in Sources */,
 				1648BAC02925F48F0076AC35 /* BottomSheetTableViewCell.swift in Sources */,
 				8330622F2924A402000E786E /* String+Regex.swift in Sources */,
-				60DA632B293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift in Sources */,
 				16988880292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift in Sources */,
-				60DA6333293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift in Sources */,
 				6001DA8C292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift in Sources */,
 				6001DA8A292D5F270062EAD0 /* ChatMessageRepository.swift in Sources */,
 				603FD38A292928D000687ED4 /* FirebaseQueryKey.swift in Sources */,
@@ -1869,8 +1860,8 @@
 				603FD388292914EB00687ED4 /* FirestoreService.swift in Sources */,
 				836A50EA293E262700C9DD25 /* UIViewController+KeyboardHandler.swift in Sources */,
 				83E7BBC82922AFED007C390A /* AppSettingViewController.swift in Sources */,
+				6094B9EB29406F63008FC01B /* CDChatMessage+CoreDataProperties.swift in Sources */,
 				5506CDDB292B4D270002F328 /* FriendListDIContainer.swift in Sources */,
-				60DA6329293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */,
 				1648BAAF292387020076AC35 /* GroupChatRoomAnnotationView.swift in Sources */,
 				7CE8063D29253A3800D828FF /* ProfileDetailCoordinator.swift in Sources */,
 				7C6684AE2924BC9E00A5E10A /* ProfileDetailViewModel.swift in Sources */,
@@ -1885,7 +1876,6 @@
 				60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */,
 				7CA4EA3C292BE5FF00D8C757 /* ProfileDetailDIContainer.swift in Sources */,
 				5506CDDD292B4F810002F328 /* FetchFriendListUseCase.swift in Sources */,
-				60DA6337293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift in Sources */,
 				83D5ECC5292B736500AD1781 /* DefaultAuthRepository.swift in Sources */,
 				60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */,
 				83D5ECC3292B714500AD1781 /* AuthRepository.swift in Sources */,
@@ -1900,6 +1890,8 @@
 				608BD111292FD59700CB676E /* Environment.swift in Sources */,
 				6001DA88292D47320062EAD0 /* UserChatRoomTicket.swift in Sources */,
 				7C522E1F2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift in Sources */,
+				6094B9ED29406F63008FC01B /* CDUserProfile+CoreDataClass.swift in Sources */,
+				6094B9EF29406F63008FC01B /* CDChatRoom+CoreDataClass.swift in Sources */,
 				83EE7979293F15DC0008D859 /* MyProfileView.swift in Sources */,
 				6001DA88292D47320062EAD0 /* UserChatRoomTicket.swift in Sources */,
 				601273422921D34E00E1456B /* LaunchScreenViewController.swift in Sources */,
@@ -1921,27 +1913,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60DA6330293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataClass.swift in Sources */,
 				60DA630A293D20A1003CA3E5 /* CoreDataTests.swift in Sources */,
-				60DA632A293E5BC1003CA3E5 /* CDChatMessage+CoreDataClass.swift in Sources */,
 				60DA6318293D21D4003CA3E5 /* BaseEntity.swift in Sources */,
-				60DA6328293E5BC1003CA3E5 /* CDUserChatRoomTicket+CoreDataProperties.swift in Sources */,
 				60DA6316293D21D4003CA3E5 /* ChatMessage.swift in Sources */,
 				60DA631B293D21D4003CA3E5 /* UserChatRoomTicket.swift in Sources */,
 				60DA631C293D21D4003CA3E5 /* ChatRoomList.swift in Sources */,
 				60DA6317293D21D4003CA3E5 /* UserProfile.swift in Sources */,
-				60DA632C293E5BC1003CA3E5 /* CDChatMessage+CoreDataProperties.swift in Sources */,
-				60DA6336293E5BC1003CA3E5 /* CDUserProfile+CoreDataProperties.swift in Sources */,
 				60DA631E293D21D4003CA3E5 /* UserChatModel.swift in Sources */,
 				60DA630B293D20E6003CA3E5 /* CoreDataService.swift in Sources */,
-				60DA632E293E5BC1003CA3E5 /* CDUserProfile+CoreDataClass.swift in Sources */,
 				1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */,
 				60DA6319293D21D4003CA3E5 /* NCLocation.swift in Sources */,
 				60DA631A293D21D4003CA3E5 /* Friend.swift in Sources */,
 				60DA631D293D21D4003CA3E5 /* ChatRoom.swift in Sources */,
-				60DA6334293E5BC1003CA3E5 /* CDChatRoom+CoreDataClass.swift in Sources */,
 				60DA631F293D21D4003CA3E5 /* NCMapRegion.swift in Sources */,
-				60DA6332293E5BC1003CA3E5 /* CDChatRoom+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
