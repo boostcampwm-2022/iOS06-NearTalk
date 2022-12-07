@@ -13,7 +13,7 @@ struct MessageItem: Hashable {
     var message: String?
     var type: MyMessageType
     var imagePath: String?
-    var createdDate: Date
+    var createdAt: Date
     
     init(chatMessage: ChatMessage, myID: String, userProfile: UserProfile?) {
         self.id = chatMessage.uuid ?? UUID().uuidString
@@ -21,7 +21,7 @@ struct MessageItem: Hashable {
         self.message = chatMessage.text
         self.type = chatMessage.senderID == myID ? MyMessageType.send : MyMessageType.receive
         self.imagePath = userProfile?.profileImagePath ?? "이미지없음"
-        self.createdDate = chatMessage.createdAt ?? Date()
+        self.createdAt = chatMessage.createdAt ?? Date()
     }
 }
 

@@ -185,7 +185,7 @@ private extension ChatViewController {
     func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messgeItems.sorted { $0.createdDate < $1.createdDate })
+        snapshot.appendItems(messgeItems.sorted { $0.createdAt < $1.createdAt })
         return snapshot
     }
 }

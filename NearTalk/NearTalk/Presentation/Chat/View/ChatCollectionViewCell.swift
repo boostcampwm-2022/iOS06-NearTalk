@@ -78,7 +78,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.textView.backgroundColor = isInComing ? .secondaryLabel : .primaryColor
         self.textView.text = messageItem.message
         self.namelabel.text = isInComing ? messageItem.userName : ""
-        self.timelabel.text = self.convertDateToString(with: messageItem.createdDate)
+        self.timelabel.text = self.convertDateToString(with: messageItem.createdAt)
                 
         if isInComing {
             self.setImage(path: messageItem.imagePath)
