@@ -74,13 +74,13 @@ final class FriendListCell: UICollectionViewCell {
         guard let path = path,
               let url = URL(string: path)
         else {
-            img.image = UIImage(systemName: "photo")
+            img.image = UIImage(named: "nearTalkLogo")
             return
         }
         
         img.kf.setImage(with: url)
         if img.image == nil {
-            img.image = UIImage(systemName: "photo")
+            img.image = UIImage(named: "nearTalkLogo")
         }
     }
     
@@ -102,10 +102,9 @@ final class FriendListCell: UICollectionViewCell {
         }
         
         self.stactView.snp.makeConstraints { make in
-            make.leading.equalTo(self.img.snp.trailing).offset(8)
+            make.leading.equalTo(self.img.snp.trailing).offset(16)
             make.trailing.equalTo(self.contentView).offset(-16)
             make.centerY.equalTo(self.contentView)
         }
     }
 }
-
