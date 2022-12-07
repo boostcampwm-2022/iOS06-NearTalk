@@ -114,6 +114,7 @@ final class ChatViewController: UIViewController {
             .bind { [weak self] message in
                 self?.viewModel.sendMessage(message)
                 self?.chatInputAccessoryView.messageInputTextField.text = nil
+                self?.chatInputAccessoryView.sendButton.isEnabled = false
             }
             .disposed(by: disposeBag)
         
