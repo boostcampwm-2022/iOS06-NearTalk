@@ -31,8 +31,9 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     
     static func create(with chatRoomInfo: ChatRoom) -> ChatRoomAnnotation? {
         guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == "group" ? .group : .directMessage,
-              let latitude = chatRoomInfo.location?.latitude,
-              let longitude = chatRoomInfo.location?.longitude else { return nil }
+              let latitude = chatRoomInfo.latitude,
+              let longitude = chatRoomInfo.longitude
+        else { return nil }
         
         return ChatRoomAnnotation(chatRoomInfo: chatRoomInfo,
                                   roomType: roomType,
