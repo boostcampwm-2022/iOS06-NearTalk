@@ -32,7 +32,7 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
             .flatMapCompletable { chatRoom in
                 var newChatRoom: ChatRoom = chatRoom
                 newChatRoom.recentMessageID = message.chatRoomID
-                newChatRoom.recentMessageDate = message.createdAt
+                newChatRoom.recentMessageDateTimeStamp = message.createdAtTimeStamp
                 newChatRoom.recentMessageText = message.text
                 return self.databaseService.updateChatRoom(newChatRoom).asCompletable()
             }
@@ -59,8 +59,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
         self.databaseService.fetchSingleMessage(messageID: messageID, roomID: roomID)
     }
     
-    func fetchMessage(page: Int, skip: Int, count: Int, roomID: String) -> Single<[ChatMessage]> {
-        self.databaseService.fetchMessages(page: page, skip: skip, pageCount: count, roomID: roomID)
+    func fetchMessage(before date: Date, count: Int, roomID: String) -> Single<[ChatMessage]> {
+        self.databaseService.fetchMessages(date: date, pageCount: count, roomID: roomID)
     }
     
     func observeChatRoomMessages(roomID: String) -> Observable<ChatMessage> {

@@ -145,7 +145,7 @@ final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    private func fetchObjectList<T>(entityKey: CoreDataEntityKey, predicate: NSPredicate, limit: Int) -> Single<[T]> {
+    private func fetchObjectList<T: BaseEntity>(entityKey: CoreDataEntityKey, predicate: NSPredicate, limit: Int) -> Single<[T]> {
         Single<[T]>.create { [weak self] single in
             guard let self else {
                 print("🔥 CoreDataServiceError.failedToFetch")
@@ -156,20 +156,14 @@ final class DefaultCoreDataService: CoreDataService {
             let fetchRequest: NSFetchRequest<NSManagedObject> = self.getRequest(entityKey, predicate, limit)
             do {
                 if let fetchResult: [T] = try self.persistentContainer.viewContext.fetch(fetchRequest) as? [T] {
-                    print(fetchResult)
                     single(.success(fetchResult))
+                } else {
+                    single(.failure(CoreDataServiceError.failedToDecode))
                 }
             } catch let error {
                 print("🔥 ", error)
                 single(.failure(CoreDataServiceError.failedToFetch))
             }
-//            if let fetchResult: [T] = try? self.persistentContainer.viewContext.fetch(fetchRequest) as? [T] {
-//                print(fetchResult)
-//                single(.success(fetchResult))
-//            } else {
-//                print("🔴 Could not fetch")
-//                single(.failure(CoreDataServiceError.failedToFetch))
-//            }
             return Disposables.create()
         }
     }
@@ -348,7 +342,7 @@ enum CoreDataEntityKey: String {
         object.setValue(message.messageType, forKey: "messageType")
         object.setValue(message.mediaPath, forKey: "mediaPath")
         object.setValue(message.mediaType, forKey: "mediaType")
-        object.setValue(message.createdAt, forKey: "createdAt")
+        object.setValue(message.createdAtTimeStamp, forKey: "createdAtTimeStamp")
     }
     
     private func setChatRoomData(_ object: NSManagedObject, _ chatRoom: ChatRoom) {
@@ -379,4 +373,5 @@ enum CoreDataServiceError: Error {
     case failedToSave
     case failedToUpdate
     case failedToDelete
+    case failedToDecode
 }
