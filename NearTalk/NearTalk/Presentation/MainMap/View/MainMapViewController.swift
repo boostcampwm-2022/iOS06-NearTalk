@@ -101,16 +101,17 @@ final class MainMapViewController: UIViewController {
     }
     
     private func bindViewModel() {
+
         // MARK: - Bind VM input
         let input = MainMapViewModel.Input(
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
             didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation.compactMap { _ in
-                return self.convertRegionToNCMapRegion(with: self.mapView.region)
+                return self.convertToNCMapRegion(with: self.mapView.region)
             },
             didUpdateMapViewRegion: self.mapView.rx.region.map { region in
-                return self.convertRegionToNCMapRegion(with: region)
+                return self.convertToNCMapRegion(with: region)
             }
         )
         
@@ -169,7 +170,7 @@ final class MainMapViewController: UIViewController {
         )
     }
     
-    private func convertRegionToNCMapRegion(with region: MKCoordinateRegion) -> NCMapRegion {
+    private func convertToNCMapRegion(with region: MKCoordinateRegion) -> NCMapRegion {
         let centerLocation: NCLocation = .init(latitude: region.center.latitude, longitude: region.center.longitude)
         let latitudeDelta: Double = region.span.latitudeDelta
         let longitudeDelta: Double = region.span.longitudeDelta

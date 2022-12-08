@@ -68,14 +68,6 @@ final class MainMapViewModel {
             .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
         
-        input.didUpdateMapViewRegion
-            .flatMap { region in
-                let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
-                return chatRooms
-            }
-            .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
-            .disposed(by: self.disposeBag)
-        
         input.didTapAnnotationView
             .compactMap { annotation in
                 if annotation is MKClusterAnnotation {
