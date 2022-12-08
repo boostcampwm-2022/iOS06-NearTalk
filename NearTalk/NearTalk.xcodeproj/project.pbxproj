@@ -155,6 +155,19 @@
 		60DA631F293D21D4003CA3E5 /* NCMapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B6B2935176D004724D9 /* NCMapRegion.swift */; };
 		60DCAAF42928B9610087A63D /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60DCAAF32928B9610087A63D /* Cartfile */; };
 		60E749DC292C88F40048F877 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E749DB292C88F40048F877 /* AuthService.swift */; };
+		60FB892C2940EDD500E9E4E5 /* FirebaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FB892B2940EDD500E9E4E5 /* FirebaseTests.swift */; };
+		60FB89352940EE8500E9E4E5 /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */; };
+		60FB89362940EE8500E9E4E5 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705929238CBB00A4C29A /* StorageService.swift */; };
+		60FB89372940EE8500E9E4E5 /* FirebaseKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603EDD6229261A2000BEE65C /* FirebaseKey.swift */; };
+		60FB89382940EE8500E9E4E5 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E749DB292C88F40048F877 /* AuthService.swift */; };
+		60FB89392940EE8500E9E4E5 /* FirebaseQueryKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FD389292928D000687ED4 /* FirebaseQueryKey.swift */; };
+		60FB893A2940EE8500E9E4E5 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FD387292914EB00687ED4 /* FirestoreService.swift */; };
+		60FB893B2940EE8500E9E4E5 /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */; };
+		60FB893C2940EE8500E9E4E5 /* FCMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD10D292F709B00CB676E /* FCMService.swift */; };
+		60FB893D2940EEA500E9E4E5 /* FCMNotificationDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD114292FFEFC00CB676E /* FCMNotificationDTO.swift */; };
+		60FB893E2940EEA500E9E4E5 /* FirebaseQueryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603FD38B2929290C00687ED4 /* FirebaseQueryDTO.swift */; };
+		60FB893F2940EEB800E9E4E5 /* Codable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */; };
+		60FB89402940EEC800E9E4E5 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD110292FD59700CB676E /* Environment.swift */; };
 		60FD705C29238CBB00A4C29A /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705929238CBB00A4C29A /* StorageService.swift */; };
 		60FD705D29238CBB00A4C29A /* RealTimeDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */; };
 		60FD706029238DD400A4C29A /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */; };
@@ -408,6 +421,7 @@
 		60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		60E749DB292C88F40048F877 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		60FB892B2940EDD500E9E4E5 /* FirebaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTests.swift; sourceTree = "<group>"; };
 		60FD705929238CBB00A4C29A /* StorageService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		60FD705A29238CBB00A4C29A /* RealTimeDatabaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealTimeDatabaseService.swift; sourceTree = "<group>"; };
 		60FD705F29238DD400A4C29A /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
@@ -710,6 +724,7 @@
 			children = (
 				1660D241291DDB3A005F7B24 /* NearTalkTests.swift */,
 				60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */,
+				60FB892B2940EDD500E9E4E5 /* FirebaseTests.swift */,
 			);
 			path = NearTalkTests;
 			sourceTree = "<group>";
@@ -737,6 +752,7 @@
 		1660D25B291DDD7D005F7B24 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				601F6FCE2941AD11007BBDA9 /* DTO */,
 				1660D26B291DE326005F7B24 /* Entities */,
 				1660D26C291DE32F005F7B24 /* UseCases */,
 				1660D26D291DE336005F7B24 /* Interfaces */,
@@ -854,16 +870,11 @@
 		1660D26B291DE326005F7B24 /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				555A6B3729238C69001336ED /* ChatRoomList.swift */,
+				603FD38D2929301200687ED4 /* BaseEntity.swift */,
 				60FD70692924080A00A4C29A /* ChatMessage.swift */,
 				60FD706B2924081000A4C29A /* ChatRoom.swift */,
-				555A6B472924BE65001336ED /* UserProfile.swift */,
-				6008FC9C2925DBCF0044F017 /* NCLocation.swift */,
-				603EDDA22926C01D00BEE65C /* UserChatModel.swift */,
-				5506CDDE292B50D10002F328 /* Friend.swift */,
-				603FD38D2929301200687ED4 /* BaseEntity.swift */,
 				6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */,
-				162B1B6B2935176D004724D9 /* NCMapRegion.swift */,
+				555A6B472924BE65001336ED /* UserProfile.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -1004,6 +1015,18 @@
 				16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		601F6FCE2941AD11007BBDA9 /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				555A6B3729238C69001336ED /* ChatRoomList.swift */,
+				5506CDDE292B50D10002F328 /* Friend.swift */,
+				6008FC9C2925DBCF0044F017 /* NCLocation.swift */,
+				162B1B6B2935176D004724D9 /* NCMapRegion.swift */,
+				603EDDA22926C01D00BEE65C /* UserChatModel.swift */,
+			);
+			path = DTO;
 			sourceTree = "<group>";
 		};
 		6028097829349D5F0025F3B8 /* UserDefaults */ = {
@@ -1919,17 +1942,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				60DA630A293D20A1003CA3E5 /* CoreDataTests.swift in Sources */,
+				60FB893A2940EE8500E9E4E5 /* FirestoreService.swift in Sources */,
+				60FB893C2940EE8500E9E4E5 /* FCMService.swift in Sources */,
 				60DA6318293D21D4003CA3E5 /* BaseEntity.swift in Sources */,
+				60FB893D2940EEA500E9E4E5 /* FCMNotificationDTO.swift in Sources */,
+				60FB89372940EE8500E9E4E5 /* FirebaseKey.swift in Sources */,
+				60FB89382940EE8500E9E4E5 /* AuthService.swift in Sources */,
 				60DA6316293D21D4003CA3E5 /* ChatMessage.swift in Sources */,
 				60DA631B293D21D4003CA3E5 /* UserChatRoomTicket.swift in Sources */,
+				60FB893B2940EE8500E9E4E5 /* RealTimeDatabaseService.swift in Sources */,
+				60FB89392940EE8500E9E4E5 /* FirebaseQueryKey.swift in Sources */,
 				60DA631C293D21D4003CA3E5 /* ChatRoomList.swift in Sources */,
+				60FB89362940EE8500E9E4E5 /* StorageService.swift in Sources */,
 				60DA6317293D21D4003CA3E5 /* UserProfile.swift in Sources */,
 				60DA631E293D21D4003CA3E5 /* UserChatModel.swift in Sources */,
+				60FB893E2940EEA500E9E4E5 /* FirebaseQueryDTO.swift in Sources */,
 				60DA630B293D20E6003CA3E5 /* CoreDataService.swift in Sources */,
 				1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */,
 				60DA6319293D21D4003CA3E5 /* NCLocation.swift in Sources */,
+				60FB893F2940EEB800E9E4E5 /* Codable+Dictionary.swift in Sources */,
+				60FB89352940EE8500E9E4E5 /* FirebaseAuthService.swift in Sources */,
+				60FB89402940EEC800E9E4E5 /* Environment.swift in Sources */,
 				60DA631A293D21D4003CA3E5 /* Friend.swift in Sources */,
 				60DA631D293D21D4003CA3E5 /* ChatRoom.swift in Sources */,
+				60FB892C2940EDD500E9E4E5 /* FirebaseTests.swift in Sources */,
 				60DA631F293D21D4003CA3E5 /* NCMapRegion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
