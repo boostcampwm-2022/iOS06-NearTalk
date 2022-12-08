@@ -12,7 +12,7 @@ final class ChatViewController: UIViewController {
     // MARK: - Proporties
     
     private let viewModel: ChatViewModel
-    private var messgeItems: [MessageItem]
+    private var messageItems: [MessageItem]
     
     private let disposeBag: DisposeBag = DisposeBag()
     private lazy var dataSource: DataSource = makeDataSource()
@@ -36,7 +36,7 @@ final class ChatViewController: UIViewController {
     // MARK: - Lifecycles
     
     init(viewModel: ChatViewModel) {
-        self.messgeItems = []
+        self.messageItems = []
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -97,8 +97,8 @@ final class ChatViewController: UIViewController {
         return layout
     }
     
-    private func scrolltoBottom() {
-        let indexPath = IndexPath(item: messgeItems.count - 1, section: 0)
+    private func scrollToBottom() {
+        let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
         
@@ -118,7 +118,7 @@ final class ChatViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        self.viewModel.chatMessages
+        self.viewModel.observeChatMessage?
             .asDriver(onErrorDriveWith: .empty())
             .drive(onNext: { [weak self] message in
                 guard let self,
@@ -132,10 +132,10 @@ final class ChatViewController: UIViewController {
                     myID: myID,
                     userProfile: userProfile
                 )
-                self.messgeItems.append(messageItem)
-                let snapshot = self.appendSnapshot(items: self.messgeItems)
+                self.messageItems.append(messageItem)
+                let snapshot = self.appendSnapshot(items: self.messageItems)
                 self.dataSource.apply(snapshot, animatingDifferences: false) {
-                    self.scrolltoBottom()
+                    self.scrollToBottom()
                 }
             })
             .disposed(by: disposeBag)
@@ -185,7 +185,7 @@ private extension ChatViewController {
     func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messgeItems.sorted { $0.createdAt < $1.createdAt })
+        snapshot.appendItems(messageItems.sorted { $0.createdAt < $1.createdAt })
         return snapshot
     }
 }
@@ -224,7 +224,7 @@ private extension ChatViewController {
         }
         
         animator.startAnimation()
-        self.scrolltoBottom()
+        self.scrollToBottom()
     }
     
     @objc

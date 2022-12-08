@@ -10,23 +10,27 @@ import Foundation
 import RxSwift
 
 protocol FetchProfileUseCase {
-    func fetchUserInfo(with userID: String) -> Single<UserProfile>
+    func fetchUserProfile(with userID: String) -> Single<UserProfile>
     func updateUserProfile(userProfile: UserProfile)
+    func fetchUserProfiles(with userIDList: [String]) -> Single<[UserProfile]>
 }
 
 final class DefaultFetchProfileUseCase: FetchProfileUseCase {
-    private let disposebag: DisposeBag = DisposeBag()
     private let userProfileRepository: ProfileRepository
     
     init(profileRepository: ProfileRepository) {
         self.userProfileRepository = profileRepository
     }
     
-    func fetchUserInfo(with userID: String) -> Single<UserProfile> {
+    func fetchUserProfile(with userID: String) -> Single<UserProfile> {
         return self.userProfileRepository.fetchProfileByUUID(userID)
     }
     
     func updateUserProfile(userProfile: UserProfile) {
         _ = self.userProfileRepository.updateMyProfile(userProfile)
+    }
+    
+    func fetchUserProfiles(with userIDList: [String]) -> Single<[UserProfile]> {
+        return self.userProfileRepository.fetchProfileByUUIDList(userIDList)
     }
 }

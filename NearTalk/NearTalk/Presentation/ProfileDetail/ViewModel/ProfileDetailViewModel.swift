@@ -64,7 +64,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
         self.actions = actions
         self.bind()
         
-        self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
+        self.fetchProfileUseCase.fetchUserProfile(with: self.userID)
             .subscribe(onSuccess: { info in
                 self.userName.accept(info.username ?? "Unkown")
                 self.statusMessage.accept(info.statusMessage ?? "Unkown")
