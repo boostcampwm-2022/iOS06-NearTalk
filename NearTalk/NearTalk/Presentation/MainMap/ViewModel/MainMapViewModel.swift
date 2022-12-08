@@ -79,12 +79,12 @@ final class MainMapViewModel {
                         
                         return chatRoomAnnotation.chatRoomInfo
                     }
-                } else {
-                    guard let singleChatRoomAnnotation = annotation as? ChatRoomAnnotation
-                    else { return [] }
-                    
-                    return [singleChatRoomAnnotation.chatRoomInfo]
                 }
+                
+                guard let singleChatRoomAnnotation = annotation as? ChatRoomAnnotation
+                else { return [] }
+                
+                return [singleChatRoomAnnotation.chatRoomInfo]
             }
             .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
