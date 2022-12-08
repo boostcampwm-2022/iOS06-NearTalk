@@ -12,7 +12,7 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
         case group
         case directMessage
         
-        var string: String {
+        var name: String {
             switch self {
             case .group:
                 return "group"
@@ -39,7 +39,7 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     }
     
     static func create(with chatRoomInfo: ChatRoom) -> ChatRoomAnnotation? {
-        guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == RoomType.group.string ? .group : .directMessage,
+        guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == RoomType.group.name ? .group : .directMessage,
               let latitude = chatRoomInfo.latitude,
               let longitude = chatRoomInfo.longitude
         else { return nil }
