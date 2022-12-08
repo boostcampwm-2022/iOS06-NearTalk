@@ -46,6 +46,10 @@ final class DefaultProfileRepository: ProfileRepository {
             }
     }
     
+    func updateFriendProfile(_ userProfile: UserProfile) -> Completable {
+        self.firestoreService.update(updatedData: userProfile, dataKey: .users).asCompletable()
+    }
+    
     func deleteMyProfile() -> Completable {
         self.fetchMyProfile()
             .flatMapCompletable { (userProfile: UserProfile) in
