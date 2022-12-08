@@ -21,6 +21,7 @@ final class BottomSheetViewController: UIViewController {
     static let roomTypeItems: [String] = ["전체 채팅방 목록", "입장 가능한 목록"]
     private let roomTypeSegmentedControl = UISegmentedControl(items: BottomSheetViewController.roomTypeItems).then {
         $0.backgroundColor = .red
+        $0.selectedSegmentIndex = 0
     }
     private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(BottomSheetTableViewCell.self,
@@ -57,16 +58,16 @@ final class BottomSheetViewController: UIViewController {
     }
     
     private func configureConstraints() {
-        self.roomTypeSegmentedControl.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().offset(40)
+        self.roomTypeSegmentedControl.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(40)
         }
         
-        self.chatRoomsTableView.snp.makeConstraints {
-            $0.top.equalTo(self.roomTypeSegmentedControl.snp.bottom).offset(20)
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-20)
+        self.chatRoomsTableView.snp.makeConstraints { make in
+            make.top.equalTo(self.roomTypeSegmentedControl.snp.bottom).offset(20)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-20)
         }
     }
     
