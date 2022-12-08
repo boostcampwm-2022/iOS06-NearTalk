@@ -16,7 +16,7 @@ extension CDChatMessage {
     }
 
     @NSManaged public var chatRoomID: String?
-    @NSManaged public var createdAt: Date?
+    @NSManaged public var createdAtTimeStamp: NSNumber?
     @NSManaged public var mediaPath: String?
     @NSManaged public var mediaType: String?
     @NSManaged public var messageType: String?

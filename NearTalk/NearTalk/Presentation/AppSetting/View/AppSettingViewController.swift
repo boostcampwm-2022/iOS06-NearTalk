@@ -11,8 +11,11 @@ import RxSwift
 import SnapKit
 import UIKit
 
-final class AppSettingViewController: UIViewController, UITableViewDelegate {
-    private let tableView = UITableView()
+final class AppSettingViewController: UIViewController {
+    private let tableView: UITableView = UITableView()
+    
+    private let viewModel: any AppSettingViewModel
+    private let disposeBag: DisposeBag = DisposeBag()
     
     private lazy var dataSource: UITableViewDiffableDataSource<AppSettingSection, AppSettingItem> = {
         UITableViewDiffableDataSource<AppSettingSection, AppSettingItem>(tableView: self.tableView) { _, _, item in
@@ -47,14 +50,24 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         }
     }()
     
+    init(viewModel: any AppSettingViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        configureUI()
-        configureConstraint()
-        initDataSource()
-        configureTableView()
-        configureNavigationBar()
+        self.configureUI()
+        self.configureConstraint()
+        self.initDataSource()
+        self.configureTableView()
+        self.configureNavigationBar()
+        self.bindToModel()
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,21 +87,11 @@ final class AppSettingViewController: UIViewController, UITableViewDelegate {
         self.viewModel.viewWillAppear()
         super.viewWillAppear(animated)
     }
-    
+}
+
+extension AppSettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.viewModel.tableRowSelected(item: self.dataSource.itemIdentifier(for: indexPath))
-    }
-        
-    private let viewModel: any AppSettingViewModel
-    private let disposeBag: DisposeBag = DisposeBag()
-    
-    init(viewModel: any AppSettingViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -100,7 +103,7 @@ private extension AppSettingViewController {
     }
     
     func configureNavigationBar() {
-        let newNavBarAppearance = UINavigationBarAppearance()
+        let newNavBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
         newNavBarAppearance.configureWithOpaqueBackground()
         newNavBarAppearance.backgroundColor = .secondaryBackground
         
@@ -120,18 +123,14 @@ private extension AppSettingViewController {
     }
     
     func configureTableView() {
-        tableView.delegate = self
-        tableView.register(
+        self.tableView.delegate = self
+        self.tableView.register(
             AppSettingTableViewCell.self,
             forCellReuseIdentifier: AppSettingTableViewCell.identifier)
-        tableView.dataSource = self.dataSource
-        tableView.separatorInset = .zero
-        tableView.layer.cornerRadius = 5.0
+        self.tableView.dataSource = self.dataSource
+        self.tableView.separatorInset = .zero
+        self.tableView.layer.cornerRadius = 5.0
         self.tableView.isScrollEnabled = false
-        
-        self.viewModel.interactionEnable
-            .drive(self.tableView.rx.isUserInteractionEnabled)
-            .disposed(by: self.disposeBag)
     }
     
     func initDataSource() {
@@ -139,6 +138,16 @@ private extension AppSettingViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(AppSettingItem.allCases, toSection: .main)
         self.dataSource.apply(snapshot)
+    }
+    
+    func bindToModel() {
+        self.bindToTouchEnable()
+    }
+    
+    func bindToTouchEnable() {
+        self.viewModel.interactionEnable
+            .drive(self.tableView.rx.isUserInteractionEnabled)
+            .disposed(by: self.disposeBag)
     }
 }
 
@@ -171,6 +180,7 @@ extension AppSettingViewController: ASAuthorizationControllerDelegate, ASAuthori
 #if DEBUG
         print("apple authorization error: \(error)")
 #endif
+        self.viewModel.failToAuthenticate()
     }
     
     func presentReauthenticationViewController() {

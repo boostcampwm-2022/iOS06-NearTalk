@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator?.start()
 
         window?.makeKeyAndVisible()
+        window?.initTheme()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) { }
@@ -33,4 +34,27 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillEnterForeground(_ scene: UIScene) { }
 
     func sceneDidEnterBackground(_ scene: UIScene) { }
+}
+
+extension UIWindow {
+    func initTheme() {
+        if let themeRawValue = UserDefaults.standard.string(forKey: AppTheme.keyName),
+           let theme = AppTheme(rawValue: themeRawValue) {
+            self.applyTheme(theme: theme)
+        } else {
+            self.applyTheme(theme: .system)
+        }
+        
+    }
+    
+    func applyTheme(theme: AppTheme) {
+        switch theme {
+        case .system:
+            self.overrideUserInterfaceStyle = .unspecified
+        case .dark:
+            self.overrideUserInterfaceStyle = .dark
+        case .light:
+            self.overrideUserInterfaceStyle = .light
+        }
+    }
 }

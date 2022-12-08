@@ -36,14 +36,13 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
             .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan)
         ]
         let latitudeFilteredChatRooms: Single<[ChatRoom]> = service.fetchList(dataKey: .chatRoom, queryList: queryList)
-        
+
         return latitudeFilteredChatRooms
             .map { chatRooms in
                 chatRooms.filter {
-                    guard let chatRoomLongitude = $0.location?.longitude
+                    guard let chatRoomLongitude = $0.longitude
                     else { return false }
-                    
-                    return southWest.longitude < chatRoomLongitude && chatRoomLongitude < northEast.longitude
+                    return southWest.longitude..<northEast.longitude ~= chatRoomLongitude
                 }
             }
     }
@@ -74,7 +73,7 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      accessibleRadius: 1,
                      recentMessageID: nil,
                      recentMessageText: nil,
-                     recentMessageDate: nil,
+                     recentMessageDateTimeStamp: nil,
                      maxNumberOfParticipants: nil,
                      messageCount: nil),
             ChatRoom(uuid: "2",
@@ -88,7 +87,7 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      accessibleRadius: 2,
                      recentMessageID: nil,
                      recentMessageText: nil,
-                     recentMessageDate: nil,
+                     recentMessageDateTimeStamp: nil,
                      maxNumberOfParticipants: nil,
                      messageCount: nil),
             ChatRoom(uuid: "3",
@@ -102,7 +101,7 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      accessibleRadius: 3,
                      recentMessageID: nil,
                      recentMessageText: nil,
-                     recentMessageDate: nil,
+                     recentMessageDateTimeStamp: nil,
                      maxNumberOfParticipants: nil,
                      messageCount: nil),
             ChatRoom(uuid: "4",
@@ -116,7 +115,7 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      accessibleRadius: 4,
                      recentMessageID: nil,
                      recentMessageText: nil,
-                     recentMessageDate: nil,
+                     recentMessageDateTimeStamp: nil,
                      maxNumberOfParticipants: nil,
                      messageCount: nil),
             ChatRoom(uuid: "5",
@@ -130,7 +129,7 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
                      accessibleRadius: 5,
                      recentMessageID: nil,
                      recentMessageText: nil,
-                     recentMessageDate: nil,
+                     recentMessageDateTimeStamp: nil,
                      maxNumberOfParticipants: nil,
                      messageCount: nil)
             ]

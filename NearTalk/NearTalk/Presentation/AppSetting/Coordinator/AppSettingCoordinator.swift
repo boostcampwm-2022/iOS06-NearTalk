@@ -34,7 +34,8 @@ final class AppSettingCoordinator: Coordinator {
             action: Action(presentLogoutResult: self.presentLogoutResult(success:),
                            presentDropoutResult: self.presentDropoutResult(success:),
                            presentNotificationPrompt: self.presentNotificationPrompt,
-                           presentReauthenticateView: self.presentAppleAuthenticateViewController))
+                           presentReauthenticateView: self.presentAppleAuthenticateViewController,
+                           showThemeSettingPage: self.showThemeSettingPage))
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -43,6 +44,7 @@ final class AppSettingCoordinator: Coordinator {
         let presentDropoutResult: ((Bool) -> Void)?
         let presentNotificationPrompt: (() -> Single<Bool>)?
         let presentReauthenticateView: (() -> Void)?
+        let showThemeSettingPage: (() -> Void)?
     }
     
     func presentLogoutResult(success: Bool) {
@@ -142,6 +144,12 @@ final class AppSettingCoordinator: Coordinator {
         }
         
         appSettingController.presentReauthenticationViewController()
+    }
+    
+    func showThemeSettingPage() {
+        let themeSettingViewModel: any ThemeSettingViewModel = DefaultThemeSettingViewModel()
+        let viewController: ThemeSettingViewController = ThemeSettingViewController(viewModel: themeSettingViewModel)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 
     @MainActor

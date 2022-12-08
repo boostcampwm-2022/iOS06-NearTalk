@@ -20,10 +20,12 @@ struct ChatRoom: BaseEntity {
     var accessibleRadius: Double?
     var recentMessageID: String?
     var recentMessageText: String?
-    var recentMessageDate: Date?
+    var recentMessageDateTimeStamp: Double?
     var maxNumberOfParticipants: Int?
     var messageCount: Int?
-    var createdAt: Date?
+    
+    /// Date().timeIntervalSince1970 값
+    var createdAtTimeStamp: Double?
     
     init(
         uuid: String? = nil,
@@ -38,10 +40,10 @@ struct ChatRoom: BaseEntity {
         accessibleRadius: Double? = nil,
         recentMessageID: String? = nil,
         recentMessageText: String? = nil,
-        recentMessageDate: Date? = nil,
+        recentMessageDateTimeStamp: Double? = nil,
         maxNumberOfParticipants: Int? = nil,
         messageCount: Int? = nil,
-        createdAt: Date? = Date()
+        createdAtTimeStamp: Double? = Date().timeIntervalSince1970
     ) {
         self.uuid = uuid
         self.userList = userList
@@ -55,9 +57,9 @@ struct ChatRoom: BaseEntity {
         self.accessibleRadius = accessibleRadius
         self.recentMessageID = recentMessageID
         self.recentMessageText = recentMessageText
-        self.recentMessageDate = recentMessageDate
+        self.recentMessageDateTimeStamp = recentMessageDateTimeStamp
         self.maxNumberOfParticipants = maxNumberOfParticipants
         self.messageCount = messageCount
-        self.createdAt = createdAt
+        self.createdAtTimeStamp = createdAtTimeStamp
     }
 }
