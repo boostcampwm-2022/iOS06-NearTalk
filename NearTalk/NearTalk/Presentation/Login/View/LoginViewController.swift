@@ -14,7 +14,7 @@ import Then
 import UIKit
 
 final class LoginViewController: UIViewController {
-    private let logoView = UIImageView(image: UIImage(systemName: "map.circle.fill"))
+    private let logoView: UIImageView = UIImageView(image: UIImage(named: "ChatLogo"))
     private let loginButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline).then {
         $0.cornerRadius = 5
     }
@@ -47,9 +47,10 @@ final class LoginViewController: UIViewController {
         super.viewWillDisappear(animated)
     }
 }
+
 private extension LoginViewController {
     func configureUI() {
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .primaryBackground
         view.addSubview(logoView)
         view.addSubview(loginButton)
     }

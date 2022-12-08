@@ -5,6 +5,7 @@
 //  Created by dong eun shin on 2022/11/23.
 //
 
+import Kingfisher
 import SnapKit
 import UIKit
 
@@ -17,7 +18,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     private let textView: UITextView = {
         let view = UITextView()
-        view.font = .systemFont(ofSize: 18.0)
+        view.font = .systemFont(ofSize: 16.0)
         view.text = "message"
         view.textContainer.maximumNumberOfLines = 0
         view.textColor = .black
@@ -26,7 +27,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         view.layer.masksToBounds = false
         view.isEditable = false
         view.isScrollEnabled = false
-        view.textContainerInset = .init(top: 16, left: 16, bottom: 16, right: 16)
+        view.textContainerInset = .init(top: 13, left: 13, bottom: 13, right: 13)
         view.sizeToFit()
         return view
     }()
@@ -38,16 +39,16 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     private let timelabel: UILabel = UILabel().then { label in
         label.text = "timelabel"
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 8)
     }
     
-    private lazy var profileImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "heart"))
-        view.layer.cornerRadius = 20.0
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.clear.cgColor
-        return view
-    }()
+    private lazy var profileImageView: UIImageView = UIImageView().then { imageView in
+        imageView.layer.cornerRadius = 20.0
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.clear.cgColor
+        imageView.clipsToBounds = true
+        imageView.image = UIImage(systemName: "heart")
+    }
     
     // MARK: - LifeCycle
     
@@ -67,30 +68,47 @@ class ChatCollectionViewCell: UICollectionViewCell {
             make.bottom.equalToSuperview()
         }
         self.namelabel.text = ""
+        self.timelabel.text = ""
         self.profileImageView.image = nil
     }
 
-    func configure(isInComing: Bool, message: String, name: String? = nil) {
-        self.textView.text = message
-        self.textView.backgroundColor = isInComing ? .darkGray : .systemGray
-        self.namelabel.text = isInComing ? name : ""
-        self.profileImageView.image = isInComing ? UIImage(systemName: "heart") : nil
+    func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
+        let isInComing = messageItem.type == .receive ? true : false
         
+        self.textView.backgroundColor = isInComing ? .secondaryLabel : .primaryColor
+        self.textView.text = messageItem.message
+        self.namelabel.text = isInComing ? messageItem.userName : ""
+        self.timelabel.text = self.convertDateToString(with: messageItem.createdAt)
+                
         if isInComing {
+            self.setImage(path: messageItem.imagePath)
+            
             self.textView.snp.makeConstraints { make in
-                make.leading.equalTo(profileImageView.snp.trailing)
-                make.top.equalTo(namelabel.snp.bottom)
+                make.leading.equalTo(profileImageView.snp.trailing).inset(-5)
+                make.top.equalTo(namelabel.snp.bottom).inset(-2)
+            }
+            
+            self.timelabel.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.leading.equalTo(self.textView.snp.trailing)
             }
         } else {
+            self.profileImageView.image = nil
+            
             self.textView.snp.makeConstraints { make in
-                make.trailing.equalToSuperview()
+                make.trailing.equalToSuperview().inset(10)
                 make.top.equalToSuperview()
+            }
+            
+            self.timelabel.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview()
+                make.trailing.equalTo(self.textView.snp.leading)
             }
         }
     }
     
     private func addViews() {
-        [namelabel, profileImageView, textView].forEach {
+        [namelabel, profileImageView, textView, timelabel].forEach {
             self.contentView.addSubview($0)
         }
         
@@ -101,8 +119,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
         
         self.profileImageView.snp.makeConstraints { make in
             make.width.height.equalTo(40)
-            make.left.equalToSuperview()
-            make.right.equalTo(namelabel.snp.left)
+            make.left.equalToSuperview().inset(10)
+            make.right.equalTo(namelabel.snp.left).inset(-5)
             make.top.equalToSuperview()
         }
         
@@ -110,5 +128,26 @@ class ChatCollectionViewCell: UICollectionViewCell {
             make.width.lessThanOrEqualTo(250)
             make.bottom.equalToSuperview()
         }
+        
+        self.timelabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+        }
+    }
+    
+    private func setImage(path: String?) {
+        guard let path = path,
+              let url = URL(string: path)
+        else {
+            return
+        }
+        
+        self.profileImageView.kf.setImage(with: url)
+    }
+    
+    private func convertDateToString(with date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm"
+        
+        return dateFormatter.string(from: date)
     }
 }
