@@ -146,7 +146,7 @@ class DefaultChatViewModel: ChatViewModel {
             messageType: MessageType.text.rawValue,
             mediaPath: nil,
             mediaType: nil,
-            createdAt: Date()
+            createdAtTimeStamp: Date().timeIntervalSince1970
         )
         
         self.messagingUseCase.sendMessage(
@@ -212,7 +212,7 @@ private extension DefaultChatViewModel {
                 var newChatRoom = self.chatRoom.value
                 newChatRoom?.messageCount = messageCount + 1
                 newChatRoom?.recentMessageID = chatMessage.uuid
-                newChatRoom?.recentMessageDate = chatMessage.createdAt
+                newChatRoom?.recentMessageDateTimeStamp = chatMessage.createdAtTimeStamp
                 newChatRoom?.recentMessageText = chatMessage.text
                 if let newChatRoom, let myID = self.myID {
                     _ = self.messagingUseCase.updateChatRoom(chatRoom: newChatRoom, userID: myID)
