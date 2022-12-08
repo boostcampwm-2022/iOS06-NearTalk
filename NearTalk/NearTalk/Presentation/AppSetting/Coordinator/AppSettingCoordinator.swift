@@ -34,7 +34,8 @@ final class AppSettingCoordinator: Coordinator {
             action: Action(presentLogoutResult: self.presentLogoutResult(success:),
                            presentDropoutResult: self.presentDropoutResult(success:),
                            presentNotificationPrompt: self.presentNotificationPrompt,
-                           presentReauthenticateView: self.presentAppleAuthenticateViewController, showThemeSettingPage: self.showThemeSettingPage))
+                           presentReauthenticateView: self.presentAppleAuthenticateViewController,
+                           showThemeSettingPage: self.showThemeSettingPage))
         self.navigationController?.pushViewController(viewController, animated: true)
     }
     
