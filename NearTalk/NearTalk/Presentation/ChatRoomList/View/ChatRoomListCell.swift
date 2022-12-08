@@ -264,32 +264,33 @@ class ChatRoomListCell: UICollectionViewCell {
         guard let location, let accessibleRadius
         else { return }
         
-        UserDefaults.standard.rx
-            .observe([String: Double].self, "CurrentUserLocation")
-            .subscribe(onNext: { (value: [String: Double]?) in
-                guard let longitude = value?["longitude"],
-                      let latitude = value?["latitude"] else { return }
-                
-                let newNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
-                let distance = location.distance(from: newNCLocation)
-                
-                print("\(self.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
-                
-                if distance <= accessibleRadius * 1000 {
-                    self.inArea = true
-                    DispatchQueue.main.async {
-                        self.lockIcon.isHidden = true
-                        self.view.isHidden = true
-                    }
-                } else {
-                    self.inArea = false
-                    DispatchQueue.main.async {
-                        self.lockIcon.isHidden = false
-                        self.view.isHidden = false
-                    }
+        Observable.zip(
+            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
+            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
+        )
+        .subscribe(onNext: { [weak self] (latitude, longitude) in
+            guard let longitude,
+                  let latitude else { return }
+            
+            let newNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
+            let distance = location.distance(from: newNCLocation)
+            
+            print("\(self?.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
+            
+            if distance <= accessibleRadius * 1000 {
+                self?.inArea = true
+                DispatchQueue.main.async {
+                    self?.lockIcon.isHidden = true
+                    self?.view.isHidden = true
                 }
-                
-            })
-            .disposed(by: disposeBag)
+            } else {
+                self?.inArea = false
+                DispatchQueue.main.async {
+                    self?.lockIcon.isHidden = false
+                    self?.view.isHidden = false
+                }
+            }
+        })
+        .disposed(by: disposeBag)
     }
 }
