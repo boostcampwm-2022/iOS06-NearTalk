@@ -60,9 +60,9 @@ final class MainMapViewModel {
             .disposed(by: self.disposeBag)
         
         input.currentUserMapRegion
-            .flatMap { _ in
-                let dummyChatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchDummyChatRooms()
-                return dummyChatRooms
+            .flatMap { region in
+                let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
+                return chatRooms
             }
             .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
