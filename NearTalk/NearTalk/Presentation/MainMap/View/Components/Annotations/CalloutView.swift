@@ -6,6 +6,8 @@
 //
 
 import Kingfisher
+import RxSwift
+import RxCocoa
 import SnapKit
 import UIKit
 
@@ -50,16 +52,20 @@ final class CalloutView: UIView {
     
     // MARK: - Properties
     private let annotation: ChatRoomAnnotation
+    private let coordinator: MainMapCoordinator?
+    private let disposeBag: DisposeBag = .init()
     
     // MARK: - LifeCycles
-    init(annotation: ChatRoomAnnotation) {
+    init(annotation: ChatRoomAnnotation, coordinator: MainMapCoordinator?) {
         self.annotation = annotation
+        self.coordinator = coordinator
 
         super.init(frame: .zero)
 
         self.addSubviews()
         self.configureConstraints()
         self.fetch()
+        self.bind()
     }
     
     required init?(coder: NSCoder) {
@@ -99,6 +105,16 @@ final class CalloutView: UIView {
         self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomInfo.location)
         self.fetchImage(path: chatRoomInfo.roomImagePath)
         self.chatRoomDescription.text = chatRoomInfo.roomDescription
+    }
+    
+    private func bind() {
+        self.chatRoomEnterButton.rx.tap
+            .bind { [weak self] _ in
+                if let chatRoomID = self?.annotation.chatRoomInfo.uuid {
+                    self?.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
+                }
+            }
+            .disposed(by: self.disposeBag)
     }
 }
 
