@@ -39,7 +39,7 @@ struct GroupChatRoomListData: Hashable {
 struct DMChatRoomListData: Hashable {
     var uuid: String?
     var roomImagePath: String?
-    var roomName: String?
+    var userList: [String]?
     var recentMessageID: String?
     var recentMessageText: String?
     var recentMessageDate: Date?
@@ -48,7 +48,7 @@ struct DMChatRoomListData: Hashable {
     init(data: ChatRoom) {
         self.uuid = data.uuid
         self.roomImagePath = data.roomImagePath
-        self.roomName = data.roomName
+        self.userList = data.userList
         self.recentMessageID = data.recentMessageID
         self.messageCount = data.messageCount
         self.recentMessageText = data.recentMessageText

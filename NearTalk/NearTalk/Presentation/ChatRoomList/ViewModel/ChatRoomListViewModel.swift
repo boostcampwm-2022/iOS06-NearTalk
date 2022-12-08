@@ -19,6 +19,8 @@ struct ChatRoomListViewModelActions {
 
 protocol ChatRoomListViewModelInput {
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
+    func getUserProfile(userID: String) -> Single<UserProfile>
+    func getMyProfile() -> UserProfile?
     func didDMChatRoomList()
     func didGroupChatRoomList()
     func didCreateChatRoom()
@@ -63,8 +65,12 @@ final class DefaultChatRoomListViewModel: ChatRoomListViewModel {
         self.chatRoomListUseCase.getUserChatRoomTicket(roomID: roomID)
     }
     
-    func distanceOperate(distance: Double) {
-        
+    func getMyProfile() -> UserProfile? {
+        self.chatRoomListUseCase.getMyProfile()
+    }
+    
+    func getUserProfile(userID: String) -> Single<UserProfile> {
+        return self.chatRoomListUseCase.getUserProfile(userID: userID)
     }
 }
 

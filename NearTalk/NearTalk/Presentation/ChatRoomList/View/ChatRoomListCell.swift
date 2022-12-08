@@ -125,11 +125,11 @@ class ChatRoomListCell: UICollectionViewCell {
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
         self.uuid = dmData.uuid
-        self.name.text = dmData.roomName
         self.imageLoad(path: dmData.roomImagePath)
         self.recentMessage.text = dmData.recentMessageText == nil ? "새로 생성된 방입니다" : dmData.recentMessageText
         self.unreadMessageCheck(roomID: dmData.uuid ?? "", number: dmData.messageCount)
         self.dateOperate(date: dmData.recentMessageDate)
+        self.dmRoomNameSetup(userList: dmData.userList)
     }
     
     // MARK: - Configure views
@@ -295,5 +295,26 @@ class ChatRoomListCell: UICollectionViewCell {
             }
         })
         .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - DM Chat Setting
+extension ChatRoomListCell {
+    func dmRoomNameSetup(userList: [String]?) {
+        guard let userList,
+              let myProfile = self.viewModel?.getMyProfile(),
+              let myUUID = myProfile.uuid
+        else { return }
+        
+        userList.forEach {
+            if $0 != myUUID {
+                self.viewModel?.getUserProfile(userID: $0)
+                    .subscribe(onSuccess: { userProfile in
+                        self.name.text = userProfile.username
+                        self.imageLoad(path: userProfile.profileImagePath)
+                    })
+                    .disposed(by: disposeBag)
+            }
+        }
     }
 }
