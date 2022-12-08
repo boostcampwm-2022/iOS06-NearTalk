@@ -8,11 +8,11 @@
 import RxSwift
 import UIKit
 
-class ChatViewController: UIViewController {
+final class ChatViewController: UIViewController {
     // MARK: - Proporties
     
     private let viewModel: ChatViewModel
-    private var messgeItems: [MessageItem]
+    private var messageItems: [MessageItem]
     
     private let disposeBag: DisposeBag = DisposeBag()
     private lazy var dataSource: DataSource = makeDataSource()
@@ -36,7 +36,7 @@ class ChatViewController: UIViewController {
     // MARK: - Lifecycles
     
     init(viewModel: ChatViewModel) {
-        self.messgeItems = []
+        self.messageItems = []
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -57,9 +57,6 @@ class ChatViewController: UIViewController {
         // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         view.addGestureRecognizer(tapGesture)
-        
-        // diffableDataSource
-        applySnapshot(animatingDifferences: false)
     }
     
     private func addSubviews() {
@@ -67,17 +64,16 @@ class ChatViewController: UIViewController {
             self.view.addSubview($0)
         }
         
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(10)
-            make.bottom.equalTo(chatInputAccessoryView.snp.top)
+        chatInputAccessoryView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(55)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
-        chatInputAccessoryView.snp.makeConstraints { make in
-            make.width.equalTo(self.view.frame.width)
-            make.height.equalTo(50)
-            make.bottom.equalToSuperview()
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        collectionView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
     }
     
@@ -101,39 +97,47 @@ class ChatViewController: UIViewController {
         return layout
     }
     
-    private func scrolltoBottom() {
-        let indexPath = IndexPath(item: messgeItems.count - 1, section: 0)
+    private func scrollToBottom() {
+        let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
         
     private func bind() {
+        self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
+            .map { !$0.isEmpty }
+            .bind(to: chatInputAccessoryView.sendButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
         self.chatInputAccessoryView.sendButton.rx.tap
             .withLatestFrom(chatInputAccessoryView.messageInputTextField.rx.text.orEmpty)
+            .filter { !$0.isEmpty }
             .bind { [weak self] message in
                 self?.viewModel.sendMessage(message)
                 self?.chatInputAccessoryView.messageInputTextField.text = nil
+                self?.chatInputAccessoryView.sendButton.isEnabled = false
             }
             .disposed(by: disposeBag)
         
-        self.viewModel.chatMessages
-            .subscribe { event in
-                switch event {
-                case .next(let newMessage):
-                    guard let myID = self.viewModel.myID
-                    else {
-                        return
-                    }
-                    let userProfile = self.viewModel.getUserProfile(userID: newMessage.senderID ?? "")
-                    let messageItem = MessageItem(chatMessage: newMessage, myID: myID, userName: userProfile?.username)
-                    self.messgeItems.append(messageItem)
-                    self.applySnapshot()
-                    self.scrolltoBottom()
-                case .error(let error):
-                    print(">>ERROR: ", error)
-                case .completed:
-                    print(">>observeMessage completed")
+        self.viewModel.observeChatMessage?
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(onNext: { [weak self] message in
+                guard let self,
+                        let myID = self.viewModel.myID
+                else {
+                    return
                 }
-            }
+                let userProfile = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                let messageItem = MessageItem(
+                    chatMessage: message,
+                    myID: myID,
+                    userProfile: userProfile
+                )
+                self.messageItems.append(messageItem)
+                let snapshot = self.appendSnapshot(items: self.messageItems)
+                self.dataSource.apply(snapshot, animatingDifferences: false) {
+                    self.scrollToBottom()
+                }
+            })
             .disposed(by: disposeBag)
         
         self.viewModel.chatRoom
@@ -159,30 +163,30 @@ private extension ChatViewController {
     }
     
     func makeDataSource() -> DataSource {
-        let datasource = DataSource(collectionView: collectionView) { collectionView, indexPath, itemIdentifier in
+        let datasource = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
             
-            guard let cell = collectionView.dequeueReusableCell(
+            guard let self,
+                  let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatCollectionViewCell.identifier,
-                for: indexPath) as? ChatCollectionViewCell,
-                  let newMessage = itemIdentifier.message
+                for: indexPath) as? ChatCollectionViewCell
             else {
                 return UICollectionViewCell()
             }
-            
-            let messageType = itemIdentifier.type
-            cell.configure(isInComing: messageType == .receive ? true : false, message: newMessage, name: itemIdentifier.userName)
-            
+        
+            cell.configure(messageItem: item) {
+                var snapshot = self.dataSource.snapshot()
+                snapshot.reloadItems([item])
+            }
             return cell
         }
         return datasource
     }
     
-    func applySnapshot(animatingDifferences: Bool = true) {
+    func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messgeItems.sorted { $0.createdDate < $1.createdDate })
-        
-        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
+        snapshot.appendItems(messageItems.sorted { $0.createdAt < $1.createdAt })
+        return snapshot
     }
 }
 
@@ -220,7 +224,7 @@ private extension ChatViewController {
         }
         
         animator.startAnimation()
-        self.scrolltoBottom()
+        self.scrollToBottom()
     }
     
     @objc

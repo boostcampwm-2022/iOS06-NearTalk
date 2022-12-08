@@ -20,7 +20,7 @@ final class MyProfileView: UIView {
     }
     
     private let fieldStack: UIStackView = UIStackView().then {
-        $0.distribution = .fillProportionally
+        $0.distribution = .fillEqually
         $0.alignment = .fill
         $0.axis = .vertical
     }
