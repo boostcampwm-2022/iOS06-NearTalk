@@ -11,6 +11,7 @@ import RxSwift
 
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
+    func viewDidDisappear()
 }
 
 protocol ChatViewModelOut {
@@ -30,7 +31,7 @@ class DefaultChatViewModel: ChatViewModel {
     private let chatRoomID: String
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
-    private let disposeBag: DisposeBag = DisposeBag()
+    private var disposeBag: DisposeBag = DisposeBag()
     var userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     var userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
 
@@ -167,8 +168,12 @@ class DefaultChatViewModel: ChatViewModel {
     }
     
     func getUserProfile(userID: String) -> UserProfile? {
-        print(userProfileList)
+//        print(userProfileList)
         return self.userProfileList[userID]
+    }
+    
+    func viewDidDisappear() {
+        self.disposeBag = DisposeBag()
     }
 }
 

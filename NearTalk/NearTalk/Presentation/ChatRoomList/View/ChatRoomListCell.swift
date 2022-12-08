@@ -231,6 +231,8 @@ class ChatRoomListCell: UICollectionViewCell {
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
                           let number = number,
                           number > lastRoomMessageCount else {
+                        print(number)
+                        print(ticket)
                         
                         DispatchQueue.main.async {
                             self?.unreadMessageCount.isHidden = true
@@ -278,7 +280,7 @@ class ChatRoomListCell: UICollectionViewCell {
             let chatNCLocation: NCLocation = NCLocation(latitude: currentLatitude, longitude: currentLongitude)
             let distance = currentNCLocation.distance(from: chatNCLocation)
             
-            print("\(self?.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
+//            print("\(self?.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
             
             if distance <= accessibleRadius * 1000 {
                 self?.inArea = true

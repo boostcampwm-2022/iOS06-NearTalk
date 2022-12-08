@@ -101,10 +101,8 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                                                   accessibleRadius: nil,
                                                   recentMessageID: nil,
                                                   recentMessageText: nil,
-                                                  recentMessageDate: Date(),
                                                   maxNumberOfParticipants: 2,
-                                                  messageCount: nil,
-                                                  createdAt: Date())
+                                                  messageCount: nil)
                 
                 // 상대 프로필 업데이트 하는 로직 없음
 //                self.fetchProfileUseCase
