@@ -33,14 +33,15 @@ protocol CreateGroupChatViewModel: CreateGroupChatViewModelInput, CreateGroupCha
 }
 
 final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
+    // MARK: - Proporties
+    
     var thumbnailImage: RxCocoa.Driver<Data?> {
-        self.imageRelay.asDriver()
+        self.imageBehaviorRelay.asDriver()
     }
     
     var maxRangeLabel: Driver<String>
     var createChatButtonIsEnabled: Driver<Bool>
 
-    // MARK: - Proporties
     private let disposeBag = DisposeBag()
     
     private let createGroupChatUseCase: CreateGroupChatUseCase
@@ -55,7 +56,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     private var descriptionPublishSubject = PublishSubject<String>()
     private var maxRange: Int = 0
     private var maxRangePublishSubject = PublishSubject<Int>()
-    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    private let imageBehaviorRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     
     init(createGroupChatUseCase: CreateGroupChatUseCase,
          userDefaultUseCase: UserDefaultUseCase,
@@ -101,11 +102,11 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     }
     
     func setThumbnailImage(_ binary: Data?) {
-        self.imageRelay.accept(binary)
+        self.imageBehaviorRelay.accept(binary)
     }
 
     func createChatButtonDIdTapped() {
-        if let image = self.imageRelay.value {
+        if let image = self.imageBehaviorRelay.value {
             self.uploadImageUseCase.execute(image: image)
                 .subscribe(onSuccess: { [weak self] imagePath in
                     self?.createChatRoom(imagePath: imagePath)
