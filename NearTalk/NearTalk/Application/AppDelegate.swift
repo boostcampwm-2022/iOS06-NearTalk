@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
             )
+        self.bindToUserDefaultsTheme()
         return true
     }
 
@@ -90,5 +91,33 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
         Messaging.messaging().apnsToken = deviceToken;
+    }
+}
+
+extension AppDelegate {
+    func bindToUserDefaultsTheme() {
+        UserDefaults.standard.rx
+            .observe(String.self, AppTheme.keyName)
+            .compactMap { $0 }
+            .compactMap { AppTheme(rawValue: $0) }
+            .asObservable()
+            .subscribe { [weak self] in
+                self?.applyTheme(theme: $0)
+            }
+            .disposed(by: self.disposeBag)
+    }
+    
+    func initTheme() {
+        if UserDefaults.standard.string(forKey: AppTheme.keyName) == nil {
+            UserDefaults.standard.set(AppTheme.system.rawValue, forKey: AppTheme.keyName)
+        }
+    }
+    
+    func applyTheme(theme: AppTheme) {
+        UIApplication.shared.connectedScenes.forEach { scene in
+            (scene as? UIWindowScene)?.windows.forEach { window in
+                window.applyTheme(theme: theme)
+            }
+        }
     }
 }
