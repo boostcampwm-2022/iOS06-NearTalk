@@ -16,7 +16,7 @@ enum AppSettingSection: Hashable & Sendable {
 enum AppSettingItem: String, Hashable & Sendable & CaseIterable {
     case logout = "로그아웃"
     case drop = "탈퇴"
-    case developerInfo = "개발자 정보"
+    case theme = "테마"
     case alarmOnOff = "알람 on/off"
 }
 
@@ -25,6 +25,7 @@ protocol AppSettingAction {
     var presentDropoutResult: ((Bool) -> Void)? { get }
     var presentNotificationPrompt: (() -> Single<Bool>)? { get }
     var presentReauthenticateView: (() -> Void)? { get }
+    var showThemeSettingPage: (() -> Void)? { get }
 }
 
 protocol AppSettingInput {
@@ -32,6 +33,7 @@ protocol AppSettingInput {
     func tableRowSelected(item: AppSettingItem?)
     func notificationSwitchToggled(on: Bool)
     func reauthenticate(token: String)
+    func failToAuthenticate()
 }
 
 protocol AppSettingOutput {
@@ -61,7 +63,7 @@ final class DefaultAppSettingViewModel {
     }
 }
 
-extension DefaultAppSettingViewModel: AppSettingViewModel {
+extension DefaultAppSettingViewModel: AppSettingViewModel {    
     var interactionEnable: Driver<Bool> {
         self.interactionEnableRelay.asDriver()
     }
@@ -92,6 +94,8 @@ extension DefaultAppSettingViewModel: AppSettingViewModel {
         case .drop:
             self.interactionEnableRelay.accept(false)
             self.action.presentReauthenticateView?()
+        case .theme:
+            self.action.showThemeSettingPage?()
         default:
             return
         }
@@ -120,6 +124,10 @@ extension DefaultAppSettingViewModel: AppSettingViewModel {
                 self?.action.presentDropoutResult?(false)
             }
             .disposed(by: self.disposeBag)
+    }
+    
+    func failToAuthenticate() {
+        self.interactionEnableRelay.accept(true)
     }
 }
 
