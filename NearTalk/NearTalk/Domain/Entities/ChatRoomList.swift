@@ -17,6 +17,8 @@ struct GroupChatRoomListData: Hashable {
     var recentMessageDate: Date?
     var messageCount: Int?
     var location: NCLocation?
+    var latitude: Double?
+    var longitude: Double?
     
     init(data: ChatRoom) {
         self.uuid = data.uuid
@@ -28,6 +30,8 @@ struct GroupChatRoomListData: Hashable {
         self.recentMessageText = data.recentMessageText
         self.recentMessageDate = data.recentMessageDate
         self.location = data.location
+        self.latitude = data.latitude
+        self.longitude = data.longitude
     }
     
 }

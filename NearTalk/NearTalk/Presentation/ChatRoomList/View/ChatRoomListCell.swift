@@ -116,7 +116,9 @@ class ChatRoomListCell: UICollectionViewCell {
         self.recentMessage.text = groupData.recentMessageText == nil ? "새로 생성된 방입니다" : groupData.recentMessageText
         self.unreadMessageCheck(roomID: groupData.uuid ?? "", number: groupData.messageCount)
         self.dateOperate(date: groupData.recentMessageDate)
-        self.accessibleRadiusCheck(location: groupData.location, accessibleRadius: groupData.accessibleRadius)
+        self.accessibleRadiusCheck(latitude: groupData.latitude,
+                                   longitude: groupData.longitude,
+                                   accessibleRadius: groupData.accessibleRadius)
         
     }
     
@@ -260,20 +262,21 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
-    private func accessibleRadiusCheck(location: NCLocation?, accessibleRadius: Double?) {
-        guard let location, let accessibleRadius
+    private func accessibleRadiusCheck(latitude: Double?, longitude: Double?, accessibleRadius: Double?) {
+        guard let latitude, let longitude, let accessibleRadius
         else { return }
         
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
             UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
         )
-        .subscribe(onNext: { [weak self] (latitude, longitude) in
-            guard let longitude,
-                  let latitude else { return }
+        .subscribe(onNext: { [weak self] (currentLatitude, currentLongitude) in
+            guard let currentLatitude,
+                  let currentLongitude else { return }
             
-            let newNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
-            let distance = location.distance(from: newNCLocation)
+            let currentNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
+            let chatNCLocation: NCLocation = NCLocation(latitude: currentLatitude, longitude: currentLongitude)
+            let distance = currentNCLocation.distance(from: chatNCLocation)
             
             print("\(self?.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
             

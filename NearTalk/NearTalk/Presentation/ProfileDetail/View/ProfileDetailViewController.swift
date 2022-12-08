@@ -145,11 +145,6 @@ private extension ProfileDetailViewController {
     }
     
     func binding() {
-        self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
-            .map({_ in})
-            .bind(to: viewModel.viewWillAppearEvent)
-            .disposed(by: disposeBag)
-        
         self.startChatButton.rx.tap
             .bind(to: viewModel.startChatButtonDidTapEvent)
             .disposed(by: disposeBag)

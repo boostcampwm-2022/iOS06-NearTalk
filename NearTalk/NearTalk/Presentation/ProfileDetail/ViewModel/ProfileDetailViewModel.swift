@@ -16,7 +16,6 @@ struct ProfileDetailViewModelActions {
 }
 
 protocol ProfileDetailViewModelInput {
-    var viewWillAppearEvent: PublishRelay<Void> { get set }
     var startChatButtonDidTapEvent: PublishRelay<Void> { get set }
     var deleteFriendButtonDidTapEvent: PublishRelay<Void> { get set }
 }
@@ -38,13 +37,12 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     
     var profileImageURL: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
     
-    var viewWillAppearEvent = PublishRelay<Void>()
-    
     var startChatButtonDidTapEvent = PublishRelay<Void>()
     
     var deleteFriendButtonDidTapEvent = PublishRelay<Void>()
     
-    private let userID: String
+    private var userID: String
+    private var myID: String?
     private let fetchProfileUseCase: FetchProfileUseCase
     private let uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase
     private let removeFriendUseCase: RemoveFriendUseCase
@@ -73,43 +71,60 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                 print("ERROR: fetchUserInfo - ", error.localizedDescription)
             })
             .disposed(by: self.disposeBag)
+        
+        self.fetchProfileUseCase.fetchMyProfile()
+            .subscribe(onSuccess: { [weak self] profile in
+                self?.myID = profile.uuid
+            })
+            .disposed(by: disposeBag)
     }
     
     private func bind() {
-//        viewWillAppearEvent
-//            .subscribe(onNext: { [weak self] in
-//                guard let self else {
-//                    return
-//                }
-//                self.fetchProfileUseCase.fetchUserInfo(with: self.userID)
-//                    .subscribe(onSuccess: { info in
-//                        self.userName.accept(info.username ?? "Unkown")
-//                        self.statusMessage.accept(info.statusMessage ?? "Unkown")
-//                        self.profileImageURL.accept(info.profileImagePath ?? "")
-//                    })
-//                    .disposed(by: self.disposeBag)
-//            })
-//            .disposed(by: disposeBag)
         
         startChatButtonDidTapEvent
             .subscribe(onNext: { [weak self] in
-                // TODO: - DM 구현 필요
-//                let chatRoom = ChatRoom(
-//                    uuid: <#T##String?#>,
-//                    userList: <#T##[String]?#>,
-//                    roomImagePath: <#T##String?#>,
-//                    roomType: "DM",
-//                    roomName: <#T##String?#>,
-//                    roomDescription: <#T##String?#>,
-//                    location: <#T##NCLocation?#>,
-//                    accessibleRadius: <#T##Double?#>,
-//                    recentMessageID: <#T##String?#>,
-//                    maxNumberOfParticipants: <#T##Int?#>,
-//                    messageCount: <#T##Int?#>
-//                )
-//                self.uploadChatRoomInfoUseCase.createChatRoom(chatRoom)
-                print("startChatButtonDidTapEvent")
-//                self?.actions.showChatViewController("chatroomUUID")
+                guard let self,
+                      let myID = self.myID
+                else { return }
+                
+                let chatRoomUUID = UUID().uuidString
+                
+                let chatRoom: ChatRoom = ChatRoom(uuid: chatRoomUUID,
+                                                  userList: [self.userID, myID],
+                                                  roomImagePath: nil,
+                                                  roomType: "dm",
+                                                  roomName: "DM Chat",
+                                                  roomDescription: nil,
+                                                  location: nil,
+                                                  latitude: nil,
+                                                  longitude: nil,
+                                                  accessibleRadius: nil,
+                                                  recentMessageID: nil,
+                                                  recentMessageText: nil,
+                                                  recentMessageDate: Date(),
+                                                  maxNumberOfParticipants: 2,
+                                                  messageCount: nil,
+                                                  createdAt: Date())
+                
+                // 상대 프로필 업데이트 하는 로직 없음
+//                self.fetchProfileUseCase
+                
+                self.fetchProfileUseCase.fetchUserProfile(with: myID)
+                    .subscribe(onSuccess: { userProfile in
+                        var newUserProfile = userProfile
+                        newUserProfile.chatRooms?.append(chatRoomUUID)
+                        self.fetchProfileUseCase.updateUserProfile(userProfile: newUserProfile)
+                            .subscribe(onSuccess: { _ in
+                                print("내 프로필 업데이트")
+                            })
+                            .disposed(by: self.disposeBag)
+                            
+                    })
+                    .disposed(by: self.disposeBag)
+                
+                self.uploadChatRoomInfoUseCase.createChatRoom(chatRoom)
+                    .subscribe(onCompleted: { self.actions.showChatViewController(chatRoomUUID) })
+                    .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
         
