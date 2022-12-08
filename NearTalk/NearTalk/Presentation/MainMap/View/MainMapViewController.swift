@@ -114,7 +114,6 @@ final class MainMapViewController: UIViewController {
                 return self.convertToNCMapRegion(with: region)
             }
         )
-        
         // MARK: - Bind VM output
         let output = self.viewModel.transform(input: input)
         output.moveToCurrentLocationEvent
@@ -200,6 +199,7 @@ private extension MKMapView {
     
     private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 5000) {
         let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: coordinateRegion)
+        
         self.setCameraBoundary(cameraBoundary, animated: true)
     }
     
@@ -208,6 +208,7 @@ private extension MKMapView {
             minCenterCoordinateDistance: minDistance,
             maxCenterCoordinateDistance: maxDistance
         )
+        
         self.setCameraZoomRange(zoomRange, animated: true)
     }
 }
@@ -220,15 +221,11 @@ extension MainMapViewController: MKMapViewDelegate {
         
         switch chatRoomAnnotation.roomType {
         case .group:
-            return GroupChatRoomAnnotationView(
-                annotation: chatRoomAnnotation,
-                reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier
-            )
+            return GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
+                                               reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
         case .directMessage:
-            return DmChatRoomAnnotationView(
-                annotation: chatRoomAnnotation,
-                reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier
-            )
+            return DmChatRoomAnnotationView(annotation: chatRoomAnnotation,
+                                            reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
         }
     }
 }
