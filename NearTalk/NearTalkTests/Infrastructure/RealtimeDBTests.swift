@@ -9,7 +9,7 @@ import RxBlocking
 import RxSwift
 import XCTest
 
-final class FirebaseTests: XCTestCase {
+final class RealtimeDBTests: XCTestCase {
     
     private let realtimeDB: RealTimeDatabaseService = DefaultRealTimeDatabaseService()
 
@@ -22,9 +22,9 @@ final class FirebaseTests: XCTestCase {
     }
     
     func test_최근메세지_10개_가져오기() throws {
-        let pageCount: Int = 4
-        let roomID: String = "484974D2-E3AB-4613-B4F5-CC788D36BB7E" // 서버에 있는 채팅방 ID 필요
-        let date: Date = Date(timeIntervalSince1970: 1670478819.9933949) // 불러오고 싶은 기준 시간
+        let pageCount: Int = 10
+        let roomID: String = "81D881F7-D25C-41DC-AA1A-4EC38530B201" // 서버에 있는 채팅방 ID 필요
+        let date: Date = Date() // 불러오고 싶은 기준 시간
         
         let fetchMessage: Single<[ChatMessage]> = self.realtimeDB.fetchMessages(date: date, pageCount: pageCount, roomID: roomID)
         let result: [ChatMessage] = try fetchMessage.toBlocking().first()!

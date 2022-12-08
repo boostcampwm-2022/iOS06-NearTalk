@@ -36,14 +36,13 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
             .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan)
         ]
         let latitudeFilteredChatRooms: Single<[ChatRoom]> = service.fetchList(dataKey: .chatRoom, queryList: queryList)
-        
+
         return latitudeFilteredChatRooms
             .map { chatRooms in
                 chatRooms.filter {
-                    guard let chatRoomLongitude = $0.location?.longitude
+                    guard let chatRoomLongitude = $0.longitude
                     else { return false }
-                    
-                    return southWest.longitude < chatRoomLongitude && chatRoomLongitude < northEast.longitude
+                    return southWest.longitude..<northEast.longitude ~= chatRoomLongitude
                 }
             }
     }
