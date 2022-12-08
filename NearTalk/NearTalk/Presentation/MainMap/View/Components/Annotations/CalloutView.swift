@@ -101,8 +101,14 @@ final class CalloutView: UIView {
     
     private func fetch() {
         let chatRoomInfo = self.annotation.chatRoomInfo
+        
+        guard let chatRoomLatitude = chatRoomInfo.latitude,
+              let chatRoomLongitude = chatRoomInfo.longitude
+        else { return }
+        
         self.chatRoomName.text = chatRoomInfo.roomName
-        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomInfo.location)
+        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
+        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomLocation)
         self.fetchImage(path: chatRoomInfo.roomImagePath)
         self.chatRoomDescription.text = chatRoomInfo.roomDescription
     }
