@@ -25,8 +25,9 @@ final class MainMapViewModel {
     struct Input {
         let didTapMoveToCurrentLocationButton: Observable<Void>
         let didTapCreateChatRoomButton: Observable<Void>
-        let currentUserMapRegion: Observable<NCMapRegion>
         let didTapAnnotationView: Observable<MKAnnotation>
+        let didUpdateUserLocation: Observable<NCMapRegion>
+        let didUpdateMapViewRegion: Observable<NCMapRegion>
     }
     
     struct Output {
@@ -59,7 +60,15 @@ final class MainMapViewModel {
             .bind(to: output.showCreateChatRoomViewEvent)
             .disposed(by: self.disposeBag)
         
-        input.currentUserMapRegion
+        input.didUpdateUserLocation
+            .flatMap { region in
+                let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
+                return chatRooms
+            }
+            .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
+            .disposed(by: self.disposeBag)
+        
+        input.didUpdateMapViewRegion
             .flatMap { region in
                 let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
                 return chatRooms
