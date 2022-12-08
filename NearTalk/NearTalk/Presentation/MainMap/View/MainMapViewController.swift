@@ -148,7 +148,9 @@ final class MainMapViewController: UIViewController {
                 guard let mainMapVC = self
                 else { return }
                 
-                self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
+                if chatRooms.count > 1 {
+                    self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
+                }
             })
             .disposed(by: self.disposeBag)
     }
