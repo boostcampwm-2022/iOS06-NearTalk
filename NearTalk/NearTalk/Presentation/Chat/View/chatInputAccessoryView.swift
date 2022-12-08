@@ -8,11 +8,22 @@
 import UIKit
 
 class ChatInputAccessoryView: UIView {
+    
+    lazy var messageInputView = UIView().then {
+        $0.layer.borderWidth = 1.5
+        $0.layer.borderColor = UIColor.secondaryLabel?.cgColor
+        $0.layer.cornerRadius = 15
+        $0.clipsToBounds = true
+        $0.backgroundColor = .white
+        
+    }
+    
     lazy var messageInputTextField = UITextField().then {
+        $0.backgroundColor = .clear
+        $0.textColor = .black
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.layer.cornerRadius = 15
-        $0.layer.borderWidth = 2.0
-        $0.layer.borderColor = UIColor.primaryColor?.cgColor
+        $0.clipsToBounds = true
     }
     
     lazy var sendButton = UIButton(type: .system).then {
@@ -20,6 +31,11 @@ class ChatInputAccessoryView: UIView {
         let image = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: imageConfigure)
         $0.setImage(image, for: .normal)
         $0.tintColor = .primaryColor
+    }
+    
+    lazy var addButton = UIButton(type: .custom).then {
+        $0.setImage(UIImage(systemName: "plus"), for: .normal)
+        $0.tintColor = .label
     }
     
     override init(frame: CGRect) {
@@ -32,8 +48,14 @@ class ChatInputAccessoryView: UIView {
     }
     
     private func addSubviews() {
-        [messageInputTextField, sendButton].forEach {
+        [addButton, messageInputView, messageInputTextField, sendButton].forEach {
             self.addSubview($0)
+        }
+        addButton.snp.makeConstraints { make in
+            make.centerY.equalTo(self)
+            make.leading.equalTo(self).offset(8)
+            make.height.width.equalTo(35)
+            
         }
         
         sendButton.snp.makeConstraints { make in
@@ -42,10 +64,17 @@ class ChatInputAccessoryView: UIView {
             make.trailing.equalToSuperview().inset(20)
         }
         
+        messageInputView.snp.makeConstraints { make in
+            make.height.equalTo(35)
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(addButton.snp.trailing).offset(8)
+            make.trailing.equalTo(sendButton.snp.leading).offset(-20)
+        }
+        
         messageInputTextField.snp.makeConstraints { make in
             make.height.equalTo(35)
             make.centerY.equalToSuperview()
-            make.leading.equalToSuperview().offset(20)
+            make.leading.equalTo(addButton.snp.trailing).offset(16)
             make.trailing.equalTo(sendButton.snp.leading).offset(-20)
         }
     }
