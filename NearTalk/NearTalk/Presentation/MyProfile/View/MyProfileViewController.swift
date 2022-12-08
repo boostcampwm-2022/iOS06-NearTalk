@@ -121,6 +121,7 @@ private extension MyProfileViewController {
             .navigationBar
             .topItem?
             .backButtonDisplayMode = .minimal
+        self.navigationController?.navigationBar.tintColor = .label
 
         self.navigationItem.title = "마이 프로필"
         self.navigationItem.hidesBackButton = true

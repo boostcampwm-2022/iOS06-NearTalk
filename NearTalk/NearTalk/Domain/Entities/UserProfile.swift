@@ -24,7 +24,20 @@ struct UserProfile: BaseEntity {
     /// FCM 토큰
     var fcmToken: String?
     
-    init(uuid: String? = nil, username: String? = nil, email: String? = nil, statusMessage: String? = nil, profileImagePath: String? = nil, friends: [String]? = [], chatRooms: [String]? = [], fcmToken: String? = nil) {
+    /// Date().timeIntervalSince1970 값
+    var createdAtTimeStamp: Double?
+    
+    init(
+        uuid: String? = nil,
+        username: String? = nil,
+        email: String? = nil,
+        statusMessage: String? = nil,
+        profileImagePath: String? = nil,
+        friends: [String]? = [],
+        chatRooms: [String]? = [],
+        fcmToken: String? = nil,
+        createdAtTimeStamp: Double? = Date().timeIntervalSince1970
+    ) {
         self.uuid = uuid
         self.username = username
         self.email = email
@@ -33,5 +46,6 @@ struct UserProfile: BaseEntity {
         self.friends = friends
         self.chatRooms = chatRooms
         self.fcmToken = fcmToken
+        self.createdAtTimeStamp = createdAtTimeStamp
     }
 }

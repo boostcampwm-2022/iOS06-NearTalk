@@ -14,6 +14,9 @@ struct UserChatRoomTicket: BaseEntity {
     var roomID: String?
     var lastReadMessageID: String?
     
+    /// Date().timeIntervalSince1970 값
+    var createdAtTimeStamp: Double?
+    
     /// 읽었을 당시 채팅방의 총 메시지 갯수
     var lastRoomMessageCount: Int?
 }

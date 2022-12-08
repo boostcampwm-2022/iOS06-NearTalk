@@ -73,6 +73,7 @@ extension AppCoordinator: LoginCoordinatorDependency {
         guard let appDIContainer else {
             return
         }
+        self.navigationController?.navigationBar.isHidden = false
         let onboardingDIContainer: DefaultOnboardingDIContainer = appDIContainer.resolveOnboardingDIContainer()
         let onboardingCoordinator: OnboardingCoordinator = OnboardingCoordinator(
             container: onboardingDIContainer,
@@ -82,7 +83,6 @@ extension AppCoordinator: LoginCoordinatorDependency {
     }
     
     func backToLoginView() {
-        self.navigationController?.dismiss(animated: false)
-        self.navigationController?.popToRootViewController(animated: false)
+        self.showLoginViewController()
     }
 }

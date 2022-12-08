@@ -159,7 +159,7 @@ final class DefaultFirestoreService: FirestoreService {
                 single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                 return Disposables.create()
             }
-            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(FirebaseKey.FireStore.users.rawValue)
+            let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
             guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList) else {
                 single(.failure(FirebaseStoreError.invalidQuery(type: String(describing: T.self))))
                 return Disposables.create()

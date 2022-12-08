@@ -63,19 +63,10 @@ class UserProfileInputViewController: PhotoImagePickerViewController {
         newNavBarAppearance.configureWithOpaqueBackground()
         newNavBarAppearance.backgroundColor = .secondaryBackground
         
-        self.navigationController?.navigationBar.tintColor = .label
         self.navigationItem.standardAppearance = newNavBarAppearance
         self.navigationItem.compactAppearance = newNavBarAppearance
         self.navigationItem.scrollEdgeAppearance = newNavBarAppearance
         self.navigationItem.compactScrollEdgeAppearance = newNavBarAppearance
-        self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.navigationBar.backgroundColor = .secondaryBackground
-        self.navigationController?.navigationBar.standardAppearance = newNavBarAppearance
-        self.navigationController?.navigationBar.compactAppearance = newNavBarAppearance
-        self.navigationController?.navigationBar.scrollEdgeAppearance = newNavBarAppearance
-        self.navigationController?.navigationBar.compactScrollEdgeAppearance = newNavBarAppearance
-        self.navigationController?.navigationBar.topItem?.backButtonTitle = nil
-        self.navigationController?.navigationBar.isTranslucent = false
     }
     
     func configureScrollViewConstraint() {

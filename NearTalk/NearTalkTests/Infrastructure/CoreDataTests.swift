@@ -35,18 +35,10 @@ final class CoreDataTests: XCTestCase {
             messageType: "group",
             mediaPath: "",
             mediaType: "",
-            createdAt: Date()
+            createdAtTimeStamp: Date().timeIntervalSince1970
         )
-        let saveMessage: Completable = self.coreDataService.saveMessage(message)
-        do {
-            _ = try await saveMessage.value
-        } catch let error {
-            print(error)
-            XCTFail()
-            return
-        }
-        
-        let fetchMessageList: Single<[ChatMessage]> = self.coreDataService.fetchMessageList(roomID: testRoomID, before: Date())
+        let fetchMessageList: Single<[ChatMessage]> = self.coreDataService.saveMessage(message)
+            .andThen(self.coreDataService.fetchMessageList(roomID: testRoomID, before: Date()))
         do {
             let count = try await fetchMessageList.value.count
             XCTAssertEqual(count, 1)
@@ -66,7 +58,6 @@ final class CoreDataTests: XCTestCase {
             print(error)
             XCTFail()
         }
-//        XCTAssertEqual(try! fetchMessageList.toBlocking().first()!.count, 0)
     }
     
     func testPerformanceExample() throws {

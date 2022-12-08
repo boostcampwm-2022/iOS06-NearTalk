@@ -9,4 +9,7 @@ import Foundation
 
 protocol BaseEntity: Codable {
     var uuid: String? { get set }
+    
+    /// Date().timeIntervalSince1970 값
+    var createdAtTimeStamp: Double? { get set }
 }
