@@ -9,6 +9,7 @@ import Foundation
 
 protocol UserDefaultUseCase {
     func fetchUserUUID() -> String?
+    func fetchCurrentLocation()
 }
 
 final class DefaultUserDefaultUseCase: UserDefaultUseCase {
@@ -22,4 +23,7 @@ final class DefaultUserDefaultUseCase: UserDefaultUseCase {
         return self.userDefaultsRepository.fetchUserProfile()?.uuid
     }
     
+    func fetchCurrentLocation() {
+        
+    }
 }
