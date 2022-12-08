@@ -150,6 +150,7 @@ final class MainMapViewController: UIViewController {
                 
                 if chatRooms.count > 1 {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
+                    self?.mapView.selectedAnnotations = []
                 }
             })
             .disposed(by: self.disposeBag)
