@@ -13,7 +13,7 @@ protocol RealTimeDatabaseService {
     // MARK: 채팅 메시지
     func sendMessage(_ message: ChatMessage) -> Completable
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
-    func fetchMessages(page: Int, skip: Int, pageCount: Int, roomID: String) -> Single<[ChatMessage]>
+    func fetchMessages(date: Date, pageCount: Int, roomID: String) -> Single<[ChatMessage]>
     func observeNewMessage(_ chatRoomID: String) -> Observable<ChatMessage>
     
     // MARK: 채팅방 정보
@@ -31,6 +31,7 @@ protocol RealTimeDatabaseService {
     func observeUserChatRoomTicketList(_ userID: String) -> Observable<UserChatRoomTicket>
 }
 
+// swiftlint:disable: type_body_length
 /// Firestore RealTimeDatabase 저장소를 관리하는 서비스
 final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     let ref: DatabaseReference
@@ -83,7 +84,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
         }
     }
     
-    func fetchMessages(page: Int, skip: Int, pageCount: Int, roomID: String) -> Single<[ChatMessage]> {
+    func fetchMessages(date: Date, pageCount: Int, roomID: String) -> Single<[ChatMessage]> {
         Single<[ChatMessage]>.create { [weak self] single in
             guard let self else {
                 single(.failure(DatabaseError.failedToFetch))
@@ -93,15 +94,16 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.ref
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(roomID)
-                .queryStarting(atValue: skip)
-                .queryLimited(toFirst: UInt(pageCount))
+                .queryOrdered(byChild: "createdAtTimeStamp")
+                .queryEnding(atValue: date.timeIntervalSince1970)
+                .queryLimited(toLast: UInt(pageCount))
                 .observeSingleEvent(of: .value) { snapshot in
-                    if let value: [[String: Any]] = snapshot.value as? [[String: Any]] {
-                        let chatMessages: [ChatMessage] = value.compactMap({ try? ChatMessage.decode(dictionary: $0) })
-                        single(.success(chatMessages))
-                    }
+                    let messages: [ChatMessage] = snapshot.children
+                        .compactMap { $0 as? DataSnapshot }
+                        .compactMap { $0.value as? [String: Any] }
+                        .compactMap { try? ChatMessage.decode(dictionary: $0) }
+                    single(.success(messages))
                 }
-            
             return Disposables.create()
         }
     }
@@ -338,4 +340,5 @@ enum DatabaseError: Error {
     case failedToSend
     case failedToFetch
     case failedToCreate
+    case failedToDecode
 }

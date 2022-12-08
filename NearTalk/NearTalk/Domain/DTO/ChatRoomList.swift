@@ -26,7 +26,7 @@ struct GroupChatRoomListData: Hashable {
         self.accessibleRadius = data.accessibleRadius
         self.messageCount = data.messageCount
         self.recentMessageText = data.recentMessageText
-        self.recentMessageDate = data.recentMessageDate
+        self.recentMessageDate = Date(timeIntervalSince1970: data.recentMessageDateTimeStamp ?? Date().timeIntervalSince1970)
         self.location = data.location
     }
     
@@ -48,6 +48,6 @@ struct DMChatRoomListData: Hashable {
         self.recentMessageID = data.recentMessageID
         self.messageCount = data.messageCount
         self.recentMessageText = data.recentMessageText
-        self.recentMessageDate = data.recentMessageDate
+        self.recentMessageDate = Date(timeIntervalSince1970: data.recentMessageDateTimeStamp ?? Date().timeIntervalSince1970)
     }
 }

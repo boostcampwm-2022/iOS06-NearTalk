@@ -12,7 +12,7 @@ protocol MessagingUseCase {
     func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable
     func observeMessage(roomID: String) -> Observable<ChatMessage>
     func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable
-    func fetchMessage(roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]>
+    func fetchMessage(before date: Date, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]>
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
@@ -41,12 +41,13 @@ final class DefalultMessagingUseCase: MessagingUseCase {
     
     func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable {
         var newChatRoom = chatRoom
+        #warning("의문의 append -> append하면 중복 유저가 생겨야하는데 DB에는 멀쩡히 중복이 없다.")
         newChatRoom.userList?.append(userID)
         return self.chatMessageRepository.updateChatRoom(newChatRoom)
             .asCompletable()
     }
     
-    func fetchMessage(roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
-        self.chatMessageRepository.fetchMessage(page: 0, skip: 0, count: totalMessageCount, roomID: roomID)
+    func fetchMessage(before date: Date, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
+        self.chatMessageRepository.fetchMessage(before: date, count: totalMessageCount, roomID: roomID)
     }
 }

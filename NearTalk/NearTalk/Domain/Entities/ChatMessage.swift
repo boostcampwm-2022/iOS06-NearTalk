@@ -15,7 +15,9 @@ struct ChatMessage: BaseEntity {
     var messageType: String?
     var mediaPath: String?
     var mediaType: String?
-    var createdAt: Date?
+    
+    /// Date().timeIntervalSince1970 값
+    var createdAtTimeStamp: Double?
 }
 
 enum MessageType: String {
