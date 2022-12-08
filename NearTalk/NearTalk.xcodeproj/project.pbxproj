@@ -15,6 +15,7 @@
 		162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B6B2935176D004724D9 /* NCMapRegion.swift */; };
 		162B1B722935E2BF004724D9 /* UserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */; };
 		162B1B742935E2DA004724D9 /* DefaultUserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */; };
+		162B1B7729424346004724D9 /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B7629424346004724D9 /* CalloutView.swift */; };
 		1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA962921D73E0076AC35 /* MainMapViewModel.swift */; };
 		1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA982921D7480076AC35 /* MainMapCoordinator.swift */; };
 		1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA9A2921D7570076AC35 /* MainMapViewController.swift */; };
@@ -291,6 +292,7 @@
 		162B1B6B2935176D004724D9 /* NCMapRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCMapRegion.swift; sourceTree = "<group>"; };
 		162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsRepository.swift; sourceTree = "<group>"; };
 		162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultUserDefaultsRepository.swift; sourceTree = "<group>"; };
+		162B1B7629424346004724D9 /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
 		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
 		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */,
 				1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */,
 				1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */,
+				162B1B7629424346004724D9 /* CalloutView.swift */,
 			);
 			path = Annotations;
 			sourceTree = "<group>";
@@ -1838,6 +1841,7 @@
 				8386B7CA292F59740095597D /* AppSettingCoordinator.swift in Sources */,
 				608BD1192931F3E800CB676E /* AppDIContainer.swift in Sources */,
 				608BD10E292F709B00CB676E /* FCMService.swift in Sources */,
+				162B1B7729424346004724D9 /* CalloutView.swift in Sources */,
 				555A6B3329236D98001336ED /* FriendListCoordinator.swift in Sources */,
 				6008FC9D2925DBCF0044F017 /* NCLocation.swift in Sources */,
 				83EE797D293F5FAA0008D859 /* UserProfileInputView.swift in Sources */,

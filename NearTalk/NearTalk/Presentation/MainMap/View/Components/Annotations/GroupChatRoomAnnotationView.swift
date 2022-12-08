@@ -8,7 +8,18 @@
 import MapKit
 
 final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
+    
     static let reuseIdentifier = String(describing: GroupChatRoomAnnotationView.self)
+    
+    override var annotation: MKAnnotation? {
+        willSet {
+            guard let value = newValue as? ChatRoomAnnotation
+            else { return }
+            
+            self.canShowCallout = true
+            self.detailCalloutAccessoryView = CalloutView(annotation: value)
+        }
+    }
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -22,8 +33,9 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
 
     override func prepareForDisplay() {
         super.prepareForDisplay()
+        
         displayPriority = .defaultLow
-        markerTintColor = UIColor.red // 임시 색상
-        glyphImage = UIImage(systemName: "figure.2.arms.open") // 임시 이미지
+        markerTintColor = UIColor.red
+        glyphImage = UIImage(systemName: "figure.2.arms.open")
     }
 }
