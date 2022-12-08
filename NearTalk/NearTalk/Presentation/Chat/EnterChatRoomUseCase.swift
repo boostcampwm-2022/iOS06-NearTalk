@@ -10,7 +10,7 @@ import RxSwift
 
 protocol EnterChatRoomUseCase {
     func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket>
-    func upateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
+    func updateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
 }
 
 final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
@@ -29,7 +29,7 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
         return self.chatRoomListRepository.createUserChatRoomTicket(ticket)
     }
     
-    func upateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
+    func updateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         return self.chatRoomListRepository.updateUserChatRoomTicket(ticket)
     }
     
@@ -43,7 +43,7 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
                 var newUserChatRoomTicket = userChatRoomTicket
                 newUserChatRoomTicket.lastReadMessageID = chatRoom.recentMessageID
                 newUserChatRoomTicket.lastRoomMessageCount = chatRoom.messageCount
-                return self.upateUserChatRoomTicket(ticket: newUserChatRoomTicket)
+                return self.updateUserChatRoomTicket(ticket: newUserChatRoomTicket)
             }
             .catch { _ in
                 let userChatRoomTicket = UserChatRoomTicket(

@@ -12,14 +12,14 @@ class ChatInputAccessoryView: UIView {
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.layer.cornerRadius = 15
         $0.layer.borderWidth = 2.0
-        $0.layer.borderColor = UIColor.systemOrange.cgColor
+        $0.layer.borderColor = UIColor.primaryColor?.cgColor
     }
     
     lazy var sendButton = UIButton(type: .system).then {
-        $0.setImage(UIImage(systemName: "arrow.up.circle.fill"), for: .normal)
-        $0.layer.cornerRadius = 15
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.systemOrange.cgColor
+        let imageConfigure = UIImage.SymbolConfiguration(pointSize: 40, weight: .regular)
+        let image = UIImage(systemName: "arrow.up.circle.fill", withConfiguration: imageConfigure)
+        $0.setImage(image, for: .normal)
+        $0.tintColor = .primaryColor
     }
     
     override init(frame: CGRect) {

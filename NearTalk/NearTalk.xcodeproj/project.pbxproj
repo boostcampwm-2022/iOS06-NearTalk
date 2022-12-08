@@ -175,6 +175,7 @@
 		7CA4EA36292BA61300D8C757 /* RemoveFriendUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */; };
 		7CA4EA38292BA65000D8C757 /* FetchProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA37292BA65000D8C757 /* FetchProfileUseCase.swift */; };
 		7CA4EA3C292BE5FF00D8C757 /* ProfileDetailDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */; };
+		7CAA2CFE29404D1A00630692 /* MessageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAA2CFD29404D1A00630692 /* MessageItem.swift */; };
 		7CE8063D29253A3800D828FF /* ProfileDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */; };
 		7CE806412925528F00D828FF /* CreateGroupChatUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */; };
 		7CE80643292552BA00D828FF /* CreateGroupChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE80642292552BA00D828FF /* CreateGroupChatViewModel.swift */; };
@@ -430,6 +431,7 @@
 		7CA4EA35292BA61300D8C757 /* RemoveFriendUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveFriendUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA37292BA65000D8C757 /* FetchProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchProfileUseCase.swift; sourceTree = "<group>"; };
 		7CA4EA3B292BE5FF00D8C757 /* ProfileDetailDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailDIContainer.swift; sourceTree = "<group>"; };
+		7CAA2CFD29404D1A00630692 /* MessageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageItem.swift; sourceTree = "<group>"; };
 		7CE8063C29253A3800D828FF /* ProfileDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailCoordinator.swift; sourceTree = "<group>"; };
 		7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupChatUseCase.swift; sourceTree = "<group>"; };
 		7CE80642292552BA00D828FF /* CreateGroupChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupChatViewModel.swift; sourceTree = "<group>"; };
@@ -1164,6 +1166,7 @@
 				7C254DA9292DB22B004D4CEC /* Coordinator */,
 				7C254DA8292DB21E004D4CEC /* ViewModel */,
 				7C254DA7292DB217004D4CEC /* View */,
+				7CAA2CFD29404D1A00630692 /* MessageItem.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -1749,6 +1752,8 @@
 				162B1B662933E022004724D9 /* RxMapViewDataSourceType.swift in Sources */,
 				555A6B482924BE65001336ED /* UserProfile.swift in Sources */,
 				608BD113292FD72600CB676E /* UIImage+Resize.swift in Sources */,
+				8349529E2925FEAE004C5B3B /* ImageRepository.swift in Sources */,
+				7CAA2CFE29404D1A00630692 /* MessageItem.swift in Sources */,
 				7C254DB3292DDAAF004D4CEC /* ChatCoordinator.swift in Sources */,
 				60FD706029238DD400A4C29A /* FirebaseAuthService.swift in Sources */,
 				83649775292DF0590002DDE5 /* LoginDIContainer.swift in Sources */,
