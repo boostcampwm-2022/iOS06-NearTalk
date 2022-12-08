@@ -31,8 +31,7 @@ final class RootTabBarCoordinator: Coordinator {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-        viewcontroller.modalPresentationStyle = .fullScreen
-        self.navigationController?.topViewController?.present(viewcontroller, animated: false)
+        self.navigationController?.pushViewController(viewcontroller, animated: false)
         self.navigationController?.navigationBar.isHidden = true
     }
         

@@ -51,6 +51,7 @@ private extension DefaultLoginViewModel {
         #if DEBUG
         print(#function)
         #endif
+        
         self.loginUseCase.login(token: token)
             .subscribe { [weak self] in
                 self?.requestProfileExistence()
@@ -65,6 +66,7 @@ private extension DefaultLoginViewModel {
         #if DEBUG
         print(#function)
         #endif
+        
         self.verifyUseCase.verifyProfile()
             .subscribe { [weak self] in
                 self?.action.presentMainView?()
@@ -85,12 +87,16 @@ extension DefaultLoginViewModel: LoginViewModel {
         #if DEBUG
         print(#function)
         #endif
+        
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-            guard let userIdentifier = appleIDCredential.identityToken, let idTokenString = String(data: userIdentifier, encoding: .utf8) else {
+            guard let userIdentifier = appleIDCredential.identityToken,
+                  let idTokenString = String(data: userIdentifier, encoding: .utf8)
+            else {
                 #if DEBUG
                 print("Failed to fetch Apple ID Token")
                 #endif
+                
                 self.loginEnableRelay.accept(true)
                 break
             }
@@ -108,6 +114,7 @@ extension DefaultLoginViewModel: LoginViewModel {
         #if DEBUG
         print(#function)
         #endif
+        
         self.loginEnableRelay.accept(false)
         let appleIDProvider: ASAuthorizationAppleIDProvider = ASAuthorizationAppleIDProvider()
         let request: ASAuthorizationAppleIDRequest = appleIDProvider.createRequest()
@@ -119,6 +126,7 @@ extension DefaultLoginViewModel: LoginViewModel {
         #if DEBUG
         print(#function)
         #endif
+        
         self.loginEnableRelay.accept(true)
     }
     
@@ -126,6 +134,7 @@ extension DefaultLoginViewModel: LoginViewModel {
         #if DEBUG
         print(#function)
         #endif
+        
         self.loginEnableRelay.accept(false)
     }
 }
