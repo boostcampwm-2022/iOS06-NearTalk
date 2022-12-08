@@ -23,6 +23,7 @@ struct ChatRoom: BaseEntity {
     var recentMessageDate: Date?
     var maxNumberOfParticipants: Int?
     var messageCount: Int?
+    var createdAt: Date?
     
     init(
         uuid: String? = nil,
@@ -39,7 +40,8 @@ struct ChatRoom: BaseEntity {
         recentMessageText: String? = nil,
         recentMessageDate: Date? = nil,
         maxNumberOfParticipants: Int? = nil,
-        messageCount: Int? = nil
+        messageCount: Int? = nil,
+        createdAt: Date? = Date()
     ) {
         self.uuid = uuid
         self.userList = userList
@@ -56,5 +58,6 @@ struct ChatRoom: BaseEntity {
         self.recentMessageDate = recentMessageDate
         self.maxNumberOfParticipants = maxNumberOfParticipants
         self.messageCount = messageCount
+        self.createdAt = createdAt
     }
 }
