@@ -17,9 +17,11 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
             else { return }
             
             self.canShowCallout = true
-            self.detailCalloutAccessoryView = CalloutView(annotation: value)
+            self.detailCalloutAccessoryView = CalloutView(annotation: value, coordinator: self.coordinator)
         }
     }
+    
+    private var coordinator: MainMapCoordinator?
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -37,5 +39,9 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
         displayPriority = .defaultLow
         markerTintColor = UIColor.red
         glyphImage = UIImage(systemName: "figure.2.arms.open")
+    }
+    
+    func insert(coordinator: MainMapCoordinator?) {
+        self.coordinator = coordinator
     }
 }

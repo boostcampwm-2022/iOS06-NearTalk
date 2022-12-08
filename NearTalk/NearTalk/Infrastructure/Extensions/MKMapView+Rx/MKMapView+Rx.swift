@@ -185,17 +185,6 @@ extension Reactive where Base: MKMapView {
         
         return ControlEvent(events: source)
     }
-    
-    public var didCalloutAccessoryControlTapped:
-        ControlEvent<(view: MKAnnotationView, control: UIControl)> {
-        let source = delegate
-            .methodInvoked(#selector(MKMapViewDelegate.mapView(_:annotationView:calloutAccessoryControlTapped:)))
-            .map { event in
-                return (view: try castOrThrow(MKAnnotationView.self, event[1]),
-                    control: try castOrThrow(UIControl.self, event[2]))
-            }
-        return ControlEvent(events: source)
-    }
 
     // MARK: Selecting Annotation Views
     public var didSelectAnnotationView: ControlEvent<MKAnnotationView> {

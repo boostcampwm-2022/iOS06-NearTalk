@@ -49,6 +49,7 @@ final class MainMapViewModel {
     // MARK: - VC Binding
     func transform(input: Input) -> Output {
         let output = Output()
+        
         input.didTapMoveToCurrentLocationButton
             .map { true }
             .bind(to: output.moveToCurrentLocationEvent)

@@ -220,8 +220,11 @@ extension MainMapViewController: MKMapViewDelegate {
         
         switch chatRoomAnnotation.roomType {
         case .group:
-            return GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
-                                               reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+            let groupChatRoomAnnotationView = GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
+                                                                    reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+            groupChatRoomAnnotationView.insert(coordinator: coordinator)
+            
+            return groupChatRoomAnnotationView
         case .directMessage:
             return DmChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                             reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
