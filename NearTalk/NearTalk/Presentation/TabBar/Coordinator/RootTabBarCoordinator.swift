@@ -31,8 +31,9 @@ final class RootTabBarCoordinator: Coordinator {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()
         self.tabBarViewController = viewcontroller
         viewcontroller.viewControllers = [showMapView(), showChatRoomList(), showFriendList(), showMyProfile()]
-        self.navigationController?.pushViewController(viewcontroller, animated: false)
         self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.viewControllers.insert(viewcontroller, at: 0)
+        self.navigationController?.popToRootViewController(animated: false)
     }
         
     private func showMapView() -> UIViewController {

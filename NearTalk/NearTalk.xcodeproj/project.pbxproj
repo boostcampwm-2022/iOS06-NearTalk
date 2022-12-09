@@ -1162,6 +1162,7 @@
 		6043603A2941F6B800E5D257 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */,
 				60FB892B2940EDD500E9E4E5 /* RealtimeDBTests.swift */,
 			);
 			path = Infrastructure;
@@ -2003,17 +2004,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				60DA630A293D20A1003CA3E5 /* CoreDataTests.swift in Sources */,
-				60DA6318293D21D4003CA3E5 /* BaseEntity.swift in Sources */,
-				60DA6316293D21D4003CA3E5 /* ChatMessage.swift in Sources */,
-				60DA631B293D21D4003CA3E5 /* UserChatRoomTicket.swift in Sources */,
-				60DA631C293D21D4003CA3E5 /* ChatRoomList.swift in Sources */,
-				60DA6317293D21D4003CA3E5 /* UserProfile.swift in Sources */,
-				60DA631E293D21D4003CA3E5 /* UserChatModel.swift in Sources */,
-				60DA630B293D20E6003CA3E5 /* CoreDataService.swift in Sources */,
-				1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */,
-				60DA6319293D21D4003CA3E5 /* NCLocation.swift in Sources */,
-				60DA631A293D21D4003CA3E5 /* Friend.swift in Sources */,
-				60DA631D293D21D4003CA3E5 /* ChatRoom.swift in Sources */,
 				60FB893A2940EE8500E9E4E5 /* FirestoreService.swift in Sources */,
 				60FB893C2940EE8500E9E4E5 /* FCMService.swift in Sources */,
 				60DA6318293D21D4003CA3E5 /* BaseEntity.swift in Sources */,

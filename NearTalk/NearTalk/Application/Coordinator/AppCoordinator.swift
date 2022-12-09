@@ -83,6 +83,6 @@ extension AppCoordinator: LoginCoordinatorDependency {
     }
     
     func backToLoginView() {
-        self.navigationController?.popToRootViewController(animated: false)
+        self.showLoginViewController()
     }
 }
