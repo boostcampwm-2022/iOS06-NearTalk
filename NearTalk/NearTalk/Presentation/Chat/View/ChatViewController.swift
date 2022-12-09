@@ -13,7 +13,9 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
     
     private enum Metric {
         static var keyboardHeight: CGFloat = 0
-        static var defaultChatInputAccessoryViewHeight = 50
+        static let defaultChatInputAccessoryViewHeight = 50
+        static let defaultTextFieldHeight: Double = 40.0
+        static let textFieldInset: Double = 5.0
     }
     
     private let viewModel: ChatViewModel
@@ -23,7 +25,7 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
     private lazy var dataSource: DataSource = makeDataSource()
     private lazy var compositionalLayout: UICollectionViewCompositionalLayout = self.createLayout()
     
-    private lazy var collectionView: UICollectionView = UICollectionView(
+    private lazy var chatCollectionView: UICollectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: compositionalLayout
     ).then {
@@ -59,7 +61,7 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
         self.view.backgroundColor = .primaryBackground
         self.addSubviews()
         self.configureChatInputAccessoryView()
-        self.configureCollectionView()
+        self.configureChatCollectionView()
         self.bind()
         self.chatInputAccessoryView.messageInputTextField.delegate = self
         
@@ -74,7 +76,7 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
 
     private func scrollToBottom() {
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        chatCollectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
         
     private func bind() {
@@ -149,7 +151,7 @@ private extension ChatViewController {
     }
     
     func makeDataSource() -> DataSource {
-        let datasource = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
+        let datasource = DataSource(collectionView: chatCollectionView) { [weak self] collectionView, indexPath, item in
             guard let self,
                   let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: ChatCollectionViewCell.identifier,
@@ -171,14 +173,6 @@ private extension ChatViewController {
         snapshot.appendSections([.main])
         snapshot.appendItems(messageItems.sorted { $0.createdAt < $1.createdAt })
         return snapshot
-    }
-}
-
-// MARK: - UITextViewDelegate
-
-extension ChatViewController: UITextViewDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return false
     }
 }
 
@@ -205,7 +199,7 @@ private extension ChatViewController {
 
         self.reconfigureChatInputAccessoryView()
         
-        self.collectionView.snp.makeConstraints { make in
+        self.chatCollectionView.snp.makeConstraints { make in
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
         
@@ -229,7 +223,7 @@ private extension ChatViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
-        self.collectionView.snp.remakeConstraints { make in
+        self.chatCollectionView.snp.remakeConstraints { make in
             make.left.right.equalTo(self.view)
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
@@ -241,7 +235,7 @@ private extension ChatViewController {
 
 private extension ChatViewController {
     func addSubviews() {
-        [collectionView, chatInputAccessoryView].forEach {
+        [chatCollectionView, chatInputAccessoryView].forEach {
             self.view.addSubview($0)
         }
     }
@@ -298,11 +292,19 @@ private extension ChatViewController {
         }
     }
     
-    func configureCollectionView() {
-        self.collectionView.snp.makeConstraints { make in
+    func configureChatCollectionView() {
+        self.chatCollectionView.snp.makeConstraints { make in
             make.left.right.equalTo(self.view)
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension ChatViewController: UITextViewDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return false
     }
 }
