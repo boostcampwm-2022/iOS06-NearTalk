@@ -108,7 +108,6 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                                                   maxNumberOfParticipants: 2,
                                                   messageCount: nil)
                 
-                // 상대 프로필 업데이트 하는 로직 없음
                 self.fetchProfileUseCase.fetchUserProfile(with: self.userID)
                     .subscribe(onSuccess: { userProfile in
                         var newUserProfile = userProfile
