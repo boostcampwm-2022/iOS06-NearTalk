@@ -24,11 +24,10 @@ class ChatInputAccessoryView: UIView {
         $0.layer.borderWidth = 1.5
         $0.layer.borderColor = UIColor.secondaryLabel?.cgColor
         $0.layer.cornerRadius = 15
-        
+        $0.layer.cornerRadius = 15
         $0.backgroundColor = .clear
         $0.textColor = .black
         $0.font = UIFont.systemFont(ofSize: 16)
-        $0.layer.cornerRadius = 15
         $0.clipsToBounds = true
         $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 7.0, bottom: 10.0, right: 7.0)
     }
@@ -77,12 +76,5 @@ class ChatInputAccessoryView: UIView {
             make.leading.equalTo(addButton.snp.trailing).offset(16)
             make.trailing.equalTo(sendButton.snp.leading).offset(-20)
         }
-        print("%%%%%%%",self.frame.height)
-//        messageInputView.snp.remakeConstraints { make in
-//            make.height.equalTo(35)
-//            make.centerY.equalToSuperview()
-//            make.leading.equalTo(addButton.snp.trailing).offset(8)
-//            make.trailing.equalTo(sendButton.snp.leading).offset(-20)
-//        }
     }
 }
