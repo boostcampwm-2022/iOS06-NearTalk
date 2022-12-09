@@ -263,16 +263,16 @@ private extension ChatViewController {
     func reconfigureChatInputAccessoryView() {
         let contentHeight = self.chatInputAccessoryView.messageInputTextField.contentSize.height
         
-        if (41...(40*3)).contains(contentHeight) {
+        if ((Metric.defaultTextFieldHeight + 1)...(Metric.defaultTextFieldHeight * 3)).contains(contentHeight) {
             self.chatInputAccessoryView.snp.remakeConstraints { make in
                 make.left.right.equalTo(self.view)
                 make.height.equalTo(self.chatInputAccessoryView.messageInputTextField.contentSize.height)
                 make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
             }
-        } else if ((40*3) + 1) < contentHeight {
+        } else if ((Metric.defaultTextFieldHeight * 3) + 1) < contentHeight {
             self.chatInputAccessoryView.snp.remakeConstraints { make in
                 make.left.right.equalTo(self.view)
-                make.height.equalTo((40*3) + (5*2))
+                make.height.equalTo((Metric.defaultTextFieldHeight * 3) + (Metric.textFieldInset * 2))
                 make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
             }
         } else {
