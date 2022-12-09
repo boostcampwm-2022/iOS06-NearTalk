@@ -1,21 +1,18 @@
 //
-//  BottomSheetTableViewCell.swift
+//  CalloutView.swift
 //  NearTalk
 //
-//  Created by lymchgmk on 2022/11/17.
+//  Created by lymchgmk on 2022/12/09.
 //
 
 import Kingfisher
+import RxSwift
+import RxCocoa
 import SnapKit
-import Then
 import UIKit
 
-final class BottomSheetTableViewCell: UITableViewCell {
-    
-    // MARK: - Class Identifier
-    static let reuseIdentifier = String(describing: BottomSheetTableViewCell.self)
-    
-    // MARK: - UI Components
+final class CalloutView: UIView {
+    // MARK: - UI Compoments
     private let chatRoomImage = UIImageView().then {
         $0.layer.cornerRadius = 30
         $0.image = UIImage(systemName: "photo")
@@ -44,7 +41,7 @@ final class BottomSheetTableViewCell: UITableViewCell {
     private let chatRoomDescription = UILabel().then {
         $0.textColor = .gray
         $0.font = UIFont.systemFont(ofSize: 16)
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
     }
     private let chatRoomEnterButton = UIButton().then {
         let buttonImageConfig = UIImage.SymbolConfiguration(pointSize: 24)
@@ -53,60 +50,82 @@ final class BottomSheetTableViewCell: UITableViewCell {
         $0.setImage(buttonImage, for: .normal)
     }
     
-    // MARK: - Lifecycles
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+    // MARK: - Properties
+    private let annotation: ChatRoomAnnotation
+    private let coordinator: MainMapCoordinator?
+    private let disposeBag: DisposeBag = .init()
+    
+    // MARK: - LifeCycles
+    init(annotation: ChatRoomAnnotation, coordinator: MainMapCoordinator?) {
+        self.annotation = annotation
+        self.coordinator = coordinator
+
+        super.init(frame: .zero)
+
         self.addSubviews()
         self.configureConstraints()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been impl")
+        self.fetch()
+        self.bind()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Methods
     private func addSubviews() {
-        self.contentView.addSubview(self.chatRoomImage)
-        self.contentView.addSubview(self.infoStackView)
-        self.contentView.addSubview(self.chatRoomEnterButton)
+        self.addSubview(self.chatRoomImage)
+        self.addSubview(self.infoStackView)
+        self.addSubview(self.chatRoomEnterButton)
     }
     
     private func configureConstraints() {
         self.chatRoomImage.snp.makeConstraints { make in
-            make.leading.equalTo(self.contentView).offset(16)
-            make.centerY.equalTo(self.contentView)
-            make.width.height.equalTo(60)
+            make.leading.equalToSuperview().offset(4)
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(30)
         }
         
         self.chatRoomEnterButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.contentView).offset(-16)
-            make.centerY.equalTo(self.contentView)
+            make.trailing.equalToSuperview().offset(-4)
+            make.centerY.equalToSuperview()
             make.width.height.equalTo(40)
         }
         
         self.infoStackView.snp.makeConstraints { make in
-            make.leading.equalTo(self.chatRoomImage.snp.trailing).offset(16)
-            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-8)
-            make.top.bottom.equalTo(self.contentView).inset(8)
+            make.leading.equalTo(self.chatRoomImage.snp.trailing).offset(6)
+            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-6)
+            make.top.bottom.equalToSuperview().inset(4)
         }
+    }
+    
+    private func fetch() {
+        let chatRoomInfo = self.annotation.chatRoomInfo
+        
+        guard let chatRoomLatitude = chatRoomInfo.latitude,
+              let chatRoomLongitude = chatRoomInfo.longitude
+        else { return }
+        
+        self.chatRoomName.text = chatRoomInfo.roomName
+        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
+        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomLocation)
+        self.fetchImage(path: chatRoomInfo.roomImagePath)
+        self.chatRoomDescription.text = chatRoomInfo.roomDescription
+    }
+    
+    private func bind() {
+        self.chatRoomEnterButton.rx.tap
+            .bind { [weak self] _ in
+                if let chatRoomID = self?.annotation.chatRoomInfo.uuid {
+                    self?.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
+                }
+            }
+            .disposed(by: self.disposeBag)
     }
 }
 
-// MARK: - Bind
-extension BottomSheetTableViewCell {
-    public func fetch(with data: ChatRoom) {
-        guard let chatRoomLatitude = data.latitude,
-              let chatRoomLongitude = data.longitude
-        else { return }
-        
-        self.chatRoomName.text = data.roomName
-        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
-        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomLocation)
-        self.chatRoomDescription.text = data.roomDescription
-        self.fetch(path: data.roomImagePath)
-    }
-    
-    private func fetch(path imagePath: String?) {
+extension CalloutView {
+    private func fetchImage(path imagePath: String?) {
         guard let path = imagePath,
               let url = URL(string: path)
         else { return }

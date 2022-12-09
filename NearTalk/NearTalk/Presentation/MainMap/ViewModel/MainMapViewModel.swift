@@ -49,6 +49,7 @@ final class MainMapViewModel {
     // MARK: - VC Binding
     func transform(input: Input) -> Output {
         let output = Output()
+        
         input.didTapMoveToCurrentLocationButton
             .map { true }
             .bind(to: output.moveToCurrentLocationEvent)
@@ -59,10 +60,10 @@ final class MainMapViewModel {
             .bind(to: output.showCreateChatRoomViewEvent)
             .disposed(by: self.disposeBag)
         
-        input.currentUserMapRegion
-            .flatMap { _ in
-                let dummyChatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchDummyChatRooms()
-                return dummyChatRooms
+        input.didUpdateUserLocation
+            .flatMap { region in
+                let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
+                return chatRooms
             }
             .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
@@ -79,12 +80,12 @@ final class MainMapViewModel {
                         
                         return chatRoomAnnotation.chatRoomInfo
                     }
-                } else {
-                    guard let singleChatRoomAnnotation = annotation as? ChatRoomAnnotation
-                    else { return [] }
-                    
-                    return [singleChatRoomAnnotation.chatRoomInfo]
                 }
+                
+                guard let singleChatRoomAnnotation = annotation as? ChatRoomAnnotation
+                else { return [] }
+                
+                return [singleChatRoomAnnotation.chatRoomInfo]
             }
             .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
