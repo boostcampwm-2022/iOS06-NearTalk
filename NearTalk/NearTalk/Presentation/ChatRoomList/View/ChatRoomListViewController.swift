@@ -64,6 +64,8 @@ final class ChatRoomListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.viewModel.viewWillAppear()
+        self.groupCollectionView.reloadData()
+        self.dmCollectionView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -206,4 +208,3 @@ final class ChatRoomListViewController: UIViewController {
         return layout
     }
 }
-
