@@ -107,6 +107,7 @@ final class MainMapViewController: UIViewController {
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
+            didDragMapView: self.mapView.rx.panGesture().map { _ in }.asObservable(),
             didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
                 .compactMap { event -> NCLocation? in
                     guard let latitude = event.location?.coordinate.latitude,
@@ -127,14 +128,6 @@ final class MainMapViewController: UIViewController {
                 return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
             }
             .drive(self.mapView.rx.annotations)
-            .disposed(by: self.disposeBag)
-        
-        output.moveToCurrentLocationEvent
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 == true }
-            .drive(onNext: { [weak self] _ in
-                self?.followUserLocation()
-            })
             .disposed(by: self.disposeBag)
         
         output.showCreateChatRoomViewEvent
@@ -158,11 +151,14 @@ final class MainMapViewController: UIViewController {
             })
             .disposed(by: self.disposeBag)
         
-        output.currentUserLocation
-            .asDriver(onErrorJustReturn: NCLocation.naver)
-            .drive(onNext: { [weak self] location in
-                let userLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
-                self?.followUserLocation()
+        output.followCurrentUserLocation
+            .asDriver()
+            .drive(onNext: { [weak self] isFollowing in
+                if isFollowing {
+                    self?.mapView.setUserTrackingMode(.follow, animated: true)
+                } else {
+                    self?.mapView.setUserTrackingMode(.none, animated: true)
+                }
             })
             .disposed(by: self.disposeBag)
     }

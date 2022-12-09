@@ -27,15 +27,16 @@ final class MainMapViewModel {
         let didTapMoveToCurrentLocationButton: Observable<Void>
         let didTapCreateChatRoomButton: Observable<Void>
         let didTapAnnotationView: Observable<MKAnnotation>
+        let didDragMapView: Observable<Void>
         let didUpdateUserLocation: Observable<NCLocation>
     }
     
     struct Output {
-        let moveToCurrentLocationEvent: BehaviorRelay<Bool> = .init(value: false)
         let showCreateChatRoomViewEvent: BehaviorRelay<Bool> = .init(value: false)
         let showAccessibleChatRooms: PublishRelay<[ChatRoom]> = .init()
         let showAnnotationChatRooms: PublishRelay<[ChatRoom]> = .init()
         let currentUserLocation: BehaviorRelay<NCLocation> = .init(value: NCLocation.naver)
+        let followCurrentUserLocation: BehaviorRelay<Bool> = .init(value: true)
     }
     
     // MARK: - Properties
@@ -62,7 +63,7 @@ final class MainMapViewModel {
         
         input.didTapMoveToCurrentLocationButton
             .map { true }
-            .bind(to: output.moveToCurrentLocationEvent)
+            .bind(to: output.followCurrentUserLocation)
             .disposed(by: self.disposeBag)
         
         input.didTapCreateChatRoomButton
@@ -90,6 +91,11 @@ final class MainMapViewModel {
                 return [singleChatRoomAnnotation.chatRoomInfo]
             }
             .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
+            .disposed(by: self.disposeBag)
+        
+        input.didDragMapView
+            .map { false }
+            .bind(to: output.followCurrentUserLocation)
             .disposed(by: self.disposeBag)
         
         input.didUpdateUserLocation
