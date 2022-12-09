@@ -8,6 +8,9 @@
 import Foundation
 
 struct NCLocation: Codable, Hashable {
+    // 네이버 1784
+    static let naver: NCLocation = .init(latitude: 37.375281, longitude: 127.106536)
+    
     // 미터 당 위경도
     static let decimalDegreePerMeter: Double = 0.000009009 // 도/m
     static let meterPerDecimalDegree: Double = 111000 // m/도

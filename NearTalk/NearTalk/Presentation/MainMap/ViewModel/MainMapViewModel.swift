@@ -23,11 +23,11 @@ final class MainMapViewModel {
     }
     
     struct Input {
+        let mapViewDidAppear: Observable<NCMapRegion>
         let didTapMoveToCurrentLocationButton: Observable<Void>
         let didTapCreateChatRoomButton: Observable<Void>
         let didTapAnnotationView: Observable<MKAnnotation>
-        let didUpdateUserLocation: Observable<NCMapRegion>
-        let didUpdateMapViewRegion: Observable<NCMapRegion>
+        let didUpdateUserLocation: Observable<NCLocation>
     }
     
     struct Output {
@@ -35,6 +35,7 @@ final class MainMapViewModel {
         let showCreateChatRoomViewEvent: BehaviorRelay<Bool> = .init(value: false)
         let showAccessibleChatRooms: PublishRelay<[ChatRoom]> = .init()
         let showAnnotationChatRooms: PublishRelay<[ChatRoom]> = .init()
+        let currentUserLocation: BehaviorRelay<NCLocation> = .init(value: NCLocation.naver)
     }
     
     // MARK: - Properties
@@ -51,6 +52,14 @@ final class MainMapViewModel {
     func transform(input: Input) -> Output {
         let output = Output()
         
+        input.mapViewDidAppear
+            .flatMap { region in
+                let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
+                return chatRooms
+            }
+            .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
+            .disposed(by: self.disposeBag)
+        
         input.didTapMoveToCurrentLocationButton
             .map { true }
             .bind(to: output.moveToCurrentLocationEvent)
@@ -59,14 +68,6 @@ final class MainMapViewModel {
         input.didTapCreateChatRoomButton
             .map { true }
             .bind(to: output.showCreateChatRoomViewEvent)
-            .disposed(by: self.disposeBag)
-        
-        input.didUpdateUserLocation
-            .flatMap { region in
-                let chatRooms = self.useCases.fetchAccessibleChatRoomsUseCase.fetchAccessibleAllChatRooms(in: region)
-                return chatRooms
-            }
-            .bind(onNext: { output.showAccessibleChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
         
         input.didTapAnnotationView
@@ -89,6 +90,10 @@ final class MainMapViewModel {
                 return [singleChatRoomAnnotation.chatRoomInfo]
             }
             .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
+            .disposed(by: self.disposeBag)
+        
+        input.didUpdateUserLocation
+            .bind(to: output.currentUserLocation)
             .disposed(by: self.disposeBag)
         
         return output

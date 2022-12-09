@@ -104,19 +104,39 @@ final class MainMapViewController: UIViewController {
 
         // MARK: - Bind VM input
         let input = MainMapViewModel.Input(
+            mapViewDidAppear: self.rx.methodInvoked(#selector(viewDidAppear(_:)))
+                .compactMap { _ -> NCMapRegion? in
+                    guard let region = self.mapView.cameraBoundary?.region
+                    else { return nil }
+                    
+                    return self.convertToNCMapRegion(with: region)
+                }
+                .asObservable(),
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
-            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation.compactMap { _ in
-                return self.convertToNCMapRegion(with: self.mapView.region)
-            },
-            didUpdateMapViewRegion: self.mapView.rx.region.map { region in
-                return self.convertToNCMapRegion(with: region)
-            }
+            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
+                .compactMap { event -> NCLocation? in
+                    guard let latitude = event.location?.coordinate.latitude,
+                          let longitude = event.location?.coordinate.longitude
+                    else { return nil }
+                    
+                    return NCLocation(latitude: latitude, longitude: longitude)
+                }
+                .asObservable()
         )
         
         // MARK: - Bind VM output
         let output = self.viewModel.transform(input: input)
+        
+        output.showAccessibleChatRooms
+            .asDriver(onErrorJustReturn: [])
+            .map { chatRooms in
+                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
+            }
+            .drive(self.mapView.rx.annotations)
+            .disposed(by: self.disposeBag)
+        
         output.moveToCurrentLocationEvent
             .asDriver(onErrorJustReturn: false)
             .filter { $0 == true }
@@ -133,15 +153,6 @@ final class MainMapViewController: UIViewController {
                 self?.coordinator?.showCreateChatRoomView()
             })
             .disposed(by: self.disposeBag)
-
-        output.showAccessibleChatRooms
-            .asDriver(onErrorJustReturn: [])
-            .map { chatRooms in
-                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0,
-                                                                        userLocation: self.mapView.userLocation.coordinate) }
-            }
-            .drive(self.mapView.rx.annotations)
-            .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
             .asDriver(onErrorJustReturn: [])
@@ -153,6 +164,15 @@ final class MainMapViewController: UIViewController {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
                     self?.mapView.selectedAnnotations = []
                 }
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.currentUserLocation
+            .asDriver(onErrorJustReturn: NCLocation.naver)
+            .drive(onNext: { [weak self] location in
+                print(location)
+                self?.mapView.showsUserLocation = true
+                self?.mapView.setUserTrackingMode(.follow, animated: true)
             })
             .disposed(by: self.disposeBag)
     }

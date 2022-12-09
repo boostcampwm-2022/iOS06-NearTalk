@@ -24,32 +24,19 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     
     let chatRoomInfo: ChatRoom
     let roomType: RoomType
-    let latitude: CLLocationDegrees
-    let longitude: CLLocationDegrees
+    var isAccessible: Bool = false
     @objc
     dynamic var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return CLLocationCoordinate2D(latitude: self.chatRoomInfo.latitude ?? 0,
+                                      longitude: self.chatRoomInfo.longitude ?? 0)
     }
-    let userLocation: NCLocation
     
-    init(chatRoomInfo: ChatRoom, roomType: RoomType, latitude: CLLocationDegrees, longitude: CLLocationDegrees, userLocation: CLLocationCoordinate2D) {
+    init(chatRoomInfo: ChatRoom) {
         self.chatRoomInfo = chatRoomInfo
-        self.roomType = roomType
-        self.latitude = latitude
-        self.longitude = longitude
-        self.userLocation = NCLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        self.roomType = self.chatRoomInfo.roomType == RoomType.group.name ? .group : .directMessage
     }
     
-    static func create(with chatRoomInfo: ChatRoom, userLocation: CLLocationCoordinate2D) -> ChatRoomAnnotation? {
-        guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == RoomType.group.name ? .group : .directMessage,
-              let latitude = chatRoomInfo.latitude,
-              let longitude = chatRoomInfo.longitude
-        else { return nil }
-        
-        return ChatRoomAnnotation(chatRoomInfo: chatRoomInfo,
-                                  roomType: roomType,
-                                  latitude: latitude,
-                                  longitude: longitude,
-                                  userLocation: userLocation)
+    static func create(with chatRoomInfo: ChatRoom) -> ChatRoomAnnotation? {
+        return ChatRoomAnnotation(chatRoomInfo: chatRoomInfo)
     }
 }
