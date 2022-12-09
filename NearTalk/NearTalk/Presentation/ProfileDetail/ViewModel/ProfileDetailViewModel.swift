@@ -46,6 +46,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     private let fetchProfileUseCase: FetchProfileUseCase
     private let uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase
     private let removeFriendUseCase: RemoveFriendUseCase
+    private let updateProfileUseCase: UpdateProfileUseCase
     private let actions: ProfileDetailViewModelActions
     
     private let disposeBag = DisposeBag()
@@ -54,11 +55,13 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
          fetchProfileUseCase: FetchProfileUseCase,
          uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase,
          removeFriendUseCase: RemoveFriendUseCase,
+         updateProfileUseCase: UpdateProfileUseCase,
          actions: ProfileDetailViewModelActions) {
         self.userID = userID
         self.fetchProfileUseCase = fetchProfileUseCase
         self.uploadChatRoomInfoUseCase = uploadChatRoomInfoUseCase
         self.removeFriendUseCase = removeFriendUseCase
+        self.updateProfileUseCase = updateProfileUseCase
         self.actions = actions
         self.bind()
         
@@ -106,13 +109,24 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                                                   messageCount: nil)
                 
                 // 상대 프로필 업데이트 하는 로직 없음
-//                self.fetchProfileUseCase
-                
-                self.fetchProfileUseCase.fetchUserProfile(with: myID)
+                self.fetchProfileUseCase.fetchUserProfile(with: self.userID)
                     .subscribe(onSuccess: { userProfile in
                         var newUserProfile = userProfile
                         newUserProfile.chatRooms?.append(chatRoomUUID)
-                        self.fetchProfileUseCase.updateUserProfile(userProfile: newUserProfile)
+                        self.updateProfileUseCase.updateFriendsProfile(profile: newUserProfile)
+                            .subscribe(onCompleted: {
+                                print("상대 프로필 업데이트 완료")
+                            })
+                            .disposed(by: self.disposeBag)
+                        
+                    })
+                    .disposed(by: self.disposeBag)
+                
+                self.fetchProfileUseCase.fetchMyProfile()
+                    .subscribe(onSuccess: { myProfile in
+                        var newMyProfile = myProfile
+                        newMyProfile.chatRooms?.append(chatRoomUUID)
+                        self.fetchProfileUseCase.updateUserProfile(userProfile: newMyProfile)
                             .subscribe(onSuccess: { _ in
                                 print("내 프로필 업데이트")
                             })
