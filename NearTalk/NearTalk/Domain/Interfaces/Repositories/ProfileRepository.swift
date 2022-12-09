@@ -14,8 +14,6 @@ protocol ProfileRepository {
     func updateMyProfile(_ userProfile: UserProfile) -> Single<UserProfile>
     func deleteMyProfile() -> Completable
     
-    func updateFriendProfile(_ userProfile: UserProfile) -> Completable
-    
     func addFriend(_ friendUUID: String) -> Completable
     func addChatRoom(_ chatRoomUUID: String) -> Completable
     func removeFriend(_ friendUUID: String) -> Completable

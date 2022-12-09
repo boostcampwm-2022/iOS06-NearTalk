@@ -16,10 +16,6 @@ enum DummyProfileRepoError: Error {
 }
 
 final class DummyProfileRepository: ProfileRepository {
-    func updateFriendProfile(_ userProfile: UserProfile) -> RxSwift.Completable {
-        .error(NSError())
-    }
-    
     func addChatRoom(_ chatRoomUUID: String) -> RxSwift.Completable {
         return Completable.create { completable in
             completable(.completed)

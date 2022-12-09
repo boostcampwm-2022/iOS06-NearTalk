@@ -28,8 +28,4 @@ final class DefaultUpdateProfileUseCase: UpdateProfileUseCase {
             })
             .asCompletable()
     }
-    
-    func updateFriendsProfile(profile: UserProfile) -> Completable {
-        return self.repository.updateFriendProfile(profile)
-    }
 }
