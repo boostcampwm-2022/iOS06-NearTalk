@@ -1,8 +1,8 @@
 //
-//  ChatViewModel.swift
-//  NearTalk
+// ChatViewModel.swift
+// NearTalk
 //
-//  Created by dong eun shin on 2022/11/23.
+// Created by dong eun shin on 2022/11/23.
 //
 
 import Foundation
@@ -15,7 +15,7 @@ protocol ChatViewModelInput {
 
 protocol ChatViewModelOut {
     func getUserProfile(userID: String) -> UserProfile?
-    var observeChatMessage: Observable<ChatMessage>? { get }
+    var chatMessages: BehaviorRelay<[ChatMessage]> { get }
     var myID: String? { get }
     var chatRoom: BehaviorRelay<ChatRoom?> { get }
 }
@@ -24,7 +24,6 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut {
 }
 
 class DefaultChatViewModel: ChatViewModel {
-    
     // MARK: - Proporties
     
     private let chatRoomID: String
@@ -33,7 +32,6 @@ class DefaultChatViewModel: ChatViewModel {
     private let disposeBag: DisposeBag = DisposeBag()
     var userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     var userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
-
     private var fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
     private var messagingUseCase: MessagingUseCase
     private var userDefaultUseCase: UserDefaultUseCase
@@ -43,11 +41,11 @@ class DefaultChatViewModel: ChatViewModel {
     // MARK: - Outputs
     
     let chatRoom: BehaviorRelay<ChatRoom?> = .init(value: nil)
-    var observeChatMessage: Observable<ChatMessage>?
+    let chatMessages: BehaviorRelay<[ChatMessage]>
     var myID: String?
     
     // MARK: - LifeCycle
-
+    
     init(chatRoomID: String,
          fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase,
          userDefaultUseCase: UserDefaultUseCase,
@@ -61,15 +59,12 @@ class DefaultChatViewModel: ChatViewModel {
         self.userDefaultUseCase = userDefaultUseCase
         self.fetchProfileUseCase = fetchProfileUseCase
         self.enterChatRoomUseCase = enterChatRoomUseCase
-        
+        self.chatMessages = .init(value: [])
         self.userProfileList = [:]
         self.userUUIDList = []
-        
         self.myID = self.userDefaultUseCase.fetchUserUUID()
         
         // TODO: - 특정 갯수 만큼 메세지 가지고 올 수 있도록 변경
-        self.observeChatMessage = self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
-        
         // TODO: - chatRoom 존재하지 않을때 예외처리
         // 1. chatroom single fetch
         // 2. 1번 성공시, myID를 chatRoom의 userUUIDList에 추가하기
@@ -125,9 +120,9 @@ class DefaultChatViewModel: ChatViewModel {
                 self.chatRoom.accept(chatRoom)
             })
             .disposed(by: self.disposeBag)
-                
-        // 메세지 송수신에 대한 userChatRoomTicket
-        self.observeMessage()
+            
+            // 메세지 송수신에 대한 userChatRoomTicket
+            self.observeMessage()
     }
         
     func sendMessage(_ message: String) {
@@ -187,12 +182,17 @@ private extension DefaultChatViewModel {
     }
     
     func observeMessage() {
-        self.observeChatMessage?
+        self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
             .subscribe(onNext: { [weak self] chatMessage in
                 guard let self,
-                let messageCount = self.chatRoom.value?.messageCount else {
+                      let messageCount = self.chatRoom.value?.messageCount else {
                     return
                 }
+                
+                var newChatMessages: [ChatMessage] = self.chatMessages.value
+                newChatMessages.append(chatMessage)
+                self.chatMessages.accept(newChatMessages)
+                
                 var newTicket = self.userChatRoomTicket.value
                 newTicket?.lastReadMessageID = chatMessage.uuid
                 newTicket?.lastRoomMessageCount = messageCount + 1

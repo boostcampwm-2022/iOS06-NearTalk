@@ -7,14 +7,13 @@
 
 import UIKit
 
-final class CreateGroupChatDiContainer {
+final class CreateGroupChatDIContainer {
 
     // MARK: - Dependencies
 
     // MARK: - Persistent Storage
 
     // MARK: - Services
-    
     func makeUserDefaultService() -> UserDefaultService {
         return DefaultUserDefaultsService()
     }
@@ -34,19 +33,25 @@ final class CreateGroupChatDiContainer {
     func makeAuthService() -> AuthService {
         return DefaultFirebaseAuthService()
     }
+    
+    func makeStorageService() -> StorageService {
+        return DefaultStorageService()
+    }
 
     // MARK: - UseCases
-    
-    func makeCreateGroupChatUseCase() -> CreateGroupChatUseCaseable {
-        return CreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository(), profileRepository: makeProfileRepository())
+    func makeCreateGroupChatUseCase() -> CreateGroupChatUseCase {
+        return DefaultCreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository(), profileRepository: makeProfileRepository())
     }
     
     func makeUserDefaultUseCase() -> UserDefaultUseCase {
         return DefaultUserDefaultUseCase(userDefaultsRepository: self.makeUserDefaultsRepository())
     }
+    
+    func makeUploadImageUseCase() -> UploadImageUseCase {
+        return DefaultUploadImageUseCase(mediaRepository: self.makeMediaRepository())
+    }
 
     // MARK: - Repositories
-    
     func makeUserDefaultsRepository() -> UserDefaultsRepository {
         return DefaultUserDefaultsRepository(userDefaultsService: self.makeUserDefaultService())
     }
@@ -64,9 +69,12 @@ final class CreateGroupChatDiContainer {
             databaseService: makeDatabaseService(),
             firestoreService: makeFirestoreService())
     }
+    
+    func makeMediaRepository() -> MediaRepository {
+        return DefaultMediaRepository(storageService: self.makeStorageService())
+    }
 
     // MARK: - View Controller
-
     func makeCreateGroupChatViewController(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewController {
         return CreateGroupChatViewController(viewModel: makeCreateGroupChatViewModel(actions: actions))
     }
@@ -74,21 +82,19 @@ final class CreateGroupChatDiContainer {
     func makeCreateGroupChatViewModel(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewModel {
         return DefaultCreateGroupChatViewModel(
             createGroupChatUseCase: self.makeCreateGroupChatUseCase(),
-            userDefaultUseCase: self.makeUserDefaultUseCase(),
+            userDefaultUseCase: self.makeUserDefaultUseCase(), uploadImageUseCase: self.makeUploadImageUseCase(),
             actions: actions)
     }
 
     // MARK: - Coordinator
-
     func makeCreateGroupChatCoordinator(navigationCotroller: UINavigationController) -> CreateGroupChatCoordinator {
         return CreateGroupChatCoordinator(navigationController: navigationCotroller, dependencies: self)
     }
 
     // MARK: - DI Container
-    
     func makeChatDIContainer(chatRoomID: String) -> ChatDIContainer {
         return ChatDIContainer(chatRoomID: chatRoomID)
     }
 }
 
-extension CreateGroupChatDiContainer: CreateGroupChatCoordinatorDependencies {}
+extension CreateGroupChatDIContainer: CreateGroupChatCoordinatorDependencies {}

@@ -37,7 +37,7 @@ final class MainMapCoordinator: Coordinator {
         guard let navigationController = navigationController
         else { return }
 
-        let diContainer: CreateGroupChatDiContainer = .init()
+        let diContainer: CreateGroupChatDIContainer = .init()
         let coordinator: CreateGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
         coordinator.start()
     }

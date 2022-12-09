@@ -16,7 +16,7 @@ struct CreateGroupChatViewModelActions {
 
 protocol CreateGroupChatViewModelInput {
     func titleDidEdited(_ title: String)
-    func descriptionDidEdited(_ descriptio: String)
+    func descriptionDidEdited(_ description: String)
     func maxParticipantDidChanged(_ numOfParticipant: Int)
     func maxRangeDidChanged(_ range: Int)
     func createChatButtonDIdTapped()
@@ -33,25 +33,39 @@ protocol CreateGroupChatViewModel: CreateGroupChatViewModelInput, CreateGroupCha
 }
 
 final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
+    // MARK: - Proporties
+    
     var thumbnailImage: RxCocoa.Driver<Data?> {
-        self.imageRelay.asDriver()
+        self.imageBehaviorRelay.asDriver()
     }
     
     var maxRangeLabel: Driver<String>
     var createChatButtonIsEnabled: Driver<Bool>
 
-    // MARK: - Proporties
-    private let createGroupChatUseCase: CreateGroupChatUseCaseable
-    private let userDefaultUseCase: UserDefaultUseCase
-    private let actions: CreateGroupChatViewModelActions
     private let disposeBag = DisposeBag()
     
-    init(createGroupChatUseCase: CreateGroupChatUseCaseable,
+    private let createGroupChatUseCase: CreateGroupChatUseCase
+    private let userDefaultUseCase: UserDefaultUseCase
+    private let uploadImageUseCase: UploadImageUseCase
+    private let actions: CreateGroupChatViewModelActions
+    
+    private var maxNumOfParticipant: Int = 50
+    private var title: String = ""
+    private var titlePublishSubject = PublishSubject<String>()
+    private var description: String = ""
+    private var descriptionPublishSubject = PublishSubject<String>()
+    private var maxRange: Int = 0
+    private var maxRangePublishSubject = PublishSubject<Int>()
+    private let imageBehaviorRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
+    
+    init(createGroupChatUseCase: CreateGroupChatUseCase,
          userDefaultUseCase: UserDefaultUseCase,
+         uploadImageUseCase: UploadImageUseCase,
          actions: CreateGroupChatViewModelActions
     ) {
         self.createGroupChatUseCase = createGroupChatUseCase
         self.userDefaultUseCase = userDefaultUseCase
+        self.uploadImageUseCase = uploadImageUseCase
         self.actions = actions
                 
         self.createChatButtonIsEnabled = Observable
@@ -67,46 +81,68 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     }
     
     // MARK: - Inputs
-    
-    private var title: String = ""
-    private var titlePublishSubject = PublishSubject<String>()
+
     func titleDidEdited(_ title: String) {
         self.title = title
         self.titlePublishSubject.onNext(title)
     }
     
-    private var description: String = ""
-    private var descriptionPublishSubject = PublishSubject<String>()
     func descriptionDidEdited(_ description: String) {
         self.description = description
         self.descriptionPublishSubject.onNext(description)
     }
     
-    private var maxParticipant: Int = 10
     func maxParticipantDidChanged(_ numOfParticipant: Int) {
-        self.maxParticipant = numOfParticipant
-        print(numOfParticipant)
+        self.maxNumOfParticipant = numOfParticipant
     }
     
-    private var maxRange: Int = 0
-    private var maxRangePublishSubject = PublishSubject<Int>()
     func maxRangeDidChanged(_ range: Int) {
         self.maxRange = range
         self.maxRangePublishSubject.onNext(range)
     }
     
+    func setThumbnailImage(_ binary: Data?) {
+        self.imageBehaviorRelay.accept(binary)
+    }
+
     func createChatButtonDIdTapped() {
-        guard let chatRoom = self.createChatRoom(),
-        let chatRoomUUID = chatRoom.uuid
+        if let image = self.imageBehaviorRelay.value {
+            self.uploadImageUseCase.execute(image: image)
+                .subscribe(onSuccess: { [weak self] imagePath in
+                    self?.createChatRoom(imagePath: imagePath)
+                }, onFailure: { [weak self] _ in
+                    self?.createChatRoom()
+                })
+                .disposed(by: self.disposeBag)
+        } else {
+            self.createChatRoom()
+        }
+    }
+    
+    private func createChatRoom(imagePath: String? = nil) {
+        guard let userUUID = self.userDefaultUseCase.fetchUserUUID(),
+              let randomLatitudeMeters = ((-500)...500).randomElement().map({Double($0)}),
+              let randomLongitudeMeters = ((-500)...500).randomElement().map({Double($0)})
         else {
             return
         }
+        
+        let currentLat = 37.3596093566472
+        let currentLong = 127.1056219310272
+        
+        let randomLocation = NCLocation(
+            latitude: currentLat,
+            longitude: currentLong
+        ).add(
+            latitudeMeters: randomLongitudeMeters,
+            longitudeMeters: randomLatitudeMeters
+        )
         
         let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
             uuid: chatRoomUUID,
             userList: [userUUID],
-            roomImagePath: nil,
+            roomImagePath: imagePath,
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
@@ -114,10 +150,23 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             longitude: randomLocation.longitude,
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
-            maxNumberOfParticipants: self.maxParticipant,
+            maxNumberOfParticipants: self.maxNumOfParticipant,
             messageCount: 0
         )
         
-        return chatRoom
+        self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
+            .subscribe(onCompleted: { [weak self] in
+                guard let self else {
+                    return
+                }
+                self.createGroupChatUseCase.addChatRoom(chatRoomUUID: chatRoomUUID)
+                    .subscribe(onCompleted: {
+                        self.actions.showChatViewController(chatRoomUUID)
+                    })
+                    .disposed(by: self.disposeBag)
+            }, onError: { error in
+                print("Error: ", error)
+            })
+            .disposed(by: self.disposeBag)
     }
 }
