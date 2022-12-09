@@ -10,6 +10,11 @@ import UIKit
 
 final class ChatViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate {
     // MARK: - Proporties
+    private enum Metric {
+        static var newConstant: CGFloat = 0
+        static var defaultChatInputAccessoryViewHeigt = 50
+    }
+//    var newConstant: CGFloat = 0
     
     private let viewModel: ChatViewModel
     private var messageItems: [MessageItem]
@@ -73,7 +78,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, UICollecti
         
         chatInputAccessoryView.snp.makeConstraints { make in
             make.left.right.equalTo(self.view)
-            make.height.equalTo(55)
+            make.height.equalTo(Metric.defaultChatInputAccessoryViewHeigt)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
@@ -163,6 +168,38 @@ final class ChatViewController: UIViewController, UITextViewDelegate, UICollecti
                 self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") (\(chatRoom.userList?.count ?? 0))"
             }
             .disposed(by: disposeBag)
+        
+        
+        
+        
+        self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
+            .filter({!$0.isEmpty})
+            .subscribe(onNext: { _ in
+                print("=--------=", self.chatInputAccessoryView.messageInputTextField.frame.height, self.chatInputAccessoryView.messageInputTextField.contentSize.height)
+                
+                print(self.chatInputAccessoryView.frame.height)
+                if (41...100).contains(self.chatInputAccessoryView.messageInputTextField.contentSize.height) {
+                    print("<<<<<<")
+                    self.chatInputAccessoryView.snp.remakeConstraints { make in
+                        make.height.equalTo(self.chatInputAccessoryView.messageInputTextField.contentSize.height)
+                        make.width.equalToSuperview()
+                        make.bottom.equalToSuperview().inset(Metric.newConstant)
+                    }
+                } else if 100 < self.chatInputAccessoryView.messageInputTextField.contentSize.height {
+                    self.chatInputAccessoryView.snp.remakeConstraints { make in
+                        make.height.equalTo(120)
+                        make.width.equalToSuperview()
+                        make.bottom.equalToSuperview().inset(Metric.newConstant)
+                    }
+                } else {
+                    self.chatInputAccessoryView.snp.remakeConstraints { make in
+                        make.height.equalTo(Metric.defaultChatInputAccessoryViewHeigt)
+                        make.width.equalToSuperview()
+                        make.bottom.equalToSuperview().inset(Metric.newConstant)
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -218,15 +255,38 @@ private extension ChatViewController {
         
         let safeAreaExists = (self.view?.window?.safeAreaInsets.bottom != 0)
         let bottomConstant: CGFloat = 20
-        let newConstant = keyboardHeight + (safeAreaExists ? 0 : bottomConstant)
+        Metric.newConstant = keyboardHeight + (safeAreaExists ? 0 : bottomConstant)
         
         self.chatInputAccessoryView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(newConstant)
+            make.bottom.equalToSuperview().inset(Metric.newConstant)
         }
         
         self.collectionView.snp.makeConstraints { make in
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
+        
+        if (55...100).contains(self.chatInputAccessoryView.messageInputTextField.contentSize.height) {
+            print("<<<<<<<<<<<<<<키보드 max 전")
+            self.chatInputAccessoryView.snp.remakeConstraints { make in
+                make.height.equalTo(self.chatInputAccessoryView.messageInputTextField.contentSize.height)
+                make.width.equalToSuperview()
+                make.bottom.equalToSuperview().inset(Metric.newConstant)
+            }
+        } else if 100 < self.chatInputAccessoryView.messageInputTextField.contentSize.height {
+            print("$$$$$$$$$$$$$$$$$키보드 max")
+            self.chatInputAccessoryView.snp.remakeConstraints { make in
+                make.height.equalTo(110)
+                make.width.equalToSuperview()
+                make.bottom.equalToSuperview().inset(Metric.newConstant)
+            }
+        }
+        
+        
+        
+        
+        print("키보드 올라갔을때--------", self.chatInputAccessoryView.frame.height)
+        
+        
         
         let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
             self?.view.layoutIfNeeded()

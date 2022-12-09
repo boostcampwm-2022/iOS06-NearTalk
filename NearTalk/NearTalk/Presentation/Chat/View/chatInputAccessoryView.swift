@@ -5,9 +5,11 @@
 //  Created by dong eun shin on 2022/11/23.
 //
 
+import RxSwift
 import UIKit
 
 class ChatInputAccessoryView: UIView {
+    private let disposeBag = DisposeBag()
     
     lazy var messageInputView = UIView().then {
         $0.layer.borderWidth = 1.5
@@ -18,12 +20,17 @@ class ChatInputAccessoryView: UIView {
         
     }
     
-    lazy var messageInputTextField = UITextField().then {
+    lazy var messageInputTextField = UITextView().then {
+        $0.layer.borderWidth = 1.5
+        $0.layer.borderColor = UIColor.secondaryLabel?.cgColor
+        $0.layer.cornerRadius = 15
+        
         $0.backgroundColor = .clear
         $0.textColor = .black
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.layer.cornerRadius = 15
         $0.clipsToBounds = true
+        $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 7.0, bottom: 10.0, right: 7.0)
     }
     
     lazy var sendButton = UIButton(type: .system).then {
@@ -48,7 +55,7 @@ class ChatInputAccessoryView: UIView {
     }
     
     private func addSubviews() {
-        [addButton, messageInputView, messageInputTextField, sendButton].forEach {
+        [addButton, messageInputTextField, sendButton].forEach {
             self.addSubview($0)
         }
         addButton.snp.makeConstraints { make in
@@ -64,18 +71,18 @@ class ChatInputAccessoryView: UIView {
             make.trailing.equalToSuperview().inset(20)
         }
         
-        messageInputView.snp.makeConstraints { make in
-            make.height.equalTo(35)
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(addButton.snp.trailing).offset(8)
-            make.trailing.equalTo(sendButton.snp.leading).offset(-20)
-        }
-        
         messageInputTextField.snp.makeConstraints { make in
-            make.height.equalTo(35)
+            make.top.bottom.equalToSuperview().inset(5)
             make.centerY.equalToSuperview()
             make.leading.equalTo(addButton.snp.trailing).offset(16)
             make.trailing.equalTo(sendButton.snp.leading).offset(-20)
         }
+        print("%%%%%%%",self.frame.height)
+//        messageInputView.snp.remakeConstraints { make in
+//            make.height.equalTo(35)
+//            make.centerY.equalToSuperview()
+//            make.leading.equalTo(addButton.snp.trailing).offset(8)
+//            make.trailing.equalTo(sendButton.snp.leading).offset(-20)
+//        }
     }
 }
