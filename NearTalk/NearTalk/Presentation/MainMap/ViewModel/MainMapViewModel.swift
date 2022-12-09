@@ -25,8 +25,9 @@ final class MainMapViewModel {
     struct Input {
         let didTapMoveToCurrentLocationButton: Observable<Void>
         let didTapCreateChatRoomButton: Observable<Void>
-        let currentUserMapRegion: Observable<NCMapRegion>
         let didTapAnnotationView: Observable<MKAnnotation>
+        let didUpdateUserLocation: Observable<NCMapRegion>
+        let didUpdateMapViewRegion: Observable<NCMapRegion>
     }
     
     struct Output {
