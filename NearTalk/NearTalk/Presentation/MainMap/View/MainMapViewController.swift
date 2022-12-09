@@ -58,10 +58,7 @@ final class MainMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.locationManagerDidChangeAuthorization(self.locationManager)
-        
-        if let userLocation = self.locationManager.location {
-            self.mapView.move(to: userLocation)
-        }
+        self.followUserLocation()
     }
     
     // MARK: - Methods
@@ -141,8 +138,7 @@ final class MainMapViewController: UIViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 == true }
             .drive(onNext: { [weak self] _ in
-                self?.mapView.showsUserLocation = true
-                self?.mapView.setUserTrackingMode(.follow, animated: true)
+                self?.followUserLocation()
             })
             .disposed(by: self.disposeBag)
         
@@ -170,9 +166,7 @@ final class MainMapViewController: UIViewController {
         output.currentUserLocation
             .asDriver(onErrorJustReturn: NCLocation.naver)
             .drive(onNext: { [weak self] location in
-                print(location)
-                self?.mapView.showsUserLocation = true
-                self?.mapView.setUserTrackingMode(.follow, animated: true)
+                self?.followUserLocation()
             })
             .disposed(by: self.disposeBag)
     }
@@ -202,6 +196,11 @@ final class MainMapViewController: UIViewController {
         return NCMapRegion(centerLocation: centerLocation,
                            latitudeDelta: latitudeDelta,
                            longitudeDelta: longitudeDelta)
+    }
+    
+    private func followUserLocation() {
+        self.mapView.showsUserLocation = true
+        self.mapView.setUserTrackingMode(.follow, animated: true)
     }
 }
 
