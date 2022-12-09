@@ -18,7 +18,6 @@ final class MainMapViewController: UIViewController {
     // MARK: - UI Components
     private(set) lazy var mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
-        $0.setUserTrackingMode(.follow, animated: true)
     }
     private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
@@ -49,16 +48,12 @@ final class MainMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addSubViews()
-        configureConstraints()
-        configureDelegates()
-        registerAnnotationViewClass()
-        bindViewModel()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         self.locationManagerDidChangeAuthorization(self.locationManager)
-        self.followUserLocation()
+        self.addSubViews()
+        self.configureConstraints()
+        self.configureDelegates()
+        self.registerAnnotationViewClass()
+        self.bindViewModel()
     }
     
     // MARK: - Methods
@@ -138,7 +133,7 @@ final class MainMapViewController: UIViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 == true }
             .drive(onNext: { [weak self] _ in
-                self?.followUserLocation()
+                // self?.followUserLocation()
             })
             .disposed(by: self.disposeBag)
         
@@ -166,6 +161,7 @@ final class MainMapViewController: UIViewController {
         output.currentUserLocation
             .asDriver(onErrorJustReturn: NCLocation.naver)
             .drive(onNext: { [weak self] location in
+                let userLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
                 self?.followUserLocation()
             })
             .disposed(by: self.disposeBag)
@@ -202,34 +198,24 @@ final class MainMapViewController: UIViewController {
         self.mapView.showsUserLocation = true
         self.mapView.setUserTrackingMode(.follow, animated: true)
     }
-}
-
-// MARK: - Extensions
-private extension MKMapView {
-    func move(to location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegion(
-            center: location.coordinate,
-            latitudinalMeters: 5000,
-            longitudinalMeters: 5000
-        )
-
-        setCameraBoundary(region: coordinateRegion)
-        setCameraZoomRange()
-
-        self.setRegion(coordinateRegion, animated: true)
+    
+    private func setCamera(with centerLocation: CLLocation) {
+        self.setCameraBoundary(centerLocation: centerLocation)
+        self.setCameraZoomRange()
     }
     
-    private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 5000) {
+    private func setCameraBoundary(centerLocation: CLLocation, meters regionMeters: CLLocationDistance = 5000) {
+        let coordinateRegion = MKCoordinateRegion(center: centerLocation.coordinate,
+                                                  latitudinalMeters: 5000,
+                                                  longitudinalMeters: 5000)
         let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: coordinateRegion)
-        self.setCameraBoundary(cameraBoundary, animated: true)
+        self.mapView.setCameraBoundary(cameraBoundary, animated: true)
     }
     
     private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 5000) {
-        let zoomRange = MKMapView.CameraZoomRange(
-            minCenterCoordinateDistance: minDistance,
-            maxCenterCoordinateDistance: maxDistance
-        )
-        self.setCameraZoomRange(zoomRange, animated: true)
+        let zoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: minDistance,
+                                                  maxCenterCoordinateDistance: maxDistance)
+        self.mapView.setCameraZoomRange(zoomRange, animated: true)
     }
 }
 
@@ -268,11 +254,11 @@ extension MainMapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let currentUserLocation = locations.last
+        guard let userLocation = locations.last
         else { return }
         
-        let currentUserLatitude = Double(currentUserLocation.coordinate.latitude)
-        let currentUserLongitude = Double(currentUserLocation.coordinate.longitude)
+        let currentUserLatitude = Double(userLocation.coordinate.latitude)
+        let currentUserLongitude = Double(userLocation.coordinate.longitude)
         UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
         UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
         
@@ -285,7 +271,7 @@ extension MainMapViewController: CLLocationManagerDelegate {
                                    longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2))
 
         if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
-            self.mapView.move(to: currentUserLocation)
+            // self.followUserLocation()
         }
     }
 }
