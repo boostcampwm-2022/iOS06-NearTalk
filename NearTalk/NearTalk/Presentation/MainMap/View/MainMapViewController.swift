@@ -125,6 +125,8 @@ final class MainMapViewController: UIViewController {
         output.showAccessibleChatRooms
             .asDriver(onErrorJustReturn: [])
             .map { chatRooms in
+                self.mapView.setUserTrackingMode(.follow, animated: true)
+                
                 return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
             }
             .drive(self.mapView.rx.annotations)
@@ -155,9 +157,9 @@ final class MainMapViewController: UIViewController {
             .asDriver()
             .drive(onNext: { [weak self] isFollowing in
                 if isFollowing {
-                    self?.mapView.setUserTrackingMode(.follow, animated: true)
+                    self?.mapView.setUserTrackingMode(.follow, animated: false)
                 } else {
-                    self?.mapView.setUserTrackingMode(.none, animated: true)
+                    self?.mapView.setUserTrackingMode(.none, animated: false)
                 }
             })
             .disposed(by: self.disposeBag)
@@ -257,17 +259,17 @@ extension MainMapViewController: CLLocationManagerDelegate {
         let currentUserLongitude = Double(userLocation.coordinate.longitude)
         UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
         UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
-        
-        guard let cameraBoundary = self.mapView.cameraBoundary
-        else { return }
-        
-        let southWest = NCLocation(latitude: cameraBoundary.region.center.latitude - (cameraBoundary.region.span.latitudeDelta / 2),
-                                   longitude: cameraBoundary.region.center.longitude - (cameraBoundary.region.span.longitudeDelta / 2))
-        let northEast = NCLocation(latitude: cameraBoundary.region.center.latitude + (cameraBoundary.region.span.latitudeDelta / 2),
-                                   longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2))
-
-        if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
-            // self.followUserLocation()
-        }
+//
+//        guard let cameraBoundary = self.mapView.cameraBoundary
+//        else { return }
+//
+//        let southWest = NCLocation(latitude: cameraBoundary.region.center.latitude - (cameraBoundary.region.span.latitudeDelta / 2),
+//                                   longitude: cameraBoundary.region.center.longitude - (cameraBoundary.region.span.longitudeDelta / 2))
+//        let northEast = NCLocation(latitude: cameraBoundary.region.center.latitude + (cameraBoundary.region.span.latitudeDelta / 2),
+//                                   longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2))
+//
+//        if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
+//            // self.followUserLocation()
+//        }
     }
 }
