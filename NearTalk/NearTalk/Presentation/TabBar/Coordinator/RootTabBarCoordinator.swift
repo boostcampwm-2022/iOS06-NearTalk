@@ -25,7 +25,7 @@ final class RootTabBarCoordinator: Coordinator {
     ) {
         self.navigationController = navigationController
         self.rootTabBarDIContainer = container
-    } 
+    }
     
     func start() {
         let viewcontroller: RootTabBarController = rootTabBarDIContainer.resolveRootTabBarViewController()

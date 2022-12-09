@@ -10,7 +10,7 @@ import UIKit
 protocol ChatRoomListCoordinatorDependencies {
     func makeChatRoomListViewController(actions: ChatRoomListViewModelActions) -> ChatRoomListViewController
     func makeChatDIContainer(chatRoomID: String) -> ChatDIContainer
-    func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer
+    func makeCreateGroupChatDIContainer() -> CreateGroupChatDIContainer
 }
 
 final class ChatRoomListCoordinator: Coordinator {

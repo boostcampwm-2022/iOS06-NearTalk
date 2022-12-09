@@ -7,14 +7,13 @@
 
 import UIKit
 
-final class CreateGroupChatDiContainer {
+final class CreateGroupChatDIContainer {
 
     // MARK: - Dependencies
 
     // MARK: - Persistent Storage
 
     // MARK: - Services
-    
     func makeUserDefaultService() -> UserDefaultService {
         return DefaultUserDefaultsService()
     }
@@ -40,7 +39,6 @@ final class CreateGroupChatDiContainer {
     }
 
     // MARK: - UseCases
-    
     func makeCreateGroupChatUseCase() -> CreateGroupChatUseCase {
         return DefaultCreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository(), profileRepository: makeProfileRepository())
     }
@@ -54,7 +52,6 @@ final class CreateGroupChatDiContainer {
     }
 
     // MARK: - Repositories
-    
     func makeUserDefaultsRepository() -> UserDefaultsRepository {
         return DefaultUserDefaultsRepository(userDefaultsService: self.makeUserDefaultService())
     }
@@ -78,7 +75,6 @@ final class CreateGroupChatDiContainer {
     }
 
     // MARK: - View Controller
-
     func makeCreateGroupChatViewController(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewController {
         return CreateGroupChatViewController(viewModel: makeCreateGroupChatViewModel(actions: actions))
     }
@@ -91,16 +87,14 @@ final class CreateGroupChatDiContainer {
     }
 
     // MARK: - Coordinator
-
     func makeCreateGroupChatCoordinator(navigationCotroller: UINavigationController) -> CreateGroupChatCoordinator {
         return CreateGroupChatCoordinator(navigationController: navigationCotroller, dependencies: self)
     }
 
     // MARK: - DI Container
-    
     func makeChatDIContainer(chatRoomID: String) -> ChatDIContainer {
         return ChatDIContainer(chatRoomID: chatRoomID)
     }
 }
 
-extension CreateGroupChatDiContainer: CreateGroupChatCoordinatorDependencies {}
+extension CreateGroupChatDIContainer: CreateGroupChatCoordinatorDependencies {}
