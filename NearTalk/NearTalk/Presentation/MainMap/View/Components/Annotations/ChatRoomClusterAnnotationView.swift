@@ -43,8 +43,8 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
             
             let text = "\(count)"
             let textAttibutes = [
-                NSAttributedString.Key.foregroundColor: UIColor.cyan,
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20)
+                NSAttributedString.Key.foregroundColor: UIColor.cyan, // 임시 글자 색
+                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20) // 임시 글자 font
             ]
             let size = text.size(withAttributes: textAttibutes)
             let rect = CGRect(

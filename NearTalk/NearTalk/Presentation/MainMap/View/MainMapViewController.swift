@@ -101,18 +101,20 @@ final class MainMapViewController: UIViewController {
     }
     
     private func bindViewModel() {
-
         // MARK: - Bind VM input
         let input = MainMapViewModel.Input(
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
-            didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
-            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation.compactMap { _ in
-                return self.convertToNCMapRegion(with: self.mapView.region)
+            currentUserMapRegion: self.mapView.rx.region.map { region in
+                let centerLocation: NCLocation = .init(latitude: region.center.latitude, longitude: region.center.longitude)
+                let latitudeDelta: Double = region.span.latitudeDelta
+                let longitudeDelta: Double = region.span.longitudeDelta
+                
+                return NCMapRegion(centerLocation: centerLocation,
+                                   latitudeDelta: latitudeDelta,
+                                   longitudeDelta: longitudeDelta)
             },
-            didUpdateMapViewRegion: self.mapView.rx.region.map { region in
-                return self.convertToNCMapRegion(with: region)
-            }
+            didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation }
         )
         
         // MARK: - Bind VM output
@@ -137,8 +139,7 @@ final class MainMapViewController: UIViewController {
         output.showAccessibleChatRooms
             .asDriver(onErrorJustReturn: [])
             .map { chatRooms in
-                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0,
-                                                                        userLocation: self.mapView.userLocation.coordinate) }
+                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
             }
             .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
@@ -149,10 +150,7 @@ final class MainMapViewController: UIViewController {
                 guard let mainMapVC = self
                 else { return }
                 
-                if chatRooms.count > 1 {
-                    self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
-                    self?.mapView.selectedAnnotations = []
-                }
+                self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
             })
             .disposed(by: self.disposeBag)
     }
@@ -172,16 +170,6 @@ final class MainMapViewController: UIViewController {
             ChatRoomClusterAnnotationView.self,
             forAnnotationViewWithReuseIdentifier: MKMapViewDefaultClusterAnnotationViewReuseIdentifier
         )
-    }
-    
-    private func convertToNCMapRegion(with region: MKCoordinateRegion) -> NCMapRegion {
-        let centerLocation: NCLocation = .init(latitude: region.center.latitude, longitude: region.center.longitude)
-        let latitudeDelta: Double = region.span.latitudeDelta
-        let longitudeDelta: Double = region.span.longitudeDelta
-        
-        return NCMapRegion(centerLocation: centerLocation,
-                           latitudeDelta: latitudeDelta,
-                           longitudeDelta: longitudeDelta)
     }
 }
 
@@ -222,14 +210,15 @@ extension MainMapViewController: MKMapViewDelegate {
         
         switch chatRoomAnnotation.roomType {
         case .group:
-            let groupChatRoomAnnotationView = GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
-                                                                    reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
-            groupChatRoomAnnotationView.insert(coordinator: coordinator)
-            
-            return groupChatRoomAnnotationView
+            return GroupChatRoomAnnotationView(
+                annotation: chatRoomAnnotation,
+                reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier
+            )
         case .directMessage:
-            return DmChatRoomAnnotationView(annotation: chatRoomAnnotation,
-                                            reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
+            return DmChatRoomAnnotationView(
+                annotation: chatRoomAnnotation,
+                reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier
+            )
         }
     }
 }

@@ -42,7 +42,6 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
             .init(key: "latitude", value: southWest.latitude, queryKey: .isGreaterThan),
             .init(key: "latitude", value: northEast.latitude, queryKey: .isLessThan)
         ]
-        
         return self.firestoreService.fetchList(dataKey: .chatRoom, queryList: queryList)
     }
     
