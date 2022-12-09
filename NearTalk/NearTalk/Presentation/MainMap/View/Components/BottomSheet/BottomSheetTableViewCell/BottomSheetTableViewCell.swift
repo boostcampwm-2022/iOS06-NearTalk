@@ -95,13 +95,8 @@ final class BottomSheetTableViewCell: UITableViewCell {
 // MARK: - Bind
 extension BottomSheetTableViewCell {
     public func fetch(with data: ChatRoom) {
-        guard let chatRoomLatitude = data.latitude,
-              let chatRoomLongitude = data.longitude
-        else { return }
-        
         self.chatRoomName.text = data.roomName
-        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
-        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomLocation)
+        self.chatRoomDistance.text = self.calcChatRoomDistance(with: data.location)
         self.chatRoomDescription.text = data.roomDescription
         self.fetch(path: data.roomImagePath)
     }

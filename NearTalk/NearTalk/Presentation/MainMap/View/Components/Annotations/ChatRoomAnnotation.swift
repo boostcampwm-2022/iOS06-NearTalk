@@ -11,15 +11,6 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     enum RoomType: Int, Decodable, CaseIterable {
         case group
         case directMessage
-        
-        var name: String {
-            switch self {
-            case .group:
-                return "group"
-            case .directMessage:
-                return "directMessage"
-            }
-        }
     }
     
     let chatRoomInfo: ChatRoom
@@ -30,18 +21,16 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     dynamic var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
-    let userLocation: NCLocation
     
-    init(chatRoomInfo: ChatRoom, roomType: RoomType, latitude: CLLocationDegrees, longitude: CLLocationDegrees, userLocation: CLLocationCoordinate2D) {
+    init(chatRoomInfo: ChatRoom, roomType: RoomType, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         self.chatRoomInfo = chatRoomInfo
         self.roomType = roomType
         self.latitude = latitude
         self.longitude = longitude
-        self.userLocation = NCLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
     }
     
-    static func create(with chatRoomInfo: ChatRoom, userLocation: CLLocationCoordinate2D) -> ChatRoomAnnotation? {
-        guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == RoomType.group.name ? .group : .directMessage,
+    static func create(with chatRoomInfo: ChatRoom) -> ChatRoomAnnotation? {
+        guard let roomType: ChatRoomAnnotation.RoomType = chatRoomInfo.roomType == "group" ? .group : .directMessage,
               let latitude = chatRoomInfo.latitude,
               let longitude = chatRoomInfo.longitude
         else { return nil }
@@ -49,7 +38,6 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
         return ChatRoomAnnotation(chatRoomInfo: chatRoomInfo,
                                   roomType: roomType,
                                   latitude: latitude,
-                                  longitude: longitude,
-                                  userLocation: userLocation)
+                                  longitude: longitude)
     }
 }
