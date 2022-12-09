@@ -133,7 +133,7 @@ final class MainMapViewController: UIViewController {
             .asDriver(onErrorJustReturn: false)
             .filter { $0 == true }
             .drive(onNext: { [weak self] _ in
-                // self?.followUserLocation()
+                self?.followUserLocation()
             })
             .disposed(by: self.disposeBag)
         
