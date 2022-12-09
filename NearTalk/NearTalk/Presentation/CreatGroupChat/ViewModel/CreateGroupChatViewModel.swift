@@ -126,47 +126,6 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         else {
             return
         }
-        print(">>>>>>>채팅방 생성 성공>>>>>>> UUID: ", chatRoomUUID)
-        
-        self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
-            .subscribe(onCompleted: { [weak self] in
-                guard let self else {
-                    return
-                }
-                self.createGroupChatUseCase.addChatRoom(chatRoomUUID: chatRoomUUID)
-                    .subscribe(onCompleted: {
-                        self.actions.showChatViewController(chatRoomUUID)
-                    })
-                    .disposed(by: self.disposeBag)
-            }, onError: { error in
-                print("Error: ", error)
-            })
-            .disposed(by: self.disposeBag)
-    }
-    
-    private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
-    func setThumbnailImage(_ binary: Data?) {
-        self.imageRelay.accept(binary)
-    }
-    
-    private func createChatRoom() -> ChatRoom? {
-        guard let userUUID = userDefaultUseCase.fetchUserUUID(),
-              let randomLatitudeMeters = ((-500)...500).randomElement().map({Double($0)}),
-              let randomLongitudeMeters = ((-500)...500).randomElement().map({Double($0)})
-        else {
-            return nil
-        }
-        print(randomLatitudeMeters, randomLongitudeMeters)
-        let currentLat = 37.3596093566472
-        let currentLong = 127.1056219310272
-        
-        let randomLocation = NCLocation(
-            latitude: currentLat,
-            longitude: currentLong
-        ).add(
-            latitudeMeters: randomLongitudeMeters,
-            longitudeMeters: randomLatitudeMeters
-        )
         
         let currentLat = 37.3596093566472
         let currentLong = 127.1056219310272
