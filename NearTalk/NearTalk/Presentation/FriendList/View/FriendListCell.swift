@@ -74,13 +74,13 @@ final class FriendListCell: UICollectionViewCell {
         guard let path = path,
               let url = URL(string: path)
         else {
-            img.image = UIImage(named: "nearTalkLogo")
+            img.image = UIImage(named: "ChatLogo")
             return
         }
         
         img.kf.setImage(with: url)
         if img.image == nil {
-            img.image = UIImage(named: "nearTalkLogo")
+            img.image = UIImage(named: "ChatLogo")
         }
     }
     

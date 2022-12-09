@@ -22,15 +22,14 @@ final class ChatViewController: UIViewController {
         frame: .zero,
         collectionViewLayout: compositionalLayout
     ).then {
+        $0.backgroundColor = .primaryBackground
         $0.showsVerticalScrollIndicator = false
         $0.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: ChatCollectionViewCell.identifier)
         $0.delegate = self
     }
     
     private lazy var chatInputAccessoryView: ChatInputAccessoryView = ChatInputAccessoryView().then {
-        $0.layer.borderWidth = 2.0
-        $0.layer.borderColor = UIColor.systemOrange.cgColor
-        $0.backgroundColor = .white
+        $0.backgroundColor = .primaryBackground
     }
         
     // MARK: - Lifecycles
@@ -45,8 +44,14 @@ final class ChatViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.viewModel.viewDidDisappear()
+        super.viewDidDisappear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .primaryBackground
         addSubviews()
         bind()
         
@@ -65,13 +70,13 @@ final class ChatViewController: UIViewController {
         }
         
         chatInputAccessoryView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.left.right.equalTo(self.view)
             make.height.equalTo(55)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         collectionView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.left.right.equalTo(self.view)
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
