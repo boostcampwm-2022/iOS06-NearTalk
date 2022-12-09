@@ -8,7 +8,7 @@
 import UIKit
 
 class ChatInputAccessoryView: UIView {
-    lazy var messageInputTextField = UITextField().then {
+    lazy var messageInputTextField = UITextView().then {
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.layer.cornerRadius = 15
         $0.layer.borderWidth = 2.0
@@ -48,11 +48,5 @@ class ChatInputAccessoryView: UIView {
             make.leading.equalToSuperview().offset(20)
             make.trailing.equalTo(sendButton.snp.leading).offset(-20)
         }
-    }
-}
-
-extension ChatViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-     return CGSize(width: self.view.frame.width, height: 100)
     }
 }

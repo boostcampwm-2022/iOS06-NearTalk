@@ -8,7 +8,7 @@
 import RxSwift
 import UIKit
 
-final class ChatViewController: UIViewController {
+final class ChatViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate {
     // MARK: - Proporties
     
     private let viewModel: ChatViewModel
@@ -51,6 +51,8 @@ final class ChatViewController: UIViewController {
         bind()
         
         // 키보드
+        self.chatInputAccessoryView.messageInputTextField.delegate = self
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHandler(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHandler(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -100,6 +102,10 @@ final class ChatViewController: UIViewController {
     private func scrollToBottom() {
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return false
     }
         
     private func bind() {
