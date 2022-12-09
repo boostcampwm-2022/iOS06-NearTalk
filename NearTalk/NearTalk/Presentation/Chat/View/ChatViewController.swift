@@ -118,23 +118,20 @@ final class ChatViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        self.viewModel.chatMessages
-            .asDriver(onErrorJustReturn: [])
-            .drive(onNext: { [weak self] messages in
+        self.viewModel.observeChatMessage?
+            .asDriver(onErrorDriveWith: .empty())
+            .drive(onNext: { [weak self] message in
                 guard let self,
-                      let myID = self.viewModel.myID,
-                      let message: ChatMessage = messages.last else {
+                        let myID = self.viewModel.myID
+                else {
                     return
                 }
-                
-                let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
-                
-                let messageItem: MessageItem = .init(
+                let userProfile = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                let messageItem = MessageItem(
                     chatMessage: message,
                     myID: myID,
                     userProfile: userProfile
                 )
-                
                 self.messageItems.append(messageItem)
                 let snapshot = self.appendSnapshot(items: self.messageItems)
                 self.dataSource.apply(snapshot, animatingDifferences: false) {
@@ -155,24 +152,27 @@ final class ChatViewController: UIViewController {
     }
 }
 
-// MARK: - UICollectionViewDiffableDataSource
+// MARK: - UICollectionView Diffable DataSource
+
 private extension ChatViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MessageItem>
-    
+
     enum Section {
         case main
     }
     
     func makeDataSource() -> DataSource {
         let datasource = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
+            
             guard let self,
                   let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: ChatCollectionViewCell.identifier,
-                    for: indexPath) as? ChatCollectionViewCell
+                withReuseIdentifier: ChatCollectionViewCell.identifier,
+                for: indexPath) as? ChatCollectionViewCell
             else {
                 return UICollectionViewCell()
             }
+        
             cell.configure(messageItem: item) {
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems([item])
@@ -189,7 +189,9 @@ private extension ChatViewController {
         return snapshot
     }
 }
+
 // MARK: - Keyboard
+
 private extension ChatViewController {
     @objc
     func keyboardHandler(_ notification: Notification) {

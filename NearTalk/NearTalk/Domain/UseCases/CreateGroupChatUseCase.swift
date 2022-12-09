@@ -9,12 +9,12 @@ import Foundation
 
 import RxSwift
 
-protocol CreateGroupChatUseCase {
+protocol CreateGroupChatUseCaseable {
     func createGroupChat(chatRoom: ChatRoom) -> Completable
     func addChatRoom(chatRoomUUID: String) -> Completable
 }
 
-final class DefaultCreateGroupChatUseCase {
+final class CreateGroupChatUseCase {
     // MARK: - Proporties
     
     private let chatRoomListRepository: ChatRoomListRepository
@@ -27,7 +27,7 @@ final class DefaultCreateGroupChatUseCase {
     }
 }
 
-extension DefaultCreateGroupChatUseCase: CreateGroupChatUseCase {
+extension CreateGroupChatUseCase: CreateGroupChatUseCaseable {
     func createGroupChat(chatRoom: ChatRoom) -> Completable {
         return self.chatRoomListRepository.createChatRoom(chatRoom)
     }

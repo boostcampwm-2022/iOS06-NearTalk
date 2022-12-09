@@ -6,20 +6,21 @@
 //
 
 import PhotosUI
+import UIKit
+
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
-import UIKit
 
 final class CreateGroupChatViewController: PhotoImagePickerViewController {
     
     // MARK: - Proporties
     private let pickerComponentList: [Int] = Array((10...100))
     private let viewModel: CreateGroupChatViewModel
-    private let disposeBag: DisposeBag = DisposeBag()
+    private let disposbag: DisposeBag = DisposeBag()
     
-    private enum Metric {
+    private enum Matric {
         static let cornerRadius: CGFloat = 20.0
         static let buttonFontSize: CGFloat = 15.0
         static let labelFontSize: CGFloat = 11.0
@@ -32,11 +33,11 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
         $0.axis = .vertical
         $0.alignment = .center
         $0.distribution = .fillProportionally
-        $0.spacing = Metric.stackViewSpacing
+        $0.spacing = Matric.stackViewSpacing
     }
     
-    private lazy var thumbnailImageView: UIImageView = UIImageView().then {
-        $0.layer.cornerRadius = Metric.cornerRadius
+    private lazy var thumnailImageView: UIImageView = UIImageView().then {
+        $0.layer.cornerRadius = Matric.cornerRadius
         $0.clipsToBounds = true
         $0.backgroundColor = .systemOrange
         $0.isUserInteractionEnabled = true
@@ -54,7 +55,7 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
     
     private lazy var pickerLabel: UILabel = UILabel().then {
         $0.text = "최대 참여 인원 수"
-        $0.font = .systemFont(ofSize: Metric.labelFontSize, weight: .light)
+        $0.font = .systemFont(ofSize: Matric.labelFontSize, weight: .light)
     }
     
     private lazy var maxNumOfParticipantsPicker: UIPickerView = UIPickerView().then {
@@ -64,18 +65,18 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
     
     private lazy var rangeZoneLabel: UILabel = UILabel().then {
         $0.text = "최대  채팅방 입장 가능 범위"
-        $0.font = .systemFont(ofSize: Metric.labelFontSize, weight: .light)
+        $0.font = .systemFont(ofSize: Matric.labelFontSize, weight: .light)
     }
     
     private lazy var rangeZoneView: RangeZoneView = RangeZoneView()
     
     private lazy var createChatButton: UIButton = UIButton().then {
         $0.setTitle("채팅방 생성하기", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: Metric.buttonFontSize, weight: .bold)
-        $0.layer.cornerRadius = Metric.cornerRadius
+        $0.setTitleColor(.red, for: .disabled)
+        $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonFontSize, weight: .bold)
+        $0.layer.cornerRadius = Matric.cornerRadius
         $0.backgroundColor = .systemOrange
         $0.isEnabled = false
-        $0.alpha = 0.7
     }
     
     // MARK: - LifeCycle
@@ -123,72 +124,68 @@ private extension CreateGroupChatViewController {
     private func hideKeyboard(_ sender: Any) {
         view.endEditing(true)
     }
-    
     func binding() {
-        self.thumbnailImageView.rx
+        self.thumnailImageView.rx
             .tapGesture()
             .when(.ended)
             .map({ _ in () })
             .bind(onNext: { [weak self] _ in
                 self?.showPHPickerViewController()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
         
         self.viewModel.thumbnailImage
             .compactMap({$0})
             .map({UIImage(data: $0)})
             .drive(onNext: { [weak self] image in
-                self?.thumbnailImageView.image = image
+                self?.thumnailImageView.image = image
             })
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
                 
         self.titleTextField.rx.text
             .orEmpty
             .bind { [weak self] in
                 self?.viewModel.titleDidEdited($0)
             }
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
         
         self.descriptionTextField.rx.text
             .orEmpty
             .bind { [weak self] in
                 self?.viewModel.descriptionDidEdited($0)
             }
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
         
         self.maxNumOfParticipantsPicker.rx.itemSelected
             .map {self.pickerComponentList[$0.row]}
             .bind { [weak self] in
                 self?.viewModel.maxParticipantDidChanged($0)
             }
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
         
         self.rangeZoneView.rangeSlider.rx.value
             .map({Int($0)})
             .bind { [weak self] in
                 self?.viewModel.maxRangeDidChanged($0)
             }
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
 
         self.createChatButton.rx.tap
             .bind { [weak self] in
                 self?.viewModel.createChatButtonDIdTapped()
-            }.disposed(by: disposeBag)
+            }.disposed(by: disposbag)
                 
         viewModel.createChatButtonIsEnabled
-            .do(onNext: { isEnable in
-                self.createChatButton.alpha = isEnable ? 1.0 : 0.7
-            })
             .drive(self.createChatButton.rx.isEnabled)
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
         
         viewModel.maxRangeLabel
             .drive(self.rangeZoneView.rangeLabel.rx.text)
-            .disposed(by: disposeBag)
+            .disposed(by: disposbag)
     }
     
     func addSubviews() {
-        [thumbnailImageView, titleTextField, descriptionTextField, pickerLabel, maxNumOfParticipantsPicker, rangeZoneLabel, rangeZoneView].forEach {
+        [thumnailImageView, titleTextField, descriptionTextField, pickerLabel, maxNumOfParticipantsPicker, rangeZoneLabel, rangeZoneView].forEach {
             self.stackView.addArrangedSubview($0)
         }
         
@@ -215,7 +212,7 @@ private extension CreateGroupChatViewController {
     }
     
     func configureImageView() {
-        self.thumbnailImageView.snp.makeConstraints {
+        self.thumnailImageView.snp.makeConstraints {
             $0.width.height.equalTo(100)
         }
     }

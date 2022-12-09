@@ -34,23 +34,15 @@ final class CreateGroupChatDiContainer {
     func makeAuthService() -> AuthService {
         return DefaultFirebaseAuthService()
     }
-    
-    func makeStorageService() -> StorageService {
-        return DefaultStorageService()
-    }
 
     // MARK: - UseCases
     
-    func makeCreateGroupChatUseCase() -> CreateGroupChatUseCase {
-        return DefaultCreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository(), profileRepository: makeProfileRepository())
+    func makeCreateGroupChatUseCase() -> CreateGroupChatUseCaseable {
+        return CreateGroupChatUseCase(chatRoomListRepository: makeCreateGroupChatRepository(), profileRepository: makeProfileRepository())
     }
     
     func makeUserDefaultUseCase() -> UserDefaultUseCase {
         return DefaultUserDefaultUseCase(userDefaultsRepository: self.makeUserDefaultsRepository())
-    }
-    
-    func makeUploadImageUseCase() -> UploadImageUseCase {
-        return DefaultUploadImageUseCase(mediaRepository: self.makeMediaRepository())
     }
 
     // MARK: - Repositories
@@ -72,10 +64,6 @@ final class CreateGroupChatDiContainer {
             databaseService: makeDatabaseService(),
             firestoreService: makeFirestoreService())
     }
-    
-    func makeMediaRepository() -> MediaRepository {
-        return DefaultMediaRepository(storageService: self.makeStorageService())
-    }
 
     // MARK: - View Controller
 
@@ -86,7 +74,7 @@ final class CreateGroupChatDiContainer {
     func makeCreateGroupChatViewModel(actions: CreateGroupChatViewModelActions) -> CreateGroupChatViewModel {
         return DefaultCreateGroupChatViewModel(
             createGroupChatUseCase: self.makeCreateGroupChatUseCase(),
-            userDefaultUseCase: self.makeUserDefaultUseCase(), uploadImageUseCase: self.makeUploadImageUseCase(),
+            userDefaultUseCase: self.makeUserDefaultUseCase(),
             actions: actions)
     }
 
