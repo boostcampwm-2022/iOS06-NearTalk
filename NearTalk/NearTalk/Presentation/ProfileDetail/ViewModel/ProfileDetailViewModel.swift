@@ -101,6 +101,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                                                   accessibleRadius: nil,
                                                   recentMessageID: nil,
                                                   recentMessageText: nil,
+                                                  recentMessageDateTimeStamp: Date().timeIntervalSince1970,
                                                   maxNumberOfParticipants: 2,
                                                   messageCount: nil)
                 
