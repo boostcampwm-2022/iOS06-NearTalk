@@ -97,8 +97,8 @@ final class ChatRoomListDIContainer {
         return ChatDIContainer(chatRoomID: chatRoomID)
     }
     
-    func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer {
-        return CreateGroupChatDiContainer()
+    func makeCreateGroupChatDIContainer() -> CreateGroupChatDIContainer {
+        return CreateGroupChatDIContainer()
     }
 }
 
