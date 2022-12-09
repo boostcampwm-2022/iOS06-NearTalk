@@ -36,28 +36,12 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
     override func prepareForDisplay() {
         super.prepareForDisplay()
         
-        self.displayPriority = .defaultLow
-        self.glyphImage = UIImage(systemName: "figure.2.arms.open")
-        self.markerTintColor = self.isAccessible() ? .red : .gray
-        self.canShowCallout = self.markerTintColor == .red
-        self.isEnabled = self.markerTintColor == .red
+        displayPriority = .defaultLow
+        markerTintColor = UIColor.red
+        glyphImage = UIImage(systemName: "figure.2.arms.open")
     }
     
     func insert(coordinator: MainMapCoordinator?) {
         self.coordinator = coordinator
-    }
-    
-    private func isAccessible() -> Bool {
-        guard let annotation = self.annotation as? ChatRoomAnnotation,
-              let chatRoomLatitude = annotation.chatRoomInfo.latitude,
-              let chatRoomLongitude = annotation.chatRoomInfo.longitude,
-              let chatRoomAccessibleRadius = annotation.chatRoomInfo.accessibleRadius
-        else { return false }
-        
-        let userNCLocation = annotation.userLocation
-        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
-        let chatRoomAccessibleRadiusMeters = chatRoomAccessibleRadius * 1000
-        
-        return chatRoomLocation.distance(from: userNCLocation) <= 500
     }
 }

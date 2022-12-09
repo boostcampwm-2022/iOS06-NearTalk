@@ -137,8 +137,7 @@ final class MainMapViewController: UIViewController {
         output.showAccessibleChatRooms
             .asDriver(onErrorJustReturn: [])
             .map { chatRooms in
-                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0,
-                                                                        userLocation: self.mapView.userLocation.coordinate) }
+                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
             }
             .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
