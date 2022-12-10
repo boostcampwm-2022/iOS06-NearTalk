@@ -129,9 +129,9 @@ final class MainMapViewController: UIViewController {
                 
                 return chatRooms.compactMap {
                     let annotation = ChatRoomAnnotation.create(with: $0)
-//                    if let circleOverlay = annotation?.createCircleOverlay() {
-//                        self.mapView.addOverlay(circleOverlay)
-//                    }
+                    if let circleOverlay = annotation?.createCircleOverlay() {
+                        self.mapView.addOverlay(circleOverlay)
+                    }
                     
                     return annotation
                 }
