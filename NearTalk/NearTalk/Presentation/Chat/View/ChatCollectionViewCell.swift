@@ -58,7 +58,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
-        addViews()
+        self.addViews()
+        self.isUserInteractionEnabled = false
     }
     
     override func prepareForReuse() {

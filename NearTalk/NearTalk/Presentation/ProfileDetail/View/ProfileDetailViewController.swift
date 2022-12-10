@@ -18,7 +18,7 @@ class ProfileDetailViewController: UIViewController {
     private var viewModel: ProfileDetailViewModelable!
     private let disposeBag: DisposeBag = DisposeBag()
     
-    private enum Matric {
+    private enum Metric {
         static let nameLabelFontSize: CGFloat = 24.0
         
         static let cornerRadius: CGFloat = 20.0
@@ -35,23 +35,23 @@ class ProfileDetailViewController: UIViewController {
     
     private lazy var profileStackView: UIStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = Matric.stackViewSpacing
+        $0.spacing = Metric.stackViewSpacing
     }
     
     private lazy var buttonStackView: UIStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = Matric.stackViewSpacing
+        $0.spacing = Metric.stackViewSpacing
     }
     
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
-        $0.layer.cornerRadius = Matric.cornerRadius
+        $0.layer.cornerRadius = Metric.cornerRadius
         $0.clipsToBounds = true
         $0.backgroundColor = .systemOrange
     }
     
     private lazy var nameLabel: UILabel = UILabel().then {
         $0.text = "닉네임"
-        $0.font = .systemFont(ofSize: Matric.nameLabelFontSize, weight: .bold)
+        $0.font = .systemFont(ofSize: Metric.nameLabelFontSize, weight: .bold)
     }
     
     private lazy var statusMessage: UILabel = UILabel().then {
@@ -60,15 +60,15 @@ class ProfileDetailViewController: UIViewController {
     
     private lazy var startChatButton: UIButton  = UIButton().then {
         $0.setTitle("채팅 하기", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
-        $0.layer.cornerRadius = Matric.cornerRadius
+        $0.titleLabel?.font = .systemFont(ofSize: Metric.buttonTitleFontSize, weight: .bold)
+        $0.layer.cornerRadius = Metric.cornerRadius
         $0.backgroundColor = .systemOrange
     }
 
     private lazy var deleteFriendButton: UIButton = UIButton().then {
         $0.setTitle("친구 삭제하기", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: Matric.buttonTitleFontSize, weight: .bold)
-        $0.layer.cornerRadius = Matric.cornerRadius
+        $0.titleLabel?.font = .systemFont(ofSize: Metric.buttonTitleFontSize, weight: .bold)
+        $0.layer.cornerRadius = Metric.cornerRadius
         $0.backgroundColor = .systemOrange
     }
     
@@ -117,39 +117,34 @@ private extension ProfileDetailViewController {
     
     func configureStackViews() {
         self.profileStackView.snp.makeConstraints {
-            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(Matric.stackViewLeftRightInset)
+            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(Metric.stackViewLeftRightInset)
             $0.top.equalTo(view.safeAreaLayoutGuide)
         }
         
         self.buttonStackView.snp.makeConstraints {
-            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(Matric.stackViewLeftRightInset)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(Matric.stackViewBottomInset)
+            $0.left.right.equalTo(view.safeAreaLayoutGuide).inset(Metric.stackViewLeftRightInset)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(Metric.stackViewBottomInset)
         }
     }
     
     func configureImageView() {
         self.thumbnailImageView.snp.makeConstraints {
             $0.top.equalTo(self.view.safeAreaLayoutGuide).offset(24)
-            $0.height.equalTo(view.bounds.width - Matric.stackViewLeftRightInset * 2)
+            $0.height.equalTo(view.bounds.width - Metric.stackViewLeftRightInset * 2)
         }
     }
     
     func configureButtons() {
         self.startChatButton.snp.makeConstraints {
-            $0.height.equalTo(Matric.buttonHeight)
+            $0.height.equalTo(Metric.buttonHeight)
         }
         
         self.deleteFriendButton.snp.makeConstraints {
-            $0.height.equalTo(Matric.buttonHeight)
+            $0.height.equalTo(Metric.buttonHeight)
         }
     }
     
     func binding() {
-        self.rx.methodInvoked(#selector(UIViewController.viewWillAppear))
-            .map({_ in})
-            .bind(to: viewModel.viewWillAppearEvent)
-            .disposed(by: disposeBag)
-        
         self.startChatButton.rx.tap
             .bind(to: viewModel.startChatButtonDidTapEvent)
             .disposed(by: disposeBag)
