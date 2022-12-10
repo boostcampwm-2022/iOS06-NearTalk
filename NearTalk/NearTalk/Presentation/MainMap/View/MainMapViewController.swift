@@ -127,7 +127,14 @@ final class MainMapViewController: UIViewController {
             .map { chatRooms in
                 self.mapView.setUserTrackingMode(.follow, animated: true)
                 
-                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0) }
+                return chatRooms.compactMap {
+                    let annotation = ChatRoomAnnotation.create(with: $0)
+                    if let circleOverlay = annotation?.createCircleOverlay() {
+                        self.mapView.addOverlay(circleOverlay)
+                    }
+                    
+                    return annotation
+                }
             }
             .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
@@ -227,21 +234,38 @@ extension MainMapViewController: MKMapViewDelegate {
         case .group:
             let groupChatRoomAnnotationView = GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                                                     reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+            
             groupChatRoomAnnotationView.insert(coordinator: coordinator)
+            
             self.mapView.rx.didUpdateUserLocation
                 .asDriver()
                 .drive(onNext: { userLocation in
                     let currentUserLocation = NCLocation(latitude: userLocation.coordinate.latitude,
                                                          longitude: userLocation.coordinate.longitude)
-                    groupChatRoomAnnotationView.configureAccessible(userLocation: currentUserLocation, targetAnnotation: annotation)
+                    
+                    groupChatRoomAnnotationView.configureAccessible(userLocation: currentUserLocation,
+                                                                    targetAnnotation: annotation)
                 })
                 .disposed(by: self.disposeBag)
-            
+
             return groupChatRoomAnnotationView
+            
         case .directMessage:
             return DmChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                             reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay.isKind(of: MKCircle.self) {
+            let circleRenderer = MKCircleRenderer(overlay: overlay)
+            circleRenderer.fillColor = .blue.withAlphaComponent(0.01)
+            circleRenderer.strokeColor = .red
+            circleRenderer.lineWidth = 1
+            return circleRenderer
+        }
+        
+        return MKOverlayRenderer(overlay: overlay)
     }
 }
 

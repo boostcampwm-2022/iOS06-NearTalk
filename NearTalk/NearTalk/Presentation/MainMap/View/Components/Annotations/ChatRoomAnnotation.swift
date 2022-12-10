@@ -39,4 +39,17 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     static func create(with chatRoomInfo: ChatRoom) -> ChatRoomAnnotation? {
         return ChatRoomAnnotation(chatRoomInfo: chatRoomInfo)
     }
+    
+    func createCircleOverlay() -> MKCircle {
+        guard let latitude = self.chatRoomInfo.latitude,
+              let longitude = self.chatRoomInfo.longitude,
+              let accessibleRadius = self.chatRoomInfo.accessibleRadius
+        else { return MKCircle() }
+        
+        let center = CLLocationCoordinate2D(latitude: latitude,
+                                            longitude: longitude)
+        let radius = CLLocationDistance(floatLiteral: accessibleRadius * 1000)
+
+        return MKCircle(center: center, radius: radius)
+    }
 }
