@@ -139,6 +139,7 @@ private extension DefaultAppSettingViewModel {
                 Task(priority: .high) {
                     await UIApplication.shared.unregisterForRemoteNotifications()
                 }
+                #warning("Enum으로 UserDefaults 키 관리")
                 UserDefaults.standard.set(AppTheme.system.rawValue, forKey: AppTheme.keyName)
                 UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
                 UserDefaults.standard.removeObject(forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
