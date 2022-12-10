@@ -11,18 +11,15 @@ import RxSwift
 
 protocol FCMService {
     func sendMessage(_ message: ChatMessage, _ roomName: String, _ tokenList: [String]) -> Completable
-    func subscribeRoom(_ roomID: String) -> Completable
-    func unsubscribeRoom(_ roomID: String) -> Completable
 }
 
 enum FCMServiceError: Error {
     case failedToSendFCM
-    case failedToSubscribe
-    case failedToUnsubscribe
 }
 
 final class DefaultFCMService: FCMService {
     func sendMessage(_ message: ChatMessage, _ roomName: String, _ tokenList: [String]) -> Completable {
+        print("🚧 ", #function)
         print("-+++++++", tokenList)
         return Completable.create { completable in
             let dto: FCMNotificationDTO = .init(
@@ -52,34 +49,6 @@ final class DefaultFCMService: FCMService {
             return Disposables.create {
                 task.cancel()
             }
-        }
-    }
-    
-    func subscribeRoom(_ roomID: String) -> Completable {
-        Completable.create { completable in
-            Messaging.messaging().subscribe(toTopic: "/topics/\(roomID)") { error in
-                if let error {
-                    print(error)
-                    completable(.error(FCMServiceError.failedToSubscribe))
-                } else {
-                    completable(.completed)
-                }
-            }
-            return Disposables.create()
-        }
-    }
-    
-    func unsubscribeRoom(_ roomID: String) -> Completable {
-        Completable.create { completable in
-            Messaging.messaging().unsubscribe(fromTopic: "/topics/\(roomID)") { error in
-                if let error {
-                    print(error)
-                    completable(.error(FCMServiceError.failedToUnsubscribe))
-                } else {
-                    completable(.completed)
-                }
-            }
-            return Disposables.create()
         }
     }
 }

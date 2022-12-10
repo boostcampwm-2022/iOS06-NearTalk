@@ -21,7 +21,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         view.font = .systemFont(ofSize: 16.0)
         view.text = "message"
         view.textContainer.maximumNumberOfLines = 0
-        view.textColor = .black
+        view.textColor = .label
         view.backgroundColor = .white
         view.layer.cornerRadius = 20.0
         view.layer.masksToBounds = false
@@ -76,7 +76,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
     func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
         let isInComing = messageItem.type == .receive ? true : false
         
-        self.textView.backgroundColor = isInComing ? .secondaryLabel : .primaryColor
+        self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
+        self.textView.textColor = isInComing ? .label : .whiteLabel
         self.textView.text = messageItem.message
         self.namelabel.text = isInComing ? messageItem.userName : ""
         self.timelabel.text = self.convertDateToString(with: messageItem.createdAt)
