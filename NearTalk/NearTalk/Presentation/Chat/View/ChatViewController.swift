@@ -8,8 +8,15 @@
 import RxSwift
 import UIKit
 
-final class ChatViewController: UIViewController {
+final class ChatViewController: UIViewController, UICollectionViewDelegate {
     // MARK: - Proporties
+    
+    private enum Metric {
+        static var keyboardHeight: CGFloat = 0
+        static let defaultChatInputAccessoryViewHeight = 50
+        static let defaultTextFieldHeight: Double = 40.0
+        static let textFieldInset: Double = 5.0
+    }
     
     private let viewModel: ChatViewModel
     private var messageItems: [MessageItem]
@@ -18,19 +25,18 @@ final class ChatViewController: UIViewController {
     private lazy var dataSource: DataSource = makeDataSource()
     private lazy var compositionalLayout: UICollectionViewCompositionalLayout = self.createLayout()
     
-    private lazy var collectionView: UICollectionView = UICollectionView(
+    private lazy var chatCollectionView: UICollectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: compositionalLayout
     ).then {
+        $0.backgroundColor = .primaryBackground
         $0.showsVerticalScrollIndicator = false
         $0.register(ChatCollectionViewCell.self, forCellWithReuseIdentifier: ChatCollectionViewCell.identifier)
         $0.delegate = self
     }
     
     private lazy var chatInputAccessoryView: ChatInputAccessoryView = ChatInputAccessoryView().then {
-        $0.layer.borderWidth = 2.0
-        $0.layer.borderColor = UIColor.systemOrange.cgColor
-        $0.backgroundColor = .white
+        $0.backgroundColor = .primaryBackground
     }
         
     // MARK: - Lifecycles
@@ -45,10 +51,19 @@ final class ChatViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        self.viewModel.viewDidDisappear()
+        super.viewDidDisappear(animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        addSubviews()
-        bind()
+        self.view.backgroundColor = .primaryBackground
+        self.addSubviews()
+        self.configureChatInputAccessoryView()
+        self.configureChatCollectionView()
+        self.bind()
+        self.chatInputAccessoryView.messageInputTextField.delegate = self
         
         // 키보드
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHandler(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -56,50 +71,12 @@ final class ChatViewController: UIViewController {
         
         // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
-        view.addGestureRecognizer(tapGesture)
+        self.chatCollectionView.addGestureRecognizer(tapGesture)
     }
-    
-    private func addSubviews() {
-        [collectionView, chatInputAccessoryView].forEach {
-            self.view.addSubview($0)
-        }
-        
-        chatInputAccessoryView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.height.equalTo(55)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
-        }
-        
-        collectionView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(chatInputAccessoryView.snp.top)
-        }
-    }
-    
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(40.0))
-        
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                               heightDimension: .estimated(40))
-        
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                         subitems: [item])
 
-        let section = NSCollectionLayoutSection(group: group)
-        section.interGroupSpacing = 8.0
-
-        let layout = UICollectionViewCompositionalLayout(section: section)
-        
-        return layout
-    }
-    
     private func scrollToBottom() {
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
-        collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        self.chatCollectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
         
     private func bind() {
@@ -152,10 +129,18 @@ final class ChatViewController: UIViewController {
                 self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") (\(chatRoom.userList?.count ?? 0))"
             }
             .disposed(by: disposeBag)
+        
+        self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
+            .filter({!$0.isEmpty})
+            .subscribe(onNext: { _ in
+                self.reconfigureChatInputAccessoryView()
+            })
+            .disposed(by: disposeBag)
     }
 }
 
 // MARK: - UICollectionViewDiffableDataSource
+
 private extension ChatViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MessageItem>
@@ -165,7 +150,7 @@ private extension ChatViewController {
     }
     
     func makeDataSource() -> DataSource {
-        let datasource = DataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, item in
+        let datasource = DataSource(collectionView: chatCollectionView) { [weak self] collectionView, indexPath, item in
             guard let self,
                   let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: ChatCollectionViewCell.identifier,
@@ -189,7 +174,9 @@ private extension ChatViewController {
         return snapshot
     }
 }
-// MARK: - Keyboard
+
+// MARK: - Keyboard Notification Handler
+
 private extension ChatViewController {
     @objc
     func keyboardHandler(_ notification: Notification) {
@@ -207,37 +194,111 @@ private extension ChatViewController {
         
         let safeAreaExists = (self.view?.window?.safeAreaInsets.bottom != 0)
         let bottomConstant: CGFloat = 20
-        let newConstant = keyboardHeight + (safeAreaExists ? 0 : bottomConstant)
-        
-        self.chatInputAccessoryView.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(newConstant)
-        }
-        
-        self.collectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(chatInputAccessoryView.snp.top)
-        }
+        Metric.keyboardHeight = keyboardHeight + (safeAreaExists ? 0 : bottomConstant)
+
+        self.reconfigureChatInputAccessoryView()
+        self.configureChatCollectionView()
         
         let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
             self?.view.layoutIfNeeded()
         }
-        
         animator.startAnimation()
+        
         self.scrollToBottom()
     }
     
     @objc
     func hideKeyboard(_ sender: Any) {
         view.endEditing(true)
+        
         self.chatInputAccessoryView.snp.remakeConstraints { make in
-            make.width.equalTo(self.view.frame.width)
-            make.height.equalTo(50)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(Metric.defaultChatInputAccessoryViewHeight)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
-
-        self.collectionView.snp.remakeConstraints { make in
+        
+        self.chatCollectionView.snp.remakeConstraints { make in
+            make.left.right.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(10)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
+    }
+}
+
+// MARK: - Layout
+
+private extension ChatViewController {
+    func addSubviews() {
+        [chatCollectionView, chatInputAccessoryView].forEach {
+            self.view.addSubview($0)
+        }
+    }
+    
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(40.0))
+        
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                               heightDimension: .estimated(40))
+        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                         subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 8.0
+
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
+    }
+    
+    func reconfigureChatInputAccessoryView() {
+        let contentHeight = self.chatInputAccessoryView.messageInputTextField.contentSize.height
+        
+        if ((Metric.defaultTextFieldHeight + 1)...(Metric.defaultTextFieldHeight * 3)).contains(contentHeight) {
+            self.chatInputAccessoryView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(self.chatInputAccessoryView.messageInputTextField.contentSize.height)
+                make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
+            }
+        } else if ((Metric.defaultTextFieldHeight * 3) + 1) < contentHeight {
+            self.chatInputAccessoryView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo((Metric.defaultTextFieldHeight * 3) + (Metric.textFieldInset * 2))
+                make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
+            }
+        } else {
+            self.chatInputAccessoryView.snp.remakeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(Metric.defaultChatInputAccessoryViewHeight)
+                make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
+            }
+        }
+    }
+    
+    func configureChatInputAccessoryView() {
+        self.chatInputAccessoryView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.height.equalTo(Metric.defaultChatInputAccessoryViewHeight)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+    }
+    
+    func configureChatCollectionView() {
+        self.chatCollectionView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.bottom.equalTo(chatInputAccessoryView.snp.top)
+        }
+    }
+}
+
+// MARK: - UITextViewDelegate
+
+extension ChatViewController: UITextViewDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return false
     }
 }

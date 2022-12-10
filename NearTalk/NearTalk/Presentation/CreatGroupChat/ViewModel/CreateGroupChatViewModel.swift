@@ -150,6 +150,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             longitude: randomLocation.longitude,
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
+            recentMessageDateTimeStamp: Date().timeIntervalSince1970,
             maxNumberOfParticipants: self.maxNumOfParticipant,
             messageCount: 0
         )

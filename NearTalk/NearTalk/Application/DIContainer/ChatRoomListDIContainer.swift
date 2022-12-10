@@ -56,10 +56,16 @@ final class ChatRoomListDIContainer {
             fcmService: makeFCMService()
         )
     }
+    
+    func makeUserDefaultsRepository() -> UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: DefaultUserDefaultsService())
+    }
 
     // MARK: - UseCases
     func makeChatRoomListUseCase() -> FetchChatRoomUseCase {
-        return DefaultFetchChatRoomUseCase(chatRoomListRepository: makeChatRoomListRepository())
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: makeChatRoomListRepository(),
+                                           profileRepository: makeProfileRepository(),
+                                            userDefaultsRepository: makeUserDefaultsRepository())
     }
     
     // MARK: - Repositories
@@ -91,8 +97,8 @@ final class ChatRoomListDIContainer {
         return ChatDIContainer(chatRoomID: chatRoomID)
     }
     
-    func makeCreateGroupChatDIContainer() -> CreateGroupChatDiContainer {
-        return CreateGroupChatDiContainer()
+    func makeCreateGroupChatDIContainer() -> CreateGroupChatDIContainer {
+        return CreateGroupChatDIContainer()
     }
 }
 

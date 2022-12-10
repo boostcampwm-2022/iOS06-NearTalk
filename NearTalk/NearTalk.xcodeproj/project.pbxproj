@@ -15,6 +15,7 @@
 		162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B6B2935176D004724D9 /* NCMapRegion.swift */; };
 		162B1B722935E2BF004724D9 /* UserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */; };
 		162B1B742935E2DA004724D9 /* DefaultUserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */; };
+		162B1B7729424346004724D9 /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B7629424346004724D9 /* CalloutView.swift */; };
 		1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA962921D73E0076AC35 /* MainMapViewModel.swift */; };
 		1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA982921D7480076AC35 /* MainMapCoordinator.swift */; };
 		1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA9A2921D7570076AC35 /* MainMapViewController.swift */; };
@@ -61,7 +62,7 @@
 		556EE2512926402000EEA145 /* ChatRoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556EE2502926402000EEA145 /* ChatRoomListCell.swift */; };
 		5576AC242938746B009A906A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5576AC232938746B009A906A /* GoogleService-Info.plist */; };
 		5576AC282938BF30009A906A /* config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 5576AC272938BF2F009A906A /* config.xcconfig */; };
-		55C620D5292E10ED003D9E9C /* CreateGroupChatDiContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C620D4292E10ED003D9E9C /* CreateGroupChatDiContainer.swift */; };
+		55C620D5292E10ED003D9E9C /* CreateGroupChatDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C620D4292E10ED003D9E9C /* CreateGroupChatDIContainer.swift */; };
 		6001DA88292D47320062EAD0 /* UserChatRoomTicket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */; };
 		6001DA8A292D5F270062EAD0 /* ChatMessageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA89292D5F270062EAD0 /* ChatMessageRepository.swift */; };
 		6001DA8C292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */; };
@@ -291,6 +292,7 @@
 		162B1B6B2935176D004724D9 /* NCMapRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCMapRegion.swift; sourceTree = "<group>"; };
 		162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsRepository.swift; sourceTree = "<group>"; };
 		162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultUserDefaultsRepository.swift; sourceTree = "<group>"; };
+		162B1B7629424346004724D9 /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
 		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
 		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -343,7 +345,7 @@
 		5576AC232938746B009A906A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5576AC272938BF2F009A906A /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		55B25CD3293F6C3D009F7963 /* textMoveGPS.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = textMoveGPS.gpx; sourceTree = "<group>"; };
-		55C620D4292E10ED003D9E9C /* CreateGroupChatDiContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupChatDiContainer.swift; sourceTree = "<group>"; };
+		55C620D4292E10ED003D9E9C /* CreateGroupChatDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupChatDIContainer.swift; sourceTree = "<group>"; };
 		6001DA86292CB70B0062EAD0 /* NearTalk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NearTalk.entitlements; sourceTree = "<group>"; };
 		6001DA87292D47320062EAD0 /* UserChatRoomTicket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserChatRoomTicket.swift; sourceTree = "<group>"; };
 		6001DA89292D5F270062EAD0 /* ChatMessageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRepository.swift; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				1648BAAE292387020076AC35 /* GroupChatRoomAnnotationView.swift */,
 				1648BAB0292387100076AC35 /* DmChatRoomAnnotationView.swift */,
 				1648BAB2292389920076AC35 /* ChatRoomClusterAnnotationView.swift */,
+				162B1B7629424346004724D9 /* CalloutView.swift */,
 			);
 			path = Annotations;
 			sourceTree = "<group>";
@@ -1158,7 +1161,6 @@
 		6043603A2941F6B800E5D257 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
-				60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */,
 				60FB892B2940EDD500E9E4E5 /* RealtimeDBTests.swift */,
 			);
 			path = Infrastructure;
@@ -1170,7 +1172,7 @@
 				608BD1182931F3E800CB676E /* AppDIContainer.swift */,
 				7C254DB0292DDA88004D4CEC /* ChatDIContainer.swift */,
 				555A6B3429238C13001336ED /* ChatRoomListDIContainer.swift */,
-				55C620D4292E10ED003D9E9C /* CreateGroupChatDiContainer.swift */,
+				55C620D4292E10ED003D9E9C /* CreateGroupChatDIContainer.swift */,
 				8386B7CB292F5D1C0095597D /* AppSettingDIContainer.swift */,
 				605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */,
 				83649774292DF0590002DDE5 /* LoginDIContainer.swift */,
@@ -1254,6 +1256,7 @@
 			isa = PBXGroup;
 			children = (
 				7C4895352931FBE300DD5076 /* config.xcconfig */,
+				60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1838,6 +1841,7 @@
 				8386B7CA292F59740095597D /* AppSettingCoordinator.swift in Sources */,
 				608BD1192931F3E800CB676E /* AppDIContainer.swift in Sources */,
 				608BD10E292F709B00CB676E /* FCMService.swift in Sources */,
+				162B1B7729424346004724D9 /* CalloutView.swift in Sources */,
 				555A6B3329236D98001336ED /* FriendListCoordinator.swift in Sources */,
 				6008FC9D2925DBCF0044F017 /* NCLocation.swift in Sources */,
 				83EE797D293F5FAA0008D859 /* UserProfileInputView.swift in Sources */,
@@ -1931,7 +1935,7 @@
 				6001DA8C292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift in Sources */,
 				6001DA8A292D5F270062EAD0 /* ChatMessageRepository.swift in Sources */,
 				603FD38A292928D000687ED4 /* FirebaseQueryKey.swift in Sources */,
-				55C620D5292E10ED003D9E9C /* CreateGroupChatDiContainer.swift in Sources */,
+				55C620D5292E10ED003D9E9C /* CreateGroupChatDIContainer.swift in Sources */,
 				1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */,
 				83649777292E15A50002DDE5 /* DummyAuthRepository.swift in Sources */,
 				555A6B3E29238D65001336ED /* ChatRoomListRepository.swift in Sources */,
@@ -1999,6 +2003,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				60DA630A293D20A1003CA3E5 /* CoreDataTests.swift in Sources */,
+				60DA6318293D21D4003CA3E5 /* BaseEntity.swift in Sources */,
+				60DA6316293D21D4003CA3E5 /* ChatMessage.swift in Sources */,
+				60DA631B293D21D4003CA3E5 /* UserChatRoomTicket.swift in Sources */,
+				60DA631C293D21D4003CA3E5 /* ChatRoomList.swift in Sources */,
+				60DA6317293D21D4003CA3E5 /* UserProfile.swift in Sources */,
+				60DA631E293D21D4003CA3E5 /* UserChatModel.swift in Sources */,
+				60DA630B293D20E6003CA3E5 /* CoreDataService.swift in Sources */,
+				1660D242291DDB3A005F7B24 /* NearTalkTests.swift in Sources */,
+				60DA6319293D21D4003CA3E5 /* NCLocation.swift in Sources */,
+				60DA631A293D21D4003CA3E5 /* Friend.swift in Sources */,
+				60DA631D293D21D4003CA3E5 /* ChatRoom.swift in Sources */,
 				60FB893A2940EE8500E9E4E5 /* FirestoreService.swift in Sources */,
 				60FB893C2940EE8500E9E4E5 /* FCMService.swift in Sources */,
 				60DA6318293D21D4003CA3E5 /* BaseEntity.swift in Sources */,
@@ -2193,7 +2208,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
+				INFOPLIST_KEY_CFBundleDisplayName = "근방톡";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -2245,7 +2260,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = NearTalk;
+				INFOPLIST_KEY_CFBundleDisplayName = "근방톡";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

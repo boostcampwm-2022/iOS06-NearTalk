@@ -19,6 +19,7 @@ class ChatRoomListCell: UICollectionViewCell {
     private var uuid: String?
     private var viewModel: ChatRoomListViewModel?
     private var disposeBag = DisposeBag()
+    private var userDefaults: DisposeBag = .init()
     private var inArea: Bool = true
     
     override var isSelected: Bool {
@@ -91,6 +92,8 @@ class ChatRoomListCell: UICollectionViewCell {
         self.unreadMessageCount.isHidden = true
         self.date.text = nil
         self.profileImageView.image = nil
+        
+        self.disposeBag = DisposeBag()
     }
     
     override init(frame: CGRect) {
@@ -105,7 +108,6 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     func configure(groupData: GroupChatRoomListData, viewModel: ChatRoomListViewModel) {
-        print(groupData.roomName, "유저티켓")
         self.viewModel = viewModel
         self.uuid = groupData.uuid
         self.name.text = groupData.roomName
@@ -114,18 +116,20 @@ class ChatRoomListCell: UICollectionViewCell {
         self.recentMessage.text = groupData.recentMessageText == nil ? "새로 생성된 방입니다" : groupData.recentMessageText
         self.unreadMessageCheck(roomID: groupData.uuid ?? "", number: groupData.messageCount)
         self.dateOperate(date: groupData.recentMessageDate)
-        self.accessibleRadiusCheck(location: groupData.location, accessibleRadius: groupData.accessibleRadius)
+        self.accessibleRadiusCheck(latitude: groupData.latitude,
+                                   longitude: groupData.longitude,
+                                   accessibleRadius: groupData.accessibleRadius)
         
     }
     
     func configure(dmData: DMChatRoomListData, viewModel: ChatRoomListViewModel) {
         self.viewModel = viewModel
         self.uuid = dmData.uuid
-        self.name.text = dmData.roomName
         self.imageLoad(path: dmData.roomImagePath)
         self.recentMessage.text = dmData.recentMessageText == nil ? "새로 생성된 방입니다" : dmData.recentMessageText
         self.unreadMessageCheck(roomID: dmData.uuid ?? "", number: dmData.messageCount)
         self.dateOperate(date: dmData.recentMessageDate)
+        self.dmRoomNameSetup(userList: dmData.userList)
     }
     
     // MARK: - Configure views
@@ -227,6 +231,8 @@ class ChatRoomListCell: UICollectionViewCell {
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
                           let number = number,
                           number > lastRoomMessageCount else {
+                        print(number)
+                        print(ticket)
                         
                         DispatchQueue.main.async {
                             self?.unreadMessageCount.isHidden = true
@@ -258,36 +264,59 @@ class ChatRoomListCell: UICollectionViewCell {
         }
     }
     
-    private func accessibleRadiusCheck(location: NCLocation?, accessibleRadius: Double?) {
-        guard let location, let accessibleRadius
+    private func accessibleRadiusCheck(latitude: Double?, longitude: Double?, accessibleRadius: Double?) {
+        guard let latitude, let longitude, let accessibleRadius
         else { return }
         
-        UserDefaults.standard.rx
-            .observe([String: Double].self, "CurrentUserLocation")
-            .subscribe(onNext: { (value: [String: Double]?) in
-                guard let longitude = value?["longitude"],
-                      let latitude = value?["latitude"] else { return }
-                
-                let newNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
-                let distance = location.distance(from: newNCLocation)
-                
-//                print("\(self.name.text) 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
-                
-                if distance <= accessibleRadius * 1000 {
-                    self.inArea = true
-                    DispatchQueue.main.async {
-                        self.lockIcon.isHidden = true
-                        self.view.isHidden = true
-                    }
-                } else {
-                    self.inArea = false
-                    DispatchQueue.main.async {
-                        self.lockIcon.isHidden = false
-                        self.view.isHidden = false
-                    }
+        Observable.zip(
+            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
+            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
+        )
+        .subscribe(onNext: { [weak self] (currentLatitude, currentLongitude) in
+            guard let currentLatitude,
+                  let currentLongitude else { return }
+            
+            let currentNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
+            let chatNCLocation: NCLocation = NCLocation(latitude: currentLatitude, longitude: currentLongitude)
+            let distance = currentNCLocation.distance(from: chatNCLocation)
+            
+//            print("\(self?.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
+            
+            if distance <= accessibleRadius * 1000 {
+                self?.inArea = true
+                DispatchQueue.main.async {
+                    self?.lockIcon.isHidden = true
+                    self?.view.isHidden = true
                 }
-                
-            })
-            .disposed(by: disposeBag)
+            } else {
+                self?.inArea = false
+                DispatchQueue.main.async {
+                    self?.lockIcon.isHidden = false
+                    self?.view.isHidden = false
+                }
+            }
+        })
+        .disposed(by: disposeBag)
+    }
+}
+
+// MARK: - DM Chat Setting
+extension ChatRoomListCell {
+    func dmRoomNameSetup(userList: [String]?) {
+        guard let userList,
+              let myProfile = self.viewModel?.getMyProfile(),
+              let myUUID = myProfile.uuid
+        else { return }
+        
+        userList.forEach {
+            if $0 != myUUID {
+                self.viewModel?.getUserProfile(userID: $0)
+                    .subscribe(onSuccess: { userProfile in
+                        self.name.text = userProfile.username
+                        self.imageLoad(path: userProfile.profileImagePath)
+                    })
+                    .disposed(by: disposeBag)
+            }
+        }
     }
 }

@@ -25,6 +25,10 @@ final class ProfileDetailDIContainer {
         return DefaultFirebaseAuthService()
     }
     
+    func makeUserDefaultService() -> UserDefaultService {
+        return DefaultUserDefaultsService()
+    }
+    
     // MARK: - UseCases
     func makeFetchProfileUseCase() -> FetchProfileUseCase {
         return DefaultFetchProfileUseCase(profileRepository: self.makeProfileDetailRepository())
@@ -44,6 +48,10 @@ final class ProfileDetailDIContainer {
         return DefaultRemoveFriendUseCase(profileRepository: self.makeProfileDetailRepository())
     }
     
+    func makeUpdateProfileUseCase() -> UpdateProfileUseCase {
+        return DefaultUpdateProfileUseCase(repository: makeProfileDetailRepository(), userDefaultsRepository: makeUserDefaultsRepository())
+    }
+    
     // MARK: - Repositories
     func makeProfileDetailRepository() -> ProfileRepository {
         return DefaultProfileRepository(
@@ -51,6 +59,9 @@ final class ProfileDetailDIContainer {
             firebaseAuthService: self.makefirebaseAuthService())
     }
     
+    func makeUserDefaultsRepository() -> UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: makeUserDefaultService())
+    }
     // MARK: - ViewModels
     func makeProfileDetailViewModel(
         actions: ProfileDetailViewModelActions
@@ -60,6 +71,7 @@ final class ProfileDetailDIContainer {
             fetchProfileUseCase: self.makeFetchProfileUseCase(),
             uploadChatRoomInfoUseCase: self.makeUploadChatRoomInfoUseCase(),
             removeFriendUseCase: self.makeRemoveFriendUseCase(),
+            updateProfileUseCase: self.makeUpdateProfileUseCase(),
             actions: actions)
     }
     
