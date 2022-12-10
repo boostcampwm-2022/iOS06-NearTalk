@@ -58,16 +58,15 @@ class ChatInputAccessoryView: UIView {
             self.addSubview($0)
         }
         addButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.leading.equalTo(self).offset(8)
             make.height.width.equalTo(35)
-            
+            make.leading.equalTo(self).offset(8)
+            make.bottom.equalToSuperview().inset(10)
         }
         
         sendButton.snp.makeConstraints { make in
             make.width.height.equalTo(30)
-            make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(10)
         }
         
         messageInputTextField.snp.makeConstraints { make in
