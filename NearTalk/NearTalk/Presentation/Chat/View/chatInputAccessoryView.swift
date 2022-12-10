@@ -25,8 +25,8 @@ class ChatInputAccessoryView: UIView {
         $0.layer.borderColor = UIColor.secondaryLabel?.cgColor
         $0.layer.cornerRadius = 15
         $0.layer.cornerRadius = 15
-        $0.backgroundColor = .clear
-        $0.textColor = .black
+        $0.backgroundColor = .secondaryBackground
+        $0.textColor = .label
         $0.font = UIFont.systemFont(ofSize: 16)
         $0.clipsToBounds = true
         $0.textContainerInset = UIEdgeInsets(top: 10.0, left: 7.0, bottom: 10.0, right: 7.0)

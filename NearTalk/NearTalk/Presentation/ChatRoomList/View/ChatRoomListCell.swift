@@ -229,10 +229,9 @@ class ChatRoomListCell: UICollectionViewCell {
                 switch event {
                 case .success(let ticket):
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
-                          let number = number,
+                          let number,
                           number > lastRoomMessageCount else {
-                        print(number)
-                        print(ticket)
+                        print("🚧 ", #function, number, ticket)
                         
                         DispatchQueue.main.async {
                             self?.unreadMessageCount.isHidden = true

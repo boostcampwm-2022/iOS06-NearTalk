@@ -42,7 +42,7 @@ final class DefaultFriendListViewModel: FriendListViewModel {
             .subscribe(onSuccess: { [weak self] (model: [Friend]) in
                 self?.friendsData.accept(model)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
     }
     
     // MARK: - INPUT
@@ -54,7 +54,7 @@ final class DefaultFriendListViewModel: FriendListViewModel {
             .subscribe(onSuccess: { [weak self] (model: [Friend]) in
                 self?.friendsData.accept(model)
             })
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
     }
     
     func didSelectItem(userUUID: String) {

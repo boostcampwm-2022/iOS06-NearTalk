@@ -41,8 +41,10 @@ final class DefalultMessagingUseCase: MessagingUseCase {
     
     func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable {
         var newChatRoom = chatRoom
-        #warning("의문의 append -> append하면 중복 유저가 생겨야하는데 DB에는 멀쩡히 중복이 없다.")
-        newChatRoom.userList?.append(userID)
+        if let hasMyProfile: Bool = newChatRoom.userList?.contains(userID),
+           !hasMyProfile {
+            newChatRoom.userList?.append(userID)
+        }
         return self.chatMessageRepository.updateChatRoom(newChatRoom)
             .asCompletable()
     }
