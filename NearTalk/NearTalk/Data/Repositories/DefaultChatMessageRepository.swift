@@ -54,7 +54,10 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                 return self.profileRepository.fetchProfileByUUIDList(chatMembersWithoutMyProfile)
             }
             .flatMapCompletable { (profileList: [UserProfile]) in
-                self.fcmService.sendMessage(message, roomName, profileList.compactMap({ $0.fcmToken }))
+                guard profileList.count > 0 else {
+                    return .empty()
+                }
+                return self.fcmService.sendMessage(message, roomName, profileList.compactMap({ $0.fcmToken }))
             }
     }
     

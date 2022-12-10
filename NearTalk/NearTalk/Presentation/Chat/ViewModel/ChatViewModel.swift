@@ -39,7 +39,7 @@ class DefaultChatViewModel: ChatViewModel {
     
     let userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     let userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
-    private let disposeBag: DisposeBag = DisposeBag()
+    private var disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - Outputs
     
