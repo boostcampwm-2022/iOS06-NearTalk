@@ -71,13 +71,13 @@ final class ChatViewController: UIViewController {
         }
         
         chatInputAccessoryView.snp.makeConstraints { make in
-            make.left.right.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
             make.height.equalTo(55)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         collectionView.snp.makeConstraints { make in
-            make.left.right.equalTo(self.view)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
@@ -267,7 +267,7 @@ private extension ChatViewController {
 
         self.collectionView.snp.remakeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
     }
