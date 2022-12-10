@@ -95,7 +95,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(roomID)
                 .queryOrdered(byChild: "createdAtTimeStamp")
-                .queryEnding(atValue: date.timeIntervalSince1970)
+                .queryEnding(beforeValue: date.timeIntervalSince1970)
                 .queryLimited(toLast: UInt(pageCount))
                 .observeSingleEvent(of: .value) { snapshot in
                     let messages: [ChatMessage] = snapshot.children

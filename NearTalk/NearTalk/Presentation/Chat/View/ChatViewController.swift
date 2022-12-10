@@ -5,17 +5,12 @@
 //  Created by dong eun shin on 2022/11/23.
 //
 
+import RxRelay
 import RxSwift
 import UIKit
 
 final class ChatViewController: UIViewController {
-    // MARK: - Proporties
-    
-    private let viewModel: ChatViewModel
-    private var messageItems: [MessageItem]
-    
-    private let disposeBag: DisposeBag = DisposeBag()
-    private lazy var dataSource: DataSource = makeDataSource()
+    // MARK: - UI properties
     private lazy var compositionalLayout: UICollectionViewCompositionalLayout = self.createLayout()
     
     private lazy var collectionView: UICollectionView = UICollectionView(
@@ -31,6 +26,17 @@ final class ChatViewController: UIViewController {
     private lazy var chatInputAccessoryView: ChatInputAccessoryView = ChatInputAccessoryView().then {
         $0.backgroundColor = .primaryBackground
     }
+    
+    // MARK: - Proporties
+    
+    private let viewModel: ChatViewModel
+    private var messageItems: [MessageItem]
+    
+    private let disposeBag: DisposeBag = DisposeBag()
+    private lazy var dataSource: DataSource = makeDataSource()
+
+    private var isReadyToFetchPreviousMessages: Bool = false
+    private let isLatestMessageChanged: BehaviorRelay<Bool> = .init(value: false)
         
     // MARK: - Lifecycles
     
@@ -42,11 +48,6 @@ final class ChatViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        self.viewModel.viewDidDisappear()
-        super.viewDidDisappear(animated)
     }
     
     override func viewDidLoad() {
@@ -103,6 +104,9 @@ final class ChatViewController: UIViewController {
     }
     
     private func scrollToBottom() {
+        guard self.isLatestMessageChanged.value else {
+            return
+        }
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
         collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
@@ -127,26 +131,30 @@ final class ChatViewController: UIViewController {
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
                 guard let self,
-                      let myID = self.viewModel.myID,
-                      let message: ChatMessage = messages.last else {
+                      let myID = self.viewModel.myID else {
                     return
                 }
+
+                self.isLatestMessageChanged.accept(messages.last?.uuid != self.messageItems.last?.id)
                 
-                let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                var messageItems: [MessageItem] = []
+                messages.forEach { message in
+                    let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                    let messageItem: MessageItem = .init(
+                        chatMessage: message,
+                        myID: myID,
+                        userProfile: userProfile
+                    )
+                    messageItems.append(messageItem)
+                }
                 
-                let messageItem: MessageItem = .init(
-                    chatMessage: message,
-                    myID: myID,
-                    userProfile: userProfile
-                )
-                
-                self.messageItems.append(messageItem)
+                self.messageItems = messageItems
                 let snapshot = self.appendSnapshot(items: self.messageItems)
-                self.dataSource.apply(snapshot, animatingDifferences: false) {
+                self.dataSource.apply(snapshot, animatingDifferences: self.isReadyToFetchPreviousMessages) {
                     self.scrollToBottom()
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
         
         self.viewModel.chatRoom
             .bind { [weak self] chatRoom in
@@ -156,7 +164,24 @@ final class ChatViewController: UIViewController {
                 }
                 self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") (\(chatRoom.userList?.count ?? 0))"
             }
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension ChatViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print("🚧 ", #function, indexPath.row)
+        
+        if indexPath.row > 29,
+           !self.isReadyToFetchPreviousMessages {
+            self.isReadyToFetchPreviousMessages.toggle()
+        }
+        
+        if indexPath.row < 10,
+           isReadyToFetchPreviousMessages {
+            self.viewModel.fetchMessages(before: self.viewModel.chatMessages.value[0], isInitialMessage: false)
+        }
     }
 }
 
@@ -194,6 +219,7 @@ private extension ChatViewController {
         return snapshot
     }
 }
+
 // MARK: - Keyboard
 private extension ChatViewController {
     @objc

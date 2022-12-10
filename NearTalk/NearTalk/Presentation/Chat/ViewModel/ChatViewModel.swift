@@ -11,18 +11,18 @@ import RxSwift
 
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
-    func viewDidDisappear()
 }
 
-protocol ChatViewModelOut {
+protocol ChatViewModelOutput {
     var myID: String? { get }
     var chatRoom: BehaviorRelay<ChatRoom?> { get }
     var chatMessages: BehaviorRelay<[ChatMessage]> { get }
     
     func getUserProfile(userID: String) -> UserProfile?
+    func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
 }
 
-protocol ChatViewModel: ChatViewModelInput, ChatViewModelOut { }
+protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
 
 class DefaultChatViewModel: ChatViewModel {
     // MARK: - Proporties
@@ -37,6 +37,9 @@ class DefaultChatViewModel: ChatViewModel {
     private let fetchProfileUseCase: FetchProfileUseCase
     private let enterChatRoomUseCase: EnterChatRoomUseCase
     
+    private let isLoading: BehaviorRelay<Bool> = .init(value: false)
+    private let initialMessage: BehaviorRelay<ChatMessage?> = .init(value: nil)
+    private let hasFirstMessage: BehaviorRelay<Bool> = .init(value: false)
     let userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     let userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
     private var disposeBag: DisposeBag = DisposeBag()
@@ -72,6 +75,7 @@ class DefaultChatViewModel: ChatViewModel {
         self.chatMessages = .init(value: [])
         
         self.initiateChatRoom()
+        self.bindInitialMessage()
 
         // TODO: - chatRoom 존재하지 않을때 예외처리
     }
@@ -103,21 +107,16 @@ class DefaultChatViewModel: ChatViewModel {
         .subscribe { event in
             switch event {
             case .completed:
-                print(#function, "completed")
+                print("🚧 ", #function, "completed")
             case .error(let error):
-                print(error)
+                print("🚧 ", #function, error)
             }
         }
         .disposed(by: self.disposeBag)
     }
     
     func getUserProfile(userID: String) -> UserProfile? {
-//        print(userProfileList)
         return self.userProfileList[userID]
-    }
-    
-    func viewDidDisappear() {
-        self.disposeBag = DisposeBag()
     }
 }
 
@@ -131,6 +130,7 @@ class DefaultChatViewModel: ChatViewModel {
  2. 새로운 메세지 observe (특이사항: 가장 최근 메세지 1개가 불러와진다.)
     2-1. 채팅방 정보 observe
  */
+// MARK: - Initiate ChatViewModel
 extension DefaultChatViewModel {
     private func initiateChatRoom() {
         fetchChatRoomInfo()
@@ -165,11 +165,14 @@ extension DefaultChatViewModel {
                       let messageCount = self.chatRoom.value?.messageCount else {
                     return
                 }
-                
+                self.updateTicketAndChatRoom(message, messageCount)
+                if self.initialMessage.value == nil {
+                    self.initialMessage.accept(message)
+                    return
+                }
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
                 self.chatMessages.accept(newChatMessages)
-                self.updateTicketAndChatRoom(message, messageCount)
             }).disposed(by: self.disposeBag)
     }
     
@@ -341,6 +344,65 @@ extension DefaultChatViewModel {
     
     func fetchMessages() -> Single<[ChatMessage]> {
         return .error(NSError())
+    }
+}
+
+// MARK: - Fetch messages
+extension DefaultChatViewModel {
+    func bindInitialMessage() {
+        self.initialMessage
+            .subscribe(onNext: { [weak self] (message: ChatMessage?) in
+                guard let self,
+                      let message else {
+                    return
+                }
+                self.fetchMessages(before: message, isInitialMessage: true)
+            }).disposed(by: self.disposeBag)
+    }
+    
+    func fetchMessages(before message: ChatMessage, isInitialMessage: Bool = false) {
+        guard let timeStamp: Double = message.createdAtTimeStamp,
+              !self.hasFirstMessage.value,
+              !self.isLoading.value else {
+            return
+        }
+        
+        self.isLoading.accept(true)
+        self.messagingUseCase.fetchMessage(
+            before: Date(timeIntervalSince1970: timeStamp),
+            roomID: self.chatRoomID,
+            totalMessageCount: 30
+        )
+        .subscribe(
+            onSuccess: { [weak self] messages in
+                guard let self else {
+                    self?.isLoading.accept(false)
+                    return
+                }
+                
+                if messages.count == 0 {
+                    self.hasFirstMessage.accept(true)
+                }
+                
+                var newValue: [ChatMessage] = self.chatMessages.value
+                if isInitialMessage {
+                    newValue = messages + [message]
+                } else {
+                    newValue = messages + newValue
+                }
+                
+                self.chatMessages.accept(newValue)
+                self.isLoading.accept(false)
+            },
+            onFailure: { [weak self] error in
+                guard let self else {
+                    return
+                }
+                print("🚧 ", #function, error)
+                self.isLoading.accept(false)
+            }
+        )
+        .disposed(by: self.disposeBag)
     }
 }
 
