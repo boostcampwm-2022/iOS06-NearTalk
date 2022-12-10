@@ -121,22 +121,17 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     
     private func createChatRoom(imagePath: String? = nil) {
         guard let userUUID = self.userDefaultUseCase.fetchUserUUID(),
+              let currentUserLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
+              let currentUserLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double,
               let randomLatitudeMeters = ((-500)...500).randomElement().map({Double($0)}),
               let randomLongitudeMeters = ((-500)...500).randomElement().map({Double($0)})
-        else {
-            return
-        }
+        else { return }
         
-        let currentLat = 37.3596093566472
-        let currentLong = 127.1056219310272
+        let currentUserLocation = NCLocation(latitude: currentUserLatitude,
+                                             longitude: currentUserLongitude)
         
-        let randomLocation = NCLocation(
-            latitude: currentLat,
-            longitude: currentLong
-        ).add(
-            latitudeMeters: randomLongitudeMeters,
-            longitudeMeters: randomLatitudeMeters
-        )
+        let randomChatRoomLocation = currentUserLocation.add(latitudeMeters: randomLongitudeMeters,
+                                                     longitudeMeters: randomLatitudeMeters)
         
         let chatRoomUUID = UUID().uuidString
         let chatRoom = ChatRoom(
@@ -146,8 +141,9 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            latitude: randomLocation.latitude,
-            longitude: randomLocation.longitude,
+            location: randomChatRoomLocation,
+            latitude: randomChatRoomLocation.latitude,
+            longitude: randomChatRoomLocation.longitude,
             accessibleRadius: Double(self.maxRange),
             recentMessageID: nil,
             recentMessageDateTimeStamp: Date().timeIntervalSince1970,
@@ -156,18 +152,18 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         )
         
         self.createGroupChatUseCase.createGroupChat(chatRoom: chatRoom)
-            .subscribe(onCompleted: { [weak self] in
-                guard let self else {
-                    return
-                }
-                self.createGroupChatUseCase.addChatRoom(chatRoomUUID: chatRoomUUID)
-                    .subscribe(onCompleted: {
-                        self.actions.showChatViewController(chatRoomUUID)
-                    })
-                    .disposed(by: self.disposeBag)
-            }, onError: { error in
-                print("Error: ", error)
-            })
+            .subscribe(
+                onCompleted: { [weak self] in
+                    guard let self
+                    else { return }
+                    
+                    self.createGroupChatUseCase
+                        .addChatRoom(chatRoomUUID: chatRoomUUID)
+                        .subscribe(onCompleted: { self.actions.showChatViewController(chatRoomUUID) })
+                        .disposed(by: self.disposeBag)},
+                onError: { error in
+                    print("Error: ", error)
+                })
             .disposed(by: self.disposeBag)
     }
 }
