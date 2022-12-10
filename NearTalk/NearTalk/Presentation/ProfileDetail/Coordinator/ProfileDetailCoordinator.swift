@@ -31,11 +31,12 @@ final class ProfileDetailCoordinator {
     
     func showChatViewController(chatRoomID: String) {
         print(#function)
-        guard let navigationController = navigationController
+        guard let navigationController = self.navigationController
         else { return }
         
         let dicontainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
         let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        navigationController.dismiss(animated: true)
         coordinator.start()
     }
     

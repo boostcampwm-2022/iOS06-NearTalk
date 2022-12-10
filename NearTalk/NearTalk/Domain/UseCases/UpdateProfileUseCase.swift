@@ -10,6 +10,7 @@ import RxSwift
 protocol UpdateProfileUseCase {
     init(repository: any ProfileRepository, userDefaultsRepository: any UserDefaultsRepository)
     func execute(profile: UserProfile) -> Completable
+    func updateFriendsProfile(profile: UserProfile) -> Completable
 }
 
 final class DefaultUpdateProfileUseCase: UpdateProfileUseCase {
