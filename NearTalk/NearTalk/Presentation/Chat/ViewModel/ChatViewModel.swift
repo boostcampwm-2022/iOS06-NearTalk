@@ -11,6 +11,7 @@ import RxSwift
 
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
+    func viewDidDisappear()
 }
 
 protocol ChatViewModelOut {
@@ -111,8 +112,12 @@ class DefaultChatViewModel: ChatViewModel {
     }
     
     func getUserProfile(userID: String) -> UserProfile? {
-        print(userProfileList)
+//        print(userProfileList)
         return self.userProfileList[userID]
+    }
+    
+    func viewDidDisappear() {
+        self.disposeBag = DisposeBag()
     }
 }
 

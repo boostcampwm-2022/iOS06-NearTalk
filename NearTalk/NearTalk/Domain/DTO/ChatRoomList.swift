@@ -17,6 +17,8 @@ struct GroupChatRoomListData: Hashable {
     var recentMessageDate: Date?
     var messageCount: Int?
     var location: NCLocation?
+    var latitude: Double?
+    var longitude: Double?
     
     init(data: ChatRoom) {
         self.uuid = data.uuid
@@ -28,6 +30,8 @@ struct GroupChatRoomListData: Hashable {
         self.recentMessageText = data.recentMessageText
         self.recentMessageDate = Date(timeIntervalSince1970: data.recentMessageDateTimeStamp ?? Date().timeIntervalSince1970)
         self.location = data.location
+        self.latitude = data.latitude
+        self.longitude = data.longitude
     }
     
 }
@@ -35,7 +39,7 @@ struct GroupChatRoomListData: Hashable {
 struct DMChatRoomListData: Hashable {
     var uuid: String?
     var roomImagePath: String?
-    var roomName: String?
+    var userList: [String]?
     var recentMessageID: String?
     var recentMessageText: String?
     var recentMessageDate: Date?
@@ -44,7 +48,7 @@ struct DMChatRoomListData: Hashable {
     init(data: ChatRoom) {
         self.uuid = data.uuid
         self.roomImagePath = data.roomImagePath
-        self.roomName = data.roomName
+        self.userList = data.userList
         self.recentMessageID = data.recentMessageID
         self.messageCount = data.messageCount
         self.recentMessageText = data.recentMessageText

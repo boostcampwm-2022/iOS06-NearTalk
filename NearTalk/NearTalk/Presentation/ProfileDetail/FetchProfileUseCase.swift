@@ -15,6 +15,7 @@ protocol FetchProfileUseCase {
     func updateUserProfile(userProfile: UserProfile)
     func updateUserProfileCompletable(userProfile: UserProfile) -> Completable
     func fetchUserProfiles(with userIDList: [String]) -> Single<[UserProfile]>
+    func fetchMyProfile() -> Single<UserProfile>
 }
 
 final class DefaultFetchProfileUseCase: FetchProfileUseCase {
@@ -32,8 +33,8 @@ final class DefaultFetchProfileUseCase: FetchProfileUseCase {
         return self.userProfileRepository.fetchProfileByUUID(userID)
     }
     
-    func updateUserProfile(userProfile: UserProfile) {
-        _ = self.userProfileRepository.updateMyProfile(userProfile)
+    func updateUserProfile(userProfile: UserProfile) -> Single<UserProfile> {
+        return self.userProfileRepository.updateMyProfile(userProfile)
     }
     
     func updateUserProfileCompletable(userProfile: UserProfile) -> Completable {

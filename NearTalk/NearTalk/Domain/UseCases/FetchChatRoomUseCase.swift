@@ -13,15 +13,21 @@ protocol FetchChatRoomUseCase {
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
+    func getUserProfile(userID: String) -> Single<UserProfile>
+    func getMyProfile() -> UserProfile?
     func newGetChatRoomUUIDList()
 }
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     private let disposeBag: DisposeBag = .init()
     private let chatRoomListRepository: ChatRoomListRepository
+    private let profileRepository: ProfileRepository
+    private let userDefaultsRepository: UserDefaultsRepository
     private var newChatRoomUUIDList: PublishRelay<[String]> = .init()
     
-    init(chatRoomListRepository: ChatRoomListRepository) {
+    init(chatRoomListRepository: ChatRoomListRepository, profileRepository: ProfileRepository, userDefaultsRepository: UserDefaultsRepository) {
         self.chatRoomListRepository = chatRoomListRepository
+        self.profileRepository = profileRepository
+        self.userDefaultsRepository = userDefaultsRepository
         self.newGetChatRoomUUIDList()
     }
     
@@ -58,6 +64,15 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
                 self.newChatRoomUUIDList.accept(uuidList)
             }.disposed(by: disposeBag)
     }
+    
+    func getUserProfile(userID: String) -> Single<UserProfile> {
+        return self.profileRepository.fetchProfileByUUID(userID)
+    }
+    
+    func getMyProfile() -> UserProfile? {
+        return self.userDefaultsRepository.fetchUserProfile()
+    }
+    
     // MARK: - Private
     private func newGetChatRoomList() -> Observable<[ChatRoom]> {
         self.newChatRoomUUIDList
