@@ -14,12 +14,14 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
             authRepository: self.authRepository,
             profileRepository: self.profileRepository,
             userDefaultsRepository: self.userDefaultsRepository,
+            chatRoomListRepository: self.chatRoomListRepository,
             backToLoginView: self.backToLoginView))
     }
     
     private let profileRepository: any ProfileRepository
     private let mediaRepository: any MediaRepository
     private let authRepository: any AuthRepository
+    private let chatRoomListRepository: any ChatRoomListRepository
     private let backToLoginView: (() -> Void)?
     private let userDefaultsRepository: any UserDefaultsRepository
     
@@ -28,12 +30,14 @@ final class DefaultMyProfileCoordinatorDependency: MyProfileCoordinatorDependenc
         mediaRepository: any MediaRepository,
         userDefaultsRepository: any UserDefaultsRepository,
         authRepository: any AuthRepository,
+        chatRoomListRepository: any ChatRoomListRepository,
         backToLoginView: (() -> Void)?
     ) {
         self.profileRepository = profileRepository
         self.mediaRepository = mediaRepository
         self.userDefaultsRepository = userDefaultsRepository
         self.authRepository = authRepository
+        self.chatRoomListRepository = chatRoomListRepository
         self.backToLoginView = backToLoginView
     }
     
@@ -95,6 +99,16 @@ final class MyProfileDIContainer {
         return DefaultUserDefaultsRepository(userDefaultsService: DefaultUserDefaultsService())
     }
     
+    func makeChatRoomListRepository() -> any ChatRoomListRepository {
+        return DefaultChatRoomListRepository(
+            dataTransferService: DefaultStorageService(),
+            profileRepository: DefaultProfileRepository(
+                firestoreService: self.makeFirestoreService(),
+                firebaseAuthService: self.makeAuthService()),
+            databaseService: DefaultRealTimeDatabaseService(),
+            firestoreService: self.makeFirestoreService())
+    }
+    
     // MARK: - Coordinator
     func makeCoordinator(
         navigationController: UINavigationController?,
@@ -116,6 +130,7 @@ final class MyProfileDIContainer {
             mediaRepository: self.makeMediaRepository(),
             userDefaultsRepository: self.makeUserDefaultsRepository(),
             authRepository: self.makeAuthRepository(),
+            chatRoomListRepository: self.makeChatRoomListRepository(),
             backToLoginView: backToLoginView
         )
     }

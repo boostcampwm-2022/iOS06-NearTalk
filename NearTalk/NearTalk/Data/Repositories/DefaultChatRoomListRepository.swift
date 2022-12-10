@@ -29,6 +29,36 @@ final class DefaultChatRoomListRepository {
 }
 
 extension DefaultChatRoomListRepository: ChatRoomListRepository {
+    
+    func dropUserFromChatRoom(chatRoom: ChatRoom, uuid: String) -> Completable {
+        var updatingChatRoom: ChatRoom = chatRoom
+        updatingChatRoom.userList = chatRoom.userList?.filter { $0 != uuid }
+        return self.firestoreService
+            .update(updatedData: updatingChatRoom, dataKey: .chatRoom)
+            .asCompletable()
+            .andThen(self.databaseService
+                .updateChatRoom(updatingChatRoom)
+                .asCompletable())
+    }
+    
+    func dropUserFromChatRooms() -> Completable {
+        self.profileRepository.fetchMyProfile()
+            .map { $0.uuid }
+            .flatMapCompletable { uuid in
+                guard let uuid = uuid
+                else {
+                    return Completable.error(DefaultProfileRepositoryError.invalidUserProfile)
+                }
+                return Completable.zip(
+                    self.fetchUserChatRoomUUIDList()
+                        .asObservable()
+                        .flatMap { Observable.from($0) }
+                        .flatMap { self.fetchChatRoomInfo($0).asObservable() }
+                        .flatMap { self.dropUserFromChatRoom(chatRoom: $0, uuid: uuid).asObservable() }
+                        .asCompletable()
+                )
+            }
+    }
 
     func createChatRoom(_ chatRoom: ChatRoom) -> Completable {
         Single.zip(
