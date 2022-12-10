@@ -118,6 +118,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.newMessageHandler = self.ref
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(chatRoomID)
+                .queryOrdered(byChild: "createdAtTimeStamp")
+                .queryLimited(toLast: 1)
                 .observe(.childAdded) { (snapshot) -> Void in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatMessage: ChatMessage = try? ChatMessage.decode(dictionary: value) {

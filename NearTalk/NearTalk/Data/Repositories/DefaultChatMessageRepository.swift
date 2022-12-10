@@ -48,7 +48,10 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                     return Single.error(DefaultChatMessageRepositoryError.fetchProfileInfoError)
                 }
                 let chatMembersWithoutMyProfile = chatMemberIDList.filter({ $0 != myUUID })
-                return self.profileRepository.fetchProfileByUUIDList(chatMemberIDList)
+                if chatMembersWithoutMyProfile.count == 0 {
+                    return .just([]) // 파이어베이스의 "in" 쿼리가 빈 배열을 인자로 받으면 에러를 던지기 때문에 따로 처리해줘야 한다.
+                }
+                return self.profileRepository.fetchProfileByUUIDList(chatMembersWithoutMyProfile)
             }
             .flatMapCompletable { (profileList: [UserProfile]) in
                 self.fcmService.sendMessage(message, roomName, profileList.compactMap({ $0.fcmToken }))
