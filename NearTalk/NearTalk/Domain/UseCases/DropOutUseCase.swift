@@ -20,7 +20,8 @@ final class DefaultDropOutUseCase: DropoutUseCase {
     
     init(profileRepository: any ProfileRepository,
          userDefaultsRepository: any UserDefaultsRepository,
-         authRepository: any AuthRepository, chatRoomListRepository: any ChatRoomListRepository) {
+         authRepository: any AuthRepository,
+         chatRoomListRepository: any ChatRoomListRepository) {
         self.profileRepository = profileRepository
         self.userDefaultsRepository = userDefaultsRepository
         self.authRepository = authRepository
@@ -29,6 +30,7 @@ final class DefaultDropOutUseCase: DropoutUseCase {
     
     func dropout() -> Completable {
         return self.deleteUserFromChatRooms()
+            .andThen(self.deleteUserFromFriends())
             .andThen(self.deleteUserProfile())
             .andThen(self.authRepository.dropout())
     }
@@ -48,9 +50,25 @@ private extension DefaultDropOutUseCase {
         self.chatRoomListRepository.dropUserFromChatRooms()
     }
     
-//    func deleteUserFromFriends(userProfile: UserProfile) -> Completable {
-//
-//    }
+    func deleteUserFromFriends() -> Completable {
+        guard let uuid = self.userDefaultsRepository.fetchUserProfile()?.uuid
+        else {
+            return Completable.error(DropoutUseCaseError.invalidUserUUID)
+        }
+        return Completable.zip(
+            self.profileRepository.fetchFriendsProfile()
+                .asObservable()
+                .flatMap { Observable.from($0) }
+                .flatMap { self.deleteUserFromFriend(uuid: uuid, friendProfile: $0).asObservable() }
+                .asCompletable()
+            )
+    }
+    
+    func deleteUserFromFriend(uuid: String, friendProfile: UserProfile) -> Completable {
+        var copy: UserProfile = friendProfile
+        copy.friends = friendProfile.friends?.filter { $0 != uuid }
+        return self.profileRepository.updateFriendProfile(copy)
+    }
 }
 
 enum DropoutUseCaseError: Error {
