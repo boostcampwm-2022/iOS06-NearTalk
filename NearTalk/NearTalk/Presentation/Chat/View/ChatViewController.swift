@@ -65,11 +65,11 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
         self.bind()
         self.chatInputAccessoryView.messageInputTextField.delegate = self
         
-        /// 키보드
+        // 키보드
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHandler(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHandler(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        /// 제스처
+        // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         self.chatCollectionView.addGestureRecognizer(tapGesture)
     }
