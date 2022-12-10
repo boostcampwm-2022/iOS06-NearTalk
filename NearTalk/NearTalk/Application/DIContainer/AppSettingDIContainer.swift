@@ -23,6 +23,7 @@ final class DefaultAppSettingDIContainer: AppSettingCoordinatorDependency {
         let authRepository: any AuthRepository
         let profileRepository: any ProfileRepository
         let userDefaultsRepository: any UserDefaultsRepository
+        let chatRoomListRepository: any ChatRoomListRepository
         let backToLoginView: (() -> Void)?
     }
     
@@ -35,7 +36,9 @@ final class DefaultAppSettingDIContainer: AppSettingCoordinatorDependency {
     private func makeDropoutUseCase() -> any DropoutUseCase {
         return DefaultDropOutUseCase(
             profileRepository: self.dependency.profileRepository,
-            userDefaultsRepository: self.dependency.userDefaultsRepository, authRepository: self.dependency.authRepository)
+            userDefaultsRepository: self.dependency.userDefaultsRepository,
+            authRepository: self.dependency.authRepository,
+            chatRoomListRepository: self.dependency.chatRoomListRepository)
     }
     
     private let dependency: Dependency

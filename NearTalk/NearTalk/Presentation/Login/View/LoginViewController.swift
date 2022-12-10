@@ -14,7 +14,9 @@ import Then
 import UIKit
 
 final class LoginViewController: UIViewController {
-    private let logoView: UIImageView = UIImageView(image: UIImage(named: "ChatLogo"))
+    private let logoView: UIImageView = UIImageView(image: UIImage(named: "Logo")).then {
+        $0.contentMode = .scaleAspectFit
+    }
     private let loginButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(type: .signIn, style: .whiteOutline).then {
         $0.cornerRadius = 5
     }
