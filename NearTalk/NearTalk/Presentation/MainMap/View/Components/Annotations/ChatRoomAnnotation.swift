@@ -24,11 +24,11 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
     
     let chatRoomInfo: ChatRoom
     let roomType: RoomType
-    var isAccessible: Bool = false
+    
     @objc
     dynamic var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: self.chatRoomInfo.latitude ?? 0,
-                                      longitude: self.chatRoomInfo.longitude ?? 0)
+        return CLLocationCoordinate2D(latitude: self.chatRoomInfo.latitude ?? NCLocation.naver.latitude,
+                                      longitude: self.chatRoomInfo.longitude ?? NCLocation.naver.longitude)
     }
     
     init(chatRoomInfo: ChatRoom) {

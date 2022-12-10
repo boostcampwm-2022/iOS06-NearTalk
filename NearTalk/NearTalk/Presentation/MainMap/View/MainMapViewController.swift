@@ -228,6 +228,14 @@ extension MainMapViewController: MKMapViewDelegate {
             let groupChatRoomAnnotationView = GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                                                     reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
             groupChatRoomAnnotationView.insert(coordinator: coordinator)
+            self.mapView.rx.didUpdateUserLocation
+                .asDriver()
+                .drive(onNext: { userLocation in
+                    let currentUserLocation = NCLocation(latitude: userLocation.coordinate.latitude,
+                                                         longitude: userLocation.coordinate.longitude)
+                    groupChatRoomAnnotationView.configureAccessible(userLocation: currentUserLocation, targetAnnotation: annotation)
+                })
+                .disposed(by: self.disposeBag)
             
             return groupChatRoomAnnotationView
         case .directMessage:
@@ -259,17 +267,5 @@ extension MainMapViewController: CLLocationManagerDelegate {
         let currentUserLongitude = Double(userLocation.coordinate.longitude)
         UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
         UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
-//
-//        guard let cameraBoundary = self.mapView.cameraBoundary
-//        else { return }
-//
-//        let southWest = NCLocation(latitude: cameraBoundary.region.center.latitude - (cameraBoundary.region.span.latitudeDelta / 2),
-//                                   longitude: cameraBoundary.region.center.longitude - (cameraBoundary.region.span.longitudeDelta / 2))
-//        let northEast = NCLocation(latitude: cameraBoundary.region.center.latitude + (cameraBoundary.region.span.latitudeDelta / 2),
-//                                   longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2))
-//
-//        if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
-//            // self.followUserLocation()
-//        }
     }
 }
