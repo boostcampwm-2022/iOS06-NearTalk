@@ -71,7 +71,7 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
         
         /// 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
-        self.view.addGestureRecognizer(tapGesture)
+        self.chatCollectionView.addGestureRecognizer(tapGesture)
     }
 
     private func scrollToBottom() {

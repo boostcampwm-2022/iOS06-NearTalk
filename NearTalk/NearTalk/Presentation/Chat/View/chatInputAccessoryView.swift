@@ -46,7 +46,7 @@ class ChatInputAccessoryView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubviews()
+        self.addSubviews()
     }
     
     required init?(coder: NSCoder) {
@@ -57,19 +57,19 @@ class ChatInputAccessoryView: UIView {
         [addButton, messageInputTextField, sendButton].forEach {
             self.addSubview($0)
         }
-        addButton.snp.makeConstraints { make in
+        self.addButton.snp.makeConstraints { make in
             make.height.width.equalTo(35)
             make.leading.equalTo(self).offset(8)
             make.bottom.equalToSuperview().inset(10)
         }
         
-        sendButton.snp.makeConstraints { make in
+        self.sendButton.snp.makeConstraints { make in
             make.width.height.equalTo(30)
             make.trailing.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().inset(10)
         }
         
-        messageInputTextField.snp.makeConstraints { make in
+        self.messageInputTextField.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(5)
             make.centerY.equalToSuperview()
             make.leading.equalTo(addButton.snp.trailing).offset(16)
