@@ -71,12 +71,12 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
         
         /// 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
-        view.addGestureRecognizer(tapGesture)
+        self.view.addGestureRecognizer(tapGesture)
     }
 
     private func scrollToBottom() {
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
-        chatCollectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        self.chatCollectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
         
     private func bind() {
@@ -133,7 +133,6 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
         self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
             .filter({!$0.isEmpty})
             .subscribe(onNext: { _ in
-                print("=--------=", self.chatInputAccessoryView.messageInputTextField.frame.height)
                 self.reconfigureChatInputAccessoryView()
             })
             .disposed(by: disposeBag)
@@ -198,18 +197,13 @@ private extension ChatViewController {
         Metric.keyboardHeight = keyboardHeight + (safeAreaExists ? 0 : bottomConstant)
 
         self.reconfigureChatInputAccessoryView()
-        
-        self.chatCollectionView.snp.makeConstraints { make in
-            make.bottom.equalTo(chatInputAccessoryView.snp.top)
-        }
-        
-        print("키보드--------", self.chatInputAccessoryView.messageInputTextField.frame.height, self.chatInputAccessoryView.frame.height)
+        self.configureChatCollectionView()
         
         let animator = UIViewPropertyAnimator(duration: keyboardDuration, curve: keyboardCurve) { [weak self] in
             self?.view.layoutIfNeeded()
         }
-        
         animator.startAnimation()
+        
         self.scrollToBottom()
     }
     
@@ -218,13 +212,13 @@ private extension ChatViewController {
         view.endEditing(true)
         
         self.chatInputAccessoryView.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
+            make.left.right.equalToSuperview()
             make.height.equalTo(Metric.defaultChatInputAccessoryViewHeight)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
         
         self.chatCollectionView.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
+            make.left.right.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
@@ -265,19 +259,19 @@ private extension ChatViewController {
         
         if ((Metric.defaultTextFieldHeight + 1)...(Metric.defaultTextFieldHeight * 3)).contains(contentHeight) {
             self.chatInputAccessoryView.snp.remakeConstraints { make in
-                make.left.right.equalTo(self.view)
+                make.left.right.equalToSuperview()
                 make.height.equalTo(self.chatInputAccessoryView.messageInputTextField.contentSize.height)
                 make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
             }
         } else if ((Metric.defaultTextFieldHeight * 3) + 1) < contentHeight {
             self.chatInputAccessoryView.snp.remakeConstraints { make in
-                make.left.right.equalTo(self.view)
+                make.left.right.equalToSuperview()
                 make.height.equalTo((Metric.defaultTextFieldHeight * 3) + (Metric.textFieldInset * 2))
                 make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
             }
         } else {
             self.chatInputAccessoryView.snp.remakeConstraints { make in
-                make.left.right.equalTo(self.view)
+                make.left.right.equalToSuperview()
                 make.height.equalTo(Metric.defaultChatInputAccessoryViewHeight)
                 make.bottom.equalToSuperview().inset(Metric.keyboardHeight)
             }
@@ -286,7 +280,7 @@ private extension ChatViewController {
     
     func configureChatInputAccessoryView() {
         self.chatInputAccessoryView.snp.makeConstraints { make in
-            make.left.right.equalTo(self.view)
+            make.left.right.equalToSuperview()
             make.height.equalTo(Metric.defaultChatInputAccessoryViewHeight)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
@@ -294,7 +288,7 @@ private extension ChatViewController {
     
     func configureChatCollectionView() {
         self.chatCollectionView.snp.makeConstraints { make in
-            make.left.right.equalTo(self.view)
+            make.left.right.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
