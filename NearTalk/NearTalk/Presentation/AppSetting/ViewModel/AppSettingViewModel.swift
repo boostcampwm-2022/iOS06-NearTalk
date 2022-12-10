@@ -140,6 +140,7 @@ private extension DefaultAppSettingViewModel {
                     await UIApplication.shared.unregisterForRemoteNotifications()
                 }
                 UserDefaults.standard.set(AppTheme.system.rawValue, forKey: AppTheme.keyName)
+                UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
                 UserDefaults.standard.removeObject(forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
                 UserDefaults.standard.removeObject(forKey: AppTheme.keyName)
             } onError: { [weak self] _ in
