@@ -237,6 +237,14 @@ extension MainMapViewController: MKMapViewDelegate {
             
             groupChatRoomAnnotationView.insert(coordinator: coordinator)
             
+            if let startUserCoordinate = self.mapView.userLocation.location?.coordinate {
+                let startUserNCLocation = NCLocation(latitude: startUserCoordinate.latitude,
+                                                     longitude: startUserCoordinate.longitude)
+                
+                groupChatRoomAnnotationView.configureAccessible(userLocation: startUserNCLocation,
+                                                                targetAnnotation: annotation)
+            }
+            
             self.mapView.rx.didUpdateUserLocation
                 .asDriver()
                 .drive(onNext: { userLocation in
