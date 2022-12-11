@@ -48,10 +48,6 @@ final class BottomSheetViewController: UIViewController {
     }
     
     // MARK: - Methods
-    func fetch(with dataSource: [ChatRoom]) {
-        self.dataSource = dataSource
-    }
-    
     private func addSubViews() {
         self.view.addSubview(self.sheetLabel)
         self.view.addSubview(self.chatRoomsTableView)
@@ -84,6 +80,25 @@ final class BottomSheetViewController: UIViewController {
             sheet.prefersEdgeAttachedInCompactHeight = true
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
         }
+    }
+    
+    func fetch(with dataSource: [ChatRoom]) {
+        self.dataSource = dataSource.sorted(by: { self.calcChatRoomDistance(with: $0) < self.calcChatRoomDistance(with: $1) })
+    }
+    
+    private func calcChatRoomDistance(with chatRoom: ChatRoom) -> Double {
+        guard let userLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
+              let userLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double,
+              let chatRoomLatitude = chatRoom.latitude,
+              let chatRoomLongitude = chatRoom.longitude
+        else { return Double.infinity }
+        
+        let userLocation = NCLocation(latitude: userLatitude,
+                                      longitude: userLongitude)
+        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude,
+                                          longitude: chatRoomLongitude)
+        
+        return chatRoomLocation.distance(from: userLocation)
     }
 }
 
