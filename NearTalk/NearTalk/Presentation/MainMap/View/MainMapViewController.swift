@@ -125,14 +125,16 @@ final class MainMapViewController: UIViewController {
             .asDriver(onErrorJustReturn: [])
             .map { chatRooms -> [ChatRoomAnnotation] in
                 self.mapView.setUserTrackingMode(.follow, animated: true)
-                
+
                 return chatRooms.compactMap {
                     let annotation = ChatRoomAnnotation.create(with: $0)
-                    
-                    if let circleOverlay = annotation?.createCircleOverlay() {
-                        self.mapView.addOverlay(circleOverlay)
+
+                    DispatchQueue.main.async {
+                        if let circleOverlay = annotation?.createCircleOverlay() {
+                            self.mapView.addOverlay(circleOverlay)
+                        }
                     }
-                    
+
                     return annotation
                 }
             }
@@ -148,21 +150,21 @@ final class MainMapViewController: UIViewController {
             .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
-            .asDriver(onErrorJustReturn: [])
-            .drive(onNext: { [weak self] chatRooms in
+            .asObservable()
+            .subscribe(onNext: { [weak self] chatRooms in
                 guard let mainMapVC = self
                 else { return }
-                
+
                 if chatRooms.count > 1 {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
                     self?.mapView.selectedAnnotations = []
                 }
             })
             .disposed(by: self.disposeBag)
-        
+
         output.followCurrentUserLocation
-            .asDriver()
-            .drive(onNext: { [weak self] isFollowing in
+            .asObservable()
+            .subscribe(onNext: { [weak self] isFollowing in
                 if isFollowing {
                     self?.mapView.setUserTrackingMode(.follow, animated: false)
                 } else {
@@ -266,11 +268,14 @@ extension MainMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        guard let primaryColor: UIColor = .primaryColor
+        else { return MKOverlayRenderer(overlay: overlay) }
+        
         if overlay.isKind(of: MKCircle.self) {
             let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.fillColor = .blue.withAlphaComponent(0.01)
-            circleRenderer.strokeColor = .red
-            circleRenderer.lineWidth = 1
+            circleRenderer.fillColor = primaryColor.withAlphaComponent(0.01)
+            circleRenderer.strokeColor = primaryColor
+            circleRenderer.lineWidth = 0.5
             return circleRenderer
         }
         

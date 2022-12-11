@@ -93,6 +93,11 @@ final class MainMapViewModel {
             .bind(onNext: { output.showAnnotationChatRooms.accept($0) })
             .disposed(by: self.disposeBag)
         
+        input.didTapAnnotationView
+            .map { _ in false }
+            .bind(to: output.followCurrentUserLocation)
+            .disposed(by: self.disposeBag)
+        
         input.didDragMapView
             .map { _ in false }
             .bind(to: output.followCurrentUserLocation)

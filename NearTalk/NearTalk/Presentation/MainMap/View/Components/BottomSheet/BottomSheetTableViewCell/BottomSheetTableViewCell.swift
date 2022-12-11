@@ -6,6 +6,7 @@
 //
 
 import Kingfisher
+import RxCocoa
 import RxSwift
 import SnapKit
 import Then
@@ -64,6 +65,21 @@ final class BottomSheetTableViewCell: UITableViewCell {
         $0.setImage(image, for: .normal)
         $0.setImage(highlightedImage, for: .highlighted)
     }
+
+    private let chatRoomLock = UIImageView().then {
+        guard let lockImageColor: UIColor = .primaryBackground,
+              let cellCoverColor: UIColor = .tertiaryLabel
+        else { return }
+        
+        let lockImageConfig = UIImage.SymbolConfiguration(pointSize: 40)
+        let image = UIImage(systemName: "lock.fill")?
+            .withTintColor(lockImageColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(lockImageConfig)
+        
+        $0.image = image
+        $0.isHidden = true
+        $0.tintColor = .label
+    }
     
     // MARK: - Properties
     private var chatRoom: ChatRoom?
@@ -88,6 +104,7 @@ final class BottomSheetTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.chatRoomImage)
         self.contentView.addSubview(self.infoStackView)
         self.contentView.addSubview(self.chatRoomEnterButton)
+        self.contentView.addSubview(self.chatRoomLock)
     }
     
     private func configureConstraints() {
@@ -108,6 +125,10 @@ final class BottomSheetTableViewCell: UITableViewCell {
             make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-16)
             make.top.bottom.equalTo(self.contentView).inset(8)
         }
+        
+        self.chatRoomLock.snp.makeConstraints { make in
+            make.center.equalTo(self.contentView)
+        }
     }
     
     private func bind() {
@@ -117,7 +138,6 @@ final class BottomSheetTableViewCell: UITableViewCell {
                       let chatRoomID = self.chatRoom?.uuid
                 else { return }
                 
-                print(#function, "didTapped!")
                 self.coordinator?.closeBottomSheet(bottomSheetVC: bottomSheetVC)
                 self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
             }
@@ -158,10 +178,10 @@ extension BottomSheetTableViewCell {
               let userLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
               let userLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double
         else { return "입장불가" }
-        
+
         let userLocation = NCLocation(latitude: userLatitude, longitude: userLongitude)
         let distance = chatRoomLocation.distance(from: userLocation)
-        
+
         return distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
     }
 }
