@@ -48,7 +48,6 @@ final class MainMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.locationManagerDidChangeAuthorization(self.locationManager)
         self.addSubViews()
         self.configureConstraints()
         self.configureDelegates()
@@ -109,12 +108,12 @@ final class MainMapViewController: UIViewController {
             didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
             didDragMapView: self.mapView.rx.panGesture().map { _ in }.asObservable(),
             didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
-                .compactMap { event -> NCLocation? in
-                    guard let latitude = event.location?.coordinate.latitude,
-                          let longitude = event.location?.coordinate.longitude
+                .compactMap { _ -> NCLocation? in
+                    guard let currentUserLocation = self.locationManager.location?.coordinate
                     else { return nil }
-                    
-                    return NCLocation(latitude: latitude, longitude: longitude)
+
+                    return NCLocation(latitude: currentUserLocation.latitude,
+                                      longitude: currentUserLocation.longitude)
                 }
                 .asObservable()
         )
@@ -124,11 +123,12 @@ final class MainMapViewController: UIViewController {
         
         output.showAccessibleChatRooms
             .asDriver(onErrorJustReturn: [])
-            .map { chatRooms in
+            .map { chatRooms -> [ChatRoomAnnotation] in
                 self.mapView.setUserTrackingMode(.follow, animated: true)
                 
                 return chatRooms.compactMap {
                     let annotation = ChatRoomAnnotation.create(with: $0)
+                    
                     if let circleOverlay = annotation?.createCircleOverlay() {
                         self.mapView.addOverlay(circleOverlay)
                     }
@@ -242,9 +242,10 @@ extension MainMapViewController: MKMapViewDelegate {
                 .drive(onNext: { userLocation in
                     let currentUserLocation = NCLocation(latitude: userLocation.coordinate.latitude,
                                                          longitude: userLocation.coordinate.longitude)
-                    
+
                     groupChatRoomAnnotationView.configureAccessible(userLocation: currentUserLocation,
                                                                     targetAnnotation: annotation)
+
                 })
                 .disposed(by: self.disposeBag)
 

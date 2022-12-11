@@ -99,7 +99,8 @@ final class MainMapViewModel {
             .disposed(by: self.disposeBag)
         
         input.didUpdateUserLocation
-            .bind(to: output.currentUserLocation)
+            .map { _ in true }
+            .bind(to: output.followCurrentUserLocation)
             .disposed(by: self.disposeBag)
         
         return output
