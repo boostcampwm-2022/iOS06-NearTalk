@@ -18,7 +18,6 @@ final class MainMapViewController: UIViewController {
     // MARK: - UI Components
     private(set) lazy var mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
-        $0.setUserTrackingMode(.follow, animated: true)
     }
     private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
@@ -49,19 +48,12 @@ final class MainMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addSubViews()
-        configureConstraints()
-        configureDelegates()
-        registerAnnotationViewClass()
-        bindViewModel()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         self.locationManagerDidChangeAuthorization(self.locationManager)
-        
-        if let userLocation = self.locationManager.location {
-            self.mapView.move(to: userLocation)
-        }
+        self.addSubViews()
+        self.configureConstraints()
+        self.configureDelegates()
+        self.registerAnnotationViewClass()
+        self.bindViewModel()
     }
     
     // MARK: - Methods
@@ -104,26 +96,47 @@ final class MainMapViewController: UIViewController {
 
         // MARK: - Bind VM input
         let input = MainMapViewModel.Input(
+            mapViewDidAppear: self.rx.methodInvoked(#selector(viewDidAppear(_:)))
+                .compactMap { _ -> NCMapRegion? in
+                    guard let region = self.mapView.cameraBoundary?.region
+                    else { return nil }
+                    
+                    return self.convertToNCMapRegion(with: region)
+                }
+                .asObservable(),
             didTapMoveToCurrentLocationButton: self.moveToCurrentLocationButton.rx.tap.asObservable(),
             didTapCreateChatRoomButton: self.createChatRoomButton.rx.tap.asObservable(),
             didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
-            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation.compactMap { _ in
-                return self.convertToNCMapRegion(with: self.mapView.region)
-            },
-            didUpdateMapViewRegion: self.mapView.rx.region.map { region in
-                return self.convertToNCMapRegion(with: region)
-            }
+            didDragMapView: self.mapView.rx.panGesture().map { _ in }.asObservable(),
+            didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
+                .compactMap { event -> NCLocation? in
+                    guard let latitude = event.location?.coordinate.latitude,
+                          let longitude = event.location?.coordinate.longitude
+                    else { return nil }
+                    
+                    return NCLocation(latitude: latitude, longitude: longitude)
+                }
+                .asObservable()
         )
         
         // MARK: - Bind VM output
         let output = self.viewModel.transform(input: input)
-        output.moveToCurrentLocationEvent
-            .asDriver(onErrorJustReturn: false)
-            .filter { $0 == true }
-            .drive(onNext: { [weak self] _ in
-                self?.mapView.showsUserLocation = true
-                self?.mapView.setUserTrackingMode(.follow, animated: true)
-            })
+        
+        output.showAccessibleChatRooms
+            .asDriver(onErrorJustReturn: [])
+            .map { chatRooms in
+                self.mapView.setUserTrackingMode(.follow, animated: true)
+                
+                return chatRooms.compactMap {
+                    let annotation = ChatRoomAnnotation.create(with: $0)
+                    if let circleOverlay = annotation?.createCircleOverlay() {
+                        self.mapView.addOverlay(circleOverlay)
+                    }
+                    
+                    return annotation
+                }
+            }
+            .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
         
         output.showCreateChatRoomViewEvent
@@ -132,15 +145,6 @@ final class MainMapViewController: UIViewController {
             .drive(onNext: { [weak self] _ in
                 self?.coordinator?.showCreateChatRoomView()
             })
-            .disposed(by: self.disposeBag)
-
-        output.showAccessibleChatRooms
-            .asDriver(onErrorJustReturn: [])
-            .map { chatRooms in
-                return chatRooms.compactMap { ChatRoomAnnotation.create(with: $0,
-                                                                        userLocation: self.mapView.userLocation.coordinate) }
-            }
-            .drive(self.mapView.rx.annotations)
             .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
@@ -152,6 +156,17 @@ final class MainMapViewController: UIViewController {
                 if chatRooms.count > 1 {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
                     self?.mapView.selectedAnnotations = []
+                }
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.followCurrentUserLocation
+            .asDriver()
+            .drive(onNext: { [weak self] isFollowing in
+                if isFollowing {
+                    self?.mapView.setUserTrackingMode(.follow, animated: false)
+                } else {
+                    self?.mapView.setUserTrackingMode(.none, animated: false)
                 }
             })
             .disposed(by: self.disposeBag)
@@ -183,34 +198,29 @@ final class MainMapViewController: UIViewController {
                            latitudeDelta: latitudeDelta,
                            longitudeDelta: longitudeDelta)
     }
-}
-
-// MARK: - Extensions
-private extension MKMapView {
-    func move(to location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegion(
-            center: location.coordinate,
-            latitudinalMeters: 5000,
-            longitudinalMeters: 5000
-        )
-
-        setCameraBoundary(region: coordinateRegion)
-        setCameraZoomRange()
-
-        self.setRegion(coordinateRegion, animated: true)
+    
+    private func followUserLocation() {
+        self.mapView.showsUserLocation = true
+        self.mapView.setUserTrackingMode(.follow, animated: true)
     }
     
-    private func setCameraBoundary(region coordinateRegion: MKCoordinateRegion, meters regionMeters: CLLocationDistance = 5000) {
+    private func setCamera(with centerLocation: CLLocation) {
+        self.setCameraBoundary(centerLocation: centerLocation)
+        self.setCameraZoomRange()
+    }
+    
+    private func setCameraBoundary(centerLocation: CLLocation, meters regionMeters: CLLocationDistance = 5000) {
+        let coordinateRegion = MKCoordinateRegion(center: centerLocation.coordinate,
+                                                  latitudinalMeters: 5000,
+                                                  longitudinalMeters: 5000)
         let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: coordinateRegion)
-        self.setCameraBoundary(cameraBoundary, animated: true)
+        self.mapView.setCameraBoundary(cameraBoundary, animated: true)
     }
     
     private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 5000) {
-        let zoomRange = MKMapView.CameraZoomRange(
-            minCenterCoordinateDistance: minDistance,
-            maxCenterCoordinateDistance: maxDistance
-        )
-        self.setCameraZoomRange(zoomRange, animated: true)
+        let zoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: minDistance,
+                                                  maxCenterCoordinateDistance: maxDistance)
+        self.mapView.setCameraZoomRange(zoomRange, animated: true)
     }
 }
 
@@ -224,13 +234,38 @@ extension MainMapViewController: MKMapViewDelegate {
         case .group:
             let groupChatRoomAnnotationView = GroupChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                                                     reuseIdentifier: GroupChatRoomAnnotationView.reuseIdentifier)
+            
             groupChatRoomAnnotationView.insert(coordinator: coordinator)
             
+            self.mapView.rx.didUpdateUserLocation
+                .asDriver()
+                .drive(onNext: { userLocation in
+                    let currentUserLocation = NCLocation(latitude: userLocation.coordinate.latitude,
+                                                         longitude: userLocation.coordinate.longitude)
+                    
+                    groupChatRoomAnnotationView.configureAccessible(userLocation: currentUserLocation,
+                                                                    targetAnnotation: annotation)
+                })
+                .disposed(by: self.disposeBag)
+
             return groupChatRoomAnnotationView
+            
         case .directMessage:
             return DmChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                             reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if overlay.isKind(of: MKCircle.self) {
+            let circleRenderer = MKCircleRenderer(overlay: overlay)
+            circleRenderer.fillColor = .blue.withAlphaComponent(0.01)
+            circleRenderer.strokeColor = .red
+            circleRenderer.lineWidth = 1
+            return circleRenderer
+        }
+        
+        return MKOverlayRenderer(overlay: overlay)
     }
 }
 
@@ -249,24 +284,12 @@ extension MainMapViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let currentUserLocation = locations.last
+        guard let userLocation = locations.last
         else { return }
         
-        let currentUserLatitude = Double(currentUserLocation.coordinate.latitude)
-        let currentUserLongitude = Double(currentUserLocation.coordinate.longitude)
+        let currentUserLatitude = Double(userLocation.coordinate.latitude)
+        let currentUserLongitude = Double(userLocation.coordinate.longitude)
         UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
         UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
-        
-        guard let cameraBoundary = self.mapView.cameraBoundary
-        else { return }
-        
-        let southWest = NCLocation(latitude: cameraBoundary.region.center.latitude - (cameraBoundary.region.span.latitudeDelta / 2),
-                                   longitude: cameraBoundary.region.center.longitude - (cameraBoundary.region.span.longitudeDelta / 2))
-        let northEast = NCLocation(latitude: cameraBoundary.region.center.latitude + (cameraBoundary.region.span.latitudeDelta / 2),
-                                   longitude: cameraBoundary.region.center.longitude + (cameraBoundary.region.span.longitudeDelta / 2))
-
-        if (currentUserLatitude < southWest.latitude) || (northEast.latitude < currentUserLatitude) || (currentUserLongitude < southWest.longitude) || (northEast.longitude < currentUserLongitude) {
-            self.mapView.move(to: currentUserLocation)
-        }
     }
 }
