@@ -6,16 +6,17 @@
 //
 
 import Kingfisher
-import RxSwift
 import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
 
 final class CalloutView: UIView {
+    
     // MARK: - UI Compoments
     private let chatRoomImage = UIImageView().then {
         $0.layer.cornerRadius = 30
-        $0.image = UIImage(systemName: "photo")
+        $0.image = UIImage(named: "ChatLogo")
     }
     private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
@@ -27,27 +28,37 @@ final class CalloutView: UIView {
     private lazy var infoHeaderView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .equalSpacing
+        $0.spacing = 6
         $0.addArrangedSubview(self.chatRoomName)
         $0.addArrangedSubview(self.chatRoomDistance)
     }
     private let chatRoomName = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .secondaryLabel
+        $0.font = .ntTextMediumBold
     }
     private let chatRoomDistance = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .tertiaryLabel
+        $0.font = .ntCaption
     }
     private let chatRoomDescription = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .secondaryLabel
+        $0.font = .ntTextSmallRegular
         $0.numberOfLines = 1
     }
     private let chatRoomEnterButton = UIButton().then {
+        guard let normalColor: UIColor = .secondaryLabel,
+              let highlightColor: UIColor = .primaryColor
+        else { return }
+        
         let buttonImageConfig = UIImage.SymbolConfiguration(pointSize: 24)
-        let buttonImage = UIImage(systemName: "arrow.right.circle",
-                                  withConfiguration: buttonImageConfig)
-        $0.setImage(buttonImage, for: .normal)
+        let image = UIImage(systemName: "arrow.right.circle")?
+            .withTintColor(normalColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(buttonImageConfig)
+        let highlightedImage = UIImage(systemName: "arrow.right.circle")?
+            .withTintColor(highlightColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(buttonImageConfig)
+        $0.setImage(image, for: .normal)
+        $0.setImage(highlightedImage, for: .highlighted)
     }
     
     // MARK: - Properties
@@ -83,13 +94,13 @@ final class CalloutView: UIView {
         self.chatRoomImage.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(4)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(30)
+            make.width.height.equalTo(40)
         }
         
         self.chatRoomEnterButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-4)
+            make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(40)
+            make.width.height.equalTo(28)
         }
         
         self.infoStackView.snp.makeConstraints { make in
@@ -142,6 +153,6 @@ extension CalloutView {
         let userLocation = NCLocation(latitude: userLatitude, longitude: userLongitude)
         let distance = chatRoomLocation.distance(from: userLocation)
         
-        return String(format: "%.2f", distance / 1000) + " km"
+        return distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
     }
 }
