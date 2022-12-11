@@ -94,12 +94,7 @@ final class MainMapViewModel {
             .disposed(by: self.disposeBag)
         
         input.didDragMapView
-            .map { false }
-            .bind(to: output.followCurrentUserLocation)
-            .disposed(by: self.disposeBag)
-        
-        input.didUpdateUserLocation
-            .map { _ in true }
+            .map { _ in false }
             .bind(to: output.followCurrentUserLocation)
             .disposed(by: self.disposeBag)
         
