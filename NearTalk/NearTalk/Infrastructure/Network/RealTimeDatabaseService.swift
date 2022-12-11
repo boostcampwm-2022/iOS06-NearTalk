@@ -95,7 +95,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(roomID)
                 .queryOrdered(byChild: "createdAtTimeStamp")
-                .queryEnding(atValue: date.timeIntervalSince1970)
+                .queryEnding(beforeValue: date.timeIntervalSince1970)
                 .queryLimited(toLast: UInt(pageCount))
                 .observeSingleEvent(of: .value) { snapshot in
                     let messages: [ChatMessage] = snapshot.children
@@ -118,6 +118,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.newMessageHandler = self.ref
                 .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(chatRoomID)
+                .queryOrdered(byChild: "createdAtTimeStamp")
+                .queryLimited(toLast: 1)
                 .observe(.childAdded) { (snapshot) -> Void in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let chatMessage: ChatMessage = try? ChatMessage.decode(dictionary: value) {

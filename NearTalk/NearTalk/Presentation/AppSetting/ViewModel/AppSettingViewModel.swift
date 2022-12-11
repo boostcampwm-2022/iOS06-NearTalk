@@ -136,6 +136,14 @@ private extension DefaultAppSettingViewModel {
         self.dropoutUseCase.dropout()
             .subscribe { [weak self] in
                 self?.action.presentDropoutResult?(true)
+                Task(priority: .high) {
+                    await UIApplication.shared.unregisterForRemoteNotifications()
+                }
+                #warning("Enum으로 UserDefaults 키 관리")
+                UserDefaults.standard.set(AppTheme.system.rawValue, forKey: AppTheme.keyName)
+                UserDefaults.standard.set(false, forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
+                UserDefaults.standard.removeObject(forKey: DefaultAppSettingViewModel.appNotificationOnOffKey)
+                UserDefaults.standard.removeObject(forKey: AppTheme.keyName)
             } onError: { [weak self] _ in
                 self?.action.presentDropoutResult?(false)
                 self?.interactionEnableRelay.accept(true)
@@ -147,6 +155,9 @@ private extension DefaultAppSettingViewModel {
         self.logoutUseCase.execute()
             .subscribe { [weak self] in
                 self?.action.presentLogoutResult?(true)
+                Task(priority: .high) {
+                    await UIApplication.shared.unregisterForRemoteNotifications()
+                }
             } onError: { [weak self] _ in
                 self?.action.presentLogoutResult?(false)
                 self?.interactionEnableRelay.accept(true)

@@ -5,26 +5,12 @@
 //  Created by dong eun shin on 2022/11/23.
 //
 
+import RxRelay
 import RxSwift
 import UIKit
 
-final class ChatViewController: UIViewController, UICollectionViewDelegate {
-    // MARK: - Proporties
-    
-    private enum Metric {
-        static var keyboardHeight: CGFloat = 0
-        static let defaultChatInputAccessoryViewHeight = 50
-        static let defaultTextFieldHeight: Double = 40.0
-        static let textFieldInset: Double = 5.0
-    }
-    
-    private let viewModel: ChatViewModel
-    private var messageItems: [MessageItem]
-    
-    private let disposeBag: DisposeBag = DisposeBag()
-    private lazy var dataSource: DataSource = makeDataSource()
-    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = self.createLayout()
-    
+final class ChatViewController: UIViewController {
+    // MARK: - UI Properties
     private lazy var chatCollectionView: UICollectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: compositionalLayout
@@ -38,6 +24,28 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
     private lazy var chatInputAccessoryView: ChatInputAccessoryView = ChatInputAccessoryView().then {
         $0.backgroundColor = .primaryBackground
     }
+    
+    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = self.createLayout()
+    
+    // MARK: - Proporties
+    
+    private enum Metric {
+        static var keyboardHeight: CGFloat = 0
+        static let defaultChatInputAccessoryViewHeight = 50
+        static let defaultTextFieldHeight: Double = 40.0
+        static let textFieldInset: Double = 5.0
+    }
+    
+    // MARK: - Proporties
+    
+    private let viewModel: ChatViewModel
+    private var messageItems: [MessageItem]
+    
+    private let disposeBag: DisposeBag = DisposeBag()
+    private lazy var dataSource: DataSource = makeDataSource()
+
+    private var isReadyToFetchPreviousMessages: Bool = false
+    private let isLatestMessageChanged: BehaviorRelay<Bool> = .init(value: false)
         
     // MARK: - Lifecycles
     
@@ -49,11 +57,6 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        self.viewModel.viewDidDisappear()
-        super.viewDidDisappear(animated)
     }
     
     override func viewDidLoad() {
@@ -75,6 +78,9 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
     }
 
     private func scrollToBottom() {
+        guard self.isLatestMessageChanged.value else {
+            return
+        }
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
         self.chatCollectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
     }
@@ -99,26 +105,30 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
                 guard let self,
-                      let myID = self.viewModel.myID,
-                      let message: ChatMessage = messages.last else {
+                      let myID = self.viewModel.myID else {
                     return
                 }
+
+                self.isLatestMessageChanged.accept(messages.last?.uuid != self.messageItems.last?.id)
                 
-                let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                var messageItems: [MessageItem] = []
+                messages.forEach { message in
+                    let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                    let messageItem: MessageItem = .init(
+                        chatMessage: message,
+                        myID: myID,
+                        userProfile: userProfile
+                    )
+                    messageItems.append(messageItem)
+                }
                 
-                let messageItem: MessageItem = .init(
-                    chatMessage: message,
-                    myID: myID,
-                    userProfile: userProfile
-                )
-                
-                self.messageItems.append(messageItem)
+                self.messageItems = messageItems
                 let snapshot = self.appendSnapshot(items: self.messageItems)
-                self.dataSource.apply(snapshot, animatingDifferences: false) {
+                self.dataSource.apply(snapshot, animatingDifferences: self.isReadyToFetchPreviousMessages) {
                     self.scrollToBottom()
                 }
             })
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
         
         self.viewModel.chatRoom
             .bind { [weak self] chatRoom in
@@ -128,19 +138,35 @@ final class ChatViewController: UIViewController, UICollectionViewDelegate {
                 }
                 self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") (\(chatRoom.userList?.count ?? 0))"
             }
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
         
         self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
             .filter({!$0.isEmpty})
             .subscribe(onNext: { _ in
                 self.reconfigureChatInputAccessoryView()
             })
-            .disposed(by: disposeBag)
+            .disposed(by: self.disposeBag)
+    }
+}
+
+// MARK: - UICollectionViewDelegate
+extension ChatViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        print("🚧 ", #function, indexPath.row)
+        
+        if indexPath.row > 29,
+           !self.isReadyToFetchPreviousMessages {
+            self.isReadyToFetchPreviousMessages.toggle()
+        }
+        
+        if indexPath.row < 10,
+           isReadyToFetchPreviousMessages {
+            self.viewModel.fetchMessages(before: self.viewModel.chatMessages.value[0], isInitialMessage: false)
+        }
     }
 }
 
 // MARK: - UICollectionViewDiffableDataSource
-
 private extension ChatViewController {
     typealias DataSource = UICollectionViewDiffableDataSource<Section, MessageItem>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, MessageItem>
@@ -176,7 +202,6 @@ private extension ChatViewController {
 }
 
 // MARK: - Keyboard Notification Handler
-
 private extension ChatViewController {
     @objc
     func keyboardHandler(_ notification: Notification) {
@@ -226,7 +251,6 @@ private extension ChatViewController {
 }
 
 // MARK: - Layout
-
 private extension ChatViewController {
     func addSubviews() {
         [chatCollectionView, chatInputAccessoryView].forEach {
@@ -290,13 +314,13 @@ private extension ChatViewController {
         self.chatCollectionView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide)
             make.bottom.equalTo(chatInputAccessoryView.snp.top)
         }
     }
 }
 
 // MARK: - UITextViewDelegate
-
 extension ChatViewController: UITextViewDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return false

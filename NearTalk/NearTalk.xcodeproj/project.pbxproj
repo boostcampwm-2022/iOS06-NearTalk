@@ -898,20 +898,20 @@
 		1660D26C291DE32F005F7B24 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				609E2712294431A800F4BDE4 /* Dummy */,
+				7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */,
 				83D5ECCA292BB64700AD1781 /* CreateProfileUseCase.swift */,
-				83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */,
-				83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */,
-				83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */,
-				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
+				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
+				1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */,
 				555A6B3929238C9B001336ED /* FetchChatRoomUseCase.swift */,
 				5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */,
-				7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */,
 				603FD394292A1E7000687ED4 /* LoginUseCase.swift */,
-				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
-				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
+				83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */,
 				6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */,
-				1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */,
+				83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */,
+				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
+				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1185,6 +1185,14 @@
 				16988876292E510200CEC7B9 /* MainMapDIContainer.swift */,
 			);
 			path = DIContainer;
+			sourceTree = "<group>";
+		};
+		609E2712294431A800F4BDE4 /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */,
+			);
+			path = Dummy;
 			sourceTree = "<group>";
 		};
 		60DA62EE293D05F3003CA3E5 /* Dummy */ = {
