@@ -297,7 +297,6 @@ private extension UserProfileInputView {
         messageField.snp.makeConstraints {
             $0.horizontalEdges.equalTo(messageLabel)
             $0.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
-//            $0.height.equalTo(self.nicknameField.snp.height).multipliedBy(2.0)
         }
         
         messageValidityMessageLabel.snp.makeConstraints {
