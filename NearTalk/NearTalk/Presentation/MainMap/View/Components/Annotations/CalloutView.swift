@@ -17,6 +17,7 @@ final class CalloutView: UIView {
     private let chatRoomImage = UIImageView().then {
         $0.layer.cornerRadius = 30
         $0.image = UIImage(named: "ChatLogo")
+        $0.contentMode = .scaleAspectFit
     }
     private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
