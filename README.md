@@ -16,12 +16,12 @@
 ## 개발환경 및 라이브러리
 
 ### iOS 최소 버전
-- iOS 15
+- iOS `15.0`
 
 ### 개발환경
-- Xcode 14.1
-- macOS Ventura 13.0
-- macOS Monterey 12.6
+- Xcode `14.1`
+- macOS Ventura `13.0`
+- macOS Monterey `12.6`
 
 ### 프레임워크 및 라이브러리 버전
 
