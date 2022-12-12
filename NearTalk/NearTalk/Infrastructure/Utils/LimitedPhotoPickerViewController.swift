@@ -84,27 +84,6 @@ extension LimitedPhotoPickerViewController: UICollectionViewDelegate {
     }
 }
 
-extension LimitedPhotoPickerViewController {
-    func makeViewLayout() -> UICollectionViewCompositionalLayout {
-        let itemSize: NSCollectionLayoutSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.25),
-            heightDimension: .fractionalWidth(0.25))
-        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize: NSCollectionLayoutSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(0.25))
-        let group: NSCollectionLayoutGroup = NSCollectionLayoutGroup.horizontal(
-            layoutSize: groupSize,
-            subitems: [item])
-
-        let section: NSCollectionLayoutSection = NSCollectionLayoutSection(group: group)
-        let layout: UICollectionViewCompositionalLayout = UICollectionViewCompositionalLayout(section: section)
-
-        return layout
-    }
-}
-
 extension LimitedPhotoPickerViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let fetchResults = self.fetchResults
@@ -212,5 +191,24 @@ private extension LimitedPhotoPickerViewController {
         self.navigationItem.scrollEdgeAppearance = appearance
         self.navigationItem.compactScrollEdgeAppearance = appearance
         self.navigationController?.navigationBar.tintColor = .label
+    }
+    
+    func makeViewLayout() -> UICollectionViewCompositionalLayout {
+        let itemSize: NSCollectionLayoutSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.25),
+            heightDimension: .fractionalWidth(0.25))
+        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize: NSCollectionLayoutSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalWidth(0.25))
+        let group: NSCollectionLayoutGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item])
+
+        let section: NSCollectionLayoutSection = NSCollectionLayoutSection(group: group)
+        let layout: UICollectionViewCompositionalLayout = UICollectionViewCompositionalLayout(section: section)
+
+        return layout
     }
 }
