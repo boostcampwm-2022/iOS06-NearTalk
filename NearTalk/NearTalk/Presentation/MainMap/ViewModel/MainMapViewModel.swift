@@ -103,6 +103,10 @@ final class MainMapViewModel {
             .bind(to: output.followCurrentUserLocation)
             .disposed(by: self.disposeBag)
         
+        input.didUpdateUserLocation
+            .bind(to: output.currentUserLocation)
+            .disposed(by: self.disposeBag)
+        
         return output
     }
 }

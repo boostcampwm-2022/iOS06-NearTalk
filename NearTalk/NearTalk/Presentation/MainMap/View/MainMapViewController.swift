@@ -166,6 +166,16 @@ final class MainMapViewController: UIViewController {
                 }
             })
             .disposed(by: self.disposeBag)
+        
+        output.currentUserLocation
+            .asObservable()
+            .subscribe(onNext: { currentUserLocation in
+                let currentUserLatitude = currentUserLocation.latitude
+                let currentUserLongitude = currentUserLocation.longitude
+                UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
+                UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
+            })
+            .disposed(by: self.disposeBag)
     }
     
     private func registerAnnotationViewClass() {
@@ -289,15 +299,5 @@ extension MainMapViewController: CLLocationManagerDelegate {
         @unknown default:
             return
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let userLocation = locations.last
-        else { return }
-        
-        let currentUserLatitude = Double(userLocation.coordinate.latitude)
-        let currentUserLongitude = Double(userLocation.coordinate.longitude)
-        UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
-        UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
     }
 }

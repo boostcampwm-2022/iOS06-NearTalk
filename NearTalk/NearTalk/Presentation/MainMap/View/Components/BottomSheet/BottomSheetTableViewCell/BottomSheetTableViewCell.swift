@@ -148,16 +148,11 @@ final class BottomSheetTableViewCell: UITableViewCell {
 // MARK: - Bind
 extension BottomSheetTableViewCell {
     public func fetch(with data: ChatRoom) {
-        guard let chatRoomLatitude = data.latitude,
-              let chatRoomLongitude = data.longitude
-        else { return }
-        
         self.chatRoom = data
         self.chatRoomName.text = data.roomName
-        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
-        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomLocation)
         self.chatRoomDescription.text = data.roomDescription
         self.fetch(path: data.roomImagePath)
+        self.fetchChatRoomDistance()
     }
     
     private func fetch(path imagePath: String?) {
@@ -172,16 +167,28 @@ extension BottomSheetTableViewCell {
         self.coordinator = coordinator
         self.parentVC = parentVC
     }
-
-    private func calcChatRoomDistance(with chatRoomLocation: NCLocation?) -> String {
-        guard let chatRoomLocation = chatRoomLocation,
-              let userLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
-              let userLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double
-        else { return "입장불가" }
-
-        let userLocation = NCLocation(latitude: userLatitude, longitude: userLongitude)
-        let distance = chatRoomLocation.distance(from: userLocation)
-
-        return distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
+    
+    private func fetchChatRoomDistance() {
+        guard let chatRoomLatitude = self.chatRoom?.latitude,
+              let chatRoomLongitude = self.chatRoom?.longitude,
+              let chatRoomAccessibleRadius = self.chatRoom?.accessibleRadius
+        else { return }
+        
+        Observable.zip(
+            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
+            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
+        )
+        .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
+            guard let currentUserLatitude,
+                  let currentUserLongitude
+            else { return }
+            
+            let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
+            let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
+            let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
+            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
+            self?.chatRoomEnterButton.isEnabled = distance <= chatRoomAccessibleRadius * 1000
+        })
+        .disposed(by: disposeBag)
     }
 }
