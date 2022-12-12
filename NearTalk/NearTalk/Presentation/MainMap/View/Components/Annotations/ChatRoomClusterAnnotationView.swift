@@ -44,7 +44,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
         
         return renderer.image { _ in
             // 최외각 원 그리기
-            UIColor.secondaryBackground?
+            UIColor.whiteLabel?
                 .withAlphaComponent(0.5)
                 .setFill()
             
@@ -54,7 +54,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
                                         height: height)).fill()
             
             // 내부 원 그리기
-            UIColor.secondaryColor?
+            UIColor.primaryColor?
                 // maxClusterMembers개 이상부터, 투명도 1 이상
                 .withAlphaComponent(0.5 + (Double(count) / Double(count + maxClusterMembersCount)))
                 .setFill()
@@ -67,7 +67,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
             // 텍스트 작성
             let text = "\(count)"
             let textAttibutes = [
-                NSAttributedString.Key.foregroundColor: UIColor.secondaryBackground,
+                NSAttributedString.Key.foregroundColor: UIColor.whiteLabel,
                 NSAttributedString.Key.font: UIFont.ntTextLargeRegular
             ]
             
