@@ -168,7 +168,7 @@ private extension CreateGroupChatViewController {
             .disposed(by: disposeBag)
         
         self.rangeZoneView.rangeSlider.rx.value
-            .map({Int($0)})
+            .map { Double($0) }
             .bind { [weak self] in
                 self?.viewModel.maxRangeDidChanged($0)
             }
@@ -179,14 +179,14 @@ private extension CreateGroupChatViewController {
                 self?.viewModel.createChatButtonDIdTapped()
             }.disposed(by: disposeBag)
                 
-        viewModel.createChatButtonIsEnabled
+        self.viewModel.createChatButtonIsEnabled
             .do(onNext: { isEnable in
                 self.createChatButton.alpha = isEnable ? 1.0 : 0.7
             })
             .drive(self.createChatButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        viewModel.maxRangeLabel
+        self.viewModel.maxRangeLabel
             .drive(self.rangeZoneView.rangeLabel.rx.text)
             .disposed(by: disposeBag)
     }
@@ -272,12 +272,6 @@ private extension CreateGroupChatViewController {
     }
 }
 
-extension CreateGroupChatViewController: PHPickerViewControllerDelegate {
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        dismiss(animated: true, completion: nil)
-    }
-}
-
 extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
@@ -296,6 +290,6 @@ extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataS
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        print(self.pickerComponentList[row])
+        
     }
 }
