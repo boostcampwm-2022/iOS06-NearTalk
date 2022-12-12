@@ -264,36 +264,28 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private func accessibleRadiusCheck(latitude: Double?, longitude: Double?, accessibleRadius: Double?) {
-        guard let latitude, let longitude, let accessibleRadius
+        guard let chatRoomLatitude = latitude,
+              let chatRoomLongitude = longitude,
+              let chatRoomAccessibleRadius = accessibleRadius
         else { return }
         
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
             UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
         )
-        .subscribe(onNext: { [weak self] (currentLatitude, currentLongitude) in
-            guard let currentLatitude,
-                  let currentLongitude else { return }
+        .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
+            guard let currentUserLatitude,
+                  let currentUserLongitude
+            else { return }
             
-            let currentNCLocation: NCLocation = NCLocation(latitude: latitude, longitude: longitude)
-            let chatNCLocation: NCLocation = NCLocation(latitude: currentLatitude, longitude: currentLongitude)
-            let distance = currentNCLocation.distance(from: chatNCLocation)
+            let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
+            let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
+            let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
             
-//            print("\(self?.name.text ?? "") 허용거리: \(accessibleRadius) 현제 거리 : \(distance)")
-            
-            if distance <= accessibleRadius * 1000 {
-                self?.inArea = true
-                DispatchQueue.main.async {
-                    self?.lockIcon.isHidden = true
-                    self?.view.isHidden = true
-                }
-            } else {
-                self?.inArea = false
-                DispatchQueue.main.async {
-                    self?.lockIcon.isHidden = false
-                    self?.view.isHidden = false
-                }
-            }
+            let isAccessible = distance <= chatRoomAccessibleRadius * 1000
+            self?.inArea = isAccessible
+            self?.lockIcon.isHidden = isAccessible
+            self?.view.isHidden = isAccessible
         })
         .disposed(by: disposeBag)
     }

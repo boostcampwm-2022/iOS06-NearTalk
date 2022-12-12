@@ -65,20 +65,25 @@ final class BottomSheetTableViewCell: UITableViewCell {
         $0.setImage(image, for: .normal)
         $0.setImage(highlightedImage, for: .highlighted)
     }
-
-    private let chatRoomLock = UIImageView().then {
+    private let chatRoomLockImageView = UIImageView().then {
         guard let lockImageColor: UIColor = .primaryBackground,
               let cellCoverColor: UIColor = .tertiaryLabel
         else { return }
         
         let lockImageConfig = UIImage.SymbolConfiguration(pointSize: 40)
         let image = UIImage(systemName: "lock.fill")?
-            .withTintColor(lockImageColor, renderingMode: .alwaysOriginal)
+            // .withTintColor(lockImageColor, renderingMode: .alwaysOriginal)
             .withConfiguration(lockImageConfig)
         
         $0.image = image
         $0.isHidden = true
         $0.tintColor = .label
+    }
+    private let chatRoomLockCoverView = UIView().then {
+        $0.isHidden = true
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+        $0.backgroundColor = UIColor.tertiaryLabel?.withAlphaComponent(0.5)
     }
     
     // MARK: - Properties
@@ -104,7 +109,8 @@ final class BottomSheetTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.chatRoomImage)
         self.contentView.addSubview(self.infoStackView)
         self.contentView.addSubview(self.chatRoomEnterButton)
-        self.contentView.addSubview(self.chatRoomLock)
+        self.contentView.addSubview(self.chatRoomLockImageView)
+        self.contentView.addSubview(self.chatRoomLockCoverView)
     }
     
     private func configureConstraints() {
@@ -126,8 +132,13 @@ final class BottomSheetTableViewCell: UITableViewCell {
             make.top.bottom.equalTo(self.contentView).inset(8)
         }
         
-        self.chatRoomLock.snp.makeConstraints { make in
-            make.center.equalTo(self.contentView)
+        self.chatRoomLockImageView.snp.makeConstraints { make in
+            make.centerX.centerY.equalTo(self.contentView)
+        }
+        
+        self.chatRoomLockCoverView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.contentView)
+            make.leading.trailing.equalTo(self.contentView)
         }
     }
     
@@ -187,7 +198,12 @@ extension BottomSheetTableViewCell {
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
             let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
             self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
-            self?.chatRoomEnterButton.isEnabled = distance <= chatRoomAccessibleRadius * 1000
+            
+            let isAccessible = distance <= chatRoomAccessibleRadius * 1000
+            self?.chatRoomEnterButton.isEnabled = !isAccessible
+            self?.isUserInteractionEnabled = !isAccessible
+            self?.chatRoomLockImageView.isHidden = !isAccessible
+            self?.chatRoomLockCoverView.isHidden = !isAccessible
         })
         .disposed(by: disposeBag)
     }
