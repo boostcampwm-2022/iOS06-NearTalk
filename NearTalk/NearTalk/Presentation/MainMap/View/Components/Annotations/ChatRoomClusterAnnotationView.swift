@@ -35,25 +35,27 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
     }
     
     private func drawClusterAnnotationImage(count: Int) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 40, height: 40))
+        let width: CGFloat = .init(30 + count * 2)
+        let height: CGFloat = .init(30 + count * 2)
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
         
         return renderer.image { _ in
-            UIColor.purple.setFill()
-            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 40, height: 40)).fill()
+            UIColor.primaryColor?.setFill()
+            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: width, height: height)).fill()
             
             let text = "\(count)"
             let textAttibutes = [
-                NSAttributedString.Key.foregroundColor: UIColor.cyan, // 임시 글자 색
-                NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 20) // 임시 글자 font
+                NSAttributedString.Key.foregroundColor: UIColor.secondaryBackground,
+                NSAttributedString.Key.font: UIFont.ntTextLargeRegular
             ]
-            let size = text.size(withAttributes: textAttibutes)
+            let size = text.size(withAttributes: textAttibutes as [NSAttributedString.Key: Any])
             let rect = CGRect(
-                x: 20 - size.width / 2,
-                y: 20 - size.height / 2,
+                x: (width - size.width) / 2,
+                y: (height - size.height) / 2,
                 width: size.width,
                 height: size.height
             )
-            text.draw(in: rect, withAttributes: textAttibutes)
+            text.draw(in: rect, withAttributes: textAttibutes as [NSAttributedString.Key: Any])
         }
     }
 }

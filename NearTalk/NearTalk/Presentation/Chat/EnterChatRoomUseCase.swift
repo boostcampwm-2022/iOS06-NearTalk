@@ -9,8 +9,11 @@ import Foundation
 import RxSwift
 
 protocol EnterChatRoomUseCase {
-    func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket>
+    /// 티켓 업데이트
     func updateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
+    
+    /// 티켓 업데이트 (티켓이 없을 경우 생성한다.)
+    func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket>
 }
 
 final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
@@ -18,21 +21,20 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
     private let chatRoomListRepository: ChatRoomListRepository
     private let profileRepository: ProfileRepository
     
-    init(chatRoomListRepository: ChatRoomListRepository,
-         profileRepository: ProfileRepository
+    init(
+        chatRoomListRepository: ChatRoomListRepository,
+        profileRepository: ProfileRepository
     ) {
         self.chatRoomListRepository = chatRoomListRepository
         self.profileRepository = profileRepository
     }
     
-    private func createUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
-        return self.chatRoomListRepository.createUserChatRoomTicket(ticket)
-    }
-    
+    /// 티켓 업데이트
     func updateUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         return self.chatRoomListRepository.updateUserChatRoomTicket(ticket)
     }
     
+    /// 티켓 업데이트 (티켓이 없을 경우 생성한다.)
     func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket> {
         guard let roomID = chatRoom.uuid else {
             return .error(EnterChatRoomUseCaseError.faildToEnter)
@@ -55,6 +57,11 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
                 )
                 return self.createUserChatRoomTicket(ticket: userChatRoomTicket)
             }
+    }
+    
+    // MARK: - Private
+    private func createUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
+        return self.chatRoomListRepository.createUserChatRoomTicket(ticket)
     }
     
     private func fetchUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {

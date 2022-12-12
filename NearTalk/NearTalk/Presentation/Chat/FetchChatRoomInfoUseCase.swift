@@ -10,7 +10,7 @@ import RxSwift
 
 protocol FetchChatRoomInfoUseCase {
     func fetchChatRoomInfo(chatRoomID: String) -> Single<ChatRoom>
-    func observrChatRoomInfo(chatRoomID: String) -> Observable<ChatRoom>
+    func observeChatRoomInfo(chatRoomID: String) -> Observable<ChatRoom>
 }
 
 final class DefaultFetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase {
@@ -29,7 +29,7 @@ final class DefaultFetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase {
         return chatRoomListRepository.fetchChatRoomInfo(chatRoomID)
     }
     
-    func observrChatRoomInfo(chatRoomID: String) -> Observable<ChatRoom> {
+    func observeChatRoomInfo(chatRoomID: String) -> Observable<ChatRoom> {
         return chatRoomListRepository.observeChatRoomInfo(chatRoomID)
     }
 }

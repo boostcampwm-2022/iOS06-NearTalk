@@ -16,6 +16,7 @@
 		162B1B722935E2BF004724D9 /* UserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */; };
 		162B1B742935E2DA004724D9 /* DefaultUserDefaultsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */; };
 		162B1B7729424346004724D9 /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B7629424346004724D9 /* CalloutView.swift */; };
+		162B1B7F2946082A004724D9 /* FontSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B1B7E2946082A004724D9 /* FontSet.swift */; };
 		1648BA972921D73E0076AC35 /* MainMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA962921D73E0076AC35 /* MainMapViewModel.swift */; };
 		1648BA992921D7480076AC35 /* MainMapCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA982921D7480076AC35 /* MainMapCoordinator.swift */; };
 		1648BA9B2921D7570076AC35 /* MainMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1648BA9A2921D7570076AC35 /* MainMapViewController.swift */; };
@@ -293,6 +294,7 @@
 		162B1B712935E2BF004724D9 /* UserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsRepository.swift; sourceTree = "<group>"; };
 		162B1B732935E2DA004724D9 /* DefaultUserDefaultsRepository.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultUserDefaultsRepository.swift; sourceTree = "<group>"; };
 		162B1B7629424346004724D9 /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
+		162B1B7E2946082A004724D9 /* FontSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSet.swift; sourceTree = "<group>"; };
 		1648BA962921D73E0076AC35 /* MainMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewModel.swift; sourceTree = "<group>"; };
 		1648BA982921D7480076AC35 /* MainMapCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCoordinator.swift; sourceTree = "<group>"; };
 		1648BA9A2921D7570076AC35 /* MainMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapViewController.swift; sourceTree = "<group>"; };
@@ -840,6 +842,7 @@
 				5553B7C529347C7A0054F68C /* PaddingLabel.swift */,
 				831ADB11293DA8E60070743C /* ColorSet.swift */,
 				83933F732941C51800CC07FF /* AppTheme.swift */,
+				162B1B7E2946082A004724D9 /* FontSet.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -898,20 +901,20 @@
 		1660D26C291DE32F005F7B24 /* UseCases */ = {
 			isa = PBXGroup;
 			children = (
+				609E2712294431A800F4BDE4 /* Dummy */,
+				7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */,
 				83D5ECCA292BB64700AD1781 /* CreateProfileUseCase.swift */,
-				83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */,
-				83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */,
-				83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */,
-				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
+				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
+				1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */,
 				555A6B3929238C9B001336ED /* FetchChatRoomUseCase.swift */,
 				5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */,
-				7CE806402925528F00D828FF /* CreateGroupChatUseCase.swift */,
 				603FD394292A1E7000687ED4 /* LoginUseCase.swift */,
-				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 				603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */,
-				83D5ECC6292B74FA00AD1781 /* DropOutUseCase.swift */,
+				83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */,
 				6001DA8B292DBE020062EAD0 /* UploadChatRoomInfoUseCase.swift */,
-				1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */,
+				83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */,
+				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
+				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1185,6 +1188,14 @@
 				16988876292E510200CEC7B9 /* MainMapDIContainer.swift */,
 			);
 			path = DIContainer;
+			sourceTree = "<group>";
+		};
+		609E2712294431A800F4BDE4 /* Dummy */ = {
+			isa = PBXGroup;
+			children = (
+				83649778292E1CA20002DDE5 /* DummyVerifyUseCase.swift */,
+			);
+			path = Dummy;
 			sourceTree = "<group>";
 		};
 		60DA62EE293D05F3003CA3E5 /* Dummy */ = {
@@ -1911,6 +1922,7 @@
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
 				83C6B683293B298000560C51 /* UploadingIndicatorViewController.swift in Sources */,
 				7C254DB1292DDA88004D4CEC /* ChatDIContainer.swift in Sources */,
+				162B1B7F2946082A004724D9 /* FontSet.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
 				60FD70622923927C00A4C29A /* NonceGenerator.swift in Sources */,
 				83D5ECD3292BF1F100AD1781 /* MyProfileDIContainer.swift in Sources */,
