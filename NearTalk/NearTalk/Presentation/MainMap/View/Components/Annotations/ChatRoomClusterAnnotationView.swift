@@ -35,26 +35,33 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
     }
     
     private func drawClusterAnnotationImage(count: Int) -> UIImage {
-        let width: CGFloat = .init(30 + count * 2)
-        let height: CGFloat = .init(30 + count * 2)
+        let width: CGFloat = .init(30 + count * 3)
+        let height: CGFloat = .init(30 + count * 3)
+        let lineWidth: CGFloat = .init(3)
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
         
         return renderer.image { _ in
-            UIColor.primaryColor?.setFill()
+            // 최외각 원 그리기
+            UIColor.secondaryColor?.setFill()
             UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: width, height: height)).fill()
             
+            // 내부 원 그리기
+            UIColor.primaryColor?.setFill()
+            UIBezierPath(ovalIn: CGRect(x: lineWidth, y: lineWidth, width: width - (2 * lineWidth), height: height - (2 * lineWidth))).fill()
+            
+            // 텍스트 작성
             let text = "\(count)"
             let textAttibutes = [
                 NSAttributedString.Key.foregroundColor: UIColor.secondaryBackground,
                 NSAttributedString.Key.font: UIFont.ntTextLargeRegular
             ]
+            
             let size = text.size(withAttributes: textAttibutes as [NSAttributedString.Key: Any])
-            let rect = CGRect(
-                x: (width - size.width) / 2,
-                y: (height - size.height) / 2,
-                width: size.width,
-                height: size.height
-            )
+            let rect = CGRect(x: (width - size.width) / 2,
+                              y: (height - size.height) / 2,
+                              width: size.width,
+                              height: size.height)
+            
             text.draw(in: rect, withAttributes: textAttibutes as [NSAttributedString.Key: Any])
         }
     }

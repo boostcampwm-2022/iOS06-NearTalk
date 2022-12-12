@@ -27,7 +27,7 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
             case .allowed:
                 return .primaryColor
             case .notAllowed:
-                return .primaryBackground
+                return .primaryColor?.withAlphaComponent(0.3)
             }
         }
     }

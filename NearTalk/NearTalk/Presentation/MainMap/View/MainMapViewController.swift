@@ -21,11 +21,11 @@ final class MainMapViewController: UIViewController {
     }
     private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
-        $0.tintColor = .systemBlue
+        $0.tintColor = .primaryColor?.withAlphaComponent(0.8)
     }
     private(set) lazy var createChatRoomButton: UIButton = .init().then {
-        $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
-        $0.tintColor = .systemBlue
+        $0.setBackgroundImage(UIImage(systemName: "message.badge.circle"), for: .normal)
+        $0.tintColor = .primaryColor?.withAlphaComponent(0.8)
     }
 
     // MARK: - Properties
