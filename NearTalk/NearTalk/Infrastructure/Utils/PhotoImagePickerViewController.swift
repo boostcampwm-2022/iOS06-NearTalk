@@ -12,28 +12,31 @@ class PhotoImagePickerViewController: UIViewController {
     func imagePicked(_ image: UIImage?) {}
 }
 
-extension PhotoImagePickerViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+extension PhotoImagePickerViewController {
     func showPHPickerViewController() {
         PHPhotoLibrary.requestAuthorization(for: .readWrite) { authorization in
             switch authorization {
             case .authorized, .limited:
-                Task(priority: .high) { [weak self] in
-                    self?.presentUIImagePickerViewController()
+                Task(priority: .high) {
+                    await MainActor.run { [weak self] in
+                        self?.presentLimitedImagePickerViewController()
+                    }
                 }
             default:
                 #if DEBUG
                 print("Photo 접근 권한 없습니다")
                 #endif
-                Task(priority: .high) { [weak self] in
-                    self?.goAuthorizationSettingPage()
+                Task(priority: .high) {
+                    await MainActor.run { [weak self] in
+                        self?.goAuthorizationSettingPage()
+                    }
                 }
             }
         }
     }
     
     private func goAuthorizationSettingPage() {
-        guard let appName = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String
+        guard let appName: String = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String
         else {
             return
         }
@@ -53,21 +56,13 @@ extension PhotoImagePickerViewController: UIImagePickerControllerDelegate, UINav
         
         self.navigationController?.topViewController?.present(alert, animated: true)
     }
-
-    private func presentUIImagePickerViewController() {
-        let imagePicker: UIImagePickerController = UIImagePickerController()
-        
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.allowsEditing = false
-        imagePicker.delegate = self
-        
-        self.navigationController?.topViewController?.present(imagePicker, animated: true)
-    }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        picker.dismiss(animated: true)
-        let image: UIImage? = info[UIImagePickerController.InfoKey.editedImage] as? UIImage ?? info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-        self.imagePicked(image)
+    private func presentLimitedImagePickerViewController() {
+        let imagePicker = LimitedPhotoPickerViewController()
+        let nav: UINavigationController = UINavigationController(rootViewController: imagePicker)
+        
+        imagePicker.itemSelectedEvent = self.imagePicked(_:)
+        self.navigationController?.topViewController?.present(nav, animated: true)
     }
     
     func resizeImageByUIGraphics(image: UIImage) -> Data? {
