@@ -270,8 +270,8 @@ class ChatRoomListCell: UICollectionViewCell {
         else { return }
         
         Observable.zip(
-            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
-            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
+            UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
+            UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLongitude.string)
         )
         .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
             guard let currentUserLatitude,

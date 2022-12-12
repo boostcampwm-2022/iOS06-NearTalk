@@ -66,18 +66,17 @@ final class BottomSheetTableViewCell: UITableViewCell {
         $0.setImage(highlightedImage, for: .highlighted)
     }
     private let chatRoomLockImageView = UIImageView().then {
-        guard let lockImageColor: UIColor = .primaryBackground,
+        guard let lockImageColor: UIColor = .label,
               let cellCoverColor: UIColor = .tertiaryLabel
         else { return }
         
         let lockImageConfig = UIImage.SymbolConfiguration(pointSize: 40)
         let image = UIImage(systemName: "lock.fill")?
-            // .withTintColor(lockImageColor, renderingMode: .alwaysOriginal)
+            .withTintColor(lockImageColor, renderingMode: .alwaysOriginal)
             .withConfiguration(lockImageConfig)
         
         $0.image = image
         $0.isHidden = true
-        $0.tintColor = .label
     }
     private let chatRoomLockCoverView = UIView().then {
         $0.isHidden = true
@@ -186,8 +185,8 @@ extension BottomSheetTableViewCell {
         else { return }
         
         Observable.zip(
-            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLatitude"),
-            UserDefaults.standard.rx.observe(Double.self, "CurrentUserLongitude")
+            UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
+            UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLongitude.string)
         )
         .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
             guard let currentUserLatitude,

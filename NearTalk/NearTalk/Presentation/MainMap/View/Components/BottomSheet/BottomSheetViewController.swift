@@ -13,14 +13,23 @@ import UIKit
 
 final class BottomSheetViewController: UIViewController {
     
+    private enum Text: String {
+        case sheetTitle = "채팅방 목록"
+        
+        var optional: String? {
+            return Optional(self.rawValue)
+        }
+    }
+    
     // MARK: - Properties
     private var coordinator: MainMapCoordinator?
     private var dataSource: [ChatRoom] = []
     
     // MARK: - UI Components
     private let sheetLabel: UILabel = .init().then {
-        $0.text = "채팅방 목록"
+        $0.text = Text.sheetTitle.optional
         $0.font = .ntTextMediumBold
+        $0.textColor = .secondaryBackground
     }
     private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(BottomSheetTableViewCell.self,
@@ -87,8 +96,8 @@ final class BottomSheetViewController: UIViewController {
     }
     
     private func calcChatRoomDistance(with chatRoom: ChatRoom) -> Double {
-        guard let userLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
-              let userLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double,
+        guard let userLatitude = UserDefaults.standard.object(forKey: UserDefaultsKey.currentUserLatitude.string) as? Double,
+              let userLongitude = UserDefaults.standard.object(forKey: UserDefaultsKey.currentUserLongitude.string) as? Double,
               let chatRoomLatitude = chatRoom.latitude,
               let chatRoomLongitude = chatRoom.longitude
         else { return Double.infinity }

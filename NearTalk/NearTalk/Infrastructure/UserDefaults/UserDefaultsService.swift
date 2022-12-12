@@ -35,4 +35,10 @@ final class DefaultUserDefaultsService: UserDefaultService {
 
 enum UserDefaultsKey: String {
     case userProfile
+    case currentUserLatitude
+    case currentUserLongitude
+    
+    var string: String {
+        return self.rawValue
+    }
 }

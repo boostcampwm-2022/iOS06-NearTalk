@@ -172,8 +172,8 @@ final class MainMapViewController: UIViewController {
             .subscribe(onNext: { currentUserLocation in
                 let currentUserLatitude = currentUserLocation.latitude
                 let currentUserLongitude = currentUserLocation.longitude
-                UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
-                UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
+                UserDefaults.standard.set(currentUserLatitude, forKey: UserDefaultsKey.currentUserLatitude.string)
+                UserDefaults.standard.set(currentUserLongitude, forKey: UserDefaultsKey.currentUserLatitude.string)
             })
             .disposed(by: self.disposeBag)
     }
