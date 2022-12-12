@@ -18,7 +18,7 @@ protocol CreateGroupChatViewModelInput {
     func titleDidEdited(_ title: String)
     func descriptionDidEdited(_ description: String)
     func maxParticipantDidChanged(_ numOfParticipant: Int)
-    func maxRangeDidChanged(_ range: Int)
+    func maxRangeDidChanged(_ range: Double)
     func createChatButtonDIdTapped()
     func setThumbnailImage(_ binary: Data?)
 }
@@ -54,8 +54,8 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     private var titlePublishSubject = PublishSubject<String>()
     private var description: String = ""
     private var descriptionPublishSubject = PublishSubject<String>()
-    private var maxRange: Int = 0
-    private var maxRangePublishSubject = PublishSubject<Int>()
+    private var maxRange: Double = 0.1
+    private var maxRangePublishSubject = PublishSubject<Double>()
     private let imageBehaviorRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     
     init(createGroupChatUseCase: CreateGroupChatUseCase,
@@ -76,7 +76,14 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             .asDriver(onErrorRecover: { _ in .empty() })
         
         self.maxRangeLabel = self.maxRangePublishSubject
-            .map({"\($0)km"})
+            .map {
+                let numberFormatter = NumberFormatter()
+                numberFormatter.roundingMode = .floor
+                numberFormatter.maximumSignificantDigits = 1
+
+                let formattedNum = numberFormatter.string(for: $0)
+                return (formattedNum ?? "") + " km"
+            }
             .asDriver(onErrorRecover: { _ in .empty() })
     }
     
@@ -96,7 +103,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         self.maxNumOfParticipant = numOfParticipant
     }
     
-    func maxRangeDidChanged(_ range: Int) {
+    func maxRangeDidChanged(_ range: Double) {
         self.maxRange = range
         self.maxRangePublishSubject.onNext(range)
     }
@@ -123,8 +130,8 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
         guard let userUUID = self.userDefaultUseCase.fetchUserUUID(),
               let currentUserLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
               let currentUserLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double,
-              let randomLatitudeMeters = ((-500)...500).randomElement().map({Double($0)}),
-              let randomLongitudeMeters = ((-500)...500).randomElement().map({Double($0)})
+              let randomLatitudeMeters = ((-50)...50).randomElement().map({Double($0)}),
+              let randomLongitudeMeters = ((-50)...50).randomElement().map({Double($0)})
         else { return }
         
         let currentUserLocation = NCLocation(latitude: currentUserLatitude,
