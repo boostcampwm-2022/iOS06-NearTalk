@@ -47,6 +47,7 @@ class UserProfileInputViewController: PhotoImagePickerViewController {
         self.configureRootViewConstraint()
         self.configureNavigationBar()
         self.bindToViewModel()
+        self.rootView.designateMessageViewDelegate(self)
     }
     
     // MARK: - Helpers
@@ -138,5 +139,13 @@ private extension UserProfileInputViewController {
     func scrollToDown() {
         self.scrollView.contentInset = .zero
         self.scrollView.scrollIndicatorInsets = .zero
+    }
+}
+
+extension UserProfileInputViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+      if text == "\n" { textView.resignFirstResponder() }
+
+      return true
     }
 }

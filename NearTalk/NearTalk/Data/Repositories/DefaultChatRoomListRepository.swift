@@ -116,6 +116,10 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
             }
     }
     
+    func fetchUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> Single<UserChatRoomTicket> {
+        self.databaseService.fetchSingleUserChatRoomTicket(userUUID, roomID)
+    }
+    
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         self.databaseService.updateUserChatRoomTicket(ticket)
     }

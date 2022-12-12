@@ -273,7 +273,7 @@ extension DefaultChatViewModel {
                     return Completable.error(ChatViewModelError.failedToFetch)
                 }
                 
-                if !hasChatRoom {
+                if hasChatRoom {
                     return Completable.empty()
                 }
                 

@@ -19,6 +19,8 @@ protocol OnboardingInput {
 protocol OnboardingOutput {
     var nickNameValidity: Driver<Bool> { get }
     var messageValidity: Driver<Bool> { get }
+    var nickNameValiditionMessage: Driver<String> { get }
+    var messageValiditionMessage: Driver<String> { get }
     var image: Driver<Data?> { get }
     var registerEnable: Driver<Bool> { get }
 }
@@ -31,8 +33,8 @@ protocol OnboardingViewModelAction {
 }
 
 final class DefaultOnboardingViewModel {
-    private let nickNameValidityRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
-    private let messageValidityRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    private let nickNameValidition: BehaviorRelay<String> = BehaviorRelay(value: "")
+    private let messageValidition: BehaviorRelay<String> = BehaviorRelay(value: "")
     private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     private let registerEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
@@ -63,16 +65,30 @@ final class DefaultOnboardingViewModel {
 }
 
 extension DefaultOnboardingViewModel: OnboardingViewModel {
+    var nickNameValidity: Driver<Bool> {
+        self.nickNameValidition
+            .asDriver()
+            .map { $0 == NickNameValidationResult.success.message }
+    }
+    
+    var messageValidity: Driver<Bool> {
+        self.messageValidition
+            .asDriver()
+            .map { $0 == NickNameValidationResult.success.message }
+    }
+    
     var image: Driver<Data?> {
         self.imageRelay.asDriver()
     }
     
-    var nickNameValidity: Driver<Bool> {
-        self.nickNameValidityRelay.asDriver()
+    var nickNameValiditionMessage: Driver<String> {
+        self.nickNameValidition
+            .asDriver()
     }
     
-    var messageValidity: Driver<Bool> {
-        self.messageValidityRelay.asDriver()
+    var messageValiditionMessage: Driver<String> {
+        self.messageValidition
+            .asDriver()
     }
     
     var registerEnable: Driver<Bool> {
@@ -81,13 +97,13 @@ extension DefaultOnboardingViewModel: OnboardingViewModel {
     
     func editNickName(_ text: String) {
         self.nickName = text
-        self.nickNameValidityRelay
+        self.nickNameValidition
             .accept(self.validateNickNameUseCase.execute(text))
     }
     
     func editStatusMessage(_ text: String) {
         self.message = text
-        self.messageValidityRelay
+        self.messageValidition
             .accept(self.validateStatusMessageUseCase.execute(text))
     }
     
@@ -114,8 +130,8 @@ private extension DefaultOnboardingViewModel {
     func bindRegisterEnable() {
         Observable
             .combineLatest(
-                self.nickNameValidityRelay,
-                self.messageValidityRelay) { $0 && $1 }
+                self.nickNameValidity.asObservable(),
+                self.messageValidity.asObservable()) { $0 && $1 }
             .bind(to: self.registerEnableRelay)
             .disposed(by: self.disposeBag)
     }
