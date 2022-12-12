@@ -179,6 +179,9 @@ extension BottomSheetTableViewCell {
     }
     
     private func fetchChatRoomDistance() {
+        self.chatRoomDistance.text = "입장불가"
+        self.configureAccessible(isAccessible: false)
+        
         guard let chatRoomLatitude = self.chatRoom?.latitude,
               let chatRoomLongitude = self.chatRoom?.longitude,
               let chatRoomAccessibleRadius = self.chatRoom?.accessibleRadius
@@ -199,11 +202,15 @@ extension BottomSheetTableViewCell {
             self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
             
             let isAccessible = distance <= chatRoomAccessibleRadius * 1000
-            self?.chatRoomEnterButton.isEnabled = !isAccessible
-            self?.isUserInteractionEnabled = !isAccessible
-            self?.chatRoomLockImageView.isHidden = !isAccessible
-            self?.chatRoomLockCoverView.isHidden = !isAccessible
+            self?.configureAccessible(isAccessible: isAccessible)
         })
         .disposed(by: disposeBag)
+    }
+    
+    private func configureAccessible(isAccessible: Bool) {
+        self.chatRoomEnterButton.isEnabled = !isAccessible
+        self.isUserInteractionEnabled = !isAccessible
+        self.chatRoomLockImageView.isHidden = !isAccessible
+        self.chatRoomLockCoverView.isHidden = !isAccessible
     }
 }

@@ -150,6 +150,8 @@ extension CalloutView {
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLongitude.string)
         )
         .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
+            self?.chatRoomEnterButton.isEnabled = false
+            
             guard let currentUserLatitude,
                   let currentUserLongitude
             else { return }
