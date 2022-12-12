@@ -35,19 +35,34 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
     }
     
     private func drawClusterAnnotationImage(count: Int) -> UIImage {
-        let width: CGFloat = .init(30 + count * 3)
-        let height: CGFloat = .init(30 + count * 3)
+        let magnificationPerCount: Double = 4
+        let maxClusterMembersCount: Int = 10
+        let width: CGFloat = .init(24 + Double(min(count, maxClusterMembersCount)) * magnificationPerCount)
+        let height: CGFloat = .init(24 + Double(min(count, maxClusterMembersCount)) * magnificationPerCount)
         let lineWidth: CGFloat = .init(3)
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: width, height: height))
         
         return renderer.image { _ in
             // 최외각 원 그리기
-            UIColor.secondaryColor?.setFill()
-            UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: width, height: height)).fill()
+            UIColor.secondaryBackground?
+                .withAlphaComponent(0.5)
+                .setFill()
+            
+            UIBezierPath(ovalIn: CGRect(x: 0,
+                                        y: 0,
+                                        width: width,
+                                        height: height)).fill()
             
             // 내부 원 그리기
-            UIColor.primaryColor?.setFill()
-            UIBezierPath(ovalIn: CGRect(x: lineWidth, y: lineWidth, width: width - (2 * lineWidth), height: height - (2 * lineWidth))).fill()
+            UIColor.secondaryColor?
+                // maxClusterMembers개 이상부터, 투명도 1 이상
+                .withAlphaComponent(0.5 + (Double(count) / Double(count + maxClusterMembersCount)))
+                .setFill()
+            
+            UIBezierPath(ovalIn: CGRect(x: lineWidth,
+                                        y: lineWidth,
+                                        width: width - (2 * lineWidth),
+                                        height: height - (2 * lineWidth))).fill()
             
             // 텍스트 작성
             let text = "\(count)"
