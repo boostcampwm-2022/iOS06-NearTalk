@@ -31,9 +31,7 @@ final class LimitedPhotoPickerViewController: UIViewController {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: LimitedPhotoPickerViewCell.identifer,
             for: indexPath) as? LimitedPhotoPickerViewCell
-        else {
-            return UICollectionViewCell()
-        }
+        else { return UICollectionViewCell() }
         
         PHImageManager.default().requestImage(
             for: itemIdentifier,
@@ -70,14 +68,10 @@ final class LimitedPhotoPickerViewController: UIViewController {
 extension LimitedPhotoPickerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let nextCell = collectionView.cellForItem(at: indexPath) as? LimitedPhotoPickerViewCell
-        else {
-            return
-        }
+        else { return }
         
         if let prevSelectedIndex = self.selectedIndex.value,
-           let prevCell = collectionView.cellForItem(at: prevSelectedIndex) {
-            prevCell.isSelected = false
-        }
+           let prevCell = collectionView.cellForItem(at: prevSelectedIndex) { prevCell.isSelected = false }
         
         nextCell.isSelected = true
         self.selectedIndex.accept(indexPath)
@@ -87,9 +81,7 @@ extension LimitedPhotoPickerViewController: UICollectionViewDelegate {
 extension LimitedPhotoPickerViewController: PHPhotoLibraryChangeObserver {
     func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let fetchResults = self.fetchResults
-        else {
-            return
-        }
+        else { return }
         
         if let changes = changeInstance.changeDetails(for: fetchResults) {
             var snapShot = self.dataSouce.snapshot()
@@ -135,8 +127,7 @@ private extension LimitedPhotoPickerViewController {
     
     func bindCancelButtonEvent() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "취소", style: .done, target: nil, action: nil)
-        self.navigationItem.rightBarButtonItem?.rx
-            .tap
+        self.navigationItem.rightBarButtonItem?.rx.tap
             .asSignal()
             .emit(onNext: { [weak self] _ in
                 self?.dismiss(animated: true)
@@ -147,8 +138,7 @@ private extension LimitedPhotoPickerViewController {
     func bindSelectButtonEvent() {
         let selectButton: UIBarButtonItem = UIBarButtonItem(title: "선택", style: .plain, target: nil, action: nil)
         self.navigationItem.leftBarButtonItem = selectButton
-        self.navigationItem.leftBarButtonItem?.rx
-            .tap
+        self.navigationItem.leftBarButtonItem?.rx.tap
             .asSignal()
             .emit(onNext: { [weak self] _ in
                 guard let index = self?.selectedIndex.value,
@@ -164,13 +154,13 @@ private extension LimitedPhotoPickerViewController {
             })
             .disposed(by: self.disposeBag)
         
-        self.selectedIndex.asDriver()
+        self.selectedIndex
+            .asDriver()
             .map {
                 guard let indexPath = $0,
                       self.contentView.cellForItem(at: indexPath) as? LimitedPhotoPickerViewCell != nil
-                else {
-                    return false
-                }
+                else { return false }
+
                 return true
             }
             .drive(selectButton.rx.isEnabled)
@@ -180,7 +170,7 @@ private extension LimitedPhotoPickerViewController {
     func configureNavigationItemUI() {
         let appearance: UINavigationBarAppearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemGray6
+        appearance.backgroundColor = .secondaryBackground
         
         self.contentView.contentInsetAdjustmentBehavior = .never
         self.navigationItem.title = "사진 선택"

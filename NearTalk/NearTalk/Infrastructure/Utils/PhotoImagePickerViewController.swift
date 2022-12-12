@@ -36,10 +36,8 @@ extension PhotoImagePickerViewController {
     }
     
     private func goAuthorizationSettingPage() {
-        guard let appName: String = Bundle.main.infoDictionary!["CFBundleIdentifier"] as? String
-        else {
-            return
-        }
+        guard let appName: String = Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
+        else { return }
         
         let message: String = "\(appName)이(가) 앨범 접근 허용되어 있지않습니다. \r\n 설정화면으로 가시겠습니까?"
         let alert: UIAlertController = UIAlertController(title: "설정", message: message, preferredStyle: .alert)

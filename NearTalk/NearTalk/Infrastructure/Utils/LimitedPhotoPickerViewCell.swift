@@ -20,7 +20,7 @@ final class LimitedPhotoPickerViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addViews()
+        self.addSubViews()
         self.configConstraints()
         
         self.isUserInteractionEnabled = true
@@ -63,7 +63,7 @@ extension LimitedPhotoPickerViewCell {
 }
 
 private extension LimitedPhotoPickerViewCell {
-    func addViews() {
+    func addSubViews() {
         self.addSubview(self.imageView)
         self.imageView.addSubview(self.checkMark)
     }
