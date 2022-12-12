@@ -63,12 +63,18 @@ class UserProfileInputView: UIView {
         $0.clearButtonMode = .always
     }
     
-    private let messageField: UITextField = UITextField().then {
-        $0.autocorrectionType = .no
-        $0.placeholder = "상태 메세지"
-        $0.borderStyle = .roundedRect
+    private let messageField: UITextView = UITextView().then {
+        $0.returnKeyType = .done
+        $0.isScrollEnabled = false
+        $0.sizeToFit()
+        $0.textContainer.size = $0.contentSize
+        $0.textContainer.maximumNumberOfLines = 2
+        $0.layer.masksToBounds = true
+        $0.layer.cornerRadius = 5.0
+        $0.layer.borderWidth = 1.0
+        $0.layer.borderColor = UIColor.label?.cgColor
         $0.autocapitalizationType = .none
-        $0.clearButtonMode = .always
+        $0.autocorrectionType = .no
     }
     
     private let registerButton: UIButton = UIButton().then {
@@ -214,6 +220,10 @@ extension UserProfileInputView {
     
     func setButtonTitle(buttonTitle: String) {
         self.registerButton.setTitle(buttonTitle, for: .normal)
+    }
+    
+    func designateMessageViewDelegate(_ delegate: any UITextViewDelegate) {
+        self.messageField.delegate = delegate
     }
 }
 

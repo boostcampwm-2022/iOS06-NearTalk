@@ -44,10 +44,7 @@ final class OnboardingViewController: UserProfileInputViewController {
                 self?.viewModel.editNickName(text)
                 }),
             
-            self.viewModel.nickNameValidity
-                .map { isValid in
-                    isValid ? "사용 가능한 닉네임 입니다" : "5-16 자 사이의 영어 소문자, 숫자, -_ 기호만 사용하십시오"
-                }
+            self.viewModel.nickNameValiditionMessage
                 .drive(self.rootView.nickNameValidityMessage),
             
             self.viewModel.nickNameValidity
@@ -67,10 +64,7 @@ final class OnboardingViewController: UserProfileInputViewController {
                     self?.viewModel.editStatusMessage(text)
                 }),
             
-            self.viewModel.messageValidity
-                .map { isValid in
-                    isValid ? "사용 가능한 메세지 입니다" : "50자 이하로 작성하십시오"
-                }
+            self.viewModel.messageValiditionMessage
                 .drive(self.rootView.messageValidityMessage),
             
             self.viewModel.messageValidity
