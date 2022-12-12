@@ -128,6 +128,8 @@ private extension DefaultOnboardingViewModel {
             statusMessage: self.message,
             profileImagePath: imagePath
         )
+        
+        UserDefaults.standard.set(imagePath, forKey: UserDefaultsKey.profileImagePath.string)
 
         self.createProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
