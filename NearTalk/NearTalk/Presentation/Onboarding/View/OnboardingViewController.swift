@@ -46,7 +46,7 @@ final class OnboardingViewController: UserProfileInputViewController {
             
             self.viewModel.nickNameValidity
                 .map { isValid in
-                    isValid ? "사용 가능한 닉네임 입니다" : "5-16 자 사이의 영어 소문자, 숫자, -_ 기호만 사용하십시오"
+                    isValid ? "사용 가능한 닉네임 입니다" : "3-20 자 사이의 영어 소문자, 숫자, 한글만 사용하십시오"
                 }
                 .drive(self.rootView.nickNameValidityMessage),
             
