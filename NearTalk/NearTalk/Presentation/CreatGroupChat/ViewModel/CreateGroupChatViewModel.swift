@@ -49,13 +49,13 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     private let uploadImageUseCase: UploadImageUseCase
     private let actions: CreateGroupChatViewModelActions
     
-    private var maxNumOfParticipant: Int = 50
+    private var maxNumOfParticipant: Int = 10
     private var title: String = ""
     private var titlePublishSubject = PublishSubject<String>()
     private var description: String = ""
     private var descriptionPublishSubject = PublishSubject<String>()
     private var maxRange: Double = 0.1
-    private var maxRangePublishSubject = PublishSubject<Double>()
+    private var maxRangePublishSubject = PublishSubject<String?>()
     private let imageBehaviorRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     
     init(createGroupChatUseCase: CreateGroupChatUseCase,
@@ -104,8 +104,9 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     }
     
     func maxRangeDidChanged(_ range: Double) {
-        self.maxRange = range
-        self.maxRangePublishSubject.onNext(range)
+        let formattedRange = self.convertDouble(range)
+        self.maxRange = Double(formattedRange) ?? 0.5
+        self.maxRangePublishSubject.onNext(formattedRange)
     }
     
     func setThumbnailImage(_ binary: Data?) {
@@ -148,10 +149,9 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             roomType: "group",
             roomName: self.title,
             roomDescription: self.description,
-            location: randomChatRoomLocation,
             latitude: randomChatRoomLocation.latitude,
             longitude: randomChatRoomLocation.longitude,
-            accessibleRadius: Double(self.maxRange),
+            accessibleRadius: self.maxRange,
             recentMessageID: nil,
             recentMessageDateTimeStamp: Date().timeIntervalSince1970,
             maxNumberOfParticipants: self.maxNumOfParticipant,
@@ -172,5 +172,14 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
                     print("Error: ", error)
                 })
             .disposed(by: self.disposeBag)
+    }
+    
+    func convertDouble(_ num: Double) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.roundingMode = .floor
+        numberFormatter.maximumSignificantDigits = 1
+
+        let formattedRange = numberFormatter.string(for: num)
+        return formattedRange ?? "0.5"
     }
 }
