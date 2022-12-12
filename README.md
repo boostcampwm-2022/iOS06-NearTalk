@@ -1,5 +1,6 @@
-# NearTalk (프로젝트 소개)
-<img src="/images/NearTalkLogo.png" width="250">
+# NearTalk 소개
+
+<img src="/images/Logo.png" width="250">
 
 - 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "근방톡" 입니다.
 - 실시간 위치 기반으로 근처에 있는 채팅방에 입장하고 대화할 수 있습니다.
@@ -15,14 +16,14 @@
 ## 개발환경 및 라이브러리
 
 ### iOS 최소 버전
-- iOS 15
+- iOS `15.0`
 
 ### 개발환경
-- Xcode 14.1
-- macOS Ventura 13.0 → 병학님, 준영님, 영욱님
-- macOS Monterey 12.6 → 창묵님, 동은님
+- Xcode `14.1`
+- macOS Ventura `13.0`
+- macOS Monterey `12.6`
 
-### 프레임워크 및 라이브러리
+### 프레임워크 및 라이브러리 버전
 
 - RxSwift `6.5.0`
 - RxCocoa `6.5.0`
@@ -35,15 +36,36 @@
 
 ## 기능
 
+#### 사용자 실시간 위치를 기준으로 채팅방 생성
+
+#### 애플 소셜 로그인
+
+#### 푸시 알림 On/Off
+
+#### 프로필 등록 및 수정
+
+#### 그룹 채팅
+
+#### 친구 추가
+
+#### DM 채팅
+
 ## 아키텍쳐 & 디자인 패턴
 
-### Clean Architecture
+#### Clean Architecture
 
-### MVVM - C
+- 프레젠테이션 레이어, 도메인 레이어, 데이터 레이어로 분리된 코드로 각 레이어에서 개발한 결과물을 합칠 때 이점이 있기 때문에 도입했습니다.
+- 도메인 레이어가 UI와 독립적이기 때문에 비즈니스 로직의 유닛 테스트에 용이합니다.
+- MVVM에서 viewModel이 커지는 것을 use case와 repsoitory 코드로 분산할 수 있습니다.
+
+#### MVVM - C
+
+- View와 독립적으로 개발할 수 있는 viewModel을 활용해서 유닛 테스트하기에 용이한 **MVVM 패턴**을 ****입했습니다.
+- View의 화면전환 로직을 viewController에서 분리하는 것으로 화면전환을 유연하게 할 수 있는 **코디네이터 패턴**을 도입했습니다.
 
 ## 기술적인 도전
 
-### Carthage 적용
+#### Carthage
 
 1. Carthage 설치 (터미널에서 실행)
    - `brew install carthage`
@@ -55,3 +77,4 @@
 4. Target의 "Build Settings"에 "Other Linker Flags"에 `$(OTHER_LDFLAGS) -ObjC`를 추가한다.
 
    <img src="images/carthage_1.png" width="500px" />
+
