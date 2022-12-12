@@ -76,14 +76,7 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             .asDriver(onErrorRecover: { _ in .empty() })
         
         self.maxRangeLabel = self.maxRangePublishSubject
-            .map {
-                let numberFormatter = NumberFormatter()
-                numberFormatter.roundingMode = .floor
-                numberFormatter.maximumSignificantDigits = 1
-
-                let formattedNum = numberFormatter.string(for: $0)
-                return (formattedNum ?? "") + " km"
-            }
+            .map { "\($0 ?? "") km" }
             .asDriver(onErrorRecover: { _ in .empty() })
     }
     
