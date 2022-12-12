@@ -23,7 +23,7 @@ protocol ProfileDetailViewModelInput {
 protocol ProfileDetailViewModelOutput {
     var userName: BehaviorRelay<String> { get }
     var statusMessage: BehaviorRelay<String> { get }
-    var profileImageURL: BehaviorRelay<String> { get }
+    var profileImageURL: BehaviorRelay<String?> { get }
 }
 
 protocol ProfileDetailViewModelable: ProfileDetailViewModelInput, ProfileDetailViewModelOutput {
@@ -35,7 +35,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     
     var statusMessage: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
     
-    var profileImageURL: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
+    var profileImageURL: BehaviorRelay<String?> = BehaviorRelay<String?>(value: nil)
     
     var startChatButtonDidTapEvent = PublishRelay<Void>()
     
@@ -69,7 +69,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
             .subscribe(onSuccess: { info in
                 self.userName.accept(info.username ?? "Unkown")
                 self.statusMessage.accept(info.statusMessage ?? "Unkown")
-                self.profileImageURL.accept(info.profileImagePath ?? "")
+                self.profileImageURL.accept(info.profileImagePath)
             }, onFailure: { error in
                 print("ERROR: fetchUserInfo - ", error.localizedDescription)
             })

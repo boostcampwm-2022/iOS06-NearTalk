@@ -49,7 +49,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "heart")
+        imageView.image = UIImage(named: "ChatLogo")
     }
     
     // MARK: - LifeCycle
