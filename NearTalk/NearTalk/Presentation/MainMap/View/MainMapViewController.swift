@@ -18,7 +18,9 @@ final class MainMapViewController: UIViewController {
     // MARK: - UI Components
     private(set) lazy var mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
+        $0.showsCompass = false
     }
+    private(set) lazy var compassButton: MKCompassButton = .init(mapView: self.mapView)
     private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
         $0.tintColor = .primaryColor?.withAlphaComponent(0.8)
@@ -59,30 +61,38 @@ final class MainMapViewController: UIViewController {
     private func addSubViews() {
         view.addSubview(self.mapView)
         
+        self.mapView.addSubview(self.compassButton)
         self.mapView.addSubview(self.moveToCurrentLocationButton)
         self.mapView.addSubview(self.createChatRoomButton)
     }
     
     private func configureConstraints() {
-        self.mapView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+        self.mapView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
         
-        self.moveToCurrentLocationButton.snp.makeConstraints {
-            $0.top.equalTo(self.view).offset(160)
-            $0.trailing.equalTo(self.view.snp.trailing).offset(-5)
-            $0.width.equalTo(45)
-            $0.height.equalTo(45)
+        self.compassButton.snp.makeConstraints { make in
+            make.top.equalTo(self.view).offset(160)
+            make.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            make.width.equalTo(45)
+            make.height.equalTo(45)
         }
         
-        self.createChatRoomButton.snp.makeConstraints {
-            $0.top.equalTo(self.moveToCurrentLocationButton.snp.bottom)
-            $0.trailing.equalTo(self.view.snp.trailing).offset(-5)
-            $0.width.equalTo(45)
-            $0.height.equalTo(45)
+        self.moveToCurrentLocationButton.snp.makeConstraints { make in
+            make.top.equalTo(compassButton.snp.bottom)
+            make.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            make.width.equalTo(45)
+            make.height.equalTo(45)
+        }
+        
+        self.createChatRoomButton.snp.makeConstraints { make in
+            make.top.equalTo(self.moveToCurrentLocationButton.snp.bottom)
+            make.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            make.width.equalTo(45)
+            make.height.equalTo(45)
         }
     }
     
