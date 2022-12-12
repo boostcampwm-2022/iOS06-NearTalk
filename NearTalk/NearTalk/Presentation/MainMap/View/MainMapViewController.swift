@@ -20,6 +20,13 @@ final class MainMapViewController: UIViewController {
         $0.showsUserLocation = true
         $0.showsCompass = false
     }
+    private lazy var currentUserLocationLabel: UILabel = .init().then {
+        $0.textColor = .label
+        $0.textAlignment = .center
+        $0.backgroundColor = .secondaryBackground
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+    }
     private(set) lazy var compassButton: MKCompassButton = .init(mapView: self.mapView)
     private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
         $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
@@ -61,12 +68,15 @@ final class MainMapViewController: UIViewController {
     private func addSubViews() {
         view.addSubview(self.mapView)
         
+        self.mapView.addSubview(self.currentUserLocationLabel)
         self.mapView.addSubview(self.compassButton)
         self.mapView.addSubview(self.moveToCurrentLocationButton)
         self.mapView.addSubview(self.createChatRoomButton)
     }
     
     private func configureConstraints() {
+        let safeAreaLayoutGuide = self.mapView.safeAreaLayoutGuide
+        
         self.mapView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
@@ -74,23 +84,29 @@ final class MainMapViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
         
+        self.currentUserLocationLabel.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(48)
+            make.height.equalTo(36)
+        }
+
         self.compassButton.snp.makeConstraints { make in
-            make.top.equalTo(self.view).offset(160)
-            make.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            make.top.equalTo(self.currentUserLocationLabel.snp.bottom)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-5)
             make.width.equalTo(45)
             make.height.equalTo(45)
         }
         
         self.moveToCurrentLocationButton.snp.makeConstraints { make in
             make.top.equalTo(compassButton.snp.bottom)
-            make.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-5)
             make.width.equalTo(45)
             make.height.equalTo(45)
         }
         
         self.createChatRoomButton.snp.makeConstraints { make in
             make.top.equalTo(self.moveToCurrentLocationButton.snp.bottom)
-            make.trailing.equalTo(self.view.snp.trailing).offset(-5)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-5)
             make.width.equalTo(45)
             make.height.equalTo(45)
         }
@@ -184,6 +200,18 @@ final class MainMapViewController: UIViewController {
                 let currentUserLongitude = currentUserLocation.longitude
                 UserDefaults.standard.set(currentUserLatitude, forKey: UserDefaultsKey.currentUserLatitude.string)
                 UserDefaults.standard.set(currentUserLongitude, forKey: UserDefaultsKey.currentUserLongitude.string)
+                
+                let currentUserCLLocation = CLLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
+                let geocoder = CLGeocoder()
+                let locale = Locale(identifier: "Ko-kr")
+                geocoder.reverseGeocodeLocation(currentUserCLLocation, preferredLocale: locale) { [weak self] (placeMarks, _) in
+                    guard let placeMarks = placeMarks,
+                          let address = placeMarks.last?.name
+                    else { return }
+                    
+                    self?.currentUserLocationLabel.text = address
+                    self?.currentUserLocationLabel.textAlignment = .center
+                }
             })
             .disposed(by: self.disposeBag)
     }
