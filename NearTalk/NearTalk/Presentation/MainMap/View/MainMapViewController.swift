@@ -48,7 +48,6 @@ final class MainMapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.locationManagerDidChangeAuthorization(self.locationManager)
         self.addSubViews()
         self.configureConstraints()
         self.configureDelegates()
@@ -109,12 +108,12 @@ final class MainMapViewController: UIViewController {
             didTapAnnotationView: self.mapView.rx.didSelectAnnotationView.compactMap { $0.annotation },
             didDragMapView: self.mapView.rx.panGesture().map { _ in }.asObservable(),
             didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
-                .compactMap { event -> NCLocation? in
-                    guard let latitude = event.location?.coordinate.latitude,
-                          let longitude = event.location?.coordinate.longitude
+                .compactMap { _ -> NCLocation? in
+                    guard let currentUserLocation = self.locationManager.location?.coordinate
                     else { return nil }
-                    
-                    return NCLocation(latitude: latitude, longitude: longitude)
+
+                    return NCLocation(latitude: currentUserLocation.latitude,
+                                      longitude: currentUserLocation.longitude)
                 }
                 .asObservable()
         )
@@ -124,15 +123,12 @@ final class MainMapViewController: UIViewController {
         
         output.showAccessibleChatRooms
             .asDriver(onErrorJustReturn: [])
-            .map { chatRooms in
+            .map { chatRooms -> [ChatRoomAnnotation] in
                 self.mapView.setUserTrackingMode(.follow, animated: true)
-                
+
                 return chatRooms.compactMap {
                     let annotation = ChatRoomAnnotation.create(with: $0)
-                    if let circleOverlay = annotation?.createCircleOverlay() {
-                        self.mapView.addOverlay(circleOverlay)
-                    }
-                    
+
                     return annotation
                 }
             }
@@ -148,26 +144,36 @@ final class MainMapViewController: UIViewController {
             .disposed(by: self.disposeBag)
         
         output.showAnnotationChatRooms
-            .asDriver(onErrorJustReturn: [])
-            .drive(onNext: { [weak self] chatRooms in
+            .asObservable()
+            .subscribe(onNext: { [weak self] chatRooms in
                 guard let mainMapVC = self
                 else { return }
-                
+
                 if chatRooms.count > 1 {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
                     self?.mapView.selectedAnnotations = []
                 }
             })
             .disposed(by: self.disposeBag)
-        
+
         output.followCurrentUserLocation
-            .asDriver()
-            .drive(onNext: { [weak self] isFollowing in
+            .asObservable()
+            .subscribe(onNext: { [weak self] isFollowing in
                 if isFollowing {
                     self?.mapView.setUserTrackingMode(.follow, animated: false)
                 } else {
                     self?.mapView.setUserTrackingMode(.none, animated: false)
                 }
+            })
+            .disposed(by: self.disposeBag)
+        
+        output.currentUserLocation
+            .asObservable()
+            .subscribe(onNext: { currentUserLocation in
+                let currentUserLatitude = currentUserLocation.latitude
+                let currentUserLongitude = currentUserLocation.longitude
+                UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
+                UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
             })
             .disposed(by: self.disposeBag)
     }
@@ -237,14 +243,23 @@ extension MainMapViewController: MKMapViewDelegate {
             
             groupChatRoomAnnotationView.insert(coordinator: coordinator)
             
+            if let startUserCoordinate = self.mapView.userLocation.location?.coordinate {
+                let startUserNCLocation = NCLocation(latitude: startUserCoordinate.latitude,
+                                                     longitude: startUserCoordinate.longitude)
+                
+                groupChatRoomAnnotationView.configureAccessible(userLocation: startUserNCLocation,
+                                                                targetAnnotation: annotation)
+            }
+            
             self.mapView.rx.didUpdateUserLocation
                 .asDriver()
                 .drive(onNext: { userLocation in
                     let currentUserLocation = NCLocation(latitude: userLocation.coordinate.latitude,
                                                          longitude: userLocation.coordinate.longitude)
-                    
+
                     groupChatRoomAnnotationView.configureAccessible(userLocation: currentUserLocation,
                                                                     targetAnnotation: annotation)
+
                 })
                 .disposed(by: self.disposeBag)
 
@@ -257,11 +272,14 @@ extension MainMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        guard let primaryColor: UIColor = .primaryColor
+        else { return MKOverlayRenderer(overlay: overlay) }
+        
         if overlay.isKind(of: MKCircle.self) {
             let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.fillColor = .blue.withAlphaComponent(0.01)
-            circleRenderer.strokeColor = .red
-            circleRenderer.lineWidth = 1
+            circleRenderer.fillColor = primaryColor.withAlphaComponent(0.01)
+            circleRenderer.strokeColor = primaryColor
+            circleRenderer.lineWidth = 0.5
             return circleRenderer
         }
         
@@ -281,15 +299,5 @@ extension MainMapViewController: CLLocationManagerDelegate {
         @unknown default:
             return
         }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let userLocation = locations.last
-        else { return }
-        
-        let currentUserLatitude = Double(userLocation.coordinate.latitude)
-        let currentUserLongitude = Double(userLocation.coordinate.longitude)
-        UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
-        UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
     }
 }

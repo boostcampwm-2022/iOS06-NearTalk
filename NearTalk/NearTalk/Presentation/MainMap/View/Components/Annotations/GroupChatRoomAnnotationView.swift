@@ -22,12 +22,12 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
             }
         }
         
-        var color: UIColor {
+        var color: UIColor? {
             switch self {
             case .allowed:
-                return .red
+                return .primaryColor
             case .notAllowed:
-                return .blue
+                return .primaryBackground
             }
         }
     }
@@ -61,7 +61,7 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
         super.prepareForDisplay()
         
         self.displayPriority = .defaultLow
-        self.glyphImage = UIImage(systemName: "figure.2.arms.open")
+        self.glyphImage = UIImage(named: "Logo")
         self.markerTintColor = self.isAccessible.color
         self.canShowCallout = self.isAccessible.bool
     }
@@ -81,5 +81,6 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
         self.isAccessible = targetNCLocation.distance(from: userLocation) < accessibleRadius * 1000 ? .allowed : .notAllowed
         self.markerTintColor = self.isAccessible.color
         self.canShowCallout = self.isAccessible.bool
+        self.isEnabled = self.isAccessible.bool
     }
 }
