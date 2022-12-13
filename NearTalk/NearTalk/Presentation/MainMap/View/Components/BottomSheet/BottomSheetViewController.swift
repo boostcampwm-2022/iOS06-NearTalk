@@ -78,7 +78,7 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureLayout() {
         self.chatRoomsTableView.estimatedRowHeight = 80.0
-        self.view.backgroundColor = .systemOrange
+        self.view.backgroundColor = .primaryColor
         
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -126,7 +126,8 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
             return BottomSheetTableViewCell()
         }
         
-        cell.fetch(with: self.dataSource[indexPath.row])
+        let chatRoom = self.dataSource[indexPath.row]
+        cell.fetch(with: chatRoom)
         cell.insert(coordinator: self.coordinator, parentVC: self)
 
         return cell
