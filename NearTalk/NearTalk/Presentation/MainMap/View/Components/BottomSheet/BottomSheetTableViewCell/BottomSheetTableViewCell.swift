@@ -211,18 +211,17 @@ extension BottomSheetTableViewCell {
             let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
             let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
-            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
-            
             let isAccessible = distance <= chatRoomAccessibleRadius * 1000
+            self?.chatRoomDistance.text = isAccessible ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
             self?.configureAccessible(isAccessible: isAccessible)
         })
         .disposed(by: disposeBag)
     }
     
     private func configureAccessible(isAccessible: Bool) {
-        self.chatRoomEnterButton.isEnabled = !isAccessible
-        self.isUserInteractionEnabled = !isAccessible
-        self.chatRoomLockImageView.isHidden = !isAccessible
-        self.chatRoomLockCoverView.isHidden = !isAccessible
+        self.chatRoomEnterButton.isEnabled = isAccessible
+        self.isUserInteractionEnabled = isAccessible
+        self.chatRoomLockImageView.isHidden = isAccessible
+        self.chatRoomLockCoverView.isHidden = isAccessible
     }
 }
