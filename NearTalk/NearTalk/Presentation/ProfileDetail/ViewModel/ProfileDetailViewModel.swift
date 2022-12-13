@@ -117,16 +117,14 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     }
     
     private func hasChatRoomChecking(myID: String, userID: String) {
-        self.fetchChatRoomUseCase.hasFriendDMChat(userID: userID)
+        self.fetchChatRoomUseCase.hasFriendDMChat(myID: myID, friendID: userID)
             .subscribe(onSuccess: { (chatRoom: ChatRoom?) in
-                
                 if let chatRoom = chatRoom, let chatRoomUUID = chatRoom.uuid {
                     self.actions.showChatViewController(chatRoomUUID)
                 } else {
-                    
                     let chatRoomUUID = UUID().uuidString
                     let newDMChat = self.createDMChatRoom(myID: myID, userID: userID, chatRoomUUID: chatRoomUUID)
-                    
+
                     self.userProfileUpdate(userID: userID, chatRoomUUID: chatRoomUUID)
                     self.myProfileUpdate(chatRoomUUID: chatRoomUUID)
                     self.uploadChatRoomInfoUseCase.createChatRoom(newDMChat)
