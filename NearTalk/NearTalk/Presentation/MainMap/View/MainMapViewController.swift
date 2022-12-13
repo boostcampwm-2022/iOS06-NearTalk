@@ -6,8 +6,8 @@
 //
 
 import CoreLocation
-import MapKit
 import Kingfisher
+import MapKit
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -340,6 +340,14 @@ final class MainMapViewController: UIViewController {
 
 extension MainMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let userLocationView = MKUserLocationView(annotation: annotation, reuseIdentifier: nil)
+            userLocationView.canShowCallout = false
+            userLocationView.tintColor = .red
+
+            return userLocationView
+        }
+        
         guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation
         else {
             return nil
