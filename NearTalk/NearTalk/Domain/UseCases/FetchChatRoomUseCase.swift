@@ -16,6 +16,7 @@ protocol FetchChatRoomUseCase {
     func getUserProfile(userID: String) -> Single<UserProfile>
     func getMyProfile() -> UserProfile?
     func newGetChatRoomUUIDList()
+    func hasFriendDMChat(userID: String) -> Single<ChatRoom?>
 }
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     private let disposeBag: DisposeBag = .init()
@@ -41,6 +42,23 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
         self.newGetChatRoomList()
             .map { $0.filter { $0.roomType == "dm" } }
             .map { $0.map { DMChatRoomListData(data: $0) } }
+    }
+                                        
+    func hasFriendDMChat(userID: String) -> Single<ChatRoom?> {
+        self.newGetChatRoomList()
+            .take(1)
+            .asSingle()
+            .map { return $0.filter { $0.roomType == "dm" } }
+            .map { (chatRoomList: [ChatRoom]) in
+                print(#function)
+                for chatRoom in chatRoomList {
+                    if let userList = chatRoom.userList, userList.contains(userID) {
+                        return chatRoom
+                    }
+                }
+                return nil
+            }
+            
     }
     
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {
@@ -86,6 +104,7 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
                 return Observable.combineLatest(fetchChatRoomList)
             }
     }
+    
 }
 // MARK: - FetchChatRoomUseCaseError
 enum FetchChatRoomUseCaseError: Error {
