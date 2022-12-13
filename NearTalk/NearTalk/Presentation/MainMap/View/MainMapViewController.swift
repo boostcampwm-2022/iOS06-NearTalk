@@ -343,7 +343,7 @@ extension MainMapViewController: MKMapViewDelegate {
         if annotation is MKUserLocation {
             let userLocationView = MKUserLocationView(annotation: annotation, reuseIdentifier: nil)
             userLocationView.canShowCallout = false
-            userLocationView.tintColor = .red
+            userLocationView.tintColor = .tertiaryColor
 
             return userLocationView
         }

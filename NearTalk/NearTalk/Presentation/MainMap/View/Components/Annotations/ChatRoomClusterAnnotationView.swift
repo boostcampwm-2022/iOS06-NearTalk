@@ -54,7 +54,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
                                         height: height)).fill()
             
             // 내부 원 그리기
-            UIColor.primaryColor?
+            UIColor.secondaryColor?
                 // maxClusterMembers개 이상부터, 투명도 1 이상
                 .withAlphaComponent(0.5 + (Double(count) / Double(count + maxClusterMembersCount)))
                 .setFill()
