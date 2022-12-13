@@ -16,7 +16,7 @@ import UIKit
 final class MainMapViewController: UIViewController {
     
     // MARK: - UI Components
-    private lazy var mapView: MKMapView = .init().then {
+    private let mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
         $0.showsCompass = false
     }
@@ -29,16 +29,14 @@ final class MainMapViewController: UIViewController {
         $0.layer.cornerRadius = 10
         $0.layoutMargins = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         $0.isLayoutMarginsRelativeArrangement = true
-        $0.addArrangedSubview(self.userProfileImage)
-        $0.addArrangedSubview(self.userLocationLabel)
     }
-    private lazy var userProfileImage: UIImageView = .init().then {
+    private lazy var userProfileImage: UIImageView = .init().then { [weak self] in
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(named: "Logo")
         if let profileImagePath = UserDefaults.standard.object(forKey: UserDefaultsKey.profileImagePath.string) as? String {
-            self.fetch(path: profileImagePath)
+            self?.fetch(path: profileImagePath)
         }
     }
     private let userLocationLabel: UILabel = .init().then {
@@ -49,7 +47,7 @@ final class MainMapViewController: UIViewController {
         $0.layer.cornerRadius = 10
     }
     private lazy var compassButton: MKCompassButton = .init(mapView: self.mapView)
-    private lazy var moveToCurrentLocationButton: UIButton = .init().then {
+    private let moveToCurrentLocationButton: UIButton = .init().then {
         guard let normalColor: UIColor = .primaryColor,
               let highlightedColor: UIColor = .secondaryColor
         else {
@@ -67,7 +65,7 @@ final class MainMapViewController: UIViewController {
         $0.setImage(normalImage, for: .normal)
         $0.setImage(highlightImage, for: .highlighted)
     }
-    private lazy var createChatRoomButton: UIButton = .init().then {
+    private let createChatRoomButton: UIButton = .init().then {
         guard let normalColor: UIColor = .primaryColor,
               let highlightedColor: UIColor = .secondaryColor
         else {
@@ -116,6 +114,9 @@ final class MainMapViewController: UIViewController {
     // MARK: - Methods
     private func addSubViews() {
         view.addSubview(self.mapView)
+        
+        self.userLocationInfoView.addArrangedSubview(self.userProfileImage)
+        self.userLocationInfoView.addArrangedSubview(self.userLocationLabel)
         
         self.mapView.addSubview(self.userLocationInfoView)
         self.mapView.addSubview(self.compassButton)
