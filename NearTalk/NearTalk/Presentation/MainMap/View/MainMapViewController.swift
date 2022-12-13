@@ -113,6 +113,8 @@ final class MainMapViewController: UIViewController {
         if let profileImagePath = UserDefaults.standard.object(forKey: UserDefaultsKey.profileImagePath.string) as? String {
             self.fetch(path: profileImagePath)
         }
+        
+        self.locationManager.startUpdatingLocation()
     }
     
     // MARK: - Methods
