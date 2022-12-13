@@ -41,7 +41,9 @@ extension DefaultAccessibleChatRoomsRepository: AccessibleChatRoomsRepository {
             .map { chatRooms in
                 chatRooms.filter {
                     guard let chatRoomLongitude = $0.longitude
-                    else { return false }
+                    else {
+                        return false
+                    }
                     return southWest.longitude..<northEast.longitude ~= chatRoomLongitude
                 }
             }

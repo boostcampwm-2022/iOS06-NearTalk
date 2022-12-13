@@ -98,7 +98,8 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
         self.profileRepository.fetchMyProfile()
             .flatMap { [weak self] (profile: UserProfile) in
                 guard let self,
-                      let uuid: String = profile.uuid else {
+                      let uuid: String = profile.uuid
+                else {
                     throw ChatRoomListRepositoryError.failedToFetch
                 }
                 return self.databaseService.fetchUserChatRoomTicketList(uuid)
@@ -109,7 +110,8 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
         self.profileRepository.fetchMyProfile()
             .flatMap { [weak self] (profile: UserProfile) in
                 guard let self,
-                      let uuid: String = profile.uuid else {
+                      let uuid: String = profile.uuid
+                else {
                     throw ChatRoomListRepositoryError.failedToFetch
                 }
                 return self.databaseService.fetchSingleUserChatRoomTicket(uuid, roomID)
@@ -129,7 +131,8 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
             .asObservable()
             .flatMap { [weak self] (profile: UserProfile) in
                 guard let self,
-                      let uuid: String = profile.uuid else {
+                      let uuid: String = profile.uuid
+                else {
                     throw ChatRoomListRepositoryError.failedToFetch
                 }
                 return self.databaseService.observeUserChatRoomTicketList(uuid)

@@ -25,7 +25,9 @@ final class MainMapCoordinator: Coordinator {
     // MARK: - Methods
     func start() {
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
         
         let actions = MainMapViewModel.Actions(showCreateChatRoomView: self.showCreateChatRoomView)
         let mainMapVC = dependencies.makeMainMapViewController(actions: actions, navigationController: navigationController)
@@ -35,7 +37,9 @@ final class MainMapCoordinator: Coordinator {
     // MARK: - View Actions
     func showCreateChatRoomView() {
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
 
         let diContainer: CreateGroupChatDIContainer = .init()
         let coordinator: CreateGroupChatCoordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)
@@ -57,7 +61,9 @@ final class MainMapCoordinator: Coordinator {
     
     func showChatRoomView(chatRoomID: String) {
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
         
         let diContainer: ChatDIContainer = ChatRoomListDIContainer().makeChatDIContainer(chatRoomID: chatRoomID)
         let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)

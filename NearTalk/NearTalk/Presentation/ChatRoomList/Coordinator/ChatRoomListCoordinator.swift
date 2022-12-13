@@ -44,7 +44,9 @@ final class ChatRoomListCoordinator: Coordinator {
     // MARK: - Actions
     private func showDMChatRoomList() {
         guard let chatRoomListViewController = chatRoomListViewController
-        else { return }
+        else {
+            return
+        }
         
         chatRoomListViewController.dmCollectionView.isHidden = false
         chatRoomListViewController.groupCollectionView.isHidden = true
@@ -52,7 +54,9 @@ final class ChatRoomListCoordinator: Coordinator {
     
     private func showGroupChatRoomList() {
         guard let chatRoomListViewController = chatRoomListViewController
-        else { return }
+        else {
+            return
+        }
         
         chatRoomListViewController.dmCollectionView.isHidden = true
         chatRoomListViewController.groupCollectionView.isHidden = false
@@ -60,7 +64,9 @@ final class ChatRoomListCoordinator: Coordinator {
     
     private func showChatRoom(chatRoomID: String) {
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
         
         let diContainer = dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
         let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
@@ -69,7 +75,9 @@ final class ChatRoomListCoordinator: Coordinator {
     
     private func showCreateChatRoom() {
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
         
         let diContainer = dependencies.makeCreateGroupChatDIContainer()
         let coordinator = diContainer.makeCreateGroupChatCoordinator(navigationCotroller: navigationController)

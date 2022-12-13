@@ -7,6 +7,7 @@
 
 import CoreLocation
 import MapKit
+import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -16,16 +17,69 @@ import UIKit
 final class MainMapViewController: UIViewController {
     
     // MARK: - UI Components
-    private(set) lazy var mapView: MKMapView = .init().then {
+    private let mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
+        $0.showsCompass = false
     }
-    private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
-        $0.setBackgroundImage(UIImage(systemName: "location.circle"), for: .normal)
-        $0.tintColor = .systemBlue
+    private lazy var userLocationInfoView: UIStackView = .init().then {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.spacing = 4
+        $0.backgroundColor = .primaryColor
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+        $0.layoutMargins = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        $0.isLayoutMarginsRelativeArrangement = true
     }
-    private(set) lazy var createChatRoomButton: UIButton = .init().then {
-        $0.setBackgroundImage(UIImage(systemName: "pencil.circle"), for: .normal)
-        $0.tintColor = .systemBlue
+    private lazy var userProfileImage: UIImageView = .init().then { [weak self] in
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+        $0.contentMode = .scaleAspectFit
+        $0.image = UIImage(named: "Logo")
+    }
+    private let userLocationLabel: UILabel = .init().then {
+        $0.textColor = .label
+        $0.textAlignment = .center
+        $0.backgroundColor = .secondaryBackground
+        $0.clipsToBounds = true
+        $0.layer.cornerRadius = 10
+    }
+    private lazy var compassButton: MKCompassButton = .init(mapView: self.mapView)
+    private let moveToCurrentLocationButton: UIButton = .init().then {
+        guard let normalColor: UIColor = .primaryColor,
+              let highlightedColor: UIColor = .secondaryColor
+        else {
+            return
+        }
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 40)
+        let normalImage = UIImage(systemName: "location.circle")?
+            .withTintColor(normalColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(imageConfig)
+        let highlightImage = UIImage(systemName: "location.circle")?
+            .withTintColor(highlightedColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(imageConfig)
+        
+        $0.setImage(normalImage, for: .normal)
+        $0.setImage(highlightImage, for: .highlighted)
+    }
+    private let createChatRoomButton: UIButton = .init().then {
+        guard let normalColor: UIColor = .primaryColor,
+              let highlightedColor: UIColor = .secondaryColor
+        else {
+            return
+        }
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 40)
+        let normalImage = UIImage(systemName: "message.badge.circle")?
+            .withTintColor(normalColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(imageConfig)
+        let highlightImage = UIImage(systemName: "message.badge.circle")?
+            .withTintColor(highlightedColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(imageConfig)
+        
+        $0.setImage(normalImage, for: .normal)
+        $0.setImage(highlightImage, for: .highlighted)
     }
 
     // MARK: - Properties
@@ -55,34 +109,70 @@ final class MainMapViewController: UIViewController {
         self.bindViewModel()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if let profileImagePath = UserDefaults.standard.object(forKey: UserDefaultsKey.profileImagePath.string) as? String {
+            self.fetch(path: profileImagePath)
+        }
+    }
+    
     // MARK: - Methods
     private func addSubViews() {
         view.addSubview(self.mapView)
         
+        self.userLocationInfoView.addArrangedSubview(self.userProfileImage)
+        self.userLocationInfoView.addArrangedSubview(self.userLocationLabel)
+        
+        self.mapView.addSubview(self.userLocationInfoView)
+        self.mapView.addSubview(self.compassButton)
         self.mapView.addSubview(self.moveToCurrentLocationButton)
         self.mapView.addSubview(self.createChatRoomButton)
     }
     
     private func configureConstraints() {
-        self.mapView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+        let safeAreaLayoutGuide = self.mapView.safeAreaLayoutGuide
+        
+        self.mapView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
         
-        self.moveToCurrentLocationButton.snp.makeConstraints {
-            $0.top.equalTo(self.view).offset(160)
-            $0.trailing.equalTo(self.view.snp.trailing).offset(-5)
-            $0.width.equalTo(45)
-            $0.height.equalTo(45)
+        self.userLocationInfoView.snp.makeConstraints { make in
+            make.top.equalTo(safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(safeAreaLayoutGuide).inset(52)
+            make.height.equalTo(36)
         }
         
-        self.createChatRoomButton.snp.makeConstraints {
-            $0.top.equalTo(self.moveToCurrentLocationButton.snp.bottom)
-            $0.trailing.equalTo(self.view.snp.trailing).offset(-5)
-            $0.width.equalTo(45)
-            $0.height.equalTo(45)
+        self.userProfileImage.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(24)
+        }
+        
+        self.userLocationLabel.snp.makeConstraints { make in
+            make.width.equalTo(self.userLocationInfoView.snp.width).inset(24)
+            make.height.equalTo(28)
+        }
+
+        self.compassButton.snp.makeConstraints { make in
+            make.top.equalTo(self.userLocationInfoView.snp.bottom)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-5)
+            make.width.equalTo(45)
+            make.height.equalTo(45)
+        }
+        
+        self.moveToCurrentLocationButton.snp.makeConstraints { make in
+            make.top.equalTo(compassButton.snp.bottom)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-5)
+            make.width.equalTo(45)
+            make.height.equalTo(45)
+        }
+        
+        self.createChatRoomButton.snp.makeConstraints { make in
+            make.top.equalTo(self.moveToCurrentLocationButton.snp.bottom)
+            make.trailing.equalTo(safeAreaLayoutGuide).offset(-5)
+            make.width.equalTo(45)
+            make.height.equalTo(45)
         }
     }
     
@@ -98,7 +188,9 @@ final class MainMapViewController: UIViewController {
             mapViewDidAppear: self.rx.methodInvoked(#selector(viewDidAppear(_:)))
                 .compactMap { _ -> NCMapRegion? in
                     guard let region = self.mapView.cameraBoundary?.region
-                    else { return nil }
+                    else {
+                        return nil
+                    }
                     
                     return self.convertToNCMapRegion(with: region)
                 }
@@ -110,7 +202,9 @@ final class MainMapViewController: UIViewController {
             didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
                 .compactMap { _ -> NCLocation? in
                     guard let currentUserLocation = self.locationManager.location?.coordinate
-                    else { return nil }
+                    else {
+                        return nil
+                    }
 
                     return NCLocation(latitude: currentUserLocation.latitude,
                                       longitude: currentUserLocation.longitude)
@@ -147,7 +241,9 @@ final class MainMapViewController: UIViewController {
             .asObservable()
             .subscribe(onNext: { [weak self] chatRooms in
                 guard let mainMapVC = self
-                else { return }
+                else {
+                    return
+                }
 
                 if chatRooms.count > 1 {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
@@ -170,10 +266,11 @@ final class MainMapViewController: UIViewController {
         output.currentUserLocation
             .asObservable()
             .subscribe(onNext: { currentUserLocation in
-                let currentUserLatitude = currentUserLocation.latitude
-                let currentUserLongitude = currentUserLocation.longitude
-                UserDefaults.standard.set(currentUserLatitude, forKey: "CurrentUserLatitude")
-                UserDefaults.standard.set(currentUserLongitude, forKey: "CurrentUserLongitude")
+                self.updateUserDefaults(with: currentUserLocation)
+                
+                let currentUserCLLocation = CLLocation(latitude: currentUserLocation.latitude,
+                                                       longitude: currentUserLocation.longitude)
+                self.fetch(userLocation: currentUserCLLocation)
             })
             .disposed(by: self.disposeBag)
     }
@@ -205,34 +302,44 @@ final class MainMapViewController: UIViewController {
                            longitudeDelta: longitudeDelta)
     }
     
-    private func followUserLocation() {
-        self.mapView.showsUserLocation = true
-        self.mapView.setUserTrackingMode(.follow, animated: true)
+    private func updateUserDefaults(with currentUserLocation: NCLocation) {
+        let currentUserLatitude = currentUserLocation.latitude
+        let currentUserLongitude = currentUserLocation.longitude
+        UserDefaults.standard.set(currentUserLatitude, forKey: UserDefaultsKey.currentUserLatitude.string)
+        UserDefaults.standard.set(currentUserLongitude, forKey: UserDefaultsKey.currentUserLongitude.string)
     }
     
-    private func setCamera(with centerLocation: CLLocation) {
-        self.setCameraBoundary(centerLocation: centerLocation)
-        self.setCameraZoomRange()
+    private func fetch(path imagePath: String?) {
+        guard let path = imagePath,
+              let url = URL(string: path)
+        else {
+            return
+        }
+
+        self.userProfileImage.kf.setImage(with: url)
     }
     
-    private func setCameraBoundary(centerLocation: CLLocation, meters regionMeters: CLLocationDistance = 5000) {
-        let coordinateRegion = MKCoordinateRegion(center: centerLocation.coordinate,
-                                                  latitudinalMeters: 5000,
-                                                  longitudinalMeters: 5000)
-        let cameraBoundary = MKMapView.CameraBoundary(coordinateRegion: coordinateRegion)
-        self.mapView.setCameraBoundary(cameraBoundary, animated: true)
-    }
-    
-    private func setCameraZoomRange(minDistance: CLLocationDistance = 1, maxDistance: CLLocationDistance = 5000) {
-        let zoomRange = MKMapView.CameraZoomRange(minCenterCoordinateDistance: minDistance,
-                                                  maxCenterCoordinateDistance: maxDistance)
-        self.mapView.setCameraZoomRange(zoomRange, animated: true)
+    private func fetch(userLocation: CLLocation) {
+        let geocoder = CLGeocoder()
+        let locale = Locale(identifier: "Ko-kr")
+        geocoder.reverseGeocodeLocation(userLocation, preferredLocale: locale) { [weak self] (placeMarks, _) in
+            guard let placeMarks = placeMarks,
+                  let city = placeMarks.last?.locality,
+                  let dong = placeMarks.last?.subLocality,
+                  let name = placeMarks.last?.name
+            else {
+                return
+            }
+            
+            self?.userLocationLabel.text = "\(city) \(dong) \(name)"
+        }
     }
 }
 
 extension MainMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation else {
+        guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation
+        else {
             return nil
         }
         
@@ -269,21 +376,6 @@ extension MainMapViewController: MKMapViewDelegate {
             return DmChatRoomAnnotationView(annotation: chatRoomAnnotation,
                                             reuseIdentifier: DmChatRoomAnnotationView.reuseIdentifier)
         }
-    }
-    
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        guard let primaryColor: UIColor = .primaryColor
-        else { return MKOverlayRenderer(overlay: overlay) }
-        
-        if overlay.isKind(of: MKCircle.self) {
-            let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.fillColor = primaryColor.withAlphaComponent(0.01)
-            circleRenderer.strokeColor = primaryColor
-            circleRenderer.lineWidth = 0.5
-            return circleRenderer
-        }
-        
-        return MKOverlayRenderer(overlay: overlay)
     }
 }
 

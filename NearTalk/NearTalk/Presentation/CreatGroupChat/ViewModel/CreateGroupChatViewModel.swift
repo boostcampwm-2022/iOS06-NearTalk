@@ -122,11 +122,13 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
     
     private func createChatRoom(imagePath: String? = nil) {
         guard let userUUID = self.userDefaultUseCase.fetchUserUUID(),
-              let currentUserLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
-              let currentUserLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double,
+              let currentUserLatitude = UserDefaults.standard.object(forKey: UserDefaultsKey.currentUserLatitude.string) as? Double,
+              let currentUserLongitude = UserDefaults.standard.object(forKey: UserDefaultsKey.currentUserLongitude.string) as? Double,
               let randomLatitudeMeters = ((-50)...50).randomElement().map({Double($0)}),
               let randomLongitudeMeters = ((-50)...50).randomElement().map({Double($0)})
-        else { return }
+        else {
+            return
+        }
         
         let currentUserLocation = NCLocation(latitude: currentUserLatitude,
                                              longitude: currentUserLongitude)
@@ -155,7 +157,9 @@ final class DefaultCreateGroupChatViewModel: CreateGroupChatViewModel {
             .subscribe(
                 onCompleted: { [weak self] in
                     guard let self
-                    else { return }
+                    else {
+                        return
+                    }
                     
                     self.createGroupChatUseCase
                         .addChatRoom(chatRoomUUID: chatRoomUUID)

@@ -75,18 +75,24 @@ final class MainMapViewModel {
             .compactMap { annotation in
                 if annotation is MKClusterAnnotation {
                     guard let clusterAnnotation = annotation as? MKClusterAnnotation
-                    else { return [] }
+                    else {
+                        return []
+                    }
                     
                     return clusterAnnotation.memberAnnotations.compactMap {
                         guard let chatRoomAnnotation = $0 as? ChatRoomAnnotation
-                        else { return nil }
+                        else {
+                            return nil
+                        }
                         
                         return chatRoomAnnotation.chatRoomInfo
                     }
                 }
                 
                 guard let singleChatRoomAnnotation = annotation as? ChatRoomAnnotation
-                else { return [] }
+                else {
+                    return []
+                }
                 
                 return [singleChatRoomAnnotation.chatRoomInfo]
             }

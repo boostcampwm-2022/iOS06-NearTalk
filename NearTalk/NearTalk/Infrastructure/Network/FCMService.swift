@@ -26,7 +26,8 @@ final class DefaultFCMService: FCMService {
                 notification: .init(title: "\(roomName)", body: message.text),
                 registrationIds: tokenList
             )
-            guard let postData: Data = try? JSONEncoder().encode(dto) else {
+            guard let postData: Data = try? JSONEncoder().encode(dto)
+            else {
                 completable(.error(FCMServiceError.failedToSendFCM))
                 return Disposables.create()
             }
@@ -37,7 +38,8 @@ final class DefaultFCMService: FCMService {
             request.httpMethod = "POST"
             request.httpBody = postData
             let task = URLSession.shared.dataTask(with: request) { data, _, error in
-                guard let data = data else {
+                guard let data = data
+                else {
                     print(String(describing: error))
                     completable(.error(FCMServiceError.failedToSendFCM))
                     return
