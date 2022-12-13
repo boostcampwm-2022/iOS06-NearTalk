@@ -104,7 +104,13 @@ final class OnboardingViewController: UserProfileInputViewController {
             self.rootView.registerBtnClickEvent
                 .bind(onNext: { [weak self] _ in
                     self?.viewModel.register()
-                })
+                }),
+            
+            self.viewModel.isUploading
+                .drive(self.rootView.loadingIndicator),
+            
+            self.viewModel.isUploading
+                .drive { self.rootView.isUserInteractionEnabled = !$0 }
         )
     }
 }

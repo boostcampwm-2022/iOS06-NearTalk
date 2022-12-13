@@ -244,7 +244,6 @@
 		83933F702941B34000CC07FF /* ThemeSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83933F6F2941B34000CC07FF /* ThemeSettingViewModel.swift */; };
 		83933F742941C51800CC07FF /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83933F732941C51800CC07FF /* AppTheme.swift */; };
 		839D5BDD2922AD1000857FDD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D5BDC2922AD1000857FDD /* LoginViewController.swift */; };
-		83C6B683293B298000560C51 /* UploadingIndicatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C6B682293B298000560C51 /* UploadingIndicatorViewController.swift */; };
 		83D3544C2925623600B9236A /* UIImageView+Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D3544B2925623600B9236A /* UIImageView+Rounded.swift */; };
 		83D5ECBC292B5BB700AD1781 /* UpdateProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECBB292B5BB700AD1781 /* UpdateProfileUseCase.swift */; };
 		83D5ECC1292B622500AD1781 /* ValidateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */; };
@@ -509,7 +508,6 @@
 		83933F6F2941B34000CC07FF /* ThemeSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingViewModel.swift; sourceTree = "<group>"; };
 		83933F732941C51800CC07FF /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		839D5BDC2922AD1000857FDD /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		83C6B682293B298000560C51 /* UploadingIndicatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadingIndicatorViewController.swift; sourceTree = "<group>"; };
 		83D3543929252F1A00B9236A /* MyProfileDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileDIContainer.swift; sourceTree = "<group>"; };
 		83D3543C29252F5B00B9236A /* MyProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileCoordinator.swift; sourceTree = "<group>"; };
 		83D35445292541B500B9236A /* MyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProfileViewModel.swift; sourceTree = "<group>"; };
@@ -1429,7 +1427,6 @@
 			isa = PBXGroup;
 			children = (
 				8367AB632922AF6300678669 /* ProfileSettingViewController.swift */,
-				83C6B682293B298000560C51 /* UploadingIndicatorViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1944,7 +1941,6 @@
 				7CE80643292552BA00D828FF /* CreateGroupChatViewModel.swift in Sources */,
 				601273402921D34000E1456B /* LaunchScreenViewModel.swift in Sources */,
 				555A6B3829238C69001336ED /* ChatRoomList.swift in Sources */,
-				83C6B683293B298000560C51 /* UploadingIndicatorViewController.swift in Sources */,
 				7C254DB1292DDA88004D4CEC /* ChatDIContainer.swift in Sources */,
 				162B1B7F2946082A004724D9 /* FontSet.swift in Sources */,
 				16530582291E19350026B815 /* ChatRoomListCoordinator.swift in Sources */,
