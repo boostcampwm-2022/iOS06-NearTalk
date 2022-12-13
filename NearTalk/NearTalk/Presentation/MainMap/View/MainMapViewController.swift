@@ -8,6 +8,7 @@
 import CoreLocation
 import Kingfisher
 import MapKit
+import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
