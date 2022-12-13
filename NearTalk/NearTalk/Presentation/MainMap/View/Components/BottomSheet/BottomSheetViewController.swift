@@ -24,6 +24,7 @@ final class BottomSheetViewController: UIViewController {
     // MARK: - Properties
     private var coordinator: MainMapCoordinator?
     private var dataSource: [ChatRoom] = []
+    private let disposeBag: DisposeBag = .init()
     
     // MARK: - UI Components
     private let sheetLabel: UILabel = .init().then {
@@ -137,18 +138,11 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier,
-                                            for: indexPath) as? BottomSheetTableViewCell != nil
-        else {
-            return
-        }
-        
-        let chatRoom = self.dataSource[indexPath.row]
-
-        if let chatRoomID = chatRoom.uuid {
-            self.coordinator?.closeBottomSheet(bottomSheetVC: self)
-            self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
-        }
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
 }
