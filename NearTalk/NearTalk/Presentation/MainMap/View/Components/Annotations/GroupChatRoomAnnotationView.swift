@@ -37,7 +37,9 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
     override var annotation: MKAnnotation? {
         willSet {
             guard let value = newValue as? ChatRoomAnnotation
-            else { return }
+            else {
+                return
+            }
             
             self.detailCalloutAccessoryView = CalloutView(annotation: value, coordinator: self.coordinator)
             self.canShowCallout = self.isAccessible.bool
@@ -73,7 +75,9 @@ final class GroupChatRoomAnnotationView: MKMarkerAnnotationView {
     func configureAccessible(userLocation: NCLocation, targetAnnotation: MKAnnotation) {
         guard let targetAnnotation = targetAnnotation as? ChatRoomAnnotation,
               let accessibleRadius = targetAnnotation.chatRoomInfo.accessibleRadius
-        else { return }
+        else {
+            return
+        }
         
         let targetNCLocation = NCLocation(latitude: targetAnnotation.coordinate.latitude,
                                           longitude: targetAnnotation.coordinate.longitude)

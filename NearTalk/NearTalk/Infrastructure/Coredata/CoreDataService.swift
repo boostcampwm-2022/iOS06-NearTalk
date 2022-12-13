@@ -127,7 +127,8 @@ final class DefaultCoreDataService: CoreDataService {
     // MARK: - Private
     private func fetchObject<T>(with uuid: String, entityKey: CoreDataEntityKey) -> Single<T> {
         Single<T>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(CoreDataServiceError.failedToFetch))
                 return Disposables.create()
             }
@@ -147,7 +148,8 @@ final class DefaultCoreDataService: CoreDataService {
     
     private func fetchObjectList<T: BaseEntity>(entityKey: CoreDataEntityKey, predicate: NSPredicate, limit: Int) -> Single<[T]> {
         Single<[T]>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 print("🔥 CoreDataServiceError.failedToFetch")
                 single(.failure(CoreDataServiceError.failedToFetch))
                 return Disposables.create()
@@ -171,7 +173,8 @@ final class DefaultCoreDataService: CoreDataService {
     private func saveObject<T: BaseEntity>(entityKey: CoreDataEntityKey, data: T) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
-                  let entity: NSEntityDescription = self.getEntity(entityKey: entityKey, query: .modify) else {
+                  let entity: NSEntityDescription = self.getEntity(entityKey: entityKey, query: .modify)
+            else {
                 print("🔥 fail?")
                 completable(.error(CoreDataServiceError.failedToSave))
                 return Disposables.create()
@@ -193,7 +196,8 @@ final class DefaultCoreDataService: CoreDataService {
     private func saveObjectList<T: BaseEntity>(entityKey: CoreDataEntityKey, dataList: [T]) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
-                  let entity: NSEntityDescription = self.getEntity(entityKey: entityKey, query: .modify) else {
+                  let entity: NSEntityDescription = self.getEntity(entityKey: entityKey, query: .modify)
+            else {
                 completable(.error(CoreDataServiceError.failedToSave))
                 return Disposables.create()
             }
@@ -215,7 +219,8 @@ final class DefaultCoreDataService: CoreDataService {
     private func updateObject<T: BaseEntity>(entityKey: CoreDataEntityKey, data: T) -> Single<T> {
         Single<T>.create { [weak self] single in
             guard let self,
-                  let uuid = data.uuid else {
+                  let uuid = data.uuid
+            else {
                 single(.failure(CoreDataServiceError.failedToUpdate))
                 return Disposables.create()
             }
@@ -240,7 +245,8 @@ final class DefaultCoreDataService: CoreDataService {
     
     private func deleteObject(entityKey: CoreDataEntityKey, uuid: String) -> Completable {
         Completable.create { [weak self] completable in
-            guard let self else {
+            guard let self
+            else {
                 completable(.error(CoreDataServiceError.failedToDelete))
                 return Disposables.create()
             }
@@ -301,22 +307,26 @@ enum CoreDataEntityKey: String {
     func setObject(object: NSManagedObject, _ data: BaseEntity) {
         switch self {
         case .userProfile:
-            guard let profileData: UserProfile = data as? UserProfile else {
+            guard let profileData: UserProfile = data as? UserProfile
+            else {
                 return
             }
             self.setUserProfileData(object, profileData)
         case .message:
-            guard let messageData: ChatMessage = data as? ChatMessage else {
+            guard let messageData: ChatMessage = data as? ChatMessage
+            else {
                 return
             }
             self.setMessageData(object, messageData)
         case .chatRoom:
-            guard let chatRoomData: ChatRoom = data as? ChatRoom else {
+            guard let chatRoomData: ChatRoom = data as? ChatRoom
+            else {
                 return
             }
             self.setChatRoomData(object, chatRoomData)
         case .userChatRoomTicket:
-            guard let ticketData: UserChatRoomTicket = data as? UserChatRoomTicket else {
+            guard let ticketData: UserChatRoomTicket = data as? UserChatRoomTicket
+            else {
                 return
             }
             self.setUserChatRoomTicket(object, ticketData)

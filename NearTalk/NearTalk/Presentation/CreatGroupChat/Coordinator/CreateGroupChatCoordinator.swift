@@ -37,7 +37,9 @@ final class CreateGroupChatCoordinator {
     func showChatViewController(chatRoomID: String) {
         print(#function)
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
         
         let dicontainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
         let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)

@@ -43,7 +43,8 @@ final class DummyProfileRepository: ProfileRepository {
     
     func createMyProfile(_ userProfile: UserProfile) -> Single<UserProfile> {
         return Single.create { single in
-            guard let data = self.encode(profile: userProfile) else {
+            guard let data = self.encode(profile: userProfile)
+            else {
                 single(.failure(DummyProfileRepoError.encodeFailed))
                 return Disposables.create()
             }
@@ -55,11 +56,13 @@ final class DummyProfileRepository: ProfileRepository {
     
     func fetchMyProfile() -> Single<UserProfile> {
         return Single.create { single in
-            guard let encodedData = UserDefaults.standard.object(forKey: "MyProfile") as? Data else {
+            guard let encodedData = UserDefaults.standard.object(forKey: "MyProfile") as? Data
+            else {
                 single(.failure(DummyProfileRepoError.notFound))
                 return Disposables.create()
             }
-            guard let profile = self.decode(data: encodedData) else {
+            guard let profile = self.decode(data: encodedData)
+            else {
                 single(.failure(DummyProfileRepoError.decodeFailed))
                 return Disposables.create()
             }
@@ -70,11 +73,13 @@ final class DummyProfileRepository: ProfileRepository {
     
     func updateMyProfile(_ userProfile: UserProfile) -> Single<UserProfile> {
         return Single.create { single in
-            guard UserDefaults.standard.object(forKey: "MyProfile") as? Data != nil else {
+            guard UserDefaults.standard.object(forKey: "MyProfile") as? Data != nil
+            else {
                 single(.failure(DummyProfileRepoError.notFound))
                 return Disposables.create()
             }
-            guard let encodedFile = self.encode(profile: userProfile) else {
+            guard let encodedFile = self.encode(profile: userProfile)
+            else {
                 single(.failure(DummyProfileRepoError.encodeFailed))
                 return Disposables.create()
             }
@@ -86,7 +91,8 @@ final class DummyProfileRepository: ProfileRepository {
     
     func deleteMyProfile() -> Completable {
         return Completable.create { completable in
-            guard UserDefaults.standard.object(forKey: "MyProfile") as? Data != nil else {
+            guard UserDefaults.standard.object(forKey: "MyProfile") as? Data != nil
+            else {
                 completable(.error(DummyProfileRepoError.notFound))
                 return Disposables.create()
             }
@@ -119,11 +125,13 @@ final class DummyProfileRepository: ProfileRepository {
     
     func fetchProfileByUUID(_ uuid: String) -> Single<UserProfile> {
         return Single.create { single in
-            guard let encodedFile = UserDefaults.standard.object(forKey: uuid) as? Data else {
+            guard let encodedFile = UserDefaults.standard.object(forKey: uuid) as? Data
+            else {
                 single(.failure(DummyProfileRepoError.notFound))
                 return Disposables.create()
             }
-            guard let profile = self.decode(data: encodedFile) else {
+            guard let profile = self.decode(data: encodedFile)
+            else {
                 single(.failure(DummyProfileRepoError.decodeFailed))
                 return Disposables.create()
             }

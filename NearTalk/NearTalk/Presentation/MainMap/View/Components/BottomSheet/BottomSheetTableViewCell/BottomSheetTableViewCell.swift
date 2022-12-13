@@ -53,7 +53,9 @@ final class BottomSheetTableViewCell: UITableViewCell {
     private let chatRoomEnterButton = UIButton().then {
         guard let normalColor: UIColor = .secondaryLabel,
               let highlightColor: UIColor = .primaryColor
-        else { return }
+        else {
+            return
+        }
         
         let buttonImageConfig = UIImage.SymbolConfiguration(pointSize: 28)
         let image = UIImage(systemName: "arrow.right.circle")?
@@ -68,7 +70,9 @@ final class BottomSheetTableViewCell: UITableViewCell {
     private let chatRoomLockImageView = UIImageView().then {
         guard let lockImageColor: UIColor = .label,
               let cellCoverColor: UIColor = .tertiaryLabel
-        else { return }
+        else {
+            return
+        }
         
         let lockImageConfig = UIImage.SymbolConfiguration(pointSize: 40)
         let image = UIImage(systemName: "lock.fill")?
@@ -146,7 +150,9 @@ final class BottomSheetTableViewCell: UITableViewCell {
             .bind { _ in
                 guard let bottomSheetVC = self.parentVC as? BottomSheetViewController,
                       let chatRoomID = self.chatRoom?.uuid
-                else { return }
+                else {
+                    return
+                }
                 
                 self.coordinator?.closeBottomSheet(bottomSheetVC: bottomSheetVC)
                 self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
@@ -168,7 +174,9 @@ extension BottomSheetTableViewCell {
     private func fetch(path imagePath: String?) {
         guard let path = imagePath,
               let url = URL(string: path)
-        else { return }
+        else {
+            return
+        }
         
         self.chatRoomImage.kf.setImage(with: url)
     }
@@ -185,7 +193,9 @@ extension BottomSheetTableViewCell {
         guard let chatRoomLatitude = self.chatRoom?.latitude,
               let chatRoomLongitude = self.chatRoom?.longitude,
               let chatRoomAccessibleRadius = self.chatRoom?.accessibleRadius
-        else { return }
+        else {
+            return
+        }
         
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
@@ -194,7 +204,9 @@ extension BottomSheetTableViewCell {
         .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
             guard let currentUserLatitude,
                   let currentUserLongitude
-            else { return }
+            else {
+                return
+            }
             
             let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)

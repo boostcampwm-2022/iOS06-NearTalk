@@ -36,7 +36,8 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        guard let appDIContainer else {
+        guard let appDIContainer
+        else {
             return
         }
         let launchScreenDIContainer: LaunchScreenDIContainer = appDIContainer.resolveLaunchScreenDIContainer()
@@ -47,7 +48,8 @@ final class AppCoordinator: Coordinator {
 
 extension AppCoordinator: LoginCoordinatorDependency {
     func showLoginViewController() {
-        guard let appDIContainer else {
+        guard let appDIContainer
+        else {
             return
         }
         let loginDIContainer: LoginDIContainer = appDIContainer.resolveLoginDIContainer()
@@ -59,7 +61,8 @@ extension AppCoordinator: LoginCoordinatorDependency {
     }
     
     func showMainViewController() {
-        guard let appDIContainer else {
+        guard let appDIContainer
+        else {
             return
         }
 //        self.navigationController?.popViewController(animated: false)
@@ -70,7 +73,8 @@ extension AppCoordinator: LoginCoordinatorDependency {
     }
     
     func showOnboardingView() {
-        guard let appDIContainer else {
+        guard let appDIContainer
+        else {
             return
         }
         self.navigationController?.navigationBar.isHidden = false

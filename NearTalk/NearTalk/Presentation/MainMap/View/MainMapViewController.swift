@@ -16,7 +16,7 @@ import UIKit
 final class MainMapViewController: UIViewController {
     
     // MARK: - UI Components
-    private(set) lazy var mapView: MKMapView = .init().then {
+    private lazy var mapView: MKMapView = .init().then {
         $0.showsUserLocation = true
         $0.showsCompass = false
     }
@@ -41,18 +41,20 @@ final class MainMapViewController: UIViewController {
             self.fetch(path: profileImagePath)
         }
     }
-    private lazy var userLocationLabel: UILabel = .init().then {
+    private let userLocationLabel: UILabel = .init().then {
         $0.textColor = .label
         $0.textAlignment = .center
         $0.backgroundColor = .secondaryBackground
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
     }
-    private(set) lazy var compassButton: MKCompassButton = .init(mapView: self.mapView)
-    private(set) lazy var moveToCurrentLocationButton: UIButton = .init().then {
+    private lazy var compassButton: MKCompassButton = .init(mapView: self.mapView)
+    private lazy var moveToCurrentLocationButton: UIButton = .init().then {
         guard let normalColor: UIColor = .primaryColor,
               let highlightedColor: UIColor = .secondaryColor
-        else { return }
+        else {
+            return
+        }
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 40)
         let normalImage = UIImage(systemName: "location.circle")?
@@ -65,10 +67,12 @@ final class MainMapViewController: UIViewController {
         $0.setImage(normalImage, for: .normal)
         $0.setImage(highlightImage, for: .highlighted)
     }
-    private(set) lazy var createChatRoomButton: UIButton = .init().then {
+    private lazy var createChatRoomButton: UIButton = .init().then {
         guard let normalColor: UIColor = .primaryColor,
               let highlightedColor: UIColor = .secondaryColor
-        else { return }
+        else {
+            return
+        }
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 40)
         let normalImage = UIImage(systemName: "message.badge.circle")?
@@ -179,7 +183,9 @@ final class MainMapViewController: UIViewController {
             mapViewDidAppear: self.rx.methodInvoked(#selector(viewDidAppear(_:)))
                 .compactMap { _ -> NCMapRegion? in
                     guard let region = self.mapView.cameraBoundary?.region
-                    else { return nil }
+                    else {
+                        return nil
+                    }
                     
                     return self.convertToNCMapRegion(with: region)
                 }
@@ -191,7 +197,9 @@ final class MainMapViewController: UIViewController {
             didUpdateUserLocation: self.mapView.rx.didUpdateUserLocation
                 .compactMap { _ -> NCLocation? in
                     guard let currentUserLocation = self.locationManager.location?.coordinate
-                    else { return nil }
+                    else {
+                        return nil
+                    }
 
                     return NCLocation(latitude: currentUserLocation.latitude,
                                       longitude: currentUserLocation.longitude)
@@ -228,7 +236,9 @@ final class MainMapViewController: UIViewController {
             .asObservable()
             .subscribe(onNext: { [weak self] chatRooms in
                 guard let mainMapVC = self
-                else { return }
+                else {
+                    return
+                }
 
                 if chatRooms.count > 1 {
                     self?.coordinator?.showBottomSheet(mainMapVC: mainMapVC, chatRooms: chatRooms)
@@ -297,7 +307,9 @@ final class MainMapViewController: UIViewController {
     private func fetch(path imagePath: String?) {
         guard let path = imagePath,
               let url = URL(string: path)
-        else { return }
+        else {
+            return
+        }
         
         self.userProfileImage.kf.setImage(with: url)
     }
@@ -310,7 +322,9 @@ final class MainMapViewController: UIViewController {
                   let city = placeMarks.last?.locality,
                   let dong = placeMarks.last?.subLocality,
                   let name = placeMarks.last?.name
-            else { return }
+            else {
+                return
+            }
             
             self?.userLocationLabel.text = "\(city) \(dong) \(name)"
         }
@@ -319,7 +333,8 @@ final class MainMapViewController: UIViewController {
 
 extension MainMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation else {
+        guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation
+        else {
             return nil
         }
         

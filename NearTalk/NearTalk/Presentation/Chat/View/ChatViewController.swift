@@ -78,7 +78,8 @@ final class ChatViewController: UIViewController {
     }
 
     private func scrollToBottom() {
-        guard self.isLatestMessageChanged.value else {
+        guard self.isLatestMessageChanged.value
+        else {
             return
         }
         let indexPath = IndexPath(item: messageItems.count - 1, section: 0)
@@ -105,7 +106,8 @@ final class ChatViewController: UIViewController {
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
                 guard let self,
-                      let myID = self.viewModel.myID else {
+                      let myID = self.viewModel.myID
+                else {
                     return
                 }
 
@@ -133,7 +135,8 @@ final class ChatViewController: UIViewController {
         self.viewModel.chatRoom
             .bind { [weak self] chatRoom in
                 guard let self,
-                      let chatRoom else {
+                      let chatRoom
+                else {
                     return
                 }
                 self.navigationItem.title = "\(chatRoom.roomName ?? "Unknown") (\(chatRoom.userList?.count ?? 0))"

@@ -100,7 +100,9 @@ final class BottomSheetViewController: UIViewController {
               let userLongitude = UserDefaults.standard.object(forKey: UserDefaultsKey.currentUserLongitude.string) as? Double,
               let chatRoomLatitude = chatRoom.latitude,
               let chatRoomLongitude = chatRoom.longitude
-        else { return Double.infinity }
+        else {
+            return Double.infinity
+        }
         
         let userLocation = NCLocation(latitude: userLatitude,
                                       longitude: userLongitude)
@@ -120,7 +122,9 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier,
                                                        for: indexPath) as? BottomSheetTableViewCell
-        else { return BottomSheetTableViewCell() }
+        else {
+            return BottomSheetTableViewCell()
+        }
         
         cell.fetch(with: self.dataSource[indexPath.row])
         cell.insert(coordinator: self.coordinator, parentVC: self)
@@ -135,7 +139,9 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier,
                                             for: indexPath) as? BottomSheetTableViewCell != nil
-        else { return }
+        else {
+            return
+        }
         
         let chatRoom = self.dataSource[indexPath.row]
 

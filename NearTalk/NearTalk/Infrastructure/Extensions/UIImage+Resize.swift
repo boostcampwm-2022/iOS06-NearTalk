@@ -22,7 +22,8 @@ extension UIImage {
     /// 기본적으로 512KB 이하로 압축한다.
     /// 변수 단위는 kB 입니다.
     func resized(toKB size: Double = 512) -> UIImage? {
-        guard let imageData = self.jpegData(compressionQuality: 1.0) else {
+        guard let imageData = self.jpegData(compressionQuality: 1.0)
+        else {
             return nil
         }
         
@@ -31,7 +32,8 @@ extension UIImage {
         
         while imageSizeKB > size {
             guard let resizedImage = resizingImage.resized(withPercentage: 0.7),
-                  let imageData = resizedImage.jpegData(compressionQuality: 1.0) else {
+                  let imageData = resizedImage.jpegData(compressionQuality: 1.0)
+            else {
                       return nil
                   }
             resizingImage = resizedImage

@@ -49,7 +49,9 @@ final class CalloutView: UIView {
     private let chatRoomEnterButton = UIButton().then {
         guard let normalColor: UIColor = .secondaryLabel,
               let highlightColor: UIColor = .primaryColor
-        else { return }
+        else {
+            return
+        }
         
         let buttonImageConfig = UIImage.SymbolConfiguration(pointSize: 24)
         let image = UIImage(systemName: "arrow.right.circle")?
@@ -134,7 +136,9 @@ extension CalloutView {
     private func fetchImage(path imagePath: String?) {
         guard let path = imagePath,
               let url = URL(string: path)
-        else { return }
+        else {
+            return
+        }
         
         self.chatRoomImage.kf.setImage(with: url)
     }
@@ -143,7 +147,9 @@ extension CalloutView {
         guard let chatRoomLatitude = self.annotation.chatRoomInfo.latitude,
               let chatRoomLongitude = self.annotation.chatRoomInfo.longitude,
               let chatRoomAccessibleRadius = self.annotation.chatRoomInfo.accessibleRadius
-        else { return }
+        else {
+            return
+        }
         
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
@@ -154,7 +160,9 @@ extension CalloutView {
             
             guard let currentUserLatitude,
                   let currentUserLongitude
-            else { return }
+            else {
+                return
+            }
             
             let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)

@@ -44,7 +44,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
     private func sendPushNotification(_ message: ChatMessage, _ roomName: String, _ chatMemberIDList: [String]) -> Completable {
         self.profileRepository.fetchMyProfile()
             .flatMap { (myProfile: UserProfile) in
-                guard let myUUID = myProfile.uuid else {
+                guard let myUUID = myProfile.uuid
+                else {
                     return Single.error(DefaultChatMessageRepositoryError.fetchProfileInfoError)
                 }
                 let chatMembersWithoutMyProfile = chatMemberIDList.filter({ $0 != myUUID })
@@ -54,7 +55,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                 return self.profileRepository.fetchProfileByUUIDList(chatMembersWithoutMyProfile)
             }
             .flatMapCompletable { (profileList: [UserProfile]) in
-                guard profileList.count > 0 else {
+                guard profileList.count > 0
+                else {
                     return .empty()
                 }
                 return self.fcmService.sendMessage(message, roomName, profileList.compactMap({ $0.fcmToken }))

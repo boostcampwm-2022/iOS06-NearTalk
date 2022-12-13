@@ -70,7 +70,8 @@ extension DefaultMyProfileViewModel: MyProfileViewModel {
     }
     
     func selectRow(menu: MyProfileItem?) {
-        guard let menu = menu else {
+        guard let menu = menu
+        else {
             return
         }
         switch menu {
@@ -108,7 +109,8 @@ private extension DefaultMyProfileViewModel {
     }
     
     func downloadImage(path: String?) {
-        guard let path = path else {
+        guard let path = path
+        else {
             self.imageRelay.accept(nil)
             return
         }

@@ -29,19 +29,22 @@ extension DefaultStorageService {
     /// Firebase storage에 저장하고 저장된 path를 반환한다.
     func uploadData(data: Data, fileName: String, dataType: FirebaseKey.Storage) -> Single<String> {
         Single<String>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(StorageError.failedToUpload))
                 return Disposables.create()
             }
             
             self.storage.child("\(dataType.rawValue)/\(fileName)").putData(data, metadata: nil, completion: { _, error in
-                guard error == nil else {
+                guard error == nil
+                else {
                     single(.failure(StorageError.failedToUpload))
                     return
                 }
                 
                 self.storage.child("\(dataType.rawValue)/\(fileName)").downloadURL(completion: { url, _ in
-                    guard let url = url else {
+                    guard let url = url
+                    else {
                         single(.failure(StorageError.failedToGetDownloadUrl))
                         return
                     }
@@ -56,14 +59,16 @@ extension DefaultStorageService {
     
     func downloadURL(for path: String) -> Single<URL> {
         Single<URL>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(StorageError.failedToGetDownloadUrl))
                 return Disposables.create()
             }
             
             let reference = self.storage.child(path)
             reference.downloadURL { url, error in
-                guard let url = url, error == nil else {
+                guard let url = url, error == nil
+                else {
                     single(.failure(StorageError.failedToGetDownloadUrl))
                     return
                 }

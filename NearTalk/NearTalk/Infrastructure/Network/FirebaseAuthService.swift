@@ -51,7 +51,8 @@ final class DefaultFirebaseAuthService: AuthService {
                     return
                 }
 
-                guard (authResult?.user) != nil else {
+                guard (authResult?.user) != nil
+                else {
                     completable(.error(FirebaseAuthError.nilUser))
                     return
                 }
@@ -77,7 +78,8 @@ final class DefaultFirebaseAuthService: AuthService {
     /// 탈퇴
     func deleteCurrentUser() -> Completable {
         Completable.create { completable in
-            guard let user: User = Auth.auth().currentUser else {
+            guard let user: User = Auth.auth().currentUser
+            else {
                 completable(.error(FirebaseAuthError.nilUser))
                 return Disposables.create()
             }
@@ -111,7 +113,8 @@ final class DefaultFirebaseAuthService: AuthService {
                     return
                 }
 
-                guard (authResult?.user) != nil else {
+                guard (authResult?.user) != nil
+                else {
                     completable(.error(FirebaseAuthError.nilUser))
                     return
                 }

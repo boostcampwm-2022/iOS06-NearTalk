@@ -37,7 +37,9 @@ final class RootTabBarCoordinator: Coordinator {
         
         var inactivatedImage: UIImage? {
             guard let color: UIColor = .label
-            else { return nil }
+            else {
+                return nil
+            }
             
             switch self {
             case .mapView:
@@ -53,7 +55,9 @@ final class RootTabBarCoordinator: Coordinator {
         
         var activatedImage: UIImage? {
             guard let color: UIColor = .label
-            else { return nil }
+            else {
+                return nil
+            }
             
             switch self {
             case .mapView:

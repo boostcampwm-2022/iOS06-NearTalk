@@ -192,7 +192,9 @@ class ChatRoomListCell: UICollectionViewCell {
     
     private func dateOperate(date: Date?) {
         guard let date = date
-        else { return }
+        else {
+            return
+        }
         
         self.date.text = convertDate(date: date)
     }
@@ -230,7 +232,8 @@ class ChatRoomListCell: UICollectionViewCell {
                 case .success(let ticket):
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
                           let number,
-                          number > lastRoomMessageCount else {
+                          number > lastRoomMessageCount
+                    else {
                         print("🚧 ", #function, number, ticket)
                         
                         DispatchQueue.main.async {
@@ -252,7 +255,8 @@ class ChatRoomListCell: UICollectionViewCell {
     }
     
     private func imageLoad(path: String?) {
-        guard let path = path, let url = URL(string: path) else {
+        guard let path = path, let url = URL(string: path)
+        else {
             profileImageView.image = UIImage(named: "ChatLogo")
             return
         }
@@ -267,7 +271,9 @@ class ChatRoomListCell: UICollectionViewCell {
         guard let chatRoomLatitude = latitude,
               let chatRoomLongitude = longitude,
               let chatRoomAccessibleRadius = accessibleRadius
-        else { return }
+        else {
+            return
+        }
         
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
@@ -276,7 +282,9 @@ class ChatRoomListCell: UICollectionViewCell {
         .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
             guard let currentUserLatitude,
                   let currentUserLongitude
-            else { return }
+            else {
+                return
+            }
             
             let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
@@ -297,7 +305,9 @@ extension ChatRoomListCell {
         guard let userList,
               let myProfile = self.viewModel?.getMyProfile(),
               let myUUID = myProfile.uuid
-        else { return }
+        else {
+            return
+        }
         
         userList.forEach {
             if $0 != myUUID {
