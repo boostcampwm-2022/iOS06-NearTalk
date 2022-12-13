@@ -79,7 +79,7 @@ extension DefaultProfileSettingViewModel: ProfileSettingViewModel {
     var messageValidity: Driver<Bool> {
         self.messageValidition
             .asDriver()
-            .map { $0 == NickNameValidationResult.success.message }
+            .map { $0 == MessageValidationResult.success.message }
     }
     
     var nickNameValiditionMessage: Driver<String> {
