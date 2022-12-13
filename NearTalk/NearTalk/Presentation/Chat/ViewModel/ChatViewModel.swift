@@ -83,7 +83,8 @@ class DefaultChatViewModel: ChatViewModel {
     func sendMessage(_ message: String) {
         guard let chatRoomInfo = self.chatRoom.value,
               let roomName = chatRoomInfo.roomName,
-              let chatRoomMemberIDList = chatRoomInfo.userList else {
+              let chatRoomMemberIDList = chatRoomInfo.userList
+        else {
             return
         }
         
@@ -135,14 +136,16 @@ extension DefaultChatViewModel {
     private func initiateChatRoom() {
         fetchChatRoomInfo()
             .flatMapCompletable { [weak self] (uuidList: [String]) in
-                guard let self else {
+                guard let self
+                else {
                     return Completable.error(ChatViewModelError.failedToFetch)
                 }
                 return self.fetchChatRoomUserProfileList(uuidList)
             }
             .andThen(self.isVisitedChatRoom(self.chatRoomID))
             .flatMapCompletable { [weak self] isVisited in
-                guard let self else {
+                guard let self
+                else {
                     return Completable.error(ChatViewModelError.failedToFetchProfile)
                 }
                 
@@ -162,7 +165,8 @@ extension DefaultChatViewModel {
         self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
             .subscribe(onNext: { [weak self] message in
                 guard let self,
-                      let messageCount = self.chatRoom.value?.messageCount else {
+                      let messageCount = self.chatRoom.value?.messageCount
+                else {
                     return
                 }
                 self.updateTicketAndChatRoom(message, messageCount)
@@ -181,7 +185,8 @@ extension DefaultChatViewModel {
             .subscribe(onNext: { [weak self] chatRoom in
                 guard let self,
                       let userList: [String] = self.chatRoom.value?.userList,
-                      let newUserList: [String] = chatRoom.userList else {
+                      let newUserList: [String] = chatRoom.userList
+                else {
                     return
                 }
                 self.chatRoom.accept(chatRoom)
@@ -204,7 +209,8 @@ extension DefaultChatViewModel {
         self.fetchChatRoomInfoUseCase.fetchChatRoomInfo(chatRoomID: self.chatRoomID)
             .flatMap { [weak self] chatRoom in
                 guard let self,
-                      let userUUIDList: [String] = chatRoom.userList else {
+                      let userUUIDList: [String] = chatRoom.userList
+                else {
                     return .error(ChatViewModelError.failedToFetch)
                 }
                 self.chatRoom.accept(chatRoom)
@@ -216,11 +222,13 @@ extension DefaultChatViewModel {
     private func fetchChatRoomUserProfileList(_ userUUIDList: [String]) -> Completable {
         self.fetchProfileUseCase.fetchUserProfiles(with: userUUIDList)
             .do(onSuccess: { [weak self] userProfiles in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 userProfiles.forEach { userProfile in
-                    guard let uuid = userProfile.uuid else {
+                    guard let uuid = userProfile.uuid
+                    else {
                         return
                     }
                     self.userProfileList[uuid] = userProfile
@@ -231,7 +239,8 @@ extension DefaultChatViewModel {
     
     private func isVisitedChatRoom(_ roomID: String) -> Single<Bool> {
         Single<Bool>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(ChatViewModelError.failedToFetchProfile))
                 return Disposables.create()
             }
@@ -242,7 +251,8 @@ extension DefaultChatViewModel {
     
     private func isVisitedChatRoom(_ roomID: String) -> Bool {
         guard let myProfile: UserProfile = userDefaultUseCase.fetchUserProfile(),
-              let visitedChatRoom: [String] = myProfile.chatRooms else {
+              let visitedChatRoom: [String] = myProfile.chatRooms
+        else {
             print("🔴 프로필이 등록되지 않았음.")
             return false
         }
@@ -259,7 +269,8 @@ extension DefaultChatViewModel {
     
     private func updateChatRoomWithNewUser() -> Completable {
         guard let myID,
-              let chatRoom: ChatRoom = self.chatRoom.value else {
+              let chatRoom: ChatRoom = self.chatRoom.value
+        else {
             return Completable.error(ChatViewModelError.failedToFetch)
         }
         return self.messagingUseCase.updateChatRoom(chatRoom: chatRoom, userID: myID)
@@ -269,7 +280,8 @@ extension DefaultChatViewModel {
         self.fetchProfileUseCase.fetchMyProfile()
             .flatMapCompletable({ [weak self] userProfile in
                 guard let self,
-                      let hasChatRoom: Bool = userProfile.chatRooms?.contains(self.chatRoomID) else {
+                      let hasChatRoom: Bool = userProfile.chatRooms?.contains(self.chatRoomID)
+                else {
                     return Completable.error(ChatViewModelError.failedToFetch)
                 }
                 
@@ -286,14 +298,16 @@ extension DefaultChatViewModel {
     
     private func configureUserChatRoomTicket() -> Completable {
         guard let myID,
-              let chatRoom = self.chatRoom.value else {
+              let chatRoom = self.chatRoom.value
+        else {
             return Completable.error(ChatViewModelError.failedToFetchChatRoom)
         }
         
         return self.enterChatRoomUseCase
             .configureUserChatRoomTicket(userID: myID, chatRoom: chatRoom)
             .do(onSuccess: { [weak self] (ticket: UserChatRoomTicket) in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 self.userChatRoomTicket.accept(ticket)
@@ -316,7 +330,8 @@ extension DefaultChatViewModel {
     }
     
     private func updateTicketWithNewMessage(_ message: ChatMessage, _ messageCount: Int) -> Completable {
-        guard var newTicket: UserChatRoomTicket = self.userChatRoomTicket.value else {
+        guard var newTicket: UserChatRoomTicket = self.userChatRoomTicket.value
+        else {
             return Completable.error(ChatViewModelError.failedToFetchTicket)
         }
         
@@ -331,7 +346,8 @@ extension DefaultChatViewModel {
     private func updateChatRoomWithNewMessage(_ message: ChatMessage, _ messageCount: Int) -> Completable {
         guard let myID,
               message.senderID == myID,
-              var newChatRoom = self.chatRoom.value else {
+              var newChatRoom = self.chatRoom.value
+        else {
             return Completable.error(ChatViewModelError.failedToFetch)
         }
         newChatRoom.messageCount = messageCount + 1
@@ -353,7 +369,8 @@ extension DefaultChatViewModel {
         self.initialMessage
             .subscribe(onNext: { [weak self] (message: ChatMessage?) in
                 guard let self,
-                      let message else {
+                      let message
+                else {
                     return
                 }
                 self.fetchMessages(before: message, isInitialMessage: true)
@@ -363,7 +380,8 @@ extension DefaultChatViewModel {
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool = false) {
         guard let timeStamp: Double = message.createdAtTimeStamp,
               !self.hasFirstMessage.value,
-              !self.isLoading.value else {
+              !self.isLoading.value
+        else {
             return
         }
         
@@ -375,7 +393,8 @@ extension DefaultChatViewModel {
         )
         .subscribe(
             onSuccess: { [weak self] messages in
-                guard let self else {
+                guard let self
+                else {
                     self?.isLoading.accept(false)
                     return
                 }
@@ -395,7 +414,8 @@ extension DefaultChatViewModel {
                 self.isLoading.accept(false)
             },
             onFailure: { [weak self] error in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 print("🚧 ", #function, error)

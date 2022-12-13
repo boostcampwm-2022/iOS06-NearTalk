@@ -40,7 +40,9 @@ final class FriendListCoordinator: Coordinator {
     // MARK: - Dependency
     private func showDetailFriend(userID: String) {
         guard let navigationController = navigationController
-        else { return }
+        else {
+            return
+        }
         
         let diContainer = self.dependencies.makeProfileDetailDIContainer(userID: userID)
         let coordinator = diContainer.makeProfileDetailCoordinator(navigationController: navigationController)

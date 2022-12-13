@@ -75,7 +75,9 @@ final class FriendListViewController: UIViewController {
     private func configureDatasource() {
         self.dataSource = UICollectionViewDiffableDataSource<Section, Friend>(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FriendListCell.identifier, for: indexPath) as? FriendListCell
-            else { return UICollectionViewCell() }
+            else {
+                return UICollectionViewCell()
+            }
             cell.configure(model: itemIdentifier, viewModel: self.viewModel)
             return cell
         })
