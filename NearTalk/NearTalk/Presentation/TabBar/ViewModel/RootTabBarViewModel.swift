@@ -25,16 +25,14 @@ final class DefaultRootTabBarViewModel: RootTabBarViewModel {
         
         self.chatRoomListUseCase.newGetChatRoomList()
             .subscribe(onNext: { list in
-                var count = 0
-                list.forEach { count += $0.messageCount ?? 0 }
+                let count = list.reduce(0) { $0 + ($1.messageCount ?? 0) }
                 self.messageAllCount.accept(count)
             })
             .disposed(by: self.disposeBag)
         
         self.chatRoomListUseCase.getUserChatRoomTicketList()
             .subscribe(onNext: { (userTicketList: [UserChatRoomTicket]) in
-                var count = 0
-                userTicketList.forEach { count += $0.lastRoomMessageCount ?? 0 }
+                let count = userTicketList.reduce(0) { $0 + ($1.lastRoomMessageCount ?? 0) }
                 self.readMessageCount.accept(count)
             })
             .disposed(by: disposeBag)

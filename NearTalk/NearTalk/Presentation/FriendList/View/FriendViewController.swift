@@ -66,6 +66,24 @@ final class FriendListViewController: UIViewController {
     }
     
     private func configureNavigation() {
+        let newNavBarAppearance: UINavigationBarAppearance = UINavigationBarAppearance()
+
+        newNavBarAppearance.configureWithOpaqueBackground()
+        newNavBarAppearance.backgroundColor = .secondaryBackground
+        
+        self.navigationController?
+            .navigationBar
+            .topItem?
+            .backButtonDisplayMode = .minimal
+        self.navigationController?.navigationBar.tintColor = .label
+
+        self.navigationItem.title = "마이 프로필"
+        self.navigationItem.hidesBackButton = true
+        self.navigationItem.standardAppearance = newNavBarAppearance
+        self.navigationItem.compactAppearance = newNavBarAppearance
+        self.navigationItem.scrollEdgeAppearance = newNavBarAppearance
+        self.navigationItem.compactScrollEdgeAppearance = newNavBarAppearance
+        
         self.navigationItem.title = "친구 목록"
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
         self.navigationItem.rightBarButtonItems?[0].tintColor = .label

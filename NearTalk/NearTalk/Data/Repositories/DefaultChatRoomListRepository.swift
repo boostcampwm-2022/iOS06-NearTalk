@@ -147,7 +147,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
                     throw FetchChatRoomUseCaseError.failedToFetchRoom
                 }
                 let fetchChatRoomList: [Single<ChatRoom>] = ticketList.map {
-                    return self.fetchChatRoomInfo($0.roomID ?? "")
+                    self.fetchChatRoomInfo($0.roomID ?? "")
                 }
                 
                 return Single.zip(fetchChatRoomList)

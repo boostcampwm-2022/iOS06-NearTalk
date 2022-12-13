@@ -231,7 +231,9 @@ class ChatRoomListCell: UICollectionViewCell {
                 switch event {
                 case .success(let ticket):
                     
+                    #if DEBUG
                     print("🚧  채팅방 총 메세지 수 : \(number ?? 0), 내가 읽은 메세지수 : \(ticket.lastRoomMessageCount ?? 0)")
+                    #endif
                     
                     guard let lastRoomMessageCount = ticket.lastRoomMessageCount,
                           let number,
