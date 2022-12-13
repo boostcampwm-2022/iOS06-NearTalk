@@ -48,13 +48,15 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
         self.useCase.verifyUser()
             .subscribe(
                 onCompleted: { [weak self] in
-                    guard let self else {
+                    guard let self
+                    else {
                         return
                     }
                     self.isUserAuthenticated.onNext(true)
                 },
                 onError: { [weak self] error in
-                    guard let self else {
+                    guard let self
+                    else {
                         return
                     }
                     print(error)
@@ -68,13 +70,15 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
         self.useCase.verifyProfile()
             .subscribe(
                 onCompleted: { [weak self] in
-                    guard let self else {
+                    guard let self
+                    else {
                         return
                     }
                     self.hasProfile.onNext(true)
                 },
                 onError: { [weak self] error in
-                    guard let self else {
+                    guard let self
+                    else {
                         return
                     }
                     print(error)
@@ -87,7 +91,8 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
     private func bindAuthResult() {
         self.isUserAuthenticated
             .subscribe { [weak self] isAuthenticated in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 if isAuthenticated {
@@ -101,7 +106,8 @@ final class DefaultLaunchScreenViewModel: LaunchScreenViewModel {
     private func bindProfile() {
         self.hasProfile
             .subscribe { [weak self] hasProfile in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 if hasProfile {

@@ -87,7 +87,9 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
             .subscribe(onNext: { [weak self] in
                 guard let self,
                       let myID = self.myID
-                else { return }
+                else {
+                    return
+                }
                 
                 self.hasChatRoomChecking(myID: myID, userID: self.userID)
             })
@@ -95,7 +97,8 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
         
         deleteFriendButtonDidTapEvent
             .subscribe(onNext: { [weak self] in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 print("deleteFriendButtonDidTapEvent")

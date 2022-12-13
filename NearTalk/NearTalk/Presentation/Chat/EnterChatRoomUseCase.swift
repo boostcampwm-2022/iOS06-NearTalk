@@ -36,7 +36,8 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
     
     /// 티켓 업데이트 (티켓이 없을 경우 생성한다.)
     func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket> {
-        guard let roomID = chatRoom.uuid else {
+        guard let roomID = chatRoom.uuid
+        else {
             return .error(EnterChatRoomUseCaseError.faildToEnter)
         }
         

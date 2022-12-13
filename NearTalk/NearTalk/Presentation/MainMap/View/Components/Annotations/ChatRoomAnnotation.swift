@@ -44,7 +44,9 @@ final class ChatRoomAnnotation: NSObject, Decodable, MKAnnotation {
         guard let latitude = self.chatRoomInfo.latitude,
               let longitude = self.chatRoomInfo.longitude,
               let accessibleRadius = self.chatRoomInfo.accessibleRadius
-        else { return MKCircle() }
+        else {
+            return MKCircle()
+        }
         
         let center = CLLocationCoordinate2D(latitude: latitude,
                                             longitude: longitude)

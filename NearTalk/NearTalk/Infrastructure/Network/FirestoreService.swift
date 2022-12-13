@@ -34,7 +34,8 @@ final class DefaultFirestoreService: FirestoreService {
     /// 객체 저장
     func create<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore) -> Single<T> {
         Single<T>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(FirebaseStoreError.failedToCreate(type: String(describing: T.self))))
                 return Disposables.create()
             }
@@ -56,12 +57,14 @@ final class DefaultFirestoreService: FirestoreService {
     /// 객체 불러오기
     func fetch<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<T> {
         Single<T>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
-            guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList) else {
+            guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList)
+            else {
                 single(.failure(FirebaseStoreError.invalidQuery(type: String(describing: T.self))))
                 return Disposables.create()
             }
@@ -69,7 +72,8 @@ final class DefaultFirestoreService: FirestoreService {
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let dictionary: [String: Any] = snapshot?.documents.first?.data(),
-                      let data: T = try? T.decode(dictionary: dictionary) else {
+                      let data: T = try? T.decode(dictionary: dictionary)
+                else {
                     single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                     return
                 }
@@ -83,7 +87,8 @@ final class DefaultFirestoreService: FirestoreService {
     func update<T: BaseEntity>(updatedData: T, dataKey: FirebaseKey.FireStore) -> Single<T> {
         Single<T>.create { [weak self] single in
             guard let self,
-                  let uuid = updatedData.uuid else {
+                  let uuid = updatedData.uuid
+            else {
                 single(.failure(FirebaseStoreError.invalidUUID(type: String(describing: T.self))))
                 return Disposables.create()
             }
@@ -92,7 +97,8 @@ final class DefaultFirestoreService: FirestoreService {
             query.getDocuments { snapshot, error in
                 guard error == nil,
                       let document: QueryDocumentSnapshot = snapshot?.documents.first,
-                      let data: T = try? T.decode(dictionary: document.data()) else {
+                      let data: T = try? T.decode(dictionary: document.data())
+                else {
                     single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                     return
                 }
@@ -127,7 +133,8 @@ final class DefaultFirestoreService: FirestoreService {
     func delete<T: BaseEntity>(data: T, dataKey: FirebaseKey.FireStore ) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
-                  let uuid = data.uuid else {
+                  let uuid = data.uuid
+            else {
                 completable(.error(FirebaseStoreError.failedToDelete(type: String(describing: T.self))))
                 return Disposables.create()
             }
@@ -135,7 +142,8 @@ final class DefaultFirestoreService: FirestoreService {
             let query: FirebaseFirestore.Query = docRef.whereField("uuid", isEqualTo: uuid)
             query.getDocuments { snapshot, error in
                 guard error == nil,
-                      let document: QueryDocumentSnapshot = snapshot?.documents.first else {
+                      let document: QueryDocumentSnapshot = snapshot?.documents.first
+                else {
                     completable(.error(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                     return
                 }
@@ -155,18 +163,21 @@ final class DefaultFirestoreService: FirestoreService {
     /// 객체 리스트 불러오기
     func fetchList<T: BaseEntity>(dataKey: FirebaseKey.FireStore, queryList: [FirebaseQueryDTO]) -> Single<[T]> {
         Single<[T]>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                 return Disposables.create()
             }
             let docRef: FirebaseFirestore.CollectionReference = self.db.collection(dataKey.rawValue)
-            guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList) else {
+            guard let query: FirebaseFirestore.Query = self.makeQuery(docRef: docRef, queryList: queryList)
+            else {
                 single(.failure(FirebaseStoreError.invalidQuery(type: String(describing: T.self))))
                 return Disposables.create()
             }
             query.getDocuments { snapshot, error in
                 guard error == nil,
-                      let documents: [QueryDocumentSnapshot] = snapshot?.documents else {
+                      let documents: [QueryDocumentSnapshot] = snapshot?.documents
+                else {
                     single(.failure(FirebaseStoreError.failedToFetch(type: String(describing: T.self))))
                     return
                 }
@@ -184,7 +195,8 @@ final class DefaultFirestoreService: FirestoreService {
                 docRef: docRef,
                 key: firstDTO.key,
                 value: firstDTO.value
-              ) else {
+              )
+        else {
             return nil
         }
         let queryListWithoutFirst: [FirebaseQueryDTO] = Array(queryList.dropFirst())

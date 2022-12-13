@@ -49,7 +49,8 @@ final class DummyAuthRepository: AuthRepository {
     
     func fetchCurrentUserUID() -> RxSwift.Single<String> {
         return Single<String>.create { single in
-            guard let uid = UserDefaults.standard.string(forKey: DummyAuthRepository.uidKey) else {
+            guard let uid = UserDefaults.standard.string(forKey: DummyAuthRepository.uidKey)
+            else {
                 single(.failure(DummyAuthRepositoryError.nilUser))
                 return Disposables.create()
             }
