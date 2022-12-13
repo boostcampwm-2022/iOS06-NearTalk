@@ -94,7 +94,8 @@ final class DefaultProfileRepository: ProfileRepository {
     func fetchFriendsProfile() -> Single<[UserProfile]> {
         self.fetchMyProfile()
             .flatMap { (myProfile: UserProfile) in
-                guard let friendList: [String] = myProfile.friends else {
+                guard let friendList: [String] = myProfile.friends
+                else {
                     return Single.error(DefaultProfileRepositoryError.invalidUserProfile)
                 }
                 if friendList.isEmpty {

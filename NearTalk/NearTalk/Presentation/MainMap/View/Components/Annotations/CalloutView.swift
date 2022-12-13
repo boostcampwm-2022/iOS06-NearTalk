@@ -6,16 +6,18 @@
 //
 
 import Kingfisher
-import RxSwift
 import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
 
 final class CalloutView: UIView {
+    
     // MARK: - UI Compoments
     private let chatRoomImage = UIImageView().then {
         $0.layer.cornerRadius = 30
-        $0.image = UIImage(systemName: "photo")
+        $0.image = UIImage(named: "ChatLogo")
+        $0.contentMode = .scaleAspectFit
     }
     private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
@@ -27,27 +29,39 @@ final class CalloutView: UIView {
     private lazy var infoHeaderView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .equalSpacing
+        $0.spacing = 6
         $0.addArrangedSubview(self.chatRoomName)
         $0.addArrangedSubview(self.chatRoomDistance)
     }
     private let chatRoomName = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .secondaryLabel
+        $0.font = .ntTextMediumBold
     }
     private let chatRoomDistance = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .tertiaryLabel
+        $0.font = .ntCaption
     }
     private let chatRoomDescription = UILabel().then {
-        $0.textColor = .gray
-        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .secondaryLabel
+        $0.font = .ntTextSmallRegular
         $0.numberOfLines = 1
     }
     private let chatRoomEnterButton = UIButton().then {
+        guard let normalColor: UIColor = .secondaryLabel,
+              let highlightColor: UIColor = .primaryColor
+        else {
+            return
+        }
+        
         let buttonImageConfig = UIImage.SymbolConfiguration(pointSize: 24)
-        let buttonImage = UIImage(systemName: "arrow.right.circle",
-                                  withConfiguration: buttonImageConfig)
-        $0.setImage(buttonImage, for: .normal)
+        let image = UIImage(systemName: "arrow.right.circle")?
+            .withTintColor(normalColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(buttonImageConfig)
+        let highlightedImage = UIImage(systemName: "arrow.right.circle")?
+            .withTintColor(highlightColor, renderingMode: .alwaysOriginal)
+            .withConfiguration(buttonImageConfig)
+        $0.setImage(image, for: .normal)
+        $0.setImage(highlightedImage, for: .highlighted)
     }
     
     // MARK: - Properties
@@ -83,13 +97,13 @@ final class CalloutView: UIView {
         self.chatRoomImage.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(4)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(30)
+            make.width.height.equalTo(40)
         }
         
         self.chatRoomEnterButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-4)
+            make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(40)
+            make.width.height.equalTo(28)
         }
         
         self.infoStackView.snp.makeConstraints { make in
@@ -101,16 +115,10 @@ final class CalloutView: UIView {
     
     private func fetch() {
         let chatRoomInfo = self.annotation.chatRoomInfo
-        
-        guard let chatRoomLatitude = chatRoomInfo.latitude,
-              let chatRoomLongitude = chatRoomInfo.longitude
-        else { return }
-        
         self.chatRoomName.text = chatRoomInfo.roomName
-        let chatRoomLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
-        self.chatRoomDistance.text = self.calcChatRoomDistance(with: chatRoomLocation)
-        self.fetchImage(path: chatRoomInfo.roomImagePath)
         self.chatRoomDescription.text = chatRoomInfo.roomDescription
+        self.fetchImage(path: chatRoomInfo.roomImagePath)
+        self.fetchChatRoomDistance()
     }
     
     private func bind() {
@@ -128,20 +136,40 @@ extension CalloutView {
     private func fetchImage(path imagePath: String?) {
         guard let path = imagePath,
               let url = URL(string: path)
-        else { return }
+        else {
+            return
+        }
         
         self.chatRoomImage.kf.setImage(with: url)
     }
     
-    private func calcChatRoomDistance(with chatRoomLocation: NCLocation?) -> String {
-        guard let chatRoomLocation = chatRoomLocation,
-              let userLatitude = UserDefaults.standard.object(forKey: "CurrentUserLatitude") as? Double,
-              let userLongitude = UserDefaults.standard.object(forKey: "CurrentUserLongitude") as? Double
-        else { return "입장불가" }
+    private func fetchChatRoomDistance() {
+        guard let chatRoomLatitude = self.annotation.chatRoomInfo.latitude,
+              let chatRoomLongitude = self.annotation.chatRoomInfo.longitude,
+              let chatRoomAccessibleRadius = self.annotation.chatRoomInfo.accessibleRadius
+        else {
+            return
+        }
         
-        let userLocation = NCLocation(latitude: userLatitude, longitude: userLongitude)
-        let distance = chatRoomLocation.distance(from: userLocation)
-        
-        return String(format: "%.2f", distance / 1000) + " km"
+        Observable.zip(
+            UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
+            UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLongitude.string)
+        )
+        .subscribe(onNext: { [weak self] (currentUserLatitude, currentUserLongitude) in
+            self?.chatRoomEnterButton.isEnabled = false
+            
+            guard let currentUserLatitude,
+                  let currentUserLongitude
+            else {
+                return
+            }
+            
+            let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
+            let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
+            let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
+            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
+            self?.chatRoomEnterButton.isEnabled = distance <= chatRoomAccessibleRadius * 1000
+        })
+        .disposed(by: disposeBag)
     }
 }

@@ -16,7 +16,8 @@ public enum Environment {
 
     // MARK: - Plist
     private static let infoDictionary: [String: Any] = {
-        guard let dict = Bundle.main.infoDictionary else {
+        guard let dict = Bundle.main.infoDictionary
+        else {
             fatalError("Plist file not found")
         }
         return dict
@@ -24,7 +25,8 @@ public enum Environment {
 
     // MARK: - Plist values
     static let fcmURL: URL = {
-        guard let fcmURLString = Environment.infoDictionary[Plist.fcmURL] as? String else {
+        guard let fcmURLString = Environment.infoDictionary[Plist.fcmURL] as? String
+        else {
             fatalError("Root URL not set in plist for this environment")
         }
         guard let url = URL(string: fcmURLString) else {
@@ -34,7 +36,8 @@ public enum Environment {
     }()
 
     static let fcmServerKey: String = {
-        guard let fcmServerKey = Environment.infoDictionary[Plist.fcmServerKey] as? String else {
+        guard let fcmServerKey = Environment.infoDictionary[Plist.fcmServerKey] as? String
+        else {
             fatalError("API Key not set in plist for this environment")
         }
         return fcmServerKey

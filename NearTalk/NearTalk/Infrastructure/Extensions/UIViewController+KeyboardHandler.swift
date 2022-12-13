@@ -15,7 +15,8 @@ extension UIViewController {
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
               let keyboardAnimationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int,
               let keyboardDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve) else {
+              let keyboardCurve = UIView.AnimationCurve(rawValue: keyboardAnimationCurve)
+        else {
             return nil
         }
         return KeyboardPopInfo(frame: keyboardFrame, curve: keyboardCurve, duration: keyboardDuration)

@@ -47,7 +47,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             guard let self,
                   let roomID: String = message.chatRoomID,
                   let messageID: String = message.uuid,
-                  let messageData: [String: Any] = try? message.encode() else {
+                  let messageData: [String: Any] = try? message.encode()
+            else {
                 completable(.error(DatabaseError.failedToSend))
                 return Disposables.create()
             }
@@ -64,7 +65,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
         Single<ChatMessage>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -86,7 +88,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func fetchMessages(date: Date, pageCount: Int, roomID: String) -> Single<[ChatMessage]> {
         Single<[ChatMessage]>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -110,7 +113,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func observeNewMessage(_ chatRoomID: String) -> Observable<ChatMessage> {
         Observable<ChatMessage>.create { [weak self] observer in
-            guard let self else {
+            guard let self
+            else {
                 observer.onError(DatabaseError.failedToFetch)
                 return Disposables.create()
             }
@@ -135,7 +139,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
         Single<ChatRoom>.create { [weak self] single in
             guard let self,
                   let uuid: String = chatRoom.uuid,
-                  let chatRoomData: [String: Any] = try? chatRoom.encode() else {
+                  let chatRoomData: [String: Any] = try? chatRoom.encode()
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -155,7 +160,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
         Single<ChatRoom>.create { [weak self] single in
             guard let self,
                   let roomID: String = chatRoom.uuid,
-                  let chatRoomData: [String: Any] = try? chatRoom.encode() else {
+                  let chatRoomData: [String: Any] = try? chatRoom.encode()
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -173,7 +179,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func increaseChatRoomMessageCount(_ chatRoomID: String) -> Completable {
         Completable.create { [weak self] completable in
-            guard let self else {
+            guard let self
+            else {
                 completable(.error(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -188,7 +195,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom> {
         Single<ChatRoom>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -210,7 +218,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom> {
         Observable<ChatRoom>.create { [weak self] observable in
-            guard let self else {
+            guard let self
+            else {
                 observable.onError(DatabaseError.failedToFetch)
                 return Disposables.create()
             }
@@ -236,7 +245,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             guard let self,
                   let roomID: String = ticket.roomID,
                   let userID: String = ticket.userID,
-                  let ticketData: [String: Any] = try? ticket.encode() else {
+                  let ticketData: [String: Any] = try? ticket.encode()
+            else {
                 single(.failure(DatabaseError.failedToCreate))
                 return Disposables.create()
             }
@@ -257,7 +267,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             guard let self,
                   let roomID: String = ticket.roomID,
                   let userID: String = ticket.userID,
-                  let ticketData: [String: Any] = try? ticket.encode() else {
+                  let ticketData: [String: Any] = try? ticket.encode()
+            else {
                 single(.failure(DatabaseError.failedToCreate))
                 return Disposables.create()
             }
@@ -275,7 +286,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket> {
         Single<UserChatRoomTicket>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -299,7 +311,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]> {
         Single<[UserChatRoomTicket]>.create { [weak self] single in
-            guard let self else {
+            guard let self
+            else {
                 single(.failure(DatabaseError.failedToFetch))
                 return Disposables.create()
             }
@@ -319,7 +332,8 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
     
     func observeUserChatRoomTicketList(_ userID: String) -> Observable<UserChatRoomTicket> {
         Observable<UserChatRoomTicket>.create { [weak self] observable in
-            guard let self else {
+            guard let self
+            else {
                 observable.onError(DatabaseError.failedToFetch)
                 return Disposables.create()
             }

@@ -127,7 +127,8 @@ final class ChatRoomListViewController: UIViewController {
             
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatRoomListCell.identifier,
-                for: indexPath) as? ChatRoomListCell else {
+                for: indexPath) as? ChatRoomListCell
+            else {
                 return UICollectionViewCell()
             }
 
@@ -143,7 +144,8 @@ final class ChatRoomListViewController: UIViewController {
                 
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ChatRoomListCell.identifier,
-                for: indexPath) as? ChatRoomListCell else {
+                for: indexPath) as? ChatRoomListCell
+            else {
                 return UICollectionViewCell()
             }
             

@@ -15,6 +15,63 @@ struct RootTabBarCoordinatorDependency {
 }
 
 final class RootTabBarCoordinator: Coordinator {
+    
+    private enum TabItems {
+        case mapView
+        case chatRoomList
+        case friendList
+        case myProfile
+        
+        var title: String {
+            switch self {
+            case .mapView:
+                return "지도"
+            case .chatRoomList:
+                return "채팅"
+            case .friendList:
+                return "친구"
+            case .myProfile:
+                return "마이프로필"
+            }
+        }
+        
+        var inactivatedImage: UIImage? {
+            guard let color: UIColor = .label
+            else {
+                return nil
+            }
+            
+            switch self {
+            case .mapView:
+                return UIImage(systemName: "map")?.withTintColor(color)
+            case .chatRoomList:
+                return UIImage(systemName: "message")?.withTintColor(color)
+            case .friendList:
+                return UIImage(systemName: "person.3")?.withTintColor(color)
+            case .myProfile:
+                return UIImage(systemName: "person")?.withTintColor(color)
+            }
+        }
+        
+        var activatedImage: UIImage? {
+            guard let color: UIColor = .label
+            else {
+                return nil
+            }
+            
+            switch self {
+            case .mapView:
+                return UIImage(systemName: "map.fill")?.withTintColor(color)
+            case .chatRoomList:
+                return UIImage(systemName: "message.fill")?.withTintColor(color)
+            case .friendList:
+                return UIImage(systemName: "person.3.fill")?.withTintColor(color)
+            case .myProfile:
+                return UIImage(systemName: "person.fill")?.withTintColor(color)
+            }
+        }
+    }
+    
     var navigationController: UINavigationController?
     var tabBarViewController: UITabBarController?
     private let rootTabBarDIContainer: RootTabBarDIContainer
@@ -43,9 +100,9 @@ final class RootTabBarCoordinator: Coordinator {
         coordinator.start()
         return self.embed(
             rootNav: navigationController,
-            title: "홈",
-            inactivatedImage: UIImage(systemName: "house")?.withTintColor(.label!),
-            activatedImage: UIImage(systemName: "house.fill")?.withTintColor(.label!)
+            title: TabItems.mapView.title,
+            inactivatedImage: TabItems.mapView.inactivatedImage,
+            activatedImage: TabItems.mapView.activatedImage
         )
     }
     
@@ -56,9 +113,9 @@ final class RootTabBarCoordinator: Coordinator {
         coordinator.start()
         return self.embed(
             rootNav: navigationController,
-            title: "채팅",
-            inactivatedImage: UIImage(systemName: "message")?.withTintColor(.label!),
-            activatedImage: UIImage(systemName: "message.fill")?.withTintColor(.label!)
+            title: TabItems.chatRoomList.title,
+            inactivatedImage: TabItems.chatRoomList.inactivatedImage,
+            activatedImage: TabItems.chatRoomList.activatedImage
         )
     }
 
@@ -70,9 +127,9 @@ final class RootTabBarCoordinator: Coordinator {
         
         return self.embed(
             rootNav: navigationController,
-            title: "친구",
-            inactivatedImage: UIImage(systemName: "person.3")?.withTintColor(.label!),
-            activatedImage: UIImage(systemName: "person.3.fill")?.withTintColor(.label!)
+            title: TabItems.friendList.title,
+            inactivatedImage: TabItems.friendList.inactivatedImage,
+            activatedImage: TabItems.friendList.activatedImage
         )
     }
 
@@ -88,9 +145,9 @@ final class RootTabBarCoordinator: Coordinator {
         
         return self.embed(
             rootNav: navigationController,
-            title: "마이페이지",
-            inactivatedImage: UIImage(systemName: "person")?.withTintColor(.label!),
-            activatedImage: UIImage(systemName: "person.fill")?.withTintColor(.label!)
+            title: TabItems.myProfile.title,
+            inactivatedImage: TabItems.myProfile.inactivatedImage,
+            activatedImage: TabItems.myProfile.activatedImage
         )
     }
     

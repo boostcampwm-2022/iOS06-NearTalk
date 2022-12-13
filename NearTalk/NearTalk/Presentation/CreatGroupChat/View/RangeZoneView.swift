@@ -23,24 +23,24 @@ final class RangeZoneView: UIView {
     // MARK: - UI Proporties
     
     lazy var rangeLabel = UILabel().then {
-        $0.text = "1km"
+        $0.text = "0.1 km"
     }
     
     let rangeSlider: UISlider = UISlider().then { slider in
-        slider.minimumValue = 1.0
-        slider.maximumValue = 10.0
-        slider.value = 1.0
+        slider.minimumValue = 0.1
+        slider.maximumValue = 1
+        slider.value = 0.1
         slider.isContinuous = true
         slider.tintColor = .systemOrange
     }
     
     private lazy var minRangeLabel = UILabel().then {
-        $0.text = "1km"
+        $0.text = "0.1 km"
         $0.font = .systemFont(ofSize: 11.0, weight: .light)
     }
     
     private lazy var maxRangeLabel = UILabel().then {
-        $0.text = "10km"
+        $0.text = "1 km"
         $0.font = .systemFont(ofSize: 11.0, weight: .light)
     }
     

@@ -58,7 +58,8 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     func newGetChatRoomUUIDList() {
         self.chatRoomListRepository.fetchUserChatRoomUUIDList()
             .subscribe { [weak self] (uuidList: [String]) in
-                guard let self else {
+                guard let self
+                else {
                     return
                 }
                 self.newChatRoomUUIDList.accept(uuidList)
@@ -77,7 +78,8 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     private func newGetChatRoomList() -> Observable<[ChatRoom]> {
         self.newChatRoomUUIDList
             .flatMap { [weak self] (uuidList: [String]) in
-                guard let self else {
+                guard let self
+                else {
                     throw FetchChatRoomUseCaseError.failedToFetchRoom
                 }
                 let fetchChatRoomList: [Observable<ChatRoom>] = uuidList.map {
