@@ -74,7 +74,7 @@ extension DefaultOnboardingViewModel: OnboardingViewModel {
     var messageValidity: Driver<Bool> {
         self.messageValidition
             .asDriver()
-            .map { $0 == NickNameValidationResult.success.message }
+            .map { $0 == MessageValidationResult.success.message }
     }
     
     var image: Driver<Data?> {
