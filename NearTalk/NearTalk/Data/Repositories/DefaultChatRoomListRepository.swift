@@ -57,6 +57,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
                         .flatMap { self.dropUserFromChatRoom(chatRoom: $0, uuid: uuid).asObservable() }
                         .asCompletable()
                 )
+                .andThen(self.databaseService.deleteUserTicketList(uuid))
             }
     }
 
