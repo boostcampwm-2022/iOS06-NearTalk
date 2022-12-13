@@ -115,7 +115,6 @@ final class MainMapViewController: UIViewController {
         }
     }
     
-    
     // MARK: - Methods
     private func addSubViews() {
         view.addSubview(self.mapView)
