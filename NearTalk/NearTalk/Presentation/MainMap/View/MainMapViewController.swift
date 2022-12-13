@@ -7,6 +7,7 @@
 
 import CoreLocation
 import MapKit
+import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -35,9 +36,6 @@ final class MainMapViewController: UIViewController {
         $0.layer.cornerRadius = 10
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(named: "Logo")
-        if let profileImagePath = UserDefaults.standard.object(forKey: UserDefaultsKey.profileImagePath.string) as? String {
-            self?.fetch(path: profileImagePath)
-        }
     }
     private let userLocationLabel: UILabel = .init().then {
         $0.textColor = .label
@@ -110,6 +108,13 @@ final class MainMapViewController: UIViewController {
         self.registerAnnotationViewClass()
         self.bindViewModel()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let profileImagePath = UserDefaults.standard.object(forKey: UserDefaultsKey.profileImagePath.string) as? String {
+            self.fetch(path: profileImagePath)
+        }
+    }
+    
     
     // MARK: - Methods
     private func addSubViews() {
@@ -311,7 +316,7 @@ final class MainMapViewController: UIViewController {
         else {
             return
         }
-        
+
         self.userProfileImage.kf.setImage(with: url)
     }
     
