@@ -64,7 +64,7 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureConstraints() {
         self.sheetLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
+            make.top.equalToSuperview().offset(32)
             make.centerX.equalToSuperview()
         }
         
