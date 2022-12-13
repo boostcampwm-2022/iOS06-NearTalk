@@ -40,10 +40,25 @@ final class CoreDataTests: XCTestCase {
         let fetchMessageList: Single<[ChatMessage]> = self.coreDataService.saveMessage(message)
             .andThen(self.coreDataService.fetchMessageList(roomID: testRoomID, before: Date()))
         do {
-            let count = try await fetchMessageList.value.count
+            let result: [ChatMessage] = try await fetchMessageList.value
+            let count: Int = result.count
+            print(count)
+            print(result.last?.text ?? "")
             XCTAssertEqual(count, 1)
         } catch let error {
-            print(error)
+            print("🔥", error)
+            XCTFail()
+        }
+    }
+    
+    func test_fetch_single_message() async throws {
+        print("🟢 " , Self.self, #function)
+        let fetchMessage: Single<ChatMessage> = self.coreDataService.fetchMessage("TEST_MESSAGE_ID")
+        do {
+            let result: ChatMessage = try await fetchMessage.value
+            print(result)
+        } catch let error {
+            print("🔥", error)
             XCTFail()
         }
     }
@@ -53,9 +68,10 @@ final class CoreDataTests: XCTestCase {
         let fetchMessageList: Single<[ChatMessage]> = self.coreDataService.fetchMessageList(roomID: testRoomID, before: Date())
         do {
             let count = try await fetchMessageList.value.count
-            XCTAssertEqual(count, 0)
+            print(count)
+            XCTAssertEqual(count, 30)
         } catch let error {
-            print(error)
+            print("🔥", error)
             XCTFail()
         }
     }
