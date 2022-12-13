@@ -19,10 +19,10 @@ class UserProfileInputView: UIView {
     private let labelInset: UIEdgeInsets = .init(top: 0, left: 20.0, bottom: 0, right: 20.0)
     
     // MARK: - Fonts
-    private let textFieldTitleLabelFont: UIFont = UIFont.systemFont(ofSize: 16.0, weight: .bold)
-    private let textFieldFont: UIFont = UIFont.systemFont(ofSize: 12.0, weight: .bold)
-    private let textFieldValidationMessageFont: UIFont = UIFont.systemFont(ofSize: 10.0, weight: .regular)
-    private let registerBtnFont: UIFont = UIFont.systemFont(ofSize: 17.0, weight: .semibold)
+    private let textFieldTitleLabelFont: UIFont = .ntTextMediumBold
+    private let textFieldFont: UIFont = .ntCaption
+    private let textFieldValidationMessageFont: UIFont = .ntCaption
+    private let registerBtnFont: UIFont = .ntTextSemiBold
     
     // MARK: - UI Properties
     private let pencilSymbol: UIImageView = UIImageView(
@@ -58,7 +58,9 @@ class UserProfileInputView: UIView {
     private let nicknameField: UITextField = UITextField().then {
         $0.autocorrectionType = .no
         $0.placeholder = "닉네임"
-        $0.borderStyle = .roundedRect
+        $0.layer.cornerRadius = 5.0
+        $0.layer.borderWidth = 0.5
+        $0.layer.borderColor = UIColor.tertiaryLabel?.cgColor
         $0.autocapitalizationType = .none
         $0.clearButtonMode = .always
     }
@@ -71,8 +73,8 @@ class UserProfileInputView: UIView {
         $0.textContainer.maximumNumberOfLines = 2
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 5.0
-        $0.layer.borderWidth = 1.0
-        $0.layer.borderColor = UIColor.label?.cgColor
+        $0.layer.borderWidth = 0.5
+        $0.layer.borderColor = UIColor.tertiaryLabel?.cgColor
         $0.autocapitalizationType = .none
         $0.autocorrectionType = .no
     }
@@ -158,7 +160,8 @@ extension UserProfileInputView {
     
     var keyboardWillShowOnNickNameField: Driver<Notification> {
         print(#function)
-        return self.keyboardWillShow.asDriver()
+        return self.keyboardWillShow
+            .asDriver()
             .filter { _ in
                 self.nicknameField.isFirstResponder
             }
@@ -166,21 +169,24 @@ extension UserProfileInputView {
     
     var keyboardWillDismissFromNickNameField: Driver<Notification> {
         print(#function)
-        return self.keyboardWillHide.asDriver()
+        return self.keyboardWillHide
+            .asDriver()
             .filter { _ in
                 self.nicknameField.isFirstResponder
             }
     }
     
     var keyboardWillShowOnMessageField: Driver<Notification> {
-        return self.keyboardWillShow.asDriver()
+        return self.keyboardWillShow
+            .asDriver()
             .filter { _ in
                 self.messageField.isFirstResponder
             }
     }
     
     var keyboardWillDismissFromMessageField: Driver<Notification> {
-        return self.keyboardWillHide.asDriver()
+        return self.keyboardWillHide
+            .asDriver()
             .filter { _ in
                 self.messageField.isFirstResponder
             }
@@ -193,8 +199,7 @@ extension UserProfileInputView {
     }
     
     var registerEnable: AnyObserver<Bool> {
-        return self.registerButton.rx
-            .isEnabled
+        return self.registerButton.rx.isEnabled
             .asObserver()
     }
     
@@ -233,6 +238,8 @@ private extension UserProfileInputView {
         [pencilSymbol, profileImageView, nickNameLabel, nicknameField, nickNameValidityMessageLabel, messageLabel, messageField, messageValidityMessageLabel, registerButton].forEach {
             self.addSubview($0)
         }
+        
+        self.registerButton.addSubview(indicator)
     }
     
     func configureFonts() {
@@ -256,60 +263,67 @@ private extension UserProfileInputView {
     }
     
     func configurePencilSymbol() {
-        pencilSymbol.snp.makeConstraints {
+        pencilSymbol.snp.makeConstraints { make in
             let offset: Float = sqrtf(powf(Float(self.profileImageRadius), 2) / 2)
-            $0.centerX.equalTo(self.profileImageView.snp.centerX).offset(offset)
-            $0.centerY.equalTo(self.profileImageView.snp.centerY).offset(offset)
+            make.centerX.equalTo(self.profileImageView.snp.centerX).offset(offset)
+            make.centerY.equalTo(self.profileImageView.snp.centerY).offset(offset)
         }
     }
     
     func configureProfileImageView() {
-        profileImageView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
-            $0.width.height.equalTo(self.profileImageRadius * 2)
+        profileImageView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(self.profileImageSpace)
+            make.width.height.equalTo(self.profileImageRadius * 2)
         }
     }
     
     func configureNickNameSection() {
-        nickNameLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
-            $0.top.equalTo(self.profileImageView.snp.bottom).offset(self.profileImageSpace)
+        nickNameLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
+            make.top.equalTo(self.profileImageView.snp.bottom).offset(self.profileImageSpace)
         }
         
-        nicknameField.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(nickNameLabel)
-            $0.top.equalTo(nickNameLabel.snp.bottom).offset(self.labelSpace)
+        nicknameField.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(nickNameLabel)
+            make.top.equalTo(nickNameLabel.snp.bottom).offset(self.labelSpace)
+            make.height.equalTo(self.textFieldFont.pointSize * 3.0)
         }
                 
-        nickNameValidityMessageLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(nickNameLabel)
-            $0.top.equalTo(nicknameField.snp.bottom).offset(self.labelSpace)
+        nickNameValidityMessageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(nickNameLabel)
+            make.top.equalTo(nicknameField.snp.bottom).offset(self.labelSpace)
         }
     }
     
     func configureMessageSection() {
-        messageLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
-            $0.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(10)
+        messageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.safeAreaLayoutGuide).inset(self.labelInset)
+            make.top.equalTo(self.nickNameValidityMessageLabel.snp.bottom).offset(10)
         }
         
-        messageField.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(messageLabel)
-            $0.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
+        messageField.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(messageLabel)
+            make.top.equalTo(messageLabel.snp.bottom).offset(self.labelSpace)
         }
         
-        messageValidityMessageLabel.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(messageLabel)
-            $0.top.equalTo(messageField.snp.bottom).offset(self.labelSpace)
+        messageValidityMessageLabel.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(messageLabel)
+            make.top.equalTo(messageField.snp.bottom).offset(self.labelSpace)
         }
     }
     
     func configureRegisterButton() {
-        registerButton.snp.makeConstraints {
-            $0.horizontalEdges.equalTo(self.messageField)
-            $0.top.equalTo(self.messageValidityMessageLabel).offset(60)
-            $0.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
+        registerButton.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(self.messageField)
+            make.top.equalTo(self.messageValidityMessageLabel).offset(60)
+            make.height.equalTo(self.registerButton.snp.width).multipliedBy(0.15)
+        }
+        
+        indicator.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.8)
+            make.width.equalTo(indicator.snp.height)
         }
     }
 }
