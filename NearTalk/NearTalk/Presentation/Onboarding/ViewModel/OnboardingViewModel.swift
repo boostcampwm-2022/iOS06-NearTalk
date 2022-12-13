@@ -23,6 +23,7 @@ protocol OnboardingOutput {
     var messageValiditionMessage: Driver<String> { get }
     var image: Driver<Data?> { get }
     var registerEnable: Driver<Bool> { get }
+    var isUploading: Driver<Bool> { get }
 }
 
 protocol OnboardingViewModel: OnboardingInput, OnboardingOutput {}
@@ -37,6 +38,7 @@ final class DefaultOnboardingViewModel {
     private let messageValidition: BehaviorRelay<String> = BehaviorRelay(value: "")
     private let imageRelay: BehaviorRelay<Data?> = BehaviorRelay(value: nil)
     private let registerEnableRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    private let isUploadingRelay: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
     private let validateNickNameUseCase: any ValidateTextUseCase
     private let validateStatusMessageUseCase: any ValidateTextUseCase
@@ -65,6 +67,11 @@ final class DefaultOnboardingViewModel {
 }
 
 extension DefaultOnboardingViewModel: OnboardingViewModel {
+    var isUploading: Driver<Bool> {
+        self.isUploadingRelay
+            .asDriver()
+    }
+    
     var nickNameValidity: Driver<Bool> {
         self.nickNameValidition
             .asDriver()
@@ -112,12 +119,14 @@ extension DefaultOnboardingViewModel: OnboardingViewModel {
     }
     
     func register() {
+        self.isUploadingRelay.accept(true)
         if let image = self.imageRelay.value {
             self.uploadImageUseCase.execute(image: image)
                 .subscribe(onSuccess: { [weak self] imagePath in
                     self?.registerProfile(imagePath: imagePath)
                 }, onFailure: { [weak self] _ in
                     self?.action.presentRegisterFailure?()
+                    self?.isUploadingRelay.accept(false)
                 })
                 .disposed(by: self.disposeBag)
         } else {
@@ -150,8 +159,10 @@ private extension DefaultOnboardingViewModel {
         self.createProfileUseCase.execute(profile: newProfile)
             .subscribe(onCompleted: { [weak self] in
                 self?.action.showMainViewController?()
+                self?.isUploadingRelay.accept(false)
             }, onError: { [weak self] _ in
                 self?.action.presentRegisterFailure?()
+                self?.isUploadingRelay.accept(false)
             })
             .disposed(by: self.disposeBag)
     }
