@@ -8,9 +8,13 @@
 import Foundation
 
 struct NCLocation: Codable, Hashable {
+    // 강남역
+    static let gangnamStation: NCLocation = .init(latitude: 37.497954687223526, longitude: 127.02761650085449)
+    // 판교역
+    static let pangyoStation: NCLocation = .init(latitude: 37.394904, longitude: 127.111337)
     // 네이버 1784
     static let naver: NCLocation = .init(latitude: 37.375281, longitude: 127.106536)
-    
+
     // 미터 당 위경도
     static let decimalDegreePerMeter: Double = 0.000009009 // 도/m
     static let meterPerDecimalDegree: Double = 111000 // m/도
