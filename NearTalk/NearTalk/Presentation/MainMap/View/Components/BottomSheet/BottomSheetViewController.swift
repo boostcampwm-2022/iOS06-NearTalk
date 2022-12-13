@@ -126,7 +126,8 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
             return BottomSheetTableViewCell()
         }
         
-        cell.fetch(with: self.dataSource[indexPath.row])
+        let chatRoom = self.dataSource[indexPath.row]
+        cell.fetch(with: chatRoom)
         cell.insert(coordinator: self.coordinator, parentVC: self)
 
         return cell

@@ -158,16 +158,18 @@ final class BottomSheetTableViewCell: UITableViewCell {
                 self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
             }
             .disposed(by: self.disposeBag)
+        
+        self.fetchChatRoomDistance()
     }
 }
 
 // MARK: - Bind
 extension BottomSheetTableViewCell {
-    public func fetch(with data: ChatRoom) {
-        self.chatRoom = data
-        self.chatRoomName.text = data.roomName
-        self.chatRoomDescription.text = data.roomDescription
-        self.fetch(path: data.roomImagePath)
+    public func fetch(with chatRoom: ChatRoom) {
+        self.chatRoom = chatRoom
+        self.chatRoomName.text = chatRoom.roomName
+        self.chatRoomDescription.text = chatRoom.roomDescription
+        self.fetch(path: chatRoom.roomImagePath)
         self.fetchChatRoomDistance()
     }
     
@@ -181,11 +183,6 @@ extension BottomSheetTableViewCell {
         self.chatRoomImage.kf.setImage(with: url)
     }
     
-    func insert(coordinator: MainMapCoordinator?, parentVC: UIViewController?) {
-        self.coordinator = coordinator
-        self.parentVC = parentVC
-    }
-    
     private func fetchChatRoomDistance() {
         self.chatRoomDistance.text = "입장불가"
         self.configureAccessible(isAccessible: false)
@@ -196,7 +193,7 @@ extension BottomSheetTableViewCell {
         else {
             return
         }
-        
+
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLongitude.string)
@@ -207,22 +204,26 @@ extension BottomSheetTableViewCell {
             else {
                 return
             }
-            
+
             let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
             let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
-            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
-            
             let isAccessible = distance <= chatRoomAccessibleRadius * 1000
+            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
             self?.configureAccessible(isAccessible: isAccessible)
         })
         .disposed(by: disposeBag)
     }
     
     private func configureAccessible(isAccessible: Bool) {
-        self.chatRoomEnterButton.isEnabled = !isAccessible
-        self.isUserInteractionEnabled = !isAccessible
-        self.chatRoomLockImageView.isHidden = !isAccessible
-        self.chatRoomLockCoverView.isHidden = !isAccessible
+        self.chatRoomEnterButton.isEnabled = isAccessible
+        self.isUserInteractionEnabled = isAccessible
+        self.chatRoomLockImageView.isHidden = isAccessible
+        self.chatRoomLockCoverView.isHidden = isAccessible
+    }
+    
+    func insert(coordinator: MainMapCoordinator?, parentVC: UIViewController?) {
+        self.coordinator = coordinator
+        self.parentVC = parentVC
     }
 }
