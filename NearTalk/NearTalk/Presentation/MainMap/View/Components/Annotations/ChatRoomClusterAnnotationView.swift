@@ -35,7 +35,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
     }
     
     private func drawClusterAnnotationImage(count: Int) -> UIImage {
-        let magnificationPerCount: Double = 4
+        let magnificationPerCount: Double = 5
         let maxClusterMembersCount: Int = 10
         let width: CGFloat = .init(24 + Double(min(count, maxClusterMembersCount)) * magnificationPerCount)
         let height: CGFloat = .init(24 + Double(min(count, maxClusterMembersCount)) * magnificationPerCount)
