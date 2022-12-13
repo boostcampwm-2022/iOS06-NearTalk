@@ -17,7 +17,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
     private var disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - UI Proporty
-    
     private let textView: UITextView = {
         let view = UITextView()
         view.font = .systemFont(ofSize: 16.0)
@@ -53,9 +52,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
         imageView.clipsToBounds = true
         imageView.image = UIImage(named: "ChatLogo")
     }
-    
+
     // MARK: - LifeCycle
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -68,21 +66,17 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.textView.snp.remakeConstraints { make in
-            make.width.lessThanOrEqualTo(250)
-            make.bottom.equalToSuperview()
-        }
-        self.textView.text = nil
         self.nameLabel.text = ""
         self.timeLabel.text = ""
         self.textView.text = ""
         self.countOfUnreadMessagesLabel.text = ""
         self.profileImageView.image = nil
+        self.textView.text = nil
         
         self.disposeBag = DisposeBag()
     }
 
-    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
+    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {        
         let isInComing = messageItem.type == .receive
         
         tickets
@@ -97,7 +91,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
 
             })
             .disposed(by: self.disposeBag)
-        
         
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
@@ -115,12 +108,14 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 make.bottom.equalToSuperview()
             }
             
-            self.timeLabel.snp.makeConstraints { make in
+            self.timeLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(self.textView.snp.trailing).offset(5)
+                make.bottom.equalToSuperview()
             }
             
-            self.countOfUnreadMessagesLabel.snp.makeConstraints { make in
+            self.countOfUnreadMessagesLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(self.textView.snp.trailing).offset(5)
+                make.bottom.equalTo(self.timeLabel.snp.top)
             }
         } else {
             self.profileImageView.image = nil
@@ -131,13 +126,15 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 make.width.lessThanOrEqualTo(250)
                 make.bottom.equalToSuperview()
             }
-            
-            self.timeLabel.snp.makeConstraints { make in
+
+            self.timeLabel.snp.remakeConstraints { make in
                 make.trailing.equalTo(self.textView.snp.leading).inset(-5)
+                make.bottom.equalToSuperview()
             }
-            
-            self.countOfUnreadMessagesLabel.snp.makeConstraints { make in
+
+            self.countOfUnreadMessagesLabel.snp.remakeConstraints { make in
                 make.trailing.equalTo(self.textView.snp.leading).inset(-5)
+                make.bottom.equalTo(self.timeLabel.snp.top)
             }
         }
     }
