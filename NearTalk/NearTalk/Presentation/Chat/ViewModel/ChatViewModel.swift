@@ -17,6 +17,7 @@ protocol ChatViewModelOutput {
     var myID: String? { get }
     var chatRoom: BehaviorRelay<ChatRoom?> { get }
     var chatMessages: BehaviorRelay<[ChatMessage]> { get }
+    var lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> { get }
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
@@ -27,12 +28,13 @@ protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
 
 class DefaultChatViewModel: ChatViewModel {
     // MARK: - Proporties
+    let lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
     
     private let chatRoomID: String
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
     private var messageCreatedTimeList: [String: Double]
-    private var lastUpatedTime: [String: Double]
+    private var lastUpdatedTimeOfTickets: [String: Double]
     private var ticketList: [UserChatRoomTicket]
     
     private let fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
@@ -74,7 +76,7 @@ class DefaultChatViewModel: ChatViewModel {
         self.myID = self.userDefaultUseCase.fetchUserUUID()
         
         self.ticketList = []
-        self.lastUpatedTime = [:]
+        self.lastUpdatedTimeOfTickets = [:]
         self.messageCreatedTimeList = [:]
         self.userProfileList = [:]
         self.userUUIDList = []
@@ -147,7 +149,7 @@ extension DefaultChatViewModel {
                 else {
                     return Completable.error(ChatViewModelError.failedToFetch)
                 }
-                return self.fetch(userUUIDList: uuidList)// self.fetchChatRoomUserProfileList(uuidList)
+                return self.fetchChatRoomUserProfileList(uuidList)
             }
             .andThen(self.isVisitedChatRoom(self.chatRoomID))
             .flatMapCompletable { [weak self] isVisited in
@@ -186,9 +188,6 @@ extension DefaultChatViewModel {
                 newChatMessages.append(message)
                 ///
                 self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
-                self.fetchUserChatRoomTicketList(self.userUUIDList).subscribe(onCompleted: {
-                    print("🐳 UserChatRoomTicket is modified")
-                }).dispose()
                 ///
                 self.chatMessages.accept(newChatMessages)
             }).disposed(by: self.disposeBag)
@@ -215,12 +214,6 @@ extension DefaultChatViewModel {
                 self.fetchChatRoomUserProfileList(newUserList).subscribe(onCompleted: {
                     print("🚧 user list is modified")
                 }).dispose()
-                
-                ///
-                self.fetchUserChatRoomTicketList(newUserList).subscribe(onCompleted: {
-                    print("🐳 UserChatRoomTicket is modified")
-                }).dispose()
-                ///
             })
             .disposed(by: self.disposeBag)
     }
@@ -355,8 +348,7 @@ extension DefaultChatViewModel {
     private func updateTicketAndChatRoom(_ message: ChatMessage, _ messageCount: Int) {
         Completable.zip([
             self.updateTicketWithNewMessage(message, messageCount),
-            self.updateChatRoomWithNewMessage(message, messageCount),
-            self.fetchUserChatRoomTicketList(self.userUUIDList)
+            self.updateChatRoomWithNewMessage(message, messageCount)
         ])
         .subscribe(
             onCompleted: {
@@ -416,9 +408,24 @@ extension DefaultChatViewModel {
                 self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
                 ///
                 self.fetchMessages(before: message, isInitialMessage: true)
+                
+                // TODO: - 1. chatRoom이 업데이트 될때 참가자들의 Ticket들 불러오기
                 self.fetchChatRoomInfoUseCase.fetchParticipantTickets(self.chatRoomID)
                     .subscribe(onNext: { ticketList in
-                        print(">>>>>", ticketList)
+                        print(">>>>>")
+                        // TODO: - Ticket created Date 알아내기
+                        
+                        ticketList.forEach { [weak self] ticket in
+                            guard let self,
+                                  let ticketID = ticket.uuid,
+                                let lastReadMessageID = ticket.lastReadMessageID
+                            else {
+                                return
+                            }
+                            self.lastUpdatedTimeOfTickets[ticketID] = self.messageCreatedTimeList[lastReadMessageID]
+                        }
+                        print(self.lastUpdatedTimeOfTickets)
+                        self.lastUpdatedTimeOfTicketsRelay.accept(self.lastUpdatedTimeOfTickets)
                     })
                     .disposed(by: self.disposeBag)
             }).disposed(by: self.disposeBag)

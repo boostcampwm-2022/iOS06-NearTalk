@@ -6,13 +6,15 @@
 //
 
 import Kingfisher
+import RxRelay
+import RxSwift
 import SnapKit
 import UIKit
 
 class ChatCollectionViewCell: UICollectionViewCell {
     // MARK: - Proporty
-    
     static let identifier = String(describing: ChatRoomListCell.self)
+    private var disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - UI Proporty
     
@@ -70,29 +72,47 @@ class ChatCollectionViewCell: UICollectionViewCell {
             make.width.lessThanOrEqualTo(250)
             make.bottom.equalToSuperview()
         }
+        self.textView.text = nil
         self.nameLabel.text = ""
         self.timeLabel.text = ""
         self.textView.text = ""
         self.countOfUnreadMessagesLabel.text = ""
         self.profileImageView.image = nil
+        
+        self.disposeBag = DisposeBag()
     }
 
-    func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
+    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
         let isInComing = messageItem.type == .receive
+        
+        tickets
+            .asDriver()
+            .drive(onNext: { lastUpdatedTimeOfTickets in
+                let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
+                    let lastUpdatedTime = Date(timeIntervalSince1970: time)
+                    return lastUpdatedTime < messageItem.createdAt
+                }).count
+                print("📩 [전송타입] \(isInComing ? "receive" : "send")| [메세지 내용]: \(messageItem.message ?? "")  | [안읽은 메세지 수]: \(count)")
+                self.countOfUnreadMessagesLabel.text = "\(count)"
+
+            })
+            .disposed(by: self.disposeBag)
+        
         
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
         self.textView.text = messageItem.message
         self.nameLabel.text = isInComing ? messageItem.userName : ""
         self.timeLabel.text = self.convertDateToString(with: messageItem.createdAt)
-        self.countOfUnreadMessagesLabel.text = "\(messageItem.unreadMessageCount ?? 99)"
                 
         if isInComing {
             self.setImage(path: messageItem.imagePath)
             
-            self.textView.snp.makeConstraints { make in
+            self.textView.snp.remakeConstraints { make in
                 make.leading.equalTo(profileImageView.snp.trailing).offset(5)
                 make.top.equalTo(nameLabel.snp.bottom).offset(2)
+                make.width.lessThanOrEqualTo(250)
+                make.bottom.equalToSuperview()
             }
             
             self.timeLabel.snp.makeConstraints { make in
@@ -105,9 +125,11 @@ class ChatCollectionViewCell: UICollectionViewCell {
         } else {
             self.profileImageView.image = nil
             
-            self.textView.snp.makeConstraints { make in
+            self.textView.snp.remakeConstraints { make in
                 make.trailing.equalToSuperview().inset(10)
                 make.top.equalToSuperview()
+                make.width.lessThanOrEqualTo(250)
+                make.bottom.equalToSuperview()
             }
             
             self.timeLabel.snp.makeConstraints { make in

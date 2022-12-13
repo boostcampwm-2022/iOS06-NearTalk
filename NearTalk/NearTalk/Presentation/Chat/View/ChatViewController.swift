@@ -101,6 +101,10 @@ final class ChatViewController: UIViewController {
                 self?.chatInputAccessoryView.sendButton.isEnabled = false
             }
             .disposed(by: disposeBag)
+  
+        // TODO: - 메세지 읽은 수 나타내기
+//        self.viewModel.lastUpdatedTimeOfTicketsRelay
+            
         
         self.viewModel.chatMessages
             .asDriver(onErrorJustReturn: [])
@@ -112,16 +116,17 @@ final class ChatViewController: UIViewController {
                 }
 
                 self.isLatestMessageChanged.accept(messages.last?.uuid != self.messageItems.last?.id)
-                
+                print("✅", messages.compactMap({$0.text}))
                 var messageItems: [MessageItem] = []
                 messages.forEach { message in
+                    
                     let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
-                    let count = self.viewModel.getUnreadMessageCount(before: message.createdAtTimeStamp) 
+                    
                     let messageItem: MessageItem = .init(
                         chatMessage: message,
                         myID: myID,
                         userProfile: userProfile,
-                        unreadMessageCount: count
+                        createdAtTimeStamp: message.createdAtTimeStamp
                     )
                     messageItems.append(messageItem)
                 }
@@ -189,7 +194,7 @@ private extension ChatViewController {
             else {
                 return UICollectionViewCell()
             }
-            cell.configure(messageItem: item) {
+            cell.configure(messageItem: item, tickets: self.viewModel.lastUpdatedTimeOfTicketsRelay) {
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems([item])
             }
@@ -201,7 +206,7 @@ private extension ChatViewController {
     func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messageItems.sorted { $0.createdAt < $1.createdAt })
+        snapshot.appendItems(messageItems)
         return snapshot
     }
 }
