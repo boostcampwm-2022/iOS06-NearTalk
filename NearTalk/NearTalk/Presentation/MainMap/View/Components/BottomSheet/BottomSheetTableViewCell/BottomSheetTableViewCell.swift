@@ -19,9 +19,10 @@ final class BottomSheetTableViewCell: UITableViewCell {
     
     // MARK: - UI Components
     private let chatRoomImage = UIImageView().then {
-        $0.layer.cornerRadius = 30
+        $0.layer.cornerRadius = 18
+        $0.clipsToBounds = true
         $0.image = UIImage(named: "Logo")
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleToFill
     }
     private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
@@ -112,36 +113,36 @@ final class BottomSheetTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.chatRoomImage)
         self.contentView.addSubview(self.infoStackView)
         self.contentView.addSubview(self.chatRoomEnterButton)
-        self.contentView.addSubview(self.chatRoomLockImageView)
         self.contentView.addSubview(self.chatRoomLockCoverView)
+        self.contentView.addSubview(self.chatRoomLockImageView)
     }
     
     private func configureConstraints() {
         self.chatRoomImage.snp.makeConstraints { make in
-            make.leading.equalTo(self.contentView).offset(8)
+            make.leading.equalTo(self.contentView).offset(16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
         self.chatRoomEnterButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.contentView).offset(-8)
+            make.trailing.equalTo(self.contentView).offset(-16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(40)
         }
         
         self.infoStackView.snp.makeConstraints { make in
             make.leading.equalTo(self.chatRoomImage.snp.trailing).offset(16)
-            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-16)
-            make.top.bottom.equalTo(self.contentView).inset(8)
+            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-12)
+            make.top.bottom.equalTo(self.contentView).inset(12)
+        }
+        
+        self.chatRoomLockCoverView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.contentView).inset(4)
+            make.leading.trailing.equalTo(self.contentView).inset(12)
         }
         
         self.chatRoomLockImageView.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(self.contentView)
-        }
-        
-        self.chatRoomLockCoverView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.contentView)
-            make.leading.trailing.equalTo(self.contentView)
         }
     }
     
