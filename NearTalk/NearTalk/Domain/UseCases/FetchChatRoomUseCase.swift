@@ -13,10 +13,12 @@ protocol FetchChatRoomUseCase {
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]>
     func getUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket>
+    func getUserChatRoomTicketList() -> Observable<[UserChatRoomTicket]>
     func getUserProfile(userID: String) -> Single<UserProfile>
     func getMyProfile() -> UserProfile?
     func newGetChatRoomUUIDList()
-    func hasFriendDMChat(userID: String) -> Single<ChatRoom?>
+    func newGetChatRoomList() -> Observable<[ChatRoom]> 
+    func hasFriendDMChat(myID: String, friendID: String) -> Single<ChatRoom?>
 }
 final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     private let disposeBag: DisposeBag = .init()
@@ -44,21 +46,19 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
             .map { $0.map { DMChatRoomListData(data: $0) } }
     }
                                         
-    func hasFriendDMChat(userID: String) -> Single<ChatRoom?> {
-        self.newGetChatRoomList()
-            .take(1)
-            .asSingle()
-            .map { return $0.filter { $0.roomType == "dm" } }
-            .map { (chatRoomList: [ChatRoom]) in
-                print(#function)
-                for chatRoom in chatRoomList {
-                    if let userList = chatRoom.userList, userList.contains(userID) {
-                        return chatRoom
+    func hasFriendDMChat(myID: String, friendID: String) -> Single<ChatRoom?> {
+        self.chatRoomListRepository.fetchSingleChatRoomList(myID)
+            .map { $0.filter { $0.roomType == "dm" } }
+            .map {
+                $0.filter {
+                    guard let userList = $0.userList
+                    else {
+                        return false
                     }
+                    return userList.contains(friendID)
                 }
-                return nil
             }
-            
+            .map { $0.first }
     }
     
     func getGroupChatListWithCoordinates(southWest: NCLocation, northEast: NCLocation) -> Single<[ChatRoom]> {
@@ -71,6 +71,10 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     
     func getUserChatRoomTicket(roomID: String) -> Single<UserChatRoomTicket> {
         self.chatRoomListRepository.fetchUserChatRoomTicket(roomID)
+    }
+    
+    func getUserChatRoomTicketList() -> Observable<[UserChatRoomTicket]> {
+        return self.chatRoomListRepository.observeUserChatRoomTicketList()
     }
     
     func newGetChatRoomUUIDList() {
@@ -93,7 +97,7 @@ final class DefaultFetchChatRoomUseCase: FetchChatRoomUseCase {
     }
     
     // MARK: - Private
-    private func newGetChatRoomList() -> Observable<[ChatRoom]> {
+    func newGetChatRoomList() -> Observable<[ChatRoom]> {
         self.newChatRoomUUIDList
             .flatMap { [weak self] (uuidList: [String]) in
                 guard let self
