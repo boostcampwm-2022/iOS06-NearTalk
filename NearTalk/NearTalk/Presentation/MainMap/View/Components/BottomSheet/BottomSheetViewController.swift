@@ -78,7 +78,7 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureLayout() {
         self.chatRoomsTableView.estimatedRowHeight = 80.0
-        self.view.backgroundColor = .primaryColor
+        self.view.backgroundColor = .systemOrange
         
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
