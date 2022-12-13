@@ -72,6 +72,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         }
         self.nameLabel.text = ""
         self.timeLabel.text = ""
+        self.textView.text = ""
         self.countOfUnreadMessagesLabel.text = ""
         self.profileImageView.image = nil
     }
@@ -84,7 +85,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.textView.text = messageItem.message
         self.nameLabel.text = isInComing ? messageItem.userName : ""
         self.timeLabel.text = self.convertDateToString(with: messageItem.createdAt)
-        self.countOfUnreadMessagesLabel.text = "99"
+        self.countOfUnreadMessagesLabel.text = "\(messageItem.unreadMessageCount ?? 99)"
                 
         if isInComing {
             self.setImage(path: messageItem.imagePath)

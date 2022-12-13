@@ -20,16 +20,46 @@ protocol ChatViewModelOutput {
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
+    func getUnreadMessageCount(before: Double?) -> Int?
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
 
 class DefaultChatViewModel: ChatViewModel {
+    func getUnreadMessageCount(before: Double?) -> Int? {
+        guard let before else {
+            return nil
+        }
+        print("^^^^^^^^^^^^^^", ticketList, messageCreatedTimeList, before)
+        var count = 0
+        self.ticketList.forEach({ ticket in
+            guard let messageID = ticket.lastReadMessageID,
+                  let createdTime = messageCreatedTimeList[messageID] else {
+                return
+            }
+            if createdTime < before {
+                count += 1
+            }
+        })
+        return count
+    }
+    
+    private func fetch(userUUIDList: [String]) -> Completable {
+        Completable.zip([
+            fetchChatRoomUserProfileList(userUUIDList),
+            fetchUserChatRoomTicketList(userUUIDList)
+        ])
+    }
+    
     // MARK: - Proporties
     
     private let chatRoomID: String
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
+    private var createdAtTimeStampList: [Double]
+    private var messageCreatedTimeList: [String: Double]
+    private var lastUpatedTime: [String: Double]
+    private var ticketList: [UserChatRoomTicket]
     
     private let fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
     private let messagingUseCase: MessagingUseCase
@@ -69,8 +99,12 @@ class DefaultChatViewModel: ChatViewModel {
         self.chatRoomID = chatRoomID
         self.myID = self.userDefaultUseCase.fetchUserUUID()
         
+        self.ticketList = []
+        self.lastUpatedTime = [:]
+        self.messageCreatedTimeList = [:]
         self.userProfileList = [:]
         self.userUUIDList = []
+        self.createdAtTimeStampList = []
         self.chatRoom = .init(value: nil)
         self.chatMessages = .init(value: [])
         
@@ -162,7 +196,9 @@ extension DefaultChatViewModel {
         self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
             .subscribe(onNext: { [weak self] message in
                 guard let self,
-                      let messageCount = self.chatRoom.value?.messageCount else {
+                      let messageCount = self.chatRoom.value?.messageCount,
+                      let createdAtTimeStamp = message.createdAtTimeStamp,
+                      let messageuuid = message.uuid else {
                     return
                 }
                 self.updateTicketAndChatRoom(message, messageCount)
@@ -172,6 +208,10 @@ extension DefaultChatViewModel {
                 }
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
+                ///
+                self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
+                self.createdAtTimeStampList.append(createdAtTimeStamp)
+                ///
                 self.chatMessages.accept(newChatMessages)
             }).disposed(by: self.disposeBag)
     }
@@ -196,6 +236,12 @@ extension DefaultChatViewModel {
                 self.fetchChatRoomUserProfileList(newUserList).subscribe(onCompleted: {
                     print("🚧 user list is modified")
                 }).dispose()
+                
+                ///
+                self.fetchUserChatRoomTicketList(newUserList).subscribe(onCompleted: {
+                    print("🐳 UserChatRoomTicket is modified")
+                })
+                ///
             })
             .disposed(by: self.disposeBag)
     }
@@ -227,6 +273,24 @@ extension DefaultChatViewModel {
                 }
             })
             .asCompletable()
+    }
+    
+    ///
+    private func fetchUserChatRoomTicketList(_ userUUIDList: [String]) -> Completable {
+        self.enterChatRoomUseCase.fetchSingleUserChatRoomTickets(
+            userIDList: userUUIDList.last!,
+            chatRoomID: self.chatRoomID
+        )
+        .do(onSuccess: { [weak self] ticket in
+            guard let self else {
+                return
+            }
+            
+            self.ticketList = [ticket]
+            
+            print("#@#@#@#@#@", ticket)
+        })
+        .asCompletable()
     }
     
     private func isVisitedChatRoom(_ roomID: String) -> Single<Bool> {
@@ -353,9 +417,15 @@ extension DefaultChatViewModel {
         self.initialMessage
             .subscribe(onNext: { [weak self] (message: ChatMessage?) in
                 guard let self,
-                      let message else {
+                      let message,
+                      let messageuuid = message.uuid,
+                      let createdAtTimeStamp = message.createdAtTimeStamp else {
                     return
                 }
+                ///
+                self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
+                self.createdAtTimeStampList.append(createdAtTimeStamp)
+                ///
                 self.fetchMessages(before: message, isInitialMessage: true)
             }).disposed(by: self.disposeBag)
     }
@@ -390,6 +460,17 @@ extension DefaultChatViewModel {
                 } else {
                     newValue = messages + newValue
                 }
+                
+                ///
+                newValue.forEach { message in
+                    guard let createdAtTimeStamp = message.createdAtTimeStamp,
+                    let uuid = message.uuid else {
+                        return
+                    }
+                    self.messageCreatedTimeList[uuid] = createdAtTimeStamp
+                    self.createdAtTimeStampList.append(createdAtTimeStamp)
+                }
+                ///
                 
                 self.chatMessages.accept(newValue)
                 self.isLoading.accept(false)

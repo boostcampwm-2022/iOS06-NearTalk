@@ -114,10 +114,12 @@ final class ChatViewController: UIViewController {
                 var messageItems: [MessageItem] = []
                 messages.forEach { message in
                     let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                    let count = self.viewModel.getUnreadMessageCount(before: message.createdAtTimeStamp) 
                     let messageItem: MessageItem = .init(
                         chatMessage: message,
                         myID: myID,
-                        userProfile: userProfile
+                        userProfile: userProfile,
+                        unreadMessageCount: count
                     )
                     messageItems.append(messageItem)
                 }

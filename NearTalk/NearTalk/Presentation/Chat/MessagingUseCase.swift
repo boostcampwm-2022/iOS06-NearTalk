@@ -13,6 +13,7 @@ protocol MessagingUseCase {
     func observeMessage(roomID: String) -> Observable<ChatMessage>
     func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable
     func fetchMessage(before date: Date, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]>
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
@@ -51,5 +52,9 @@ final class DefalultMessagingUseCase: MessagingUseCase {
     
     func fetchMessage(before date: Date, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
         self.chatMessageRepository.fetchMessage(before: date, count: totalMessageCount, roomID: roomID)
+    }
+    
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
+        self.chatMessageRepository.fetchSingleMessage(messageID: messageID, roomID: roomID)
     }
 }

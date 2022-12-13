@@ -14,9 +14,15 @@ protocol EnterChatRoomUseCase {
     
     /// 티켓 업데이트 (티켓이 없을 경우 생성한다.)
     func configureUserChatRoomTicket(userID: String, chatRoom: ChatRoom) -> Single<UserChatRoomTicket>
+    
+    /// 모든 참가자의 티켓 가져오기
+//    func fetchSingleUserChatRoomTickets(userIDList: [String], chatRoomID: String) -> Single<[UserChatRoomTicket]>
+    func fetchSingleUserChatRoomTickets(userIDList: String, chatRoomID: String) -> Single<UserChatRoomTicket>
 }
 
 final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
+    
+    private let disposeBag: DisposeBag = DisposeBag()
     
     private let chatRoomListRepository: ChatRoomListRepository
     private let profileRepository: ProfileRepository
@@ -59,6 +65,16 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
             }
     }
     
+//    func fetchSingleUserChatRoomTickets(userIDList: [String], chatRoomID: String) -> Single<[UserChatRoomTicket]> {
+//        var userChatRoomTicketList: [UserChatRoomTicket] = []
+//
+//        return self.fetchSingleUserChatRoomTickets(userIDList: <#T##[String]#>, chatRoomID: <#T##String#>)
+//    }
+    
+    func fetchSingleUserChatRoomTickets(userIDList: String, chatRoomID: String) -> Single<UserChatRoomTicket> {
+        self.chatRoomListRepository.fetchUserChatRoomTicket(userIDList, chatRoomID)
+    }
+    
     // MARK: - Private
     private func createUserChatRoomTicket(ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         return self.chatRoomListRepository.createUserChatRoomTicket(ticket)
@@ -71,4 +87,5 @@ final class DefaultEnterChatRoomUseCase: EnterChatRoomUseCase {
 
 enum EnterChatRoomUseCaseError: Error {
     case faildToEnter
+    case failedToFetchUserTicket
 }
