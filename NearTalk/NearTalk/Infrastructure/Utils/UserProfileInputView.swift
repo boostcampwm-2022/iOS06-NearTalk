@@ -88,6 +88,11 @@ class UserProfileInputView: UIView {
         $0.frame = CGRect(origin: .zero, size: $0.intrinsicContentSize)
     }
     
+    private let indicator: UIActivityIndicatorView = .init(style: .large).then {
+        $0.isHidden = true
+        $0.hidesWhenStopped = true
+    }
+    
     // MARK: - UIView Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -229,6 +234,11 @@ extension UserProfileInputView {
     
     func designateMessageViewDelegate(_ delegate: any UITextViewDelegate) {
         self.messageField.delegate = delegate
+    }
+    
+    var loadingIndicator: AnyObserver<Bool> {
+        self.indicator.rx.isAnimating
+            .asObserver()
     }
 }
 
