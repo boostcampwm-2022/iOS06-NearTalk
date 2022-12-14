@@ -45,9 +45,9 @@ final class RootTabBarCoordinator: Coordinator {
             case .mapView:
                 return UIImage(systemName: "map")?.withTintColor(color)
             case .chatRoomList:
-                return UIImage(systemName: "message.badge")?.withTintColor(color)
+                return UIImage(systemName: "message")?.withTintColor(color)
             case .friendList:
-                return UIImage(systemName: "person.line.dotted.person")?.withTintColor(color)
+                return UIImage(systemName: "person.3")?.withTintColor(color)
             case .myProfile:
                 return UIImage(systemName: "person.text.rectangle")?.withTintColor(color)
             }
@@ -63,9 +63,9 @@ final class RootTabBarCoordinator: Coordinator {
             case .mapView:
                 return UIImage(systemName: "map.fill")?.withTintColor(color)
             case .chatRoomList:
-                return UIImage(systemName: "message.badge.filled.fill")?.withTintColor(color)
+                return UIImage(systemName: "message.fill")?.withTintColor(color)
             case .friendList:
-                return UIImage(systemName: "person.line.dotted.person.fill")?.withTintColor(color)
+                return UIImage(systemName: "person.3.fill")?.withTintColor(color)
             case .myProfile:
                 return UIImage(systemName: "person.text.rectangle.fill")?.withTintColor(color)
             }
