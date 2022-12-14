@@ -29,6 +29,12 @@ final class DefaultChatRoomListRepository {
 }
 
 extension DefaultChatRoomListRepository: ChatRoomListRepository {
+    func dropUserFromChatRoom(_ userUUID: String, _ roomID: String) -> Completable {
+        self.fetchChatRoomInfo(roomID)
+            .flatMapCompletable { room in
+                self.dropUserFromChatRoom(chatRoom: room, uuid: userUUID)
+            }
+    }
     
     func dropUserFromChatRoom(chatRoom: ChatRoom, uuid: String) -> Completable {
         var updatingChatRoom: ChatRoom = chatRoom
