@@ -403,8 +403,7 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(FirebaseKey.RealtimeDB.users.rawValue)
                 .child(userID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
-                .queryEqual(toValue: chatRoomID, childKey: "roomID")
-                .ref
+                .child(chatRoomID)
                 .removeValue(completionBlock: { error, _ in
                     if let error = error {
                         completable(.error(error))
