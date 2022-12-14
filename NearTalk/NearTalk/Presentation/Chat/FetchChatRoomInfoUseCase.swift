@@ -11,6 +11,7 @@ import RxSwift
 protocol FetchChatRoomInfoUseCase {
     func fetchChatRoomInfo(chatRoomID: String) -> Single<ChatRoom>
     func observeChatRoomInfo(chatRoomID: String) -> Observable<ChatRoom>
+    func fetchParticipantTickets(_ room: ChatRoom) -> Observable<[UserChatRoomTicket]>
 }
 
 final class DefaultFetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase {

@@ -38,7 +38,7 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
         $0.layer.cornerRadius = Metric.cornerRadius
         $0.clipsToBounds = true
-        $0.backgroundColor = .systemOrange
+        $0.backgroundColor = .primaryColor
         $0.isUserInteractionEnabled = true
     }
 
@@ -77,7 +77,7 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
         $0.setTitle("채팅방 생성하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Metric.buttonFontSize, weight: .bold)
         $0.layer.cornerRadius = Metric.cornerRadius
-        $0.backgroundColor = .systemOrange
+        $0.backgroundColor = .primaryColor
         $0.isEnabled = false
         $0.alpha = 0.7
     }
