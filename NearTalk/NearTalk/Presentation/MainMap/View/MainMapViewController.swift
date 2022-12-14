@@ -115,6 +115,7 @@ final class MainMapViewController: UIViewController {
             self.fetch(path: profileImagePath)
         }
         
+        self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
     }
     
