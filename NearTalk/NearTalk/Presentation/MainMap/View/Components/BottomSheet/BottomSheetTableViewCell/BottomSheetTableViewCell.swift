@@ -39,7 +39,7 @@ final class BottomSheetTableViewCell: UITableViewCell {
         $0.addArrangedSubview(self.chatRoomDistance)
     }
     private let chatRoomName = UILabel().then {
-        $0.textColor = .secondaryLabel
+        $0.textColor = .label
         $0.font = .ntTextMediumBold
     }
     private let chatRoomDistance = UILabel().then {
@@ -47,7 +47,7 @@ final class BottomSheetTableViewCell: UITableViewCell {
         $0.font = .ntCaption
     }
     private let chatRoomDescription = UILabel().then {
-        $0.textColor = .secondaryLabel
+        $0.textColor = .label
         $0.font = .ntTextSmallRegular
         $0.numberOfLines = 2
     }

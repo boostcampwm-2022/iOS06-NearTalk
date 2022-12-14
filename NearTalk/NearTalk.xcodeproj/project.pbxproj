@@ -1938,7 +1938,6 @@
 				7CF4A735294979900065BF2D /* CDChatMessage+CoreDataClass.swift in Sources */,
 				830897DA292CC1E60090EC18 /* NecessaryProfileComponent.swift in Sources */,
 				7CA4EA38292BA65000D8C757 /* FetchProfileUseCase.swift in Sources */,
-				6094B9EE29406F63008FC01B /* CDChatRoom+CoreDataProperties.swift in Sources */,
 				833D035629496E720029DF76 /* DropChatRoomUseCase.swift in Sources */,
 				1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */,
 				162B1B682933E036004724D9 /* RxMapViewReactiveDataSource.swift in Sources */,
