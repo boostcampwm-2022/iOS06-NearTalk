@@ -30,7 +30,7 @@ final class BottomSheetViewController: UIViewController {
     private let sheetLabel: UILabel = .init().then {
         $0.text = Text.sheetTitle.optional
         $0.font = .ntTextMediumBold
-        $0.textColor = .secondaryBackground
+        $0.textColor = .label
     }
     private lazy var chatRoomsTableView = UITableView(frame: CGRect.zero, style: .plain).then {
         $0.register(BottomSheetTableViewCell.self,
@@ -79,7 +79,7 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureLayout() {
         self.chatRoomsTableView.estimatedRowHeight = 80.0
-        self.view.backgroundColor = .primaryColor
+        self.view.backgroundColor = .secondaryBackground
         
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
