@@ -4,7 +4,11 @@
 <dict>
 	<key>NSCameraUsageDescription</key>
 	<string>친구 추가하기 위해 카메라를 사용합니다.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>NearTalk의 지도 사용을 위한 권한요청입니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>NearTalk의 사용 중 지도 사용을 위한 권한요청입니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>NearTalk의 지도 사용을 위한 권한요청입니다.</string>
 	<key>FCM_SERVER_KEY</key>
 	<string>$(FCM_SERVER_KEY)</string>
