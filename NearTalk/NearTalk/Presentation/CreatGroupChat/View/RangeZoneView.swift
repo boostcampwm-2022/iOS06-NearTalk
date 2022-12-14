@@ -31,7 +31,7 @@ final class RangeZoneView: UIView {
         slider.maximumValue = 1
         slider.value = 0.1
         slider.isContinuous = true
-        slider.tintColor = .systemOrange
+        slider.tintColor = .primaryColor
     }
     
     private lazy var minRangeLabel = UILabel().then {

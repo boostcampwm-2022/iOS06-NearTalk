@@ -119,10 +119,6 @@ final class ChatViewController: UIViewController {
             }
             .disposed(by: disposeBag)
   
-        // TODO: - 메세지 읽은 수 나타내기
-//        self.viewModel.lastUpdatedTimeOfTicketsRelay
-            
-
         self.viewModel.chatMessages
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
@@ -133,7 +129,6 @@ final class ChatViewController: UIViewController {
                 }
 
                 self.isLatestMessageChanged.accept(messages.last?.uuid != self.messageItems.last?.id)
-                print("✅", messages.compactMap({$0.text}))
                 var messageItems: [MessageItem] = []
                 messages.forEach { message in
                     
@@ -247,7 +242,7 @@ private extension ChatViewController {
     func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messageItems)
+        snapshot.appendItems(messageItems.sorted(by: { $0.createdAt < $1.createdAt }))
         return snapshot
     }
 }
