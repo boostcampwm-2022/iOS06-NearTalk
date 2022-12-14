@@ -17,6 +17,10 @@ final class ChatRoomListDIContainer {
     
     private let dataTransferService: StorageService = DefaultStorageService()
     
+    func makeCoreDataService() -> CoreDataService {
+        return DefaultCoreDataService()
+    }
+    
     func makeFirestoreService() -> FirestoreService {
         return DefaultFirestoreService()
     }
@@ -51,6 +55,7 @@ final class ChatRoomListDIContainer {
     
     func makeChatMessageRepository() -> ChatMessageRepository {
         return DefaultChatMessageRepository(
+            coreDataService: makeCoreDataService(),
             databaseService: makeDatabaseService(),
             profileRepository: makeProfileRepository(),
             fcmService: makeFCMService()

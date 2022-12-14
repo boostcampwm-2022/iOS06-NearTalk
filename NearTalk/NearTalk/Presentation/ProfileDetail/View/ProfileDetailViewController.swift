@@ -46,7 +46,7 @@ class ProfileDetailViewController: UIViewController {
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
         $0.layer.cornerRadius = Metric.cornerRadius
         $0.clipsToBounds = true
-        $0.backgroundColor = .systemOrange
+        $0.image = UIImage(named: "ChatLogo")
     }
     
     private lazy var nameLabel: UILabel = UILabel().then {

@@ -147,6 +147,10 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
             }
     }
     
+    func observeUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> RxSwift.Observable<UserChatRoomTicket> {
+        self.databaseService.observeUserChatRoomTicket(userUUID, roomID)
+    }
+    
     func fetchSingleChatRoomList(_ userID: String) -> Single<[ChatRoom]> {
         self.databaseService.fetchUserChatRoomTicketList(userID)
             .flatMap { [weak self] (ticketList: [UserChatRoomTicket]) in
