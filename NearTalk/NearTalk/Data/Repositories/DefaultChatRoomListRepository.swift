@@ -57,6 +57,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
                         .flatMap { self.dropUserFromChatRoom(chatRoom: $0, uuid: uuid).asObservable() }
                         .asCompletable()
                 )
+                .andThen(self.databaseService.deleteUserTicketList(uuid))
             }
     }
 
@@ -126,7 +127,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
         self.databaseService.updateUserChatRoomTicket(ticket)
     }
     
-    func observeUserChatRoomTicketList() -> Observable<UserChatRoomTicket> {
+    func observeUserChatRoomTicketList() -> Observable<[UserChatRoomTicket]> {
         self.profileRepository.fetchMyProfile()
             .asObservable()
             .flatMap { [weak self] (profile: UserProfile) in
@@ -136,6 +137,21 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
                     throw ChatRoomListRepositoryError.failedToFetch
                 }
                 return self.databaseService.observeUserChatRoomTicketList(uuid)
+            }
+    }
+    
+    func fetchSingleChatRoomList(_ userID: String) -> Single<[ChatRoom]> {
+        self.databaseService.fetchUserChatRoomTicketList(userID)
+            .flatMap { [weak self] (ticketList: [UserChatRoomTicket]) in
+                guard let self
+                else {
+                    throw FetchChatRoomUseCaseError.failedToFetchRoom
+                }
+                let fetchChatRoomList: [Single<ChatRoom>] = ticketList.map {
+                    self.fetchChatRoomInfo($0.roomID ?? "")
+                }
+                
+                return Single.zip(fetchChatRoomList)
             }
     }
 }

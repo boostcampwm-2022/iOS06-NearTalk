@@ -76,6 +76,11 @@ final class ChatViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         self.chatCollectionView.addGestureRecognizer(tapGesture)
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.viewModel.viewWillDisappear()
+    }
 
     private func scrollToBottom() {
         guard self.isLatestMessageChanged.value

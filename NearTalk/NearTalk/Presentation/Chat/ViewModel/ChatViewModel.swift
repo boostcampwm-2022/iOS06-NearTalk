@@ -11,6 +11,7 @@ import RxSwift
 
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
+    func viewWillDisappear()
 }
 
 protocol ChatViewModelOutput {
@@ -78,6 +79,10 @@ class DefaultChatViewModel: ChatViewModel {
         self.bindInitialMessage()
 
         // TODO: - chatRoom 존재하지 않을때 예외처리
+    }
+    
+    func viewWillDisappear() {
+        self.disposeBag = DisposeBag()
     }
     
     func sendMessage(_ message: String) {
