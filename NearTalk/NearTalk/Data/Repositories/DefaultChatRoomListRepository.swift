@@ -29,7 +29,6 @@ final class DefaultChatRoomListRepository {
 }
 
 extension DefaultChatRoomListRepository: ChatRoomListRepository {
-    
     func dropUserFromChatRoom(chatRoom: ChatRoom, uuid: String) -> Completable {
         var updatingChatRoom: ChatRoom = chatRoom
         updatingChatRoom.userList = chatRoom.userList?.filter { $0 != uuid }
@@ -138,6 +137,10 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
                 }
                 return self.databaseService.observeUserChatRoomTicketList(uuid)
             }
+    }
+    
+    func observeUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> RxSwift.Observable<UserChatRoomTicket> {
+        self.databaseService.observeUserChatRoomTicket(userUUID, roomID)
     }
     
     func fetchSingleChatRoomList(_ userID: String) -> Single<[ChatRoom]> {

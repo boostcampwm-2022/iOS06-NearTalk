@@ -38,6 +38,10 @@ final class RootTabBarDIContainer {
         return DefaultFCMService()
     }
     
+    func makeCoreDataService() -> CoreDataService {
+        return DefaultCoreDataService()
+    }
+    
     // MARK: - Repository
     
     func makeChatRoomListRepository() -> ChatRoomListRepository {
@@ -56,6 +60,7 @@ final class RootTabBarDIContainer {
     
     func makeChatMessageRepository() -> ChatMessageRepository {
         return DefaultChatMessageRepository(
+            coreDataService: makeCoreDataService(),
             databaseService: makeDatabaseService(),
             profileRepository: makeProfileRepository(),
             fcmService: makeFCMService()
