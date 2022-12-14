@@ -20,6 +20,7 @@ final class FriendListViewController: UIViewController {
     // MARK: - Properties
     private let disposeBag: DisposeBag = DisposeBag()
     private var viewModel: FriendListViewModel!
+    private let scanResult: PublishSubject<String> = .init()
     
     private var dataSource: UICollectionViewDiffableDataSource<Section, Friend>?
     
@@ -39,6 +40,7 @@ final class FriendListViewController: UIViewController {
         
         self.addSubviews()
         self.configureConstraints()
+        self.bindScanResult()
     }
     
     // MARK: - Helper
@@ -95,7 +97,7 @@ final class FriendListViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                self?.showAlert()
+                self?.showOptions()
             })
             .disposed(by: disposeBag)
     }
@@ -116,34 +118,80 @@ final class FriendListViewController: UIViewController {
         return layout
     }
     
-    func showAlert() {
-        let alert = UIAlertController(title: "친구추가", message: "UUID를 입력해주세요", preferredStyle: UIAlertController.Style.alert)
-        
-        alert.addTextField()
+//    func showAlert() {
+//        let alert = UIAlertController(title: "친구추가", message: "UUID를 입력해주세요", preferredStyle: UIAlertController.Style.alert)
+//
+//        alert.addTextField()
+//
+//        let cancelAction =  UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel)
+//        let addFriendAction = UIAlertAction(title: "친구추가", style: UIAlertAction.Style.default) { [weak self] _ in
+//
+//            if let self = self, let textFiled = alert.textFields?.first, let uuid = textFiled.text {
+//                self.viewModel.addFriend(uuid: uuid)
+//                    .asObservable()
+//                    .subscribe { completable in
+//                        switch completable {
+//                        case .completed:
+//                            print("Completed")
+//                            self.viewModel.reload()
+//                        case .error(let error):
+//                            print("Completed with an error: \(error.localizedDescription)")
+//                        }
+//                    }
+//                    .disposed(by: self.disposeBag)
+//            }
+//        }
+//
+//        alert.addAction(cancelAction)
+//        alert.addAction(addFriendAction)
+//
+//        self.present(alert, animated: true)
+//    }
+
+    func showOptions() {
+        let alert = UIAlertController(title: "친구추가", message: "친구추가 방법을 선택해주세요", preferredStyle: UIAlertController.Style.actionSheet)
         
         let cancelAction =  UIAlertAction(title: "취소", style: UIAlertAction.Style.cancel)
-        let addFriendAction = UIAlertAction(title: "친구추가", style: UIAlertAction.Style.default) { [weak self] _ in
-            
-            if let self = self, let textFiled = alert.textFields?.first, let uuid = textFiled.text {
-                self.viewModel.addFriend(uuid: uuid)
-                    .asObservable()
-                    .subscribe { completable in
-                        switch completable {
-                        case .completed:
-                            print("Completed")
-                            self.viewModel.reload()
-                        case .error(let error):
-                            print("Completed with an error: \(error.localizedDescription)")
-                        }
-                    }
-                    .disposed(by: self.disposeBag)
-            }
+        let addFriendAction = UIAlertAction(title: "내 QR코드 보여주기", style: UIAlertAction.Style.default) { [weak self] _ in
+            self?.showQRCode()
+        }
+        let captureQRAction = UIAlertAction(title: "QR코드로 친구추가", style: UIAlertAction.Style.default) { [weak self] _ in
+            self?.showCaptureQRView()
         }
         
         alert.addAction(cancelAction)
         alert.addAction(addFriendAction)
+        alert.addAction(captureQRAction)
         
         self.present(alert, animated: true)
     }
     
+    func showQRCode() {
+        guard let myUUID = self.viewModel.myUUID else {
+            return
+        }
+        let qrCodeViewController = ShowQRViewController.create(myUUID: myUUID)
+        self.present(qrCodeViewController, animated: true)
+    }
+    
+    func showCaptureQRView() {
+        let captureQRViewController = QRCodeReaderViewController(scanResult: self.scanResult)
+        self.present(captureQRViewController, animated: true)
+    }
+    
+    private func bindScanResult() {
+        self.scanResult.subscribe(onNext: { [weak self] result in
+            guard let self,
+                  let uuid = result.components(separatedBy: ":").last else {
+                return
+            }
+            self.viewModel.addFriend(uuid: uuid)
+                .subscribe(onCompleted: {
+                    print("친구 추가 성공")
+                    DispatchQueue.main.async {
+                        self.viewModel.reload()
+                    }
+                }).disposed(by: self.disposeBag)
+        }).disposed(by: self.disposeBag)
+    }
 }

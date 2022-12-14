@@ -131,6 +131,8 @@
 		604360372941F07400E5D257 /* AccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */; };
 		604360382941F07A00E5D257 /* DefaultAccessibleChatRoomsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */; };
 		605715A62920AA19004A0904 /* LaunchScreenDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */; };
+		606F6197294968EF00A33756 /* ShowQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606F6196294968EF00A33756 /* ShowQRViewController.swift */; };
+		606F619929496D0D00A33756 /* CaptureQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 606F619829496D0D00A33756 /* CaptureQRViewController.swift */; };
 		6073A3AE2928AE9800D51CFD /* Codable+Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */; };
 		608BD10E292F709B00CB676E /* FCMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD10D292F709B00CB676E /* FCMService.swift */; };
 		608BD111292FD59700CB676E /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608BD110292FD59700CB676E /* Environment.swift */; };
@@ -419,6 +421,8 @@
 		603FD39B292B4F4A00687ED4 /* LogoutUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutUseCase.swift; sourceTree = "<group>"; };
 		604360342941F00000E5D257 /* AccessibleChatRoomsRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleChatRoomsRepositoryTests.swift; sourceTree = "<group>"; };
 		605715A52920AA19004A0904 /* LaunchScreenDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenDIContainer.swift; sourceTree = "<group>"; };
+		606F6196294968EF00A33756 /* ShowQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowQRViewController.swift; sourceTree = "<group>"; };
+		606F619829496D0D00A33756 /* CaptureQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureQRViewController.swift; sourceTree = "<group>"; };
 		6073A3AD2928AE9800D51CFD /* Codable+Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Codable+Dictionary.swift"; sourceTree = "<group>"; };
 		608BD10D292F709B00CB676E /* FCMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMService.swift; sourceTree = "<group>"; };
 		608BD110292FD59700CB676E /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
@@ -994,6 +998,8 @@
 			children = (
 				555A6B2A29236D51001336ED /* FriendListCell.swift */,
 				555A6B2C29236D61001336ED /* FriendViewController.swift */,
+				606F6196294968EF00A33756 /* ShowQRViewController.swift */,
+				606F619829496D0D00A33756 /* CaptureQRViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1911,11 +1917,13 @@
 				6001DA90292DBF770062EAD0 /* DefaultMediaRepository.swift in Sources */,
 				60FD706A2924080A00A4C29A /* ChatMessage.swift in Sources */,
 				555A6B2F29236D73001336ED /* FriendListViewModel.swift in Sources */,
+				606F6197294968EF00A33756 /* ShowQRViewController.swift in Sources */,
 				609B46E1293B06C70021E8FA /* CoreDataService.swift in Sources */,
 				162B1B6C2935176D004724D9 /* NCMapRegion.swift in Sources */,
 				16530578291E18560026B815 /* UIViewPreview.swift in Sources */,
 				833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */,
 				603FD39A292B4F0F00687ED4 /* VerifyUserUseCase.swift in Sources */,
+				606F619929496D0D00A33756 /* CaptureQRViewController.swift in Sources */,
 				83EE7981293FB8290008D859 /* PhotoImagePickerViewController.swift in Sources */,
 				603FD38C2929290C00687ED4 /* FirebaseQueryDTO.swift in Sources */,
 				60C2A789291F3FE000F7D284 /* LaunchScreenCoordinator.swift in Sources */,
