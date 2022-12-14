@@ -193,11 +193,9 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 }
                 let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
                     let lastUpdatedTime = Date(timeIntervalSince1970: time)
-                    print("--------")
-                    print(lastUpdatedTime, createdAt)
                     return lastUpdatedTime < createdAt
                 }).count
-                print("📩 [안읽은 사람 수]: \(count)")
+//                print("📩 [안읽은 사람 수]: \(count)")
                 if count > 0 {
                     self.countOfUnreadMessagesLabel.text = "\(count)"
                 }
