@@ -80,6 +80,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
+        self.profileImageView.image = nil
         let isInComing = messageItem.type == .receive
         
         self.createdAt = messageItem.createdAt
@@ -168,6 +169,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         guard let path = path,
               let url = URL(string: path)
         else {
+            self.profileImageView.image = UIImage(named: "ChatLogo")
             return
         }
         

@@ -12,6 +12,7 @@ import RxSwift
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
     func viewWillDisappear()
+    func dropRoom()
 }
 
 protocol ChatViewModelOutput {
@@ -22,15 +23,17 @@ protocol ChatViewModelOutput {
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
-    func getUnreadMessageCount(before: Double?) -> Int?
+    var dropOutEvent: Observable<Bool> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
 
 class DefaultChatViewModel: ChatViewModel {
-    // MARK: - Proporties
-    let lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
+    var dropOutEvent: Observable<Bool> {
+        self.dropEvent.asObservable()
+    }
     
+    // MARK: - Proporties
     private let chatRoomID: String
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
@@ -43,35 +46,38 @@ class DefaultChatViewModel: ChatViewModel {
     private let userDefaultUseCase: UserDefaultUseCase
     private let fetchProfileUseCase: FetchProfileUseCase
     private let enterChatRoomUseCase: EnterChatRoomUseCase
+    private let dropChatRoomUseCase: DropChatRoomUseCase
     
     private let isLoading: BehaviorRelay<Bool> = .init(value: false)
     private let initialMessage: BehaviorRelay<ChatMessage?> = .init(value: nil)
     private let hasFirstMessage: BehaviorRelay<Bool> = .init(value: false)
     let userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     let userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
+    let lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
     private var disposeBag: DisposeBag = DisposeBag()
+    private let dropEvent: PublishSubject<Bool> = PublishSubject()
     
-    // MARK: - Outputs
-    
+    // MARK: - Output Proporties
     let chatRoom: BehaviorRelay<ChatRoom?>
     var chatMessages: BehaviorRelay<[ChatMessage]>
     var myID: String?
     
     // MARK: - LifeCycle
-    
     init(
         chatRoomID: String,
         fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase,
         userDefaultUseCase: UserDefaultUseCase,
         fetchProfileUseCase: FetchProfileUseCase,
         messagingUseCase: MessagingUseCase,
-        enterChatRoomUseCase: EnterChatRoomUseCase
+        enterChatRoomUseCase: EnterChatRoomUseCase,
+        dropChatRoomUseCase: DropChatRoomUseCase
     ) {
         self.messagingUseCase = messagingUseCase
         self.fetchChatRoomInfoUseCase = fetchChatRoomInfoUseCase
         self.userDefaultUseCase = userDefaultUseCase
         self.fetchProfileUseCase = fetchProfileUseCase
         self.enterChatRoomUseCase = enterChatRoomUseCase
+        self.dropChatRoomUseCase = dropChatRoomUseCase
         
         self.chatRoomID = chatRoomID
         self.myID = self.userDefaultUseCase.fetchUserUUID()
@@ -132,6 +138,20 @@ class DefaultChatViewModel: ChatViewModel {
     func getUserProfile(userID: String) -> UserProfile? {
         return self.userProfileList[userID]
     }
+    
+    func dropRoom() {
+        guard let myID = self.myID
+        else {
+            return
+        }
+
+        self.dropChatRoomUseCase.execute(myID, self.chatRoomID)
+            .subscribe(onCompleted: { [weak self] in
+                self?.dropEvent.onNext(true)
+            }, onError: { [weak self] error in
+                self?.dropEvent.onNext(false)
+            }).disposed(by: self.disposeBag)
+    }
 }
 
 /*
@@ -147,7 +167,7 @@ class DefaultChatViewModel: ChatViewModel {
 // MARK: - Initiate ChatViewModel
 extension DefaultChatViewModel {
     private func initiateChatRoom() {
-        fetchChatRoomInfo()
+        self.fetchChatRoomInfo()
             .flatMapCompletable { [weak self] (uuidList: [String]) in
                 guard let self
                 else {
@@ -431,12 +451,9 @@ extension DefaultChatViewModel {
                 ///
                 self.fetchMessages(before: message, isInitialMessage: true)
                 
-                // TODO: - 1. chatRoom이 업데이트 될때 참가자들의 Ticket들 불러오기
                 self.fetchChatRoomInfoUseCase.fetchParticipantTickets(chatRoom)
                     .subscribe(onNext: { ticketList in
                         print(">>>>>")
-                        // TODO: - Ticket created Date 알아내기
-
                         ticketList.forEach { [weak self] ticket in
                             guard let self,
                                   let ticketID = ticket.uuid,
@@ -508,22 +525,6 @@ extension DefaultChatViewModel {
             }
         )
         .disposed(by: self.disposeBag)
-    }
-    
-    func getUnreadMessageCount(before: Double?) -> Int? {
-        guard let before
-        else {
-            return nil
-        }
-        let count = self.ticketList
-            .compactMap({ $0.lastReadMessageID })
-            .compactMap({ self.messageCreatedTimeList[$0] })
-            .filter({ createdTime in
-                createdTime < before
-            })
-            .count
-        print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<", count)
-        return count
     }
     
     private func fetch(userUUIDList: [String]) -> Completable {

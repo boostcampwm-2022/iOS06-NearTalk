@@ -75,11 +75,23 @@ final class ChatViewController: UIViewController {
         // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         self.chatCollectionView.addGestureRecognizer(tapGesture)
+        self.configureNavigation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.viewModel.viewWillDisappear()
+    }
+    
+    private func configureNavigation() {
+        self.navigationController?.navigationBar.tintColor = .label
+        let dropButton: UIBarButtonItem = .init(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: nil, action: nil)
+        self.navigationItem.rightBarButtonItem = dropButton
+        dropButton.rx.tap
+            .subscribe { [weak self] _ in
+                self?.viewModel.dropRoom()
+            }
+            .disposed(by: self.disposeBag)
     }
 
     private func scrollToBottom() {
@@ -107,10 +119,6 @@ final class ChatViewController: UIViewController {
             }
             .disposed(by: disposeBag)
   
-        // TODO: - 메세지 읽은 수 나타내기
-//        self.viewModel.lastUpdatedTimeOfTicketsRelay
-            
-
         self.viewModel.chatMessages
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
@@ -121,7 +129,6 @@ final class ChatViewController: UIViewController {
                 }
 
                 self.isLatestMessageChanged.accept(messages.last?.uuid != self.messageItems.last?.id)
-                print("✅", messages.compactMap({$0.text}))
                 var messageItems: [MessageItem] = []
                 messages.forEach { message in
                     
@@ -161,6 +168,31 @@ final class ChatViewController: UIViewController {
                 self.reconfigureChatInputAccessoryView()
             })
             .disposed(by: self.disposeBag)
+        
+        self.viewModel.dropOutEvent
+            .asSignal(onErrorJustReturn: false)
+            .emit { [weak self] isDropSuccess in
+                self?.presentDropReulst(isDropSuccess)
+            }
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func presentDropReulst(_ isDropSuccess: Bool) {
+        let alertViewController: UIAlertController = isDropSuccess ? .init(
+            title: "채팅방 탈퇴",
+            message: "탈퇴에 성공했습니다",
+            preferredStyle: .alert) : .init(
+                title: "채팅방 탈퇴",
+                message: "탈퇴에 실패했습니다.",
+                preferredStyle: .alert)
+        let action: UIAlertAction = isDropSuccess ? .init(
+            title: "나가기",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.navigationController?.popViewController(animated: true)
+        }) : .init(title: "취소", style: .cancel)
+        alertViewController.addAction(action)
+        self.present(alertViewController, animated: true)
     }
 }
 
@@ -210,7 +242,7 @@ private extension ChatViewController {
     func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messageItems)
+        snapshot.appendItems(messageItems.sorted(by: { $0.createdAt < $1.createdAt }))
         return snapshot
     }
 }
