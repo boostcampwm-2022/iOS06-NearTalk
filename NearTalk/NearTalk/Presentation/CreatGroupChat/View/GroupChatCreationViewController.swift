@@ -44,7 +44,7 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
 
     private lazy var titleTextField: UITextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "채팅방 제목을 입력해주세요.",
-                                                      attributes: [ NSAttributedString.Key.foregroundColor: UIColor.label ?? .white ])
+                                                      attributes: [ NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel ?? .white ])
         $0.backgroundColor = .secondaryBackground
         $0.borderStyle = .roundedRect
         $0.layer.borderColor = UIColor.secondaryLabel?.cgColor
@@ -52,7 +52,7 @@ final class CreateGroupChatViewController: PhotoImagePickerViewController {
 
     private lazy var descriptionTextField: UITextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "채팅방 상세설명을 입력해주세요.",
-                                                      attributes: [ NSAttributedString.Key.foregroundColor: UIColor.label ?? .white ])
+                                                      attributes: [ NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel ?? .white ])
         $0.backgroundColor = .secondaryBackground
         $0.borderStyle = .roundedRect
         $0.layer.borderColor = UIColor.secondaryLabel?.cgColor
