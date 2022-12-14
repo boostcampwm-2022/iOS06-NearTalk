@@ -6,16 +6,20 @@
 //
 
 import Kingfisher
+import RxRelay
+import RxSwift
 import SnapKit
 import UIKit
 
 class ChatCollectionViewCell: UICollectionViewCell {
     // MARK: - Proporty
-    
     static let identifier = String(describing: ChatRoomListCell.self)
+    var ticketsRelay: BehaviorRelay<[String: Double]>!
+    private var createdAt: Date?
+    private var viewModel: ChatViewModel?
+    private var disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - UI Proporty
-    
     private let textView: UITextView = {
         let view = UITextView()
         view.font = .systemFont(ofSize: 16.0)
@@ -32,16 +36,16 @@ class ChatCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var nameLabel: UILabel = UILabel().then { label in
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12)
     }
     
     private let timeLabel: UILabel = UILabel().then { label in
-        label.font = UIFont.systemFont(ofSize: 8)
+        label.font = .systemFont(ofSize: 8)
     }
     
     private let countOfUnreadMessagesLabel: UILabel = UILabel().then { label in
         label.tintColor = .primaryColor
-        label.font = UIFont.systemFont(ofSize: 8)
+        label.font = .systemFont(ofSize: 8)
     }
     
     private lazy var profileImageView: UIImageView = UIImageView().then { imageView in
@@ -49,11 +53,10 @@ class ChatCollectionViewCell: UICollectionViewCell {
         imageView.layer.borderWidth = 1
         imageView.layer.borderColor = UIColor.clear.cgColor
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "heart")
+        imageView.image = UIImage(named: "ChatLogo")
     }
-    
+
     // MARK: - LifeCycle
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -66,55 +69,67 @@ class ChatCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.textView.snp.remakeConstraints { make in
-            make.width.lessThanOrEqualTo(250)
-            make.bottom.equalToSuperview()
-        }
         self.nameLabel.text = ""
         self.timeLabel.text = ""
+        self.textView.text = ""
         self.countOfUnreadMessagesLabel.text = ""
         self.profileImageView.image = nil
+        self.textView.text = nil
+        
+        self.disposeBag = DisposeBag()
     }
 
-    func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
+    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
+        self.profileImageView.image = nil
         let isInComing = messageItem.type == .receive
+        
+        self.createdAt = messageItem.createdAt
+        self.ticketsRelay = tickets
+        self.bindTicket()
         
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
         self.textView.text = messageItem.message
         self.nameLabel.text = isInComing ? messageItem.userName : ""
         self.timeLabel.text = self.convertDateToString(with: messageItem.createdAt)
-        self.countOfUnreadMessagesLabel.text = "99"
                 
         if isInComing {
             self.setImage(path: messageItem.imagePath)
             
-            self.textView.snp.makeConstraints { make in
+            self.textView.snp.remakeConstraints { make in
                 make.leading.equalTo(profileImageView.snp.trailing).offset(5)
                 make.top.equalTo(nameLabel.snp.bottom).offset(2)
+                make.width.lessThanOrEqualTo(250)
+                make.bottom.equalToSuperview()
             }
             
-            self.timeLabel.snp.makeConstraints { make in
+            self.timeLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(self.textView.snp.trailing).offset(5)
+                make.bottom.equalToSuperview()
             }
             
-            self.countOfUnreadMessagesLabel.snp.makeConstraints { make in
+            self.countOfUnreadMessagesLabel.snp.remakeConstraints { make in
                 make.leading.equalTo(self.textView.snp.trailing).offset(5)
+                make.bottom.equalTo(self.timeLabel.snp.top)
             }
         } else {
             self.profileImageView.image = nil
             
-            self.textView.snp.makeConstraints { make in
+            self.textView.snp.remakeConstraints { make in
                 make.trailing.equalToSuperview().inset(10)
                 make.top.equalToSuperview()
+                make.width.lessThanOrEqualTo(250)
+                make.bottom.equalToSuperview()
             }
-            
-            self.timeLabel.snp.makeConstraints { make in
+
+            self.timeLabel.snp.remakeConstraints { make in
                 make.trailing.equalTo(self.textView.snp.leading).inset(-5)
+                make.bottom.equalToSuperview()
             }
-            
-            self.countOfUnreadMessagesLabel.snp.makeConstraints { make in
+
+            self.countOfUnreadMessagesLabel.snp.remakeConstraints { make in
                 make.trailing.equalTo(self.textView.snp.leading).inset(-5)
+                make.bottom.equalTo(self.timeLabel.snp.top)
             }
         }
     }
@@ -154,6 +169,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         guard let path = path,
               let url = URL(string: path)
         else {
+            self.profileImageView.image = UIImage(named: "ChatLogo")
             return
         }
         
@@ -165,5 +181,27 @@ class ChatCollectionViewCell: UICollectionViewCell {
         dateFormatter.dateFormat = "h:mm"
         
         return dateFormatter.string(from: date)
+    }
+    
+    private func bindTicket() {
+        self.ticketsRelay
+            .asDriver()
+            .drive(onNext: { [weak self] lastUpdatedTimeOfTickets in
+                guard let self,
+                      let createdAt = self.createdAt else {
+                    return
+                }
+                let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
+                    let lastUpdatedTime = Date(timeIntervalSince1970: time)
+                    print("--------")
+                    print(lastUpdatedTime, createdAt)
+                    return lastUpdatedTime < createdAt
+                }).count
+                print("📩 [안읽은 사람 수]: \(count)")
+                if count > 0 {
+                    self.countOfUnreadMessagesLabel.text = "\(count)"
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }

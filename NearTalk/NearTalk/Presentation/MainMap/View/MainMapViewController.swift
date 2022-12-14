@@ -72,10 +72,10 @@ final class MainMapViewController: UIViewController {
         }
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 40)
-        let normalImage = UIImage(systemName: "message.badge.circle")?
+        let normalImage = UIImage(systemName: "message.circle")?
             .withTintColor(normalColor, renderingMode: .alwaysOriginal)
             .withConfiguration(imageConfig)
-        let highlightImage = UIImage(systemName: "message.badge.circle")?
+        let highlightImage = UIImage(systemName: "message.circle")?
             .withTintColor(highlightedColor, renderingMode: .alwaysOriginal)
             .withConfiguration(imageConfig)
         

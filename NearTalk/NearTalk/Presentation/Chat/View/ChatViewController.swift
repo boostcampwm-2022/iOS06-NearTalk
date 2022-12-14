@@ -75,6 +75,23 @@ final class ChatViewController: UIViewController {
         // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         self.chatCollectionView.addGestureRecognizer(tapGesture)
+        self.configureNavigation()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.viewModel.viewWillDisappear()
+    }
+    
+    private func configureNavigation() {
+        self.navigationController?.navigationBar.tintColor = .label
+        let dropButton: UIBarButtonItem = .init(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: nil, action: nil)
+        self.navigationItem.rightBarButtonItem = dropButton
+        dropButton.rx.tap
+            .subscribe { [weak self] _ in
+                self?.viewModel.dropRoom()
+            }
+            .disposed(by: self.disposeBag)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -106,7 +123,7 @@ final class ChatViewController: UIViewController {
                 self?.chatInputAccessoryView.sendButton.isEnabled = false
             }
             .disposed(by: disposeBag)
-        
+  
         self.viewModel.chatMessages
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
@@ -117,14 +134,16 @@ final class ChatViewController: UIViewController {
                 }
 
                 self.isLatestMessageChanged.accept(messages.last?.uuid != self.messageItems.last?.id)
-                
                 var messageItems: [MessageItem] = []
                 messages.forEach { message in
+                    
                     let userProfile: UserProfile? = self.viewModel.getUserProfile(userID: message.senderID ?? "")
+                    
                     let messageItem: MessageItem = .init(
                         chatMessage: message,
                         myID: myID,
-                        userProfile: userProfile
+                        userProfile: userProfile,
+                        createdAtTimeStamp: message.createdAtTimeStamp
                     )
                     messageItems.append(messageItem)
                 }
@@ -154,14 +173,37 @@ final class ChatViewController: UIViewController {
                 self.reconfigureChatInputAccessoryView()
             })
             .disposed(by: self.disposeBag)
+        
+        self.viewModel.dropOutEvent
+            .asSignal(onErrorJustReturn: false)
+            .emit { [weak self] isDropSuccess in
+                self?.presentDropReulst(isDropSuccess)
+            }
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func presentDropReulst(_ isDropSuccess: Bool) {
+        let alertViewController: UIAlertController = isDropSuccess ? .init(
+            title: "채팅방 탈퇴",
+            message: "탈퇴에 성공했습니다",
+            preferredStyle: .alert) : .init(
+                title: "채팅방 탈퇴",
+                message: "탈퇴에 실패했습니다.",
+                preferredStyle: .alert)
+        let action: UIAlertAction = isDropSuccess ? .init(
+            title: "나가기",
+            style: .default,
+            handler: { [weak self] _ in
+                self?.navigationController?.popViewController(animated: true)
+        }) : .init(title: "취소", style: .cancel)
+        alertViewController.addAction(action)
+        self.present(alertViewController, animated: true)
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension ChatViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("🚧 ", #function, indexPath.row)
-        
         if indexPath.row > 29,
            !self.isReadyToFetchPreviousMessages {
             self.isReadyToFetchPreviousMessages.toggle()
@@ -192,10 +234,11 @@ private extension ChatViewController {
             else {
                 return UICollectionViewCell()
             }
-            cell.configure(messageItem: item) {
+            cell.configure(messageItem: item, tickets: self.viewModel.lastUpdatedTimeOfTicketsRelay) {
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems([item])
             }
+            
             return cell
         }
         return datasource
@@ -204,7 +247,7 @@ private extension ChatViewController {
     func appendSnapshot(items: [MessageItem]) -> NSDiffableDataSourceSnapshot<Section, MessageItem> {
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(messageItems.sorted { $0.createdAt < $1.createdAt })
+        snapshot.appendItems(messageItems.sorted(by: { $0.createdAt < $1.createdAt }))
         return snapshot
     }
 }

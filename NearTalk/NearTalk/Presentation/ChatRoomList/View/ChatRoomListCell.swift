@@ -239,6 +239,8 @@ class ChatRoomListCell: UICollectionViewCell {
                           let number,
                           number > lastRoomMessageCount
                     else {
+//                        print("🚧 ", #function, number, ticket)
+                        
                         DispatchQueue.main.async {
                             self?.unreadMessageCount.isHidden = true
                         }

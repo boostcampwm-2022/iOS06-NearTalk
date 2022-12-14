@@ -12,64 +12,79 @@ import RxSwift
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
     func viewWillDisappear()
+    func dropRoom()
 }
 
 protocol ChatViewModelOutput {
     var myID: String? { get }
     var chatRoom: BehaviorRelay<ChatRoom?> { get }
     var chatMessages: BehaviorRelay<[ChatMessage]> { get }
+    var lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> { get }
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
+    var dropOutEvent: Observable<Bool> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
 
 class DefaultChatViewModel: ChatViewModel {
-    // MARK: - Proporties
+    var dropOutEvent: Observable<Bool> {
+        self.dropEvent.asObservable()
+    }
     
+    // MARK: - Proporties
     private let chatRoomID: String
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
+    private var messageCreatedTimeList: [String: Double]
+    private var lastUpdatedTimeOfTickets: [String: Double]
+    private var ticketList: [UserChatRoomTicket]
     
     private let fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase
     private let messagingUseCase: MessagingUseCase
     private let userDefaultUseCase: UserDefaultUseCase
     private let fetchProfileUseCase: FetchProfileUseCase
     private let enterChatRoomUseCase: EnterChatRoomUseCase
+    private let dropChatRoomUseCase: DropChatRoomUseCase
     
     private let isLoading: BehaviorRelay<Bool> = .init(value: false)
     private let initialMessage: BehaviorRelay<ChatMessage?> = .init(value: nil)
     private let hasFirstMessage: BehaviorRelay<Bool> = .init(value: false)
     let userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     let userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
+    let lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
     private var disposeBag: DisposeBag = DisposeBag()
+    private let dropEvent: PublishSubject<Bool> = PublishSubject()
     
-    // MARK: - Outputs
-    
+    // MARK: - Output Proporties
     let chatRoom: BehaviorRelay<ChatRoom?>
     var chatMessages: BehaviorRelay<[ChatMessage]>
     var myID: String?
     
     // MARK: - LifeCycle
-    
     init(
         chatRoomID: String,
         fetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase,
         userDefaultUseCase: UserDefaultUseCase,
         fetchProfileUseCase: FetchProfileUseCase,
         messagingUseCase: MessagingUseCase,
-        enterChatRoomUseCase: EnterChatRoomUseCase
+        enterChatRoomUseCase: EnterChatRoomUseCase,
+        dropChatRoomUseCase: DropChatRoomUseCase
     ) {
         self.messagingUseCase = messagingUseCase
         self.fetchChatRoomInfoUseCase = fetchChatRoomInfoUseCase
         self.userDefaultUseCase = userDefaultUseCase
         self.fetchProfileUseCase = fetchProfileUseCase
         self.enterChatRoomUseCase = enterChatRoomUseCase
+        self.dropChatRoomUseCase = dropChatRoomUseCase
         
         self.chatRoomID = chatRoomID
         self.myID = self.userDefaultUseCase.fetchUserUUID()
         
+        self.ticketList = []
+        self.lastUpdatedTimeOfTickets = [:]
+        self.messageCreatedTimeList = [:]
         self.userProfileList = [:]
         self.userUUIDList = []
         self.chatRoom = .init(value: nil)
@@ -77,7 +92,6 @@ class DefaultChatViewModel: ChatViewModel {
         
         self.initiateChatRoom()
         self.bindInitialMessage()
-
         // TODO: - chatRoom 존재하지 않을때 예외처리
     }
     
@@ -124,6 +138,20 @@ class DefaultChatViewModel: ChatViewModel {
     func getUserProfile(userID: String) -> UserProfile? {
         return self.userProfileList[userID]
     }
+    
+    func dropRoom() {
+        guard let myID = self.myID
+        else {
+            return
+        }
+
+        self.dropChatRoomUseCase.execute(myID, self.chatRoomID)
+            .subscribe(onCompleted: { [weak self] in
+                self?.dropEvent.onNext(true)
+            }, onError: { [weak self] error in
+                self?.dropEvent.onNext(false)
+            }).disposed(by: self.disposeBag)
+    }
 }
 
 /*
@@ -139,7 +167,7 @@ class DefaultChatViewModel: ChatViewModel {
 // MARK: - Initiate ChatViewModel
 extension DefaultChatViewModel {
     private func initiateChatRoom() {
-        fetchChatRoomInfo()
+        self.fetchChatRoomInfo()
             .flatMapCompletable { [weak self] (uuidList: [String]) in
                 guard let self
                 else {
@@ -163,6 +191,7 @@ extension DefaultChatViewModel {
             .subscribe(onCompleted: { [weak self] in
                 self?.observeNewMessage()
                 self?.observeChatRoom()
+                self?.bindNewMessage()
             }).disposed(by: self.disposeBag)
     }
     
@@ -170,8 +199,9 @@ extension DefaultChatViewModel {
         self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
             .subscribe(onNext: { [weak self] message in
                 guard let self,
-                      let messageCount = self.chatRoom.value?.messageCount
-                else {
+                      let messageCount = self.chatRoom.value?.messageCount,
+                      let createdAtTimeStamp = message.createdAtTimeStamp,
+                      let messageuuid = message.uuid else {
                     return
                 }
                 self.updateTicketAndChatRoom(message, messageCount)
@@ -181,6 +211,9 @@ extension DefaultChatViewModel {
                 }
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
+                ///
+                self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
+                ///
                 self.chatMessages.accept(newChatMessages)
             }).disposed(by: self.disposeBag)
     }
@@ -240,6 +273,23 @@ extension DefaultChatViewModel {
                 }
             })
             .asCompletable()
+    }
+    
+    ///
+    private func fetchUserChatRoomTicketList(_ userUUIDList: [String]) -> Completable {
+        self.enterChatRoomUseCase.fetchSingleUserChatRoomTickets(
+            userIDList: userUUIDList.last!,
+            chatRoomID: self.chatRoomID
+        )
+        .do(onSuccess: { [weak self] ticket in
+            guard let self else {
+                return
+            }
+            
+            self.ticketList = [ticket]
+            print("#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@", ticket)
+        })
+        .asCompletable()
     }
     
     private func isVisitedChatRoom(_ roomID: String) -> Single<Bool> {
@@ -363,6 +413,22 @@ extension DefaultChatViewModel {
         return messagingUseCase.updateChatRoom(chatRoom: newChatRoom, userID: myID)
     }
     
+    private func bindNewMessage() {
+        self.chatMessages
+            .flatMap({ [weak self] (chatMessages: [ChatMessage]) in
+                guard let self,
+                let lastMessage = chatMessages.last,
+                let messageCount = self.chatRoom.value?.messageCount else {
+                    return Completable.error(ChatViewModelError.failedToObserve)
+                }
+                return self.updateTicketWithNewMessage(lastMessage, messageCount)
+            })
+            .subscribe(onCompleted: {
+                print("성공")
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
     func fetchMessages() -> Single<[ChatMessage]> {
         return .error(NSError())
     }
@@ -374,17 +440,38 @@ extension DefaultChatViewModel {
         self.initialMessage
             .subscribe(onNext: { [weak self] (message: ChatMessage?) in
                 guard let self,
-                      let message
-                else {
+                      let message,
+                      let messageuuid = message.uuid,
+                      let createdAtTimeStamp = message.createdAtTimeStamp,
+                      let chatRoom = self.chatRoom.value else {
                     return
                 }
+                ///
+                self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
+                ///
                 self.fetchMessages(before: message, isInitialMessage: true)
+                
+                self.fetchChatRoomInfoUseCase.fetchParticipantTickets(chatRoom)
+                    .subscribe(onNext: { ticketList in
+                        print(">>>>>")
+                        ticketList.forEach { [weak self] ticket in
+                            guard let self,
+                                  let ticketID = ticket.uuid,
+                                let lastReadMessageID = ticket.lastReadMessageID
+                            else {
+                                return
+                            }
+                            self.lastUpdatedTimeOfTickets[ticketID] = self.messageCreatedTimeList[lastReadMessageID]
+                        }
+                        print(self.lastUpdatedTimeOfTickets)
+                        self.lastUpdatedTimeOfTicketsRelay.accept(self.lastUpdatedTimeOfTickets)
+                    })
+                    .disposed(by: self.disposeBag)
             }).disposed(by: self.disposeBag)
     }
     
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool = false) {
-        guard let timeStamp: Double = message.createdAtTimeStamp,
-              !self.hasFirstMessage.value,
+        guard !self.hasFirstMessage.value,
               !self.isLoading.value
         else {
             return
@@ -392,7 +479,7 @@ extension DefaultChatViewModel {
         
         self.isLoading.accept(true)
         self.messagingUseCase.fetchMessage(
-            before: Date(timeIntervalSince1970: timeStamp),
+            before: message,
             roomID: self.chatRoomID,
             totalMessageCount: 30
         )
@@ -415,6 +502,16 @@ extension DefaultChatViewModel {
                     newValue = messages + newValue
                 }
                 
+                ///
+                newValue.forEach { message in
+                    guard let createdAtTimeStamp = message.createdAtTimeStamp,
+                    let uuid = message.uuid else {
+                        return
+                    }
+                    self.messageCreatedTimeList[uuid] = createdAtTimeStamp
+                }
+                ///
+                
                 self.chatMessages.accept(newValue)
                 self.isLoading.accept(false)
             },
@@ -428,6 +525,13 @@ extension DefaultChatViewModel {
             }
         )
         .disposed(by: self.disposeBag)
+    }
+    
+    private func fetch(userUUIDList: [String]) -> Completable {
+        Completable.zip([
+            fetchChatRoomUserProfileList(userUUIDList),
+            fetchUserChatRoomTicketList(userUUIDList)
+        ])
     }
 }
 
