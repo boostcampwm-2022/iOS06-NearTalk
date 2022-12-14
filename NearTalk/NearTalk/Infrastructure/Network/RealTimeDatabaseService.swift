@@ -29,6 +29,7 @@ protocol RealTimeDatabaseService {
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
     func observeUserChatRoomTicketList(_ userID: String) -> Observable<[UserChatRoomTicket]>
+    func deleteUserTicketList(_ userID: String) -> Completable
 }
 
 // swiftlint:disable: type_body_length
@@ -353,6 +354,22 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                     observable.onNext(tickets)
                     
                 }
+            return Disposables.create()
+        }
+    }
+    
+    func deleteUserTicketList(_ userID: String) -> Completable {
+        Completable.create { [weak self] completable in
+            self?.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(userID)
+                .removeValue(completionBlock: { error, _ in
+                    if let error = error {
+                        completable(.error(error))
+                    } else {
+                        completable(.completed)
+                    }
+                })
             return Disposables.create()
         }
     }

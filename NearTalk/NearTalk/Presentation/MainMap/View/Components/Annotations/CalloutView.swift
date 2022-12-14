@@ -168,7 +168,7 @@ extension CalloutView {
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
             let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
             let isAccessible = distance <= chatRoomAccessibleRadius * 1000
-            self?.chatRoomDistance.text = isAccessible ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
+            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
             self?.configureAccessible(isAccessible: isAccessible)
         })
         .disposed(by: disposeBag)
