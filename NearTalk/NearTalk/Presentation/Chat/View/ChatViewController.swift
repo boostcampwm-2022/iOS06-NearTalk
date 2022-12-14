@@ -76,6 +76,11 @@ final class ChatViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         self.chatCollectionView.addGestureRecognizer(tapGesture)
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.viewModel.viewWillDisappear()
+    }
 
     private func scrollToBottom() {
         guard self.isLatestMessageChanged.value
@@ -162,8 +167,6 @@ final class ChatViewController: UIViewController {
 // MARK: - UICollectionViewDelegate
 extension ChatViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("🚧 ", #function, indexPath.row)
-        
         if indexPath.row > 29,
            !self.isReadyToFetchPreviousMessages {
             self.isReadyToFetchPreviousMessages.toggle()

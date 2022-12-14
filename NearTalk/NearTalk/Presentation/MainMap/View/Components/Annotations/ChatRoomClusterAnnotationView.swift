@@ -35,7 +35,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
     }
     
     private func drawClusterAnnotationImage(count: Int) -> UIImage {
-        let magnificationPerCount: Double = 4
+        let magnificationPerCount: Double = 5
         let maxClusterMembersCount: Int = 10
         let width: CGFloat = .init(24 + Double(min(count, maxClusterMembersCount)) * magnificationPerCount)
         let height: CGFloat = .init(24 + Double(min(count, maxClusterMembersCount)) * magnificationPerCount)
@@ -54,7 +54,7 @@ final class ChatRoomClusterAnnotationView: MKAnnotationView {
                                         height: height)).fill()
             
             // 내부 원 그리기
-            UIColor.primaryColor?
+            UIColor.secondaryColor?
                 // maxClusterMembers개 이상부터, 투명도 1 이상
                 .withAlphaComponent(0.5 + (Double(count) / Double(count + maxClusterMembersCount)))
                 .setFill()

@@ -11,6 +11,7 @@ import RxSwift
 
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
+    func viewWillDisappear()
 }
 
 protocol ChatViewModelOutput {
@@ -86,6 +87,10 @@ class DefaultChatViewModel: ChatViewModel {
         self.initiateChatRoom()
         self.bindInitialMessage()
         // TODO: - chatRoom 존재하지 않을때 예외처리
+    }
+    
+    func viewWillDisappear() {
+        self.disposeBag = DisposeBag()
     }
     
     func sendMessage(_ message: String) {
@@ -431,8 +436,7 @@ extension DefaultChatViewModel {
     }
     
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool = false) {
-        guard let timeStamp: Double = message.createdAtTimeStamp,
-              !self.hasFirstMessage.value,
+        guard !self.hasFirstMessage.value,
               !self.isLoading.value
         else {
             return
@@ -440,7 +444,7 @@ extension DefaultChatViewModel {
         
         self.isLoading.accept(true)
         self.messagingUseCase.fetchMessage(
-            before: Date(timeIntervalSince1970: timeStamp),
+            before: message,
             roomID: self.chatRoomID,
             totalMessageCount: 30
         )

@@ -9,15 +9,18 @@ import Foundation
 import RxSwift
 
 final class DefaultChatMessageRepository: ChatMessageRepository {
+    private let coreDataService: CoreDataService
     private let databaseService: RealTimeDatabaseService
     private let profileRepository: any ProfileRepository
     private let fcmService: FCMService
     
     init(
+        coreDataService: CoreDataService,
         databaseService: RealTimeDatabaseService,
         profileRepository: any ProfileRepository,
         fcmService: FCMService
     ) {
+        self.coreDataService = coreDataService
         self.databaseService = databaseService
         self.profileRepository = profileRepository
         self.fcmService = fcmService
@@ -67,12 +70,76 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
         self.databaseService.fetchSingleMessage(messageID: messageID, roomID: roomID)
     }
     
-    func fetchMessage(before date: Date, count: Int, roomID: String) -> Single<[ChatMessage]> {
-        self.databaseService.fetchMessages(date: date, pageCount: count, roomID: roomID)
+    func fetchMessage(before message: ChatMessage, count: Int, roomID: String) -> Single<[ChatMessage]> {
+        guard let uuid: String = message.uuid,
+              let timestamp: Double = message.createdAtTimeStamp
+        else {
+            return .error(DefaultChatMessageRepositoryError.fetchUUIDError)
+        }
+        let date: Date = .init(timeIntervalSince1970: timestamp)
+        
+        let fetchFromNetwork: Single<[ChatMessage]> = self.databaseService.fetchMessages(date: date, pageCount: count, roomID: roomID)
+            .do(onSuccess: { (fetchedMessages: [ChatMessage]) in
+                fetchedMessages.forEach { msg in
+                    guard let uuid = msg.uuid else {
+                        return
+                    }
+                    self.coreDataService.fetchMessage(uuid)
+                        .subscribe(onFailure: { error in
+                            guard let error = error as? CoreDataServiceError,
+                                  error == .failedToFetch else {
+                                return
+                            }
+                            self.coreDataService.saveMessage(msg).subscribe(onCompleted: {
+                                print("[저장됨] ", msg.uuid ?? "")
+                            }).dispose()
+                        }).dispose()
+                }
+            })
+
+        return self.coreDataService.fetchMessage(uuid)
+            .catch { error in
+                print("🔥 ", #function, error)
+                return Single.just(ChatMessage())
+            }
+            .flatMap { (message: ChatMessage) in
+                if message.uuid == nil {
+                    return fetchFromNetwork
+                } else {
+                    return self.coreDataService.fetchMessageList(roomID: roomID, before: date, limit: count)
+                }
+            }
+            .flatMap { (messages: [ChatMessage]) in
+                if messages.count < count {
+                    return fetchFromNetwork
+                } else {
+                    print("[캐시된 메세지 불러옴]")
+                    return .just(messages)
+                }
+            }
+            .catch { error in
+                print("🔥 ", #function, error)
+                return fetchFromNetwork
+            }
     }
     
     func observeChatRoomMessages(roomID: String) -> Observable<ChatMessage> {
         self.databaseService.observeNewMessage(roomID)
+            .do(onNext: { (chatMessage: ChatMessage) in
+                guard let uuid = chatMessage.uuid else {
+                    return
+                }
+                self.coreDataService.fetchMessage(uuid)
+                    .subscribe(onFailure: { error in
+                        guard let error = error as? CoreDataServiceError,
+                              error == .failedToFetch else {
+                            return
+                        }
+                        self.coreDataService.saveMessage(chatMessage).subscribe(onCompleted: {
+                            print("[저장됨] ", uuid)
+                        }).dispose()
+                    }).dispose()
+            })
     }
     
     func updateChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom> {
@@ -83,4 +150,5 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
 enum DefaultChatMessageRepositoryError: Error {
     case fetchRoomInfoError
     case fetchProfileInfoError
+    case fetchUUIDError
 }

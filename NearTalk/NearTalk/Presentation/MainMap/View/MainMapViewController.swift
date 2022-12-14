@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import Kingfisher
 import MapKit
 import Kingfisher
 import RxCocoa
@@ -31,10 +32,10 @@ final class MainMapViewController: UIViewController {
         $0.layoutMargins = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         $0.isLayoutMarginsRelativeArrangement = true
     }
-    private lazy var userProfileImage: UIImageView = .init().then { [weak self] in
+    private let userProfileImage: UIImageView = .init().then {
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 10
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
         $0.image = UIImage(named: "Logo")
     }
     private let userLocationLabel: UILabel = .init().then {
@@ -113,6 +114,8 @@ final class MainMapViewController: UIViewController {
         if let profileImagePath = UserDefaults.standard.object(forKey: UserDefaultsKey.profileImagePath.string) as? String {
             self.fetch(path: profileImagePath)
         }
+        
+        self.locationManager.startUpdatingLocation()
     }
     
     // MARK: - Methods
@@ -338,6 +341,14 @@ final class MainMapViewController: UIViewController {
 
 extension MainMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let userLocationView = MKUserLocationView(annotation: annotation, reuseIdentifier: nil)
+            userLocationView.canShowCallout = false
+            userLocationView.tintColor = .tertiaryColor
+
+            return userLocationView
+        }
+        
         guard let chatRoomAnnotation = annotation as? ChatRoomAnnotation
         else {
             return nil

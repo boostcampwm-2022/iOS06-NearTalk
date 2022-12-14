@@ -28,7 +28,9 @@ protocol RealTimeDatabaseService {
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
-    func observeUserChatRoomTicketList(_ userID: String) -> Observable<UserChatRoomTicket>
+    func observeUserChatRoomTicketList(_ userID: String) -> Observable<[UserChatRoomTicket]>
+    func observeUserChatRoomTicket(_ userID: String, _ roomID: String) -> Observable<UserChatRoomTicket>
+    func deleteUserTicketList(_ userID: String) -> Completable
 }
 
 // swiftlint:disable: type_body_length
@@ -321,17 +323,19 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(userID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
                 .observeSingleEvent(of: .value) { snapshot in
-                    if let value: [[String: Any]] = snapshot.value as? [[String: Any]] {
-                        let userChatRoomTicket: [UserChatRoomTicket] = value.compactMap({ try? UserChatRoomTicket.decode(dictionary: $0) })
-                        single(.success(userChatRoomTicket))
-                    }
+                    let tickets: [UserChatRoomTicket] = snapshot.children
+                        .compactMap { $0 as? DataSnapshot }
+                        .compactMap { $0.value as? [String: Any] }
+                        .compactMap { try? UserChatRoomTicket.decode(dictionary: $0) }
+                
+                    single(.success(tickets))
                 }
             return Disposables.create()
         }
     }
     
-    func observeUserChatRoomTicketList(_ userID: String) -> Observable<UserChatRoomTicket> {
-        Observable<UserChatRoomTicket>.create { [weak self] observable in
+    func observeUserChatRoomTicketList(_ userID: String) -> Observable<[UserChatRoomTicket]> {
+        Observable<[UserChatRoomTicket]>.create { [weak self] observable in
             guard let self
             else {
                 observable.onError(DatabaseError.failedToFetch)
@@ -342,11 +346,52 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(userID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
                 .observe(.value) { snapshot in
+                    let tickets: [UserChatRoomTicket] = snapshot.children
+                        .compactMap { $0 as? DataSnapshot }
+                        .compactMap { $0.value as? [String: Any] }
+                        .compactMap { try? UserChatRoomTicket.decode(dictionary: $0) }
+                
+                    observable.onNext(tickets)
+                    
+                }
+            return Disposables.create()
+        }
+    }
+    
+    func observeUserChatRoomTicket(_ userID: String, _ roomID: String) -> Observable<UserChatRoomTicket> {
+        Observable<UserChatRoomTicket>.create { [weak self] observable in
+            guard let self
+            else {
+                observable.onError(DatabaseError.failedToFetch)
+                return Disposables.create()
+            }
+            self.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(userID)
+                .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
+                .child(roomID)
+                .observe(.value) { snapshot in
                     if let value: [String: Any] = snapshot.value as? [String: Any],
                        let ticket: UserChatRoomTicket = try? UserChatRoomTicket.decode(dictionary: value) {
                         observable.onNext(ticket)
                     }
                 }
+            return Disposables.create()
+        }
+    }
+    
+    func deleteUserTicketList(_ userID: String) -> Completable {
+        Completable.create { [weak self] completable in
+            self?.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(userID)
+                .removeValue(completionBlock: { error, _ in
+                    if let error = error {
+                        completable(.error(error))
+                    } else {
+                        completable(.completed)
+                    }
+                })
             return Disposables.create()
         }
     }

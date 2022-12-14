@@ -13,6 +13,7 @@ extension UIFont {
     static let ntTextSmallRegular: UIFont = .systemFont(ofSize: 14, weight: .regular)
     static let ntTextLargeBold: UIFont = .systemFont(ofSize: 20, weight: .bold)
     static let ntTextMediumBold: UIFont = .systemFont(ofSize: 16, weight: .bold)
+    static let ntTextSemiBold: UIFont = .systemFont(ofSize: 16, weight: .semibold)
     static let ntTextSmallBold: UIFont = .systemFont(ofSize: 14, weight: .bold)
     static let ntCaption: UIFont = .systemFont(ofSize: 12, weight: .regular)
 }

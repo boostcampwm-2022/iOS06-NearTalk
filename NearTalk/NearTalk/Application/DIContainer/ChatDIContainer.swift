@@ -40,6 +40,10 @@ final class ChatDIContainer {
         return DefaultUserDefaultsService()
     }
     
+    func makeCoreDataService() -> CoreDataService {
+        return DefaultCoreDataService()
+    }
+    
     // MARK: - UseCases
     
     func makeMessggingUseCase() -> MessagingUseCase {
@@ -73,6 +77,7 @@ final class ChatDIContainer {
     
     func makeChatMessageRepository() -> ChatMessageRepository {
         return DefaultChatMessageRepository(
+            coreDataService: makeCoreDataService(),
             databaseService: makeRealTimeDatabaseService(),
             profileRepository: DefaultProfileRepository(
                 firestoreService: DefaultFirestoreService(),

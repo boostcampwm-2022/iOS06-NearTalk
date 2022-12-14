@@ -24,6 +24,7 @@ final class BottomSheetViewController: UIViewController {
     // MARK: - Properties
     private var coordinator: MainMapCoordinator?
     private var dataSource: [ChatRoom] = []
+    private let disposeBag: DisposeBag = .init()
     
     // MARK: - UI Components
     private let sheetLabel: UILabel = .init().then {
@@ -64,7 +65,7 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureConstraints() {
         self.sheetLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(40)
+            make.top.equalToSuperview().offset(32)
             make.centerX.equalToSuperview()
         }
         
@@ -78,7 +79,7 @@ final class BottomSheetViewController: UIViewController {
     
     private func configureLayout() {
         self.chatRoomsTableView.estimatedRowHeight = 80.0
-        self.view.backgroundColor = .systemOrange
+        self.view.backgroundColor = .primaryColor
         
         if let sheet = self.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -126,28 +127,23 @@ extension BottomSheetViewController: UITableViewDelegate, UITableViewDataSource 
             return BottomSheetTableViewCell()
         }
         
-        cell.fetch(with: self.dataSource[indexPath.row])
+        let chatRoom = self.dataSource[indexPath.row]
+        cell.fetch(with: chatRoom)
         cell.insert(coordinator: self.coordinator, parentVC: self)
 
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        // return UITableView.automaticDimension
+        return 80
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard tableView.dequeueReusableCell(withIdentifier: BottomSheetTableViewCell.reuseIdentifier,
-                                            for: indexPath) as? BottomSheetTableViewCell != nil
-        else {
-            return
-        }
-        
-        let chatRoom = self.dataSource[indexPath.row]
-
-        if let chatRoomID = chatRoom.uuid {
-            self.coordinator?.closeBottomSheet(bottomSheetVC: self)
-            self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
-        }
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return false
     }
 }

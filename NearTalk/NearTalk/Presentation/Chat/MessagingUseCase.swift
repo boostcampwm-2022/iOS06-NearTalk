@@ -12,8 +12,7 @@ protocol MessagingUseCase {
     func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable
     func observeMessage(roomID: String) -> Observable<ChatMessage>
     func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable
-    func fetchMessage(before date: Date, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]>
-    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
+    func fetchMessage(before message: ChatMessage, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]>
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
@@ -50,8 +49,8 @@ final class DefalultMessagingUseCase: MessagingUseCase {
             .asCompletable()
     }
     
-    func fetchMessage(before date: Date, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
-        self.chatMessageRepository.fetchMessage(before: date, count: totalMessageCount, roomID: roomID)
+    func fetchMessage(before message: ChatMessage, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
+        self.chatMessageRepository.fetchMessage(before: message, count: totalMessageCount, roomID: roomID)
     }
     
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {

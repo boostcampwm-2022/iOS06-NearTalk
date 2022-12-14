@@ -18,8 +18,70 @@ final class RootTabBarDIContainer {
         self.registerViewModel()
     }
     
+    // MARK: - Services
+    
+    private let dataTransferService: StorageService = DefaultStorageService()
+    
+    func makeFirestoreService() -> FirestoreService {
+        return DefaultFirestoreService()
+    }
+    
+    func makeDatabaseService() -> RealTimeDatabaseService {
+        return DefaultRealTimeDatabaseService()
+    }
+    
+    func makeAuthService() -> AuthService {
+        return DefaultFirebaseAuthService()
+    }
+    
+    func makeFCMService() -> FCMService {
+        return DefaultFCMService()
+    }
+    
+    func makeCoreDataService() -> CoreDataService {
+        return DefaultCoreDataService()
+    }
+    
+    // MARK: - Repository
+    
+    func makeChatRoomListRepository() -> ChatRoomListRepository {
+        return DefaultChatRoomListRepository(
+            dataTransferService: dataTransferService,
+            profileRepository: makeProfileRepository(),
+            databaseService: makeDatabaseService(),
+            firestoreService: makeFirestoreService())
+    }
+    func makeProfileRepository() -> ProfileRepository {
+        return DefaultProfileRepository(
+            firestoreService: makeFirestoreService(),
+            firebaseAuthService: makeAuthService()
+        )
+    }
+    
+    func makeChatMessageRepository() -> ChatMessageRepository {
+        return DefaultChatMessageRepository(
+            coreDataService: makeCoreDataService(),
+            databaseService: makeDatabaseService(),
+            profileRepository: makeProfileRepository(),
+            fcmService: makeFCMService()
+        )
+    }
+    
+    func makeUserDefaultsRepository() -> UserDefaultsRepository {
+        return DefaultUserDefaultsRepository(userDefaultsService: DefaultUserDefaultsService())
+    }
+
+    // MARK: - UseCases
+    func makeChatRoomListUseCase() -> FetchChatRoomUseCase {
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: makeChatRoomListRepository(),
+                                           profileRepository: makeProfileRepository(),
+                                            userDefaultsRepository: makeUserDefaultsRepository())
+    }
+
     private func registerViewModel() {
-        self.container.register(RootTabBarViewModel.self) { _ in DefaultRootTabBarViewModel() }
+        self.container.register(RootTabBarViewModel.self) { _ in
+            DefaultRootTabBarViewModel(useCase: self.makeChatRoomListUseCase())
+        }
     }
 
     // MARK: - Create viewController

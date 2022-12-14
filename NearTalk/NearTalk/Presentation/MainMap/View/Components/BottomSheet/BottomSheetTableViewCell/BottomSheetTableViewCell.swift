@@ -19,9 +19,10 @@ final class BottomSheetTableViewCell: UITableViewCell {
     
     // MARK: - UI Components
     private let chatRoomImage = UIImageView().then {
-        $0.layer.cornerRadius = 30
+        $0.layer.cornerRadius = 18
+        $0.clipsToBounds = true
         $0.image = UIImage(named: "Logo")
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleToFill
     }
     private lazy var infoStackView = UIStackView().then {
         $0.axis = .vertical
@@ -112,36 +113,36 @@ final class BottomSheetTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.chatRoomImage)
         self.contentView.addSubview(self.infoStackView)
         self.contentView.addSubview(self.chatRoomEnterButton)
-        self.contentView.addSubview(self.chatRoomLockImageView)
         self.contentView.addSubview(self.chatRoomLockCoverView)
+        self.contentView.addSubview(self.chatRoomLockImageView)
     }
     
     private func configureConstraints() {
         self.chatRoomImage.snp.makeConstraints { make in
-            make.leading.equalTo(self.contentView).offset(8)
+            make.leading.equalTo(self.contentView).offset(16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(60)
         }
         
         self.chatRoomEnterButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.contentView).offset(-8)
+            make.trailing.equalTo(self.contentView).offset(-16)
             make.centerY.equalTo(self.contentView)
             make.width.height.equalTo(40)
         }
         
         self.infoStackView.snp.makeConstraints { make in
             make.leading.equalTo(self.chatRoomImage.snp.trailing).offset(16)
-            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-16)
-            make.top.bottom.equalTo(self.contentView).inset(8)
+            make.trailing.equalTo(self.chatRoomEnterButton.snp.leading).offset(-12)
+            make.top.bottom.equalTo(self.contentView).inset(12)
+        }
+        
+        self.chatRoomLockCoverView.snp.makeConstraints { make in
+            make.top.bottom.equalTo(self.contentView).inset(4)
+            make.leading.trailing.equalTo(self.contentView).inset(12)
         }
         
         self.chatRoomLockImageView.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(self.contentView)
-        }
-        
-        self.chatRoomLockCoverView.snp.makeConstraints { make in
-            make.top.bottom.equalTo(self.contentView)
-            make.leading.trailing.equalTo(self.contentView)
         }
     }
     
@@ -158,16 +159,18 @@ final class BottomSheetTableViewCell: UITableViewCell {
                 self.coordinator?.showChatRoomView(chatRoomID: chatRoomID)
             }
             .disposed(by: self.disposeBag)
+        
+        self.fetchChatRoomDistance()
     }
 }
 
 // MARK: - Bind
 extension BottomSheetTableViewCell {
-    public func fetch(with data: ChatRoom) {
-        self.chatRoom = data
-        self.chatRoomName.text = data.roomName
-        self.chatRoomDescription.text = data.roomDescription
-        self.fetch(path: data.roomImagePath)
+    public func fetch(with chatRoom: ChatRoom) {
+        self.chatRoom = chatRoom
+        self.chatRoomName.text = chatRoom.roomName
+        self.chatRoomDescription.text = chatRoom.roomDescription
+        self.fetch(path: chatRoom.roomImagePath)
         self.fetchChatRoomDistance()
     }
     
@@ -181,11 +184,6 @@ extension BottomSheetTableViewCell {
         self.chatRoomImage.kf.setImage(with: url)
     }
     
-    func insert(coordinator: MainMapCoordinator?, parentVC: UIViewController?) {
-        self.coordinator = coordinator
-        self.parentVC = parentVC
-    }
-    
     private func fetchChatRoomDistance() {
         self.chatRoomDistance.text = "입장불가"
         self.configureAccessible(isAccessible: false)
@@ -196,7 +194,7 @@ extension BottomSheetTableViewCell {
         else {
             return
         }
-        
+
         Observable.zip(
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLatitude.string),
             UserDefaults.standard.rx.observe(Double.self, UserDefaultsKey.currentUserLongitude.string)
@@ -207,12 +205,12 @@ extension BottomSheetTableViewCell {
             else {
                 return
             }
-            
+
             let currentUserNCLocation: NCLocation = NCLocation(latitude: currentUserLatitude, longitude: currentUserLongitude)
             let chatRoomNCLocation: NCLocation = NCLocation(latitude: chatRoomLatitude, longitude: chatRoomLongitude)
             let distance = chatRoomNCLocation.distance(from: currentUserNCLocation)
             let isAccessible = distance <= chatRoomAccessibleRadius * 1000
-            self?.chatRoomDistance.text = isAccessible ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
+            self?.chatRoomDistance.text = distance < 1000 ? String(format: "%.0f", distance) + " m" : String(format: "%.2f", distance / 1000) + " km"
             self?.configureAccessible(isAccessible: isAccessible)
         })
         .disposed(by: disposeBag)
@@ -223,5 +221,10 @@ extension BottomSheetTableViewCell {
         self.isUserInteractionEnabled = isAccessible
         self.chatRoomLockImageView.isHidden = isAccessible
         self.chatRoomLockCoverView.isHidden = isAccessible
+    }
+    
+    func insert(coordinator: MainMapCoordinator?, parentVC: UIViewController?) {
+        self.coordinator = coordinator
+        self.parentVC = parentVC
     }
 }

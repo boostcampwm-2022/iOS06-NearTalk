@@ -10,10 +10,6 @@ import UIKit
 final class ProfileSettingViewController: UserProfileInputViewController {
     // MARK: - Properties
     private let viewModel: any ProfileSettingViewModel
-    
-    private let loadingViewController: UploadIndicatorViewController = UploadIndicatorViewController().then {
-        $0.modalPresentationStyle = .overCurrentContext
-    }
 
     // MARK: - Lifecycles
     override func viewDidLoad() {
@@ -118,13 +114,10 @@ final class ProfileSettingViewController: UserProfileInputViewController {
                 .drive(self.navigationItem.rx.hidesBackButton),
             
             self.viewModel.backButtonHidden
-                .drive { loadingOn in
-                    if loadingOn {
-                        self.present(self.loadingViewController, animated: true)
-                    } else {
-                        self.loadingViewController.dismiss(animated: true)
-                    }
-                }
+                .drive { self.rootView.isUserInteractionEnabled = !$0 },
+            
+            self.viewModel.backButtonHidden
+                .drive(self.rootView.loadingIndicator)
         )
     }
     

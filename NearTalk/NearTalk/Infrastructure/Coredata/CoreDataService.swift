@@ -10,7 +10,31 @@ import Foundation
 import RxSwift
 
 protocol CoreDataService {
+    func fetchMessage(_ uuid: String) -> Single<ChatMessage>
+    func fetchMessageList(roomID: String, before date: Date, limit: Int) -> Single<[ChatMessage]>
+    func fetchFriend(_ uuid: String) -> Single<UserProfile>
+    func fetchFriendList() -> Single<[UserProfile]>
+    func fetchChatRoom(_ roomID: String) -> Single<ChatRoom>
+    func fetchChatRoomList() -> Single<[ChatRoom]>
+    func fetchTicket(_ ticketID: String) -> Single<UserChatRoomTicket>
+    func fetchTicketList() -> Single<[UserChatRoomTicket]>
     
+    func saveMessage(_ message: ChatMessage) -> Completable
+    func saveMessageList(_ messageList: [ChatMessage]) -> Completable
+    func saveFriend(_ profile: UserProfile) -> Completable
+    func saveChatRoom(_ room: ChatRoom) -> Completable
+    func saveTicket(_ ticket: UserChatRoomTicket) -> Completable
+
+    func updateMessage(_ message: ChatMessage) -> Single<ChatMessage>
+    func updateFriend(_ profile: UserProfile) -> Single<UserProfile>
+    func updateChatRoom(_ room: ChatRoom) -> Single<ChatRoom>
+    func updateTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
+
+    func deleteMessage(_ uuid: String) -> Completable
+    func deleteMessageList(_ uuidList: [String]) -> Completable
+    func deleteFriend(_ uuid: String) -> Completable
+    func deleteChatRoom(_ uuid: String) -> Completable
+    func deleteTicket(_ uuid: String) -> Completable
 }
 
 final class DefaultCoreDataService: CoreDataService {
@@ -36,23 +60,23 @@ final class DefaultCoreDataService: CoreDataService {
     }
     
     func fetchMessageList(roomID: String, before date: Date, limit: Int = 30) -> Single<[ChatMessage]> {
-        let beforeDate: NSDate = NSDate(timeIntervalSince1970: date.timeIntervalSince1970)
-        let predicate: NSPredicate = .init(format: "createdAt < %@ AND chatRoomID == %@", beforeDate, roomID)
+        let beforeDate: NSNumber = NSNumber(value: date.timeIntervalSince1970)
+        let predicate: NSPredicate = .init(format: "createdAtTimeStamp < %@ AND chatRoomID == %@", beforeDate, roomID)
         return self.fetchObjectList(entityKey: .message, predicate: predicate, limit: limit)
     }
     
     func fetchFriend(_ uuid: String) -> Single<UserProfile> {
         self.fetchObject(with: uuid, entityKey: .userProfile)
     }
-    
+
     func fetchFriendList() -> Single<[UserProfile]> {
         self.fetchObjectList(entityKey: .userProfile, predicate: .init(), limit: .max)
     }
-    
+
     func fetchChatRoom(_ roomID: String) -> Single<ChatRoom> {
         self.fetchObject(with: roomID, entityKey: .chatRoom)
     }
-    
+
     func fetchChatRoomList() -> Single<[ChatRoom]> {
         self.fetchObjectList(entityKey: .chatRoom, predicate: .init(), limit: .max)
     }
@@ -60,30 +84,30 @@ final class DefaultCoreDataService: CoreDataService {
     func fetchTicket(_ ticketID: String) -> Single<UserChatRoomTicket> {
         self.fetchObject(with: ticketID, entityKey: .userChatRoomTicket)
     }
-    
+
     func fetchTicketList() -> Single<[UserChatRoomTicket]> {
         self.fetchObjectList(entityKey: .userChatRoomTicket, predicate: .init(), limit: .max)
     }
-    
+
     // MARK: - Save
     func saveMessage(_ message: ChatMessage) -> Completable {
-        self.saveObject(entityKey: .message, data: message)
+        return self.saveObject(entityKey: .message, data: message, type: CDChatMessage.self)
     }
     
     func saveMessageList(_ messageList: [ChatMessage]) -> Completable {
-        self.saveObjectList(entityKey: .message, dataList: messageList)
+        self.saveObjectList(entityKey: .message, dataList: messageList, type: CDChatMessage.self)
     }
     
     func saveFriend(_ profile: UserProfile) -> Completable {
-        self.saveObject(entityKey: .userProfile, data: profile)
+        self.saveObject(entityKey: .userProfile, data: profile, type: CDUserProfile.self)
     }
     
     func saveChatRoom(_ room: ChatRoom) -> Completable {
-        self.saveObject(entityKey: .chatRoom, data: room)
+        self.saveObject(entityKey: .chatRoom, data: room, type: CDChatRoom.self)
     }
     
     func saveTicket(_ ticket: UserChatRoomTicket) -> Completable {
-        self.saveObject(entityKey: .userChatRoomTicket, data: ticket)
+        self.saveObject(entityKey: .userChatRoomTicket, data: ticket, type: CDUserChatRoomTicket.self)
     }
     
     // MARK: - Update
@@ -125,21 +149,20 @@ final class DefaultCoreDataService: CoreDataService {
     }
     
     // MARK: - Private
-    private func fetchObject<T>(with uuid: String, entityKey: CoreDataEntityKey) -> Single<T> {
+    private func fetchObject<T: BaseEntity>(with uuid: String, entityKey: CoreDataEntityKey) -> Single<T> {
         Single<T>.create { [weak self] single in
             guard let self
             else {
                 single(.failure(CoreDataServiceError.failedToFetch))
                 return Disposables.create()
             }
-            let predicate: NSPredicate = .init(format: "uuid == %@", uuid)
+            let predicate: NSPredicate = .init(format: "id == %@", uuid)
             let fetchRequest: NSFetchRequest<NSManagedObject> = self.getRequest(entityKey, predicate, 1)
-            if let fetchResult: [T] = try? self.persistentContainer.viewContext.fetch(fetchRequest) as? [T],
-               fetchResult.count == 1 {
-                print(fetchResult.first!)
-                single(.success(fetchResult.first!))
+            if let fetchResult: [NSManagedObject] = try? self.persistentContainer.viewContext.fetch(fetchRequest),
+               fetchResult.count == 1,
+               let result: T = entityKey.getObject(object: fetchResult.first!) as? T {
+                single(.success(result))
             } else {
-                print("🔴 Could not fetch")
                 single(.failure(CoreDataServiceError.failedToFetch))
             }
             return Disposables.create()
@@ -150,18 +173,19 @@ final class DefaultCoreDataService: CoreDataService {
         Single<[T]>.create { [weak self] single in
             guard let self
             else {
-                print("🔥 CoreDataServiceError.failedToFetch")
                 single(.failure(CoreDataServiceError.failedToFetch))
                 return Disposables.create()
             }
-            print("🟢", #function)
             let fetchRequest: NSFetchRequest<NSManagedObject> = self.getRequest(entityKey, predicate, limit)
             do {
-                if let fetchResult: [T] = try self.persistentContainer.viewContext.fetch(fetchRequest) as? [T] {
-                    single(.success(fetchResult))
-                } else {
-                    single(.failure(CoreDataServiceError.failedToDecode))
+                let objects: [NSManagedObject] = try self.persistentContainer.viewContext.fetch(fetchRequest)
+                var result: [T] = []
+                objects.forEach { object in
+                    if let obj = entityKey.getObject(object: object) as? T {
+                        result.append(obj)
+                    }
                 }
+                single(.success(result))
             } catch let error {
                 print("🔥 ", error)
                 single(.failure(CoreDataServiceError.failedToFetch))
@@ -170,30 +194,29 @@ final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    private func saveObject<T: BaseEntity>(entityKey: CoreDataEntityKey, data: T) -> Completable {
+    private func saveObject<T: BaseEntity, U: NSManagedObject>(entityKey: CoreDataEntityKey, data: T, type: U.Type) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
                   let entity: NSEntityDescription = self.getEntity(entityKey: entityKey, query: .modify)
             else {
-                print("🔥 fail?")
                 completable(.error(CoreDataServiceError.failedToSave))
                 return Disposables.create()
             }
-            let newObject: NSManagedObject = NSManagedObject(entity: entity, insertInto: self.backgroundContext)
+            
+            let newObject: U = U(entity: entity, insertInto: self.backgroundContext)
             entityKey.setObject(object: newObject, data)
-            print("🔥 ", newObject.value(forKey: "uuid"))
             do {
                 try self.backgroundContext.save()
                 completable(.completed)
             } catch let error {
-                print(error)
+                print("🔥 error", error)
                 completable(.error(CoreDataServiceError.failedToSave))
             }
             return Disposables.create()
         }
     }
     
-    private func saveObjectList<T: BaseEntity>(entityKey: CoreDataEntityKey, dataList: [T]) -> Completable {
+    private func saveObjectList<T: BaseEntity, U: NSManagedObject>(entityKey: CoreDataEntityKey, dataList: [T], type: U.Type) -> Completable {
         Completable.create { [weak self] completable in
             guard let self,
                   let entity: NSEntityDescription = self.getEntity(entityKey: entityKey, query: .modify)
@@ -202,7 +225,7 @@ final class DefaultCoreDataService: CoreDataService {
                 return Disposables.create()
             }
             dataList.forEach { data in
-                let newObject: NSManagedObject = NSManagedObject(entity: entity, insertInto: self.backgroundContext)
+                let newObject: U = U(entity: entity, insertInto: self.backgroundContext)
                 entityKey.setObject(object: newObject, data)
             }
             do {
@@ -270,104 +293,18 @@ final class DefaultCoreDataService: CoreDataService {
     }
     
     private func getRequest(_ entityKey: CoreDataEntityKey, _ predicate: NSPredicate, _ limit: Int) -> NSFetchRequest<NSManagedObject> {
-        let fetchRequest: NSFetchRequest<NSManagedObject> = NSFetchRequest<NSManagedObject>(entityName: entityKey.entityName)
+        let fetchRequest: NSFetchRequest<NSManagedObject> = .init(entityName: entityKey.entityName)
         fetchRequest.fetchLimit = limit
         fetchRequest.predicate = predicate
         return fetchRequest
     }
     
     private func getEntity(entityKey: CoreDataEntityKey, query: CoreDataQueryType) -> NSEntityDescription? {
+        print("🚧 entityKey.entityName", entityKey.entityName)
         return NSEntityDescription.entity(
             forEntityName: entityKey.entityName,
             in: query == .fetch ? self.persistentContainer.viewContext : self.backgroundContext
         )
-    }
-}
-
-// MARK: - CoreDataEntityKey
-enum CoreDataEntityKey: String {
-    case userProfile
-    case message
-    case chatRoom
-    case userChatRoomTicket
-    
-    var entityName: String {
-        switch self {
-        case .userProfile:
-            return "CDUserProfile"
-        case .message:
-            return "CDChatMessage"
-        case .chatRoom:
-            return "CDChatRoom"
-        case .userChatRoomTicket:
-            return "CDUserChatRoomTicket"
-        }
-    }
-    
-    func setObject(object: NSManagedObject, _ data: BaseEntity) {
-        switch self {
-        case .userProfile:
-            guard let profileData: UserProfile = data as? UserProfile
-            else {
-                return
-            }
-            self.setUserProfileData(object, profileData)
-        case .message:
-            guard let messageData: ChatMessage = data as? ChatMessage
-            else {
-                return
-            }
-            self.setMessageData(object, messageData)
-        case .chatRoom:
-            guard let chatRoomData: ChatRoom = data as? ChatRoom
-            else {
-                return
-            }
-            self.setChatRoomData(object, chatRoomData)
-        case .userChatRoomTicket:
-            guard let ticketData: UserChatRoomTicket = data as? UserChatRoomTicket
-            else {
-                return
-            }
-            self.setUserChatRoomTicket(object, ticketData)
-        }
-    }
-    
-    private func setUserProfileData(_ object: NSManagedObject, _ profile: UserProfile) {
-        object.setValue(profile.uuid, forKey: "uuid")
-        object.setValue(profile.username, forKey: "username")
-        object.setValue(profile.email, forKey: "email")
-        object.setValue(profile.statusMessage, forKey: "statusMessage")
-        object.setValue(profile.profileImagePath, forKey: "profileImagePath")
-        object.setValue(profile.friends, forKey: "friends")
-        object.setValue(profile.chatRooms, forKey: "chatRooms")
-        object.setValue(profile.fcmToken, forKey: "fcmToken")
-    }
-    
-    private func setMessageData(_ object: NSManagedObject, _ message: ChatMessage) {
-        object.setValue(message.uuid, forKey: "uuid")
-        object.setValue(message.chatRoomID, forKey: "chatRoomID")
-        object.setValue(message.senderID, forKey: "senderID")
-        object.setValue(message.text, forKey: "text")
-        object.setValue(message.messageType, forKey: "messageType")
-        object.setValue(message.mediaPath, forKey: "mediaPath")
-        object.setValue(message.mediaType, forKey: "mediaType")
-        object.setValue(message.createdAtTimeStamp, forKey: "createdAtTimeStamp")
-    }
-    
-    private func setChatRoomData(_ object: NSManagedObject, _ chatRoom: ChatRoom) {
-        object.setValue(chatRoom.uuid, forKey: "uuid")
-        object.setValue(chatRoom.roomName, forKey: "roomName")
-        object.setValue(chatRoom.roomImagePath, forKey: "roomImagePath")
-        object.setValue(chatRoom.roomType, forKey: "roomType")
-    }
-    
-    private func setUserChatRoomTicket(_ object: NSManagedObject, _ ticket: UserChatRoomTicket) {
-        object.setValue(ticket.uuid, forKey: "uuid")
-        object.setValue(ticket.userID, forKey: "userID")
-        object.setValue(ticket.roomID, forKey: "roomID")
-        object.setValue(ticket.lastReadMessageID, forKey: "lastReadMessageID")
-        object.setValue(ticket.lastRoomMessageCount, forKey: "lastRoomMessageCount")
     }
 }
 

@@ -34,18 +34,15 @@ final class DefaultFetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase {
         return chatRoomListRepository.observeChatRoomInfo(chatRoomID)
     }
     
-    func fetchParticipantTickets(_ roomID: String) -> Observable<[UserChatRoomTicket]> {
-        self.chatRoomListRepository
-            .observeChatRoomInfo(roomID)
-            .flatMap { (chatRoom: ChatRoom) in
-                guard let userList = chatRoom.userList else {
-                    return Observable<[UserChatRoomTicket]>.error(FetchChatRoomInfoUseCaseError.failedToFetchUserList)
-                }
-                let fetchTickets: [Single<UserChatRoomTicket>] = userList.map {
-                    self.chatRoomListRepository.fetchUserChatRoomTicket($0, roomID)
-                }
-                return Single.zip(fetchTickets).asObservable()
-            }
+    func fetchParticipantTickets(_ room: ChatRoom) -> Observable<[UserChatRoomTicket]> {
+        guard let userList = room.userList,
+              let roomID = room.uuid else {
+            return .error(FetchChatRoomInfoUseCaseError.failedToFetchUserList)
+        }
+        let fetchTickets: [Observable<UserChatRoomTicket>] = userList.map {
+            self.chatRoomListRepository.observeUserChatRoomTicket($0, roomID)
+        }
+        return Observable.zip(fetchTickets)
     }
 }
 

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22A400" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="CDChatMessage" representedClassName="CDChatMessage" syncable="YES">
+    <entity name="CDChatMessage" representedClassName=".CDChatMessage" syncable="YES">
         <attribute name="chatRoomID" optional="YES" attributeType="String"/>
         <attribute name="createdAtTimeStamp" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="mediaPath" optional="YES" attributeType="String"/>
         <attribute name="mediaType" optional="YES" attributeType="String"/>
         <attribute name="messageType" optional="YES" attributeType="String"/>
         <attribute name="senderID" optional="YES" attributeType="String"/>
         <attribute name="text" optional="YES" attributeType="String"/>
-        <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CDChatRoom" representedClassName="CDChatRoom" syncable="YES">
         <attribute name="roomImagePath" optional="YES" attributeType="String"/>
+        <attribute name="roomName" optional="YES" attributeType="String"/>
         <attribute name="roomType" optional="YES" attributeType="String"/>
         <attribute name="userList" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
