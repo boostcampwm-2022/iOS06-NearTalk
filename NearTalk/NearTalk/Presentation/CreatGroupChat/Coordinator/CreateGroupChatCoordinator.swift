@@ -41,8 +41,8 @@ final class CreateGroupChatCoordinator {
             return
         }
         
-        let dicontainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
-        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        let diContainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
+        let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
         coordinator.start()
     }
 }
