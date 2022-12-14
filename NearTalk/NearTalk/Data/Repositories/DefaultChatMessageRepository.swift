@@ -13,6 +13,7 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
     private let databaseService: RealTimeDatabaseService
     private let profileRepository: any ProfileRepository
     private let fcmService: FCMService
+    private let disposeBag: DisposeBag = .init()
     
     init(
         coreDataService: CoreDataService,
@@ -81,8 +82,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                             }
                             self.coreDataService.saveMessage(msg).subscribe(onCompleted: {
                                 print("[저장됨] ", msg.uuid ?? "")
-                            }).dispose()
-                        }).dispose()
+                            }).disposed(by: self.disposeBag)
+                        }).disposed(by: self.disposeBag)
                 }
             })
 
@@ -126,8 +127,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
                         }
                         self.coreDataService.saveMessage(chatMessage).subscribe(onCompleted: {
                             print("[저장됨] ", uuid)
-                        }).dispose()
-                    }).dispose()
+                        }).disposed(by: self.disposeBag)
+                    }).disposed(by: self.disposeBag)
             })
     }
     
