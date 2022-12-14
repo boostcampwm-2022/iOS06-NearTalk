@@ -177,6 +177,8 @@ final class DefaultCoreDataService: CoreDataService {
                 return Disposables.create()
             }
             let fetchRequest: NSFetchRequest<NSManagedObject> = self.getRequest(entityKey, predicate, limit)
+            let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "createdAtTimeStamp", ascending: false)
+            fetchRequest.sortDescriptors = [sortDescriptor]
             do {
                 let objects: [NSManagedObject] = try self.persistentContainer.viewContext.fetch(fetchRequest)
                 var result: [T] = []
