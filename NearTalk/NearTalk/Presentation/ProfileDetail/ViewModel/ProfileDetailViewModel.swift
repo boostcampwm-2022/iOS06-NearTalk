@@ -32,18 +32,15 @@ protocol ProfileDetailViewModelable: ProfileDetailViewModelInput, ProfileDetailV
 
 final class ProfileDetailViewModel: ProfileDetailViewModelable {
     var userName: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
-    
     var statusMessage: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
-    
     var profileImageURL: BehaviorRelay<String> = BehaviorRelay<String>(value: "..Loading")
-    
     var startChatButtonDidTapEvent = PublishRelay<Void>()
-    
     var deleteFriendButtonDidTapEvent = PublishRelay<Void>()
     
     private var userID: String
     private var myID: String?
     private let fetchProfileUseCase: FetchProfileUseCase
+    private let fetchChatRoomUseCase: FetchChatRoomUseCase
     private let uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase
     private let removeFriendUseCase: RemoveFriendUseCase
     private let updateProfileUseCase: UpdateProfileUseCase
@@ -52,12 +49,14 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
     private let disposeBag = DisposeBag()
     
     init(userID: String,
+         fetchChatRoomUseCase: FetchChatRoomUseCase,
          fetchProfileUseCase: FetchProfileUseCase,
          uploadChatRoomInfoUseCase: UploadChatRoomInfoUseCase,
          removeFriendUseCase: RemoveFriendUseCase,
          updateProfileUseCase: UpdateProfileUseCase,
          actions: ProfileDetailViewModelActions) {
         self.userID = userID
+        self.fetchChatRoomUseCase = fetchChatRoomUseCase
         self.fetchProfileUseCase = fetchProfileUseCase
         self.uploadChatRoomInfoUseCase = uploadChatRoomInfoUseCase
         self.removeFriendUseCase = removeFriendUseCase
@@ -92,53 +91,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                     return
                 }
                 
-                let chatRoomUUID = UUID().uuidString
-                
-                let chatRoom: ChatRoom = ChatRoom(uuid: chatRoomUUID,
-                                                  userList: [self.userID, myID],
-                                                  roomImagePath: nil,
-                                                  roomType: "dm",
-                                                  roomName: "DM Chat",
-                                                  roomDescription: nil,
-                                                  location: nil,
-                                                  latitude: nil,
-                                                  longitude: nil,
-                                                  accessibleRadius: nil,
-                                                  recentMessageID: nil,
-                                                  recentMessageText: nil,
-                                                  recentMessageDateTimeStamp: Date().timeIntervalSince1970,
-                                                  maxNumberOfParticipants: 2,
-                                                  messageCount: nil)
-                
-                self.fetchProfileUseCase.fetchUserProfile(with: self.userID)
-                    .subscribe(onSuccess: { userProfile in
-                        var newUserProfile = userProfile
-                        newUserProfile.chatRooms?.append(chatRoomUUID)
-                        self.updateProfileUseCase.updateFriendsProfile(profile: newUserProfile)
-                            .subscribe(onCompleted: {
-                                print("상대 프로필 업데이트 완료")
-                            })
-                            .disposed(by: self.disposeBag)
-                        
-                    })
-                    .disposed(by: self.disposeBag)
-                
-                self.fetchProfileUseCase.fetchMyProfile()
-                    .subscribe(onSuccess: { myProfile in
-                        var newMyProfile = myProfile
-                        newMyProfile.chatRooms?.append(chatRoomUUID)
-                        self.fetchProfileUseCase.updateUserProfile(userProfile: newMyProfile)
-                            .subscribe(onSuccess: { _ in
-                                print("내 프로필 업데이트")
-                            })
-                            .disposed(by: self.disposeBag)
-                            
-                    })
-                    .disposed(by: self.disposeBag)
-                
-                self.uploadChatRoomInfoUseCase.createChatRoom(chatRoom)
-                    .subscribe(onCompleted: { self.actions.showChatViewController(chatRoomUUID) })
-                    .disposed(by: self.disposeBag)
+                self.hasChatRoomChecking(myID: myID, userID: self.userID)
             })
             .disposed(by: disposeBag)
         
@@ -161,5 +114,73 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                     .disposed(by: self.disposeBag)
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func hasChatRoomChecking(myID: String, userID: String) {
+        self.fetchChatRoomUseCase.hasFriendDMChat(myID: myID, friendID: userID)
+            .subscribe(onSuccess: { (chatRoom: ChatRoom?) in
+                if let chatRoom = chatRoom, let chatRoomUUID = chatRoom.uuid {
+                    self.actions.showChatViewController(chatRoomUUID)
+                } else {
+                    let chatRoomUUID = UUID().uuidString
+                    let newDMChat = self.createDMChatRoom(myID: myID, userID: userID, chatRoomUUID: chatRoomUUID)
+
+                    self.userProfileUpdate(userID: userID, chatRoomUUID: chatRoomUUID)
+                    self.myProfileUpdate(chatRoomUUID: chatRoomUUID)
+                    self.uploadChatRoomInfoUseCase.createChatRoom(newDMChat)
+                        .subscribe(onCompleted: { self.actions.showChatViewController(chatRoomUUID) })
+                        .disposed(by: self.disposeBag)
+                }
+            })
+            .disposed(by: disposeBag)
+            
+    }
+    
+    private func createDMChatRoom(myID: String, userID: String, chatRoomUUID: String) -> ChatRoom {
+        return ChatRoom(uuid: chatRoomUUID,
+                        userList: [self.userID, myID],
+                        roomImagePath: nil,
+                        roomType: "dm",
+                        roomName: "DM Chat",
+                        roomDescription: nil,
+                        location: nil,
+                        latitude: nil,
+                        longitude: nil,
+                        accessibleRadius: nil,
+                        recentMessageID: nil,
+                        recentMessageText: nil,
+                        recentMessageDateTimeStamp: Date().timeIntervalSince1970,
+                        maxNumberOfParticipants: 2,
+                        messageCount: nil)
+    }
+    
+    private func userProfileUpdate(userID: String, chatRoomUUID: String) {
+        self.fetchProfileUseCase.fetchUserProfile(with: userID)
+            .subscribe(onSuccess: { userProfile in
+                var newUserProfile = userProfile
+                newUserProfile.chatRooms?.append(chatRoomUUID)
+                self.updateProfileUseCase.updateFriendsProfile(profile: newUserProfile)
+                    .subscribe(onCompleted: {
+                        print("상대 프로필 업데이트 완료")
+                    })
+                    .disposed(by: self.disposeBag)
+                
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func myProfileUpdate(chatRoomUUID: String) {
+        self.fetchProfileUseCase.fetchMyProfile()
+            .subscribe(onSuccess: { myProfile in
+                var newMyProfile = myProfile
+                newMyProfile.chatRooms?.append(chatRoomUUID)
+                self.fetchProfileUseCase.updateUserProfile(userProfile: newMyProfile)
+                    .subscribe(onSuccess: { _ in
+                        print("내 프로필 업데이트")
+                    })
+                    .disposed(by: self.disposeBag)
+                
+            })
+            .disposed(by: self.disposeBag)
     }
 }
