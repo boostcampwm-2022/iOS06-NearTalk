@@ -52,4 +52,8 @@ final class DefalultMessagingUseCase: MessagingUseCase {
     func fetchMessage(before message: ChatMessage, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]> {
         self.chatMessageRepository.fetchMessage(before: message, count: totalMessageCount, roomID: roomID)
     }
+    
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage> {
+        self.chatMessageRepository.fetchSingleMessage(messageID: messageID, roomID: roomID)
+    }
 }
