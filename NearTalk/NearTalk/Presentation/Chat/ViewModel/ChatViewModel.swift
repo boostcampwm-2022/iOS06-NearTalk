@@ -171,6 +171,7 @@ extension DefaultChatViewModel {
             .subscribe(onCompleted: { [weak self] in
                 self?.observeNewMessage()
                 self?.observeChatRoom()
+                self?.bindNewMessage()
             }).disposed(by: self.disposeBag)
     }
     
@@ -392,6 +393,22 @@ extension DefaultChatViewModel {
         return messagingUseCase.updateChatRoom(chatRoom: newChatRoom, userID: myID)
     }
     
+    private func bindNewMessage() {
+        self.chatMessages
+            .flatMap({ [weak self] (chatMessages: [ChatMessage]) in
+                guard let self,
+                let lastMessage = chatMessages.last,
+                let messageCount = self.chatRoom.value?.messageCount else {
+                    return Completable.error(ChatViewModelError.failedToObserve)
+                }
+                return self.updateTicketWithNewMessage(lastMessage, messageCount)
+            })
+            .subscribe(onCompleted: {
+                print("성공")
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
     func fetchMessages() -> Single<[ChatMessage]> {
         return .error(NSError())
     }
@@ -405,7 +422,8 @@ extension DefaultChatViewModel {
                 guard let self,
                       let message,
                       let messageuuid = message.uuid,
-                      let createdAtTimeStamp = message.createdAtTimeStamp else {
+                      let createdAtTimeStamp = message.createdAtTimeStamp,
+                      let chatRoom = self.chatRoom.value else {
                     return
                 }
                 ///
@@ -414,7 +432,7 @@ extension DefaultChatViewModel {
                 self.fetchMessages(before: message, isInitialMessage: true)
                 
                 // TODO: - 1. chatRoom이 업데이트 될때 참가자들의 Ticket들 불러오기
-                self.fetchChatRoomInfoUseCase.fetchParticipantTickets(self.chatRoomID)
+                self.fetchChatRoomInfoUseCase.fetchParticipantTickets(chatRoom)
                     .subscribe(onNext: { ticketList in
                         print(">>>>>")
                         // TODO: - Ticket created Date 알아내기

@@ -14,7 +14,7 @@ import UIKit
 class ChatCollectionViewCell: UICollectionViewCell {
     // MARK: - Proporty
     static let identifier = String(describing: ChatRoomListCell.self)
-    var ticketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
+    var ticketsRelay: BehaviorRelay<[String: Double]>!
     private var createdAt: Date?
     private var viewModel: ChatViewModel?
     private var disposeBag: DisposeBag = DisposeBag()
@@ -64,7 +64,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         self.addViews()
-//        self.bindTicket()
         self.isUserInteractionEnabled = false
     }
     
@@ -82,21 +81,11 @@ class ChatCollectionViewCell: UICollectionViewCell {
 
     func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
         let isInComing = messageItem.type == .receive
+        
         self.createdAt = messageItem.createdAt
+        self.ticketsRelay = tickets
+        self.bindTicket()
         
-        tickets
-            .asDriver()
-            .drive(onNext: { lastUpdatedTimeOfTickets in
-                let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
-                    let lastUpdatedTime = Date(timeIntervalSince1970: time)
-                    return lastUpdatedTime < messageItem.createdAt
-                }).count
-                print("📩 [전송타입] \(isInComing ? "receive" : "send")| [메세지 내용]: \(messageItem.message ?? "")  | [안읽은 메세지 수]: \(count)")
-                self.countOfUnreadMessagesLabel.text = "\(count)"
-            })
-            .disposed(by: self.disposeBag)
-        
-//        self.bindTicket()
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
         self.textView.text = messageItem.message
@@ -193,22 +182,23 @@ class ChatCollectionViewCell: UICollectionViewCell {
     }
     
     private func bindTicket() {
-        self.viewModel?.lastUpdatedTimeOfTicketsRelay
+        self.ticketsRelay
             .asDriver()
-            .drive(onNext: { lastUpdatedTimeOfTickets in
-                guard let createdTime = self.createdAt
-                else {
+            .drive(onNext: { [weak self] lastUpdatedTimeOfTickets in
+                guard let self,
+                      let createdAt = self.createdAt else {
                     return
                 }
-                
                 let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
                     let lastUpdatedTime = Date(timeIntervalSince1970: time)
-                    return lastUpdatedTime < createdTime
+                    print("--------")
+                    print(lastUpdatedTime, createdAt)
+                    return lastUpdatedTime < createdAt
                 }).count
+                print("📩 [안읽은 사람 수]: \(count)")
                 if count > 0 {
                     self.countOfUnreadMessagesLabel.text = "\(count)"
                 }
-                print("✅ | 티켓 수: ", lastUpdatedTimeOfTickets.count, self.createdAt, "| count: ", count)
             })
             .disposed(by: self.disposeBag)
     }
