@@ -25,4 +25,5 @@ protocol ChatRoomListRepository {
     func observeUserChatRoomTicketList() -> Observable<[UserChatRoomTicket]>
     func observeUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> Observable<UserChatRoomTicket>
     func dropUserFromChatRooms() -> Completable
+    func dropUserFromChatRoom(_ userUUID: String, _ roomID: String) -> Completable
 }

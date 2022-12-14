@@ -218,6 +218,7 @@
 		833062292924A3D7000E786E /* OnboardingDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833062282924A3D7000E786E /* OnboardingDIContainer.swift */; };
 		8330622B2924A3E2000E786E /* (null) in Sources */ = {isa = PBXBuildFile; };
 		8330622F2924A402000E786E /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8330622E2924A402000E786E /* String+Regex.swift */; };
+		833D035629496E720029DF76 /* DropChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D035529496E720029DF76 /* DropChatRoomUseCase.swift */; };
 		83649765292D33B60002DDE5 /* AppSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC62922AFED007C390A /* AppSettingViewController.swift */; };
 		83649766292D33B90002DDE5 /* AppSettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E7BBC52922AFED007C390A /* AppSettingTableViewCell.swift */; };
 		83649769292D393C0002DDE5 /* AppSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83649768292D393C0002DDE5 /* AppSettingViewModel.swift */; };
@@ -483,6 +484,7 @@
 		833062252924A3BF000E786E /* OnboardingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		833062282924A3D7000E786E /* OnboardingDIContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingDIContainer.swift; sourceTree = "<group>"; };
 		8330622E2924A402000E786E /* String+Regex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Regex.swift"; sourceTree = "<group>"; };
+		833D035529496E720029DF76 /* DropChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropChatRoomUseCase.swift; sourceTree = "<group>"; };
 		83649768292D393C0002DDE5 /* AppSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingViewModel.swift; sourceTree = "<group>"; };
 		8364976C292D3C920002DDE5 /* DummyProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyProfileRepository.swift; sourceTree = "<group>"; };
 		83649770292DE1B50002DDE5 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -1242,6 +1244,7 @@
 				7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */,
 				7C749850292F706F00FADA94 /* MessagingUseCase.swift */,
 				7C8197432939E79700A7DD8F /* EnterChatRoomUseCase.swift */,
+				833D035529496E720029DF76 /* DropChatRoomUseCase.swift */,
 				7C254DA9292DB22B004D4CEC /* Coordinator */,
 				7C254DA8292DB21E004D4CEC /* ViewModel */,
 				7C254DA7292DB217004D4CEC /* View */,
@@ -1927,6 +1930,8 @@
 				7CF4A735294979900065BF2D /* CDChatMessage+CoreDataClass.swift in Sources */,
 				830897DA292CC1E60090EC18 /* NecessaryProfileComponent.swift in Sources */,
 				7CA4EA38292BA65000D8C757 /* FetchProfileUseCase.swift in Sources */,
+				6094B9EE29406F63008FC01B /* CDChatRoom+CoreDataProperties.swift in Sources */,
+				833D035629496E720029DF76 /* DropChatRoomUseCase.swift in Sources */,
 				1648BAAD292385CD0076AC35 /* ChatRoomAnnotation.swift in Sources */,
 				162B1B682933E036004724D9 /* RxMapViewReactiveDataSource.swift in Sources */,
 				16988882292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift in Sources */,

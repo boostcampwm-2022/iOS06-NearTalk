@@ -28,16 +28,37 @@ final class DefaultChatRoomListRepository {
     }
 }
 
-extension DefaultChatRoomListRepository: ChatRoomListRepository {
+extension DefaultChatRoomListRepository: ChatRoomListRepository {    
+    func dropUserFromChatRoom(_ userUUID: String, _ roomID: String) -> Completable {
+        self.fetchChatRoomInfo(roomID)
+            .flatMapCompletable { room in
+                self.dropUserFromChatRoom(chatRoom: room, uuid: userUUID)
+                    .andThen(self.databaseService.deleteUserTicket(userUUID, roomID))
+            }
+    }
+    
     func dropUserFromChatRoom(chatRoom: ChatRoom, uuid: String) -> Completable {
         var updatingChatRoom: ChatRoom = chatRoom
         updatingChatRoom.userList = chatRoom.userList?.filter { $0 != uuid }
-        return self.firestoreService
-            .update(updatedData: updatingChatRoom, dataKey: .chatRoom)
-            .asCompletable()
-            .andThen(self.databaseService
-                .updateChatRoom(updatingChatRoom)
-                .asCompletable())
+        guard let nextUserList = updatingChatRoom.userList, let roomID = updatingChatRoom.uuid else {
+            return Completable.error(ChatRoomListRepositoryError.corruptedChatRoom)
+        }
+        
+        if nextUserList.isEmpty {
+            return self.firestoreService
+                .delete(data: chatRoom, dataKey: .chatRoom)
+                .andThen(self.databaseService
+                    .deleteChatRoom(roomID))
+                .andThen(self.databaseService
+                    .deleteChatMessages(roomID))
+        } else {
+            return self.firestoreService
+                .update(updatedData: updatingChatRoom, dataKey: .chatRoom)
+                .asCompletable()
+                .andThen(self.databaseService
+                    .updateChatRoom(updatingChatRoom)
+                    .asCompletable())
+        }
     }
     
     func dropUserFromChatRooms() -> Completable {
@@ -162,4 +183,5 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
 enum ChatRoomListRepositoryError: Error {
     case failedToFetch
     case failedToCrate
+    case corruptedChatRoom
 }
