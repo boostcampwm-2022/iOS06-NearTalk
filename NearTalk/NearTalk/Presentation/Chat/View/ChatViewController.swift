@@ -105,7 +105,7 @@ final class ChatViewController: UIViewController {
         // TODO: - 메세지 읽은 수 나타내기
 //        self.viewModel.lastUpdatedTimeOfTicketsRelay
             
-        
+
         self.viewModel.chatMessages
             .asDriver(onErrorJustReturn: [])
             .drive(onNext: { [weak self] messages in
@@ -198,6 +198,7 @@ private extension ChatViewController {
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems([item])
             }
+            
             return cell
         }
         return datasource

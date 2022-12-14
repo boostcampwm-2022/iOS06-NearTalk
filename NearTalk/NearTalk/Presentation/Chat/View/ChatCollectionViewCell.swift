@@ -14,6 +14,9 @@ import UIKit
 class ChatCollectionViewCell: UICollectionViewCell {
     // MARK: - Proporty
     static let identifier = String(describing: ChatRoomListCell.self)
+    var ticketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
+    private var createdAt: Date?
+    private var viewModel: ChatViewModel?
     private var disposeBag: DisposeBag = DisposeBag()
     
     // MARK: - UI Proporty
@@ -33,16 +36,16 @@ class ChatCollectionViewCell: UICollectionViewCell {
     }()
     
     private lazy var nameLabel: UILabel = UILabel().then { label in
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = .systemFont(ofSize: 12)
     }
     
     private let timeLabel: UILabel = UILabel().then { label in
-        label.font = UIFont.systemFont(ofSize: 8)
+        label.font = .systemFont(ofSize: 8)
     }
     
     private let countOfUnreadMessagesLabel: UILabel = UILabel().then { label in
         label.tintColor = .primaryColor
-        label.font = UIFont.systemFont(ofSize: 8)
+        label.font = .systemFont(ofSize: 8)
     }
     
     private lazy var profileImageView: UIImageView = UIImageView().then { imageView in
@@ -61,6 +64,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         self.addViews()
+//        self.bindTicket()
         self.isUserInteractionEnabled = false
     }
     
@@ -76,8 +80,9 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.disposeBag = DisposeBag()
     }
 
-    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {        
+    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
         let isInComing = messageItem.type == .receive
+        self.createdAt = messageItem.createdAt
         
         tickets
             .asDriver()
@@ -88,10 +93,10 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 }).count
                 print("📩 [전송타입] \(isInComing ? "receive" : "send")| [메세지 내용]: \(messageItem.message ?? "")  | [안읽은 메세지 수]: \(count)")
                 self.countOfUnreadMessagesLabel.text = "\(count)"
-
             })
             .disposed(by: self.disposeBag)
         
+//        self.bindTicket()
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
         self.textView.text = messageItem.message
@@ -185,5 +190,26 @@ class ChatCollectionViewCell: UICollectionViewCell {
         dateFormatter.dateFormat = "h:mm"
         
         return dateFormatter.string(from: date)
+    }
+    
+    private func bindTicket() {
+        self.viewModel?.lastUpdatedTimeOfTicketsRelay
+            .asDriver()
+            .drive(onNext: { lastUpdatedTimeOfTickets in
+                guard let createdTime = self.createdAt
+                else {
+                    return
+                }
+                
+                let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
+                    let lastUpdatedTime = Date(timeIntervalSince1970: time)
+                    return lastUpdatedTime < createdTime
+                }).count
+                if count > 0 {
+                    self.countOfUnreadMessagesLabel.text = "\(count)"
+                }
+                print("✅ | 티켓 수: ", lastUpdatedTimeOfTickets.count, self.createdAt, "| count: ", count)
+            })
+            .disposed(by: self.disposeBag)
     }
 }

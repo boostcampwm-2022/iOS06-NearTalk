@@ -85,7 +85,6 @@ class DefaultChatViewModel: ChatViewModel {
         
         self.initiateChatRoom()
         self.bindInitialMessage()
-
         // TODO: - chatRoom 존재하지 않을때 예외처리
     }
     
@@ -414,7 +413,7 @@ extension DefaultChatViewModel {
                     .subscribe(onNext: { ticketList in
                         print(">>>>>")
                         // TODO: - Ticket created Date 알아내기
-                        
+
                         ticketList.forEach { [weak self] ticket in
                             guard let self,
                                   let ticketID = ticket.uuid,
