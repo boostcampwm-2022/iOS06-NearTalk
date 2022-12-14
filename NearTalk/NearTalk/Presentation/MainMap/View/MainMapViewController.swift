@@ -326,13 +326,14 @@ final class MainMapViewController: UIViewController {
         let geocoder = CLGeocoder()
         let locale = Locale(identifier: "Ko-kr")
         geocoder.reverseGeocodeLocation(userLocation, preferredLocale: locale) { [weak self] (placeMarks, _) in
-            guard let placeMarks = placeMarks,
-                  let city = placeMarks.last?.locality,
-                  let dong = placeMarks.last?.subLocality,
-                  let name = placeMarks.last?.name
+            guard let placeMark = placeMarks?.last
             else {
                 return
             }
+            
+            let city = placeMark.locality ?? ""
+            let dong = placeMark.subLocality ?? ""
+            let name = placeMark.name ?? ""
             
             self?.userLocationLabel.text = "\(city) \(dong) \(name)"
         }
