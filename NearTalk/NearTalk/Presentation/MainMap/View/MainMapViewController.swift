@@ -8,7 +8,6 @@
 import CoreLocation
 import Kingfisher
 import MapKit
-import Kingfisher
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -115,7 +114,7 @@ final class MainMapViewController: UIViewController {
             self.fetch(path: profileImagePath)
         }
         
-        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManagerDidChangeAuthorization(self.locationManager)
         self.locationManager.startUpdatingLocation()
     }
     
@@ -395,14 +394,12 @@ extension MainMapViewController: MKMapViewDelegate {
 extension MainMapViewController: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
-        case .notDetermined:
+        case .notDetermined, .restricted, .denied:
             manager.requestWhenInUseAuthorization()
-        case .authorizedAlways, .authorizedWhenInUse:
+        case .authorizedWhenInUse, .authorizedAlways:
             manager.startUpdatingLocation()
-        case .restricted, .denied:
+        default:
             manager.requestWhenInUseAuthorization()
-        @unknown default:
-            return
         }
     }
 }
