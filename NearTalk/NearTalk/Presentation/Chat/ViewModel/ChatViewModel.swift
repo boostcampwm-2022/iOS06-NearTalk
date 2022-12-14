@@ -211,6 +211,7 @@ extension DefaultChatViewModel {
                 }
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
+                newChatMessages.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
                 ///
                 self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
                 ///
@@ -275,7 +276,6 @@ extension DefaultChatViewModel {
             .asCompletable()
     }
     
-    ///
     private func fetchUserChatRoomTicketList(_ userUUIDList: [String]) -> Completable {
         self.enterChatRoomUseCase.fetchSingleUserChatRoomTickets(
             userIDList: userUUIDList.last!,
@@ -491,6 +491,8 @@ extension DefaultChatViewModel {
                     return
                 }
                 
+                print("🚧 ", messages.count)
+                
                 if messages.count == 0 {
                     self.hasFirstMessage.accept(true)
                 }
@@ -502,7 +504,6 @@ extension DefaultChatViewModel {
                     newValue = messages + newValue
                 }
                 
-                ///
                 newValue.forEach { message in
                     guard let createdAtTimeStamp = message.createdAtTimeStamp,
                     let uuid = message.uuid else {
@@ -510,7 +511,7 @@ extension DefaultChatViewModel {
                     }
                     self.messageCreatedTimeList[uuid] = createdAtTimeStamp
                 }
-                ///
+                newValue.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
                 
                 self.chatMessages.accept(newValue)
                 self.isLoading.accept(false)

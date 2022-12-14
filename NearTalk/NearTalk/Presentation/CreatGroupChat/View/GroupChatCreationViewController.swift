@@ -15,7 +15,7 @@ import UIKit
 final class CreateGroupChatViewController: PhotoImagePickerViewController {
     
     // MARK: - Proporties
-    private let pickerComponentList: [Int] = Array((10...100))
+    private let pickerComponentList: [Int] = Array((4...10))
     private let viewModel: CreateGroupChatViewModel
     private let disposeBag: DisposeBag = DisposeBag()
     
@@ -274,6 +274,7 @@ private extension CreateGroupChatViewController {
     }
 }
 
+// MARK: - UIPickerViewDelegate, UIPickerViewDataSource
 extension CreateGroupChatViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         1
