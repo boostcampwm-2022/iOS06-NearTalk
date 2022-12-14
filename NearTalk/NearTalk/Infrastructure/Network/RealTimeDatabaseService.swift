@@ -15,6 +15,7 @@ protocol RealTimeDatabaseService {
     func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
     func fetchMessages(date: Date, pageCount: Int, roomID: String) -> Single<[ChatMessage]>
     func observeNewMessage(_ chatRoomID: String) -> Observable<ChatMessage>
+    func deleteChatMessages(_ chatRoomID: String) -> Completable
     
     // MARK: 채팅방 정보
     func createChatRoom(_ chatRoom: ChatRoom) -> Single<ChatRoom>
@@ -22,6 +23,7 @@ protocol RealTimeDatabaseService {
     func increaseChatRoomMessageCount(_ chatRoomID: String) -> Completable
     func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom>
     func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom>
+    func deleteChatRoom(_ chatRoomID: String) -> Completable
     
     // MARK: 유저-채팅방 티켓 정보
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
@@ -403,6 +405,38 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 .child(FirebaseKey.RealtimeDB.users.rawValue)
                 .child(userID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
+                .child(chatRoomID)
+                .removeValue(completionBlock: { error, _ in
+                    if let error = error {
+                        completable(.error(error))
+                    } else {
+                        completable(.completed)
+                    }
+                })
+            return Disposables.create()
+        }
+    }
+    
+    func deleteChatRoom(_ chatRoomID: String) -> Completable {
+        Completable.create { [weak self] completable in
+            self?.ref
+                .child(FirebaseKey.RealtimeDB.chatRooms.rawValue)
+                .child(chatRoomID)
+                .removeValue(completionBlock: { error, _ in
+                    if let error = error {
+                        completable(.error(error))
+                    } else {
+                        completable(.completed)
+                    }
+                })
+            return Disposables.create()
+        }
+    }
+    
+    func deleteChatMessages(_ chatRoomID: String) -> Completable {
+        Completable.create { [weak self] completable in
+            self?.ref
+                .child(FirebaseKey.RealtimeDB.chatMessages.rawValue)
                 .child(chatRoomID)
                 .removeValue(completionBlock: { error, _ in
                     if let error = error {
