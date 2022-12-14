@@ -11,9 +11,8 @@ import UIKit
 
 final class LaunchScreenViewController: UIViewController {
     // MARK: - UI properties
-    private let titleLabel: UILabel = UILabel().then {
-        $0.text = "근방톡"
-        $0.font = .systemFont(ofSize: 50, weight: .semibold)
+    private let appLogoImageView: UIImageView = UIImageView().then {
+        $0.image = UIImage(named: "Logo")
     }
     
     // MARK: - Properties
@@ -47,7 +46,7 @@ final class LaunchScreenViewController: UIViewController {
 
     // MARK: - Configure views
     private func addSubviews() {
-        self.view.addSubview(titleLabel)
+        self.view.addSubview(appLogoImageView)
     }
     
     private func configureConstraints() {
@@ -55,26 +54,8 @@ final class LaunchScreenViewController: UIViewController {
     }
     
     private func configureLogoLabel() {
-        self.titleLabel.snp.makeConstraints {
+        self.appLogoImageView.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct LaunchScreenViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        let container: AppDIContainer = .init(
-            navigationController: .init(),
-            launchScreenActions: .init(),
-            loginAction: .init(),
-            showMainViewController: nil
-        )
-        let diContainer: LaunchScreenDIContainer = container.resolveLaunchScreenDIContainer()
-        let vc: LaunchScreenViewController = diContainer.resolveLaunchScreenViewController()
-        return vc.showPreview(.iPhone14Pro)
-    }
-}
-#endif
