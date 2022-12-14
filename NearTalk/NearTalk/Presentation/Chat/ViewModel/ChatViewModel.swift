@@ -12,6 +12,7 @@ import RxSwift
 protocol ChatViewModelInput {
     func sendMessage(_ message: String)
     func viewWillDisappear()
+    func dropRoom()
 }
 
 protocol ChatViewModelOutput {
@@ -23,11 +24,16 @@ protocol ChatViewModelOutput {
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
     func getUnreadMessageCount(before: Double?) -> Int?
+    var dropOutEvent: Observable<Bool> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
 
 class DefaultChatViewModel: ChatViewModel {
+    var dropOutEvent: Observable<Bool> {
+        self.dropEvent.asObservable()
+    }
+    
     // MARK: - Proporties
     let lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
     
@@ -43,6 +49,7 @@ class DefaultChatViewModel: ChatViewModel {
     private let userDefaultUseCase: UserDefaultUseCase
     private let fetchProfileUseCase: FetchProfileUseCase
     private let enterChatRoomUseCase: EnterChatRoomUseCase
+    private let dropChatRoomUseCase: DropChatRoomUseCase
     
     private let isLoading: BehaviorRelay<Bool> = .init(value: false)
     private let initialMessage: BehaviorRelay<ChatMessage?> = .init(value: nil)
@@ -50,6 +57,7 @@ class DefaultChatViewModel: ChatViewModel {
     let userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
     let userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
     private var disposeBag: DisposeBag = DisposeBag()
+    private let dropEvent: PublishSubject<Bool> = PublishSubject()
     
     // MARK: - Outputs
     
@@ -65,13 +73,15 @@ class DefaultChatViewModel: ChatViewModel {
         userDefaultUseCase: UserDefaultUseCase,
         fetchProfileUseCase: FetchProfileUseCase,
         messagingUseCase: MessagingUseCase,
-        enterChatRoomUseCase: EnterChatRoomUseCase
+        enterChatRoomUseCase: EnterChatRoomUseCase,
+        dropChatRoomUseCase: DropChatRoomUseCase
     ) {
         self.messagingUseCase = messagingUseCase
         self.fetchChatRoomInfoUseCase = fetchChatRoomInfoUseCase
         self.userDefaultUseCase = userDefaultUseCase
         self.fetchProfileUseCase = fetchProfileUseCase
         self.enterChatRoomUseCase = enterChatRoomUseCase
+        self.dropChatRoomUseCase = dropChatRoomUseCase
         
         self.chatRoomID = chatRoomID
         self.myID = self.userDefaultUseCase.fetchUserUUID()
@@ -131,6 +141,20 @@ class DefaultChatViewModel: ChatViewModel {
     
     func getUserProfile(userID: String) -> UserProfile? {
         return self.userProfileList[userID]
+    }
+    
+    func dropRoom() {
+        guard let myID = self.myID
+        else {
+            return
+        }
+
+        self.dropChatRoomUseCase.execute(myID, self.chatRoomID)
+            .subscribe(onCompleted: { [weak self] in
+                self?.dropEvent.onNext(true)
+            }, onError: { [weak self] error in
+                self?.dropEvent.onNext(false)
+            }).disposed(by: self.disposeBag)
     }
 }
 
