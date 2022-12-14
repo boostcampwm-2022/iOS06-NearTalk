@@ -434,7 +434,6 @@
 		609B46E0293B06C70021E8FA /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		609E27152944A00B00F4BDE4 /* CoreDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		60C2A788291F3FE000F7D284 /* LaunchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenCoordinator.swift; sourceTree = "<group>"; };
-		60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTests.swift; sourceTree = "<group>"; };
 		60DCAAF32928B9610087A63D /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		60E749DB292C88F40048F877 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		60FB892B2940EDD500E9E4E5 /* RealtimeDBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeDBTests.swift; sourceTree = "<group>"; };
@@ -453,7 +452,6 @@
 		7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCoordinator.swift; sourceTree = "<group>"; };
 		7C254DB4292DDABE004D4CEC /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		7C43C1EE2935F810008322FC /* UserDefaultUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultUseCase.swift; sourceTree = "<group>"; };
-		7C4895352931FBE300DD5076 /* config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = config.xcconfig; sourceTree = "<group>"; };
 		7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatRoomInfoUseCase.swift; sourceTree = "<group>"; };
 		7C6684AD2924BC9E00A5E10A /* ProfileDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailViewModel.swift; sourceTree = "<group>"; };
 		7C749850292F706F00FADA94 /* MessagingUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingUseCase.swift; sourceTree = "<group>"; };
@@ -720,7 +718,6 @@
 				1660D24A291DDB3A005F7B24 /* NearTalkUITests */,
 				1660D225291DDB37005F7B24 /* Products */,
 				EF9BC89A864970D54CE8E69D /* Pods */,
-				7C43C1F229361920008322FC /* Recovered References */,
 				2461FCD4A34405BB5DEC161C /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -1283,15 +1280,6 @@
 				7C254DB2292DDAAF004D4CEC /* ChatCoordinator.swift */,
 			);
 			path = Coordinator;
-			sourceTree = "<group>";
-		};
-		7C43C1F229361920008322FC /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				7C4895352931FBE300DD5076 /* config.xcconfig */,
-				60DA6309293D20A1003CA3E5 /* CoreDataTests.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		7C6684AC2924BC7E00A5E10A /* ViewModel */ = {
@@ -2235,11 +2223,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 92NGUT4BRA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/watchOS",
@@ -2249,7 +2235,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "근방톡";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
+				INFOPLIST_KEY_NSCameraUsageDescription = "친구 추가하기 위해 카메라를 사용합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "NearTalk의 지도 사용을 위한 권한요청입니다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "NearTalk의 지도 사용을 위한 권한요청입니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "NearTalk의 사용 중 지도 사용을 위한 권한요청입니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2268,7 +2257,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -2287,11 +2275,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 92NGUT4BRA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/watchOS",
@@ -2301,7 +2287,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NearTalk/Resource/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "근방톡";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "메인지도 권한 요쳥";
+				INFOPLIST_KEY_NSCameraUsageDescription = "친구 추가하기 위해 카메라를 사용합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "NearTalk의 지도 사용을 위한 권한요청입니다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "NearTalk의 지도 사용을 위한 권한요청입니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "NearTalk의 사용 중 지도 사용을 위한 권한요청입니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 권한 요청입니다";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2320,7 +2309,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
