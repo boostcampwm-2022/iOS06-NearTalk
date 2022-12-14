@@ -33,6 +33,7 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
         self.fetchChatRoomInfo(roomID)
             .flatMapCompletable { room in
                 self.dropUserFromChatRoom(chatRoom: room, uuid: userUUID)
+                    .andThen(self.databaseService.deleteUserTicket(userUUID, roomID))
             }
     }
     
