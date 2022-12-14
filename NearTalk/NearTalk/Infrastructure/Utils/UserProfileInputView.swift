@@ -56,6 +56,8 @@ class UserProfileInputView: UIView {
     }
 
     private let nicknameField: UITextField = UITextField().then {
+        $0.borderStyle = .none
+        $0.backgroundColor = .secondaryBackground
         $0.autocorrectionType = .no
         $0.placeholder = "닉네임"
         $0.layer.cornerRadius = 5.0
@@ -68,6 +70,7 @@ class UserProfileInputView: UIView {
     private let messageField: UITextView = UITextView().then {
         $0.returnKeyType = .done
         $0.isScrollEnabled = false
+        $0.backgroundColor = .secondaryBackground
         $0.sizeToFit()
         $0.textContainer.size = $0.contentSize
         $0.textContainer.maximumNumberOfLines = 2

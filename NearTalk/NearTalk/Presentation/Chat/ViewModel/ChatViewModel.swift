@@ -201,7 +201,7 @@ extension DefaultChatViewModel {
                 guard let self,
                       let messageCount = self.chatRoom.value?.messageCount,
                       let createdAtTimeStamp = message.createdAtTimeStamp,
-                      let messageuuid = message.uuid else {
+                      let messageID = message.uuid else {
                     return
                 }
                 self.updateTicketAndChatRoom(message, messageCount)
@@ -211,8 +211,9 @@ extension DefaultChatViewModel {
                 }
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
+                newChatMessages.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
                 ///
-                self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
+                self.messageCreatedTimeList[messageID] = createdAtTimeStamp
                 ///
                 self.chatMessages.accept(newChatMessages)
             }).disposed(by: self.disposeBag)
@@ -275,7 +276,6 @@ extension DefaultChatViewModel {
             .asCompletable()
     }
     
-    ///
     private func fetchUserChatRoomTicketList(_ userUUIDList: [String]) -> Completable {
         self.enterChatRoomUseCase.fetchSingleUserChatRoomTickets(
             userIDList: userUUIDList.last!,
@@ -287,7 +287,6 @@ extension DefaultChatViewModel {
             }
             
             self.ticketList = [ticket]
-            print("#@#@#@#@#@#@#@#@#@#@#@#@#@#@#@", ticket)
         })
         .asCompletable()
     }
@@ -441,13 +440,13 @@ extension DefaultChatViewModel {
             .subscribe(onNext: { [weak self] (message: ChatMessage?) in
                 guard let self,
                       let message,
-                      let messageuuid = message.uuid,
+                      let messageID = message.uuid,
                       let createdAtTimeStamp = message.createdAtTimeStamp,
                       let chatRoom = self.chatRoom.value else {
                     return
                 }
                 ///
-                self.messageCreatedTimeList[messageuuid] = createdAtTimeStamp
+                self.messageCreatedTimeList[messageID] = createdAtTimeStamp
                 ///
                 self.fetchMessages(before: message, isInitialMessage: true)
                 
@@ -491,6 +490,8 @@ extension DefaultChatViewModel {
                     return
                 }
                 
+                print("🚧 ", messages.count)
+                
                 if messages.count == 0 {
                     self.hasFirstMessage.accept(true)
                 }
@@ -502,7 +503,6 @@ extension DefaultChatViewModel {
                     newValue = messages + newValue
                 }
                 
-                ///
                 newValue.forEach { message in
                     guard let createdAtTimeStamp = message.createdAtTimeStamp,
                     let uuid = message.uuid else {
@@ -510,7 +510,7 @@ extension DefaultChatViewModel {
                     }
                     self.messageCreatedTimeList[uuid] = createdAtTimeStamp
                 }
-                ///
+                newValue.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
                 
                 self.chatMessages.accept(newValue)
                 self.isLoading.accept(false)

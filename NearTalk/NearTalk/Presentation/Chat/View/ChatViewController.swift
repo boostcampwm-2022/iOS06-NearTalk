@@ -93,11 +93,6 @@ final class ChatViewController: UIViewController {
             }
             .disposed(by: self.disposeBag)
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.viewModel.viewWillDisappear()
-    }
 
     private func scrollToBottom() {
         guard self.isLatestMessageChanged.value
