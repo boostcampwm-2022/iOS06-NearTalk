@@ -23,7 +23,6 @@ protocol ChatViewModelOutput {
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
-    func getUnreadMessageCount(before: Double?) -> Int?
     var dropOutEvent: Observable<Bool> { get }
 }
 
