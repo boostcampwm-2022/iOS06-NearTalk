@@ -335,7 +335,7 @@ final class MainMapViewController: UIViewController {
             let dong = placeMark.subLocality ?? ""
             let name = placeMark.name ?? ""
             
-            self?.userLocationLabel.text = "\(city) \(dong) \(name)"
+            self?.userLocationLabel.text = "\(city) \(dong) \(name)".trimmingCharacters(in: .whitespacesAndNewlines)
         }
     }
 }
