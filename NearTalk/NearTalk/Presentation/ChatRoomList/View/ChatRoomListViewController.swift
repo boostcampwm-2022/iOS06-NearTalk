@@ -90,8 +90,7 @@ final class ChatRoomListViewController: UIViewController {
         
         self.chatTypeSegment.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.centerX.equalTo(self.view)
-            make.width.equalTo(300)
+            make.leading.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(52)
             make.height.equalTo(32)
         }
         

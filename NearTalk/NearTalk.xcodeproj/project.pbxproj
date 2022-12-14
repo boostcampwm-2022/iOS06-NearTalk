@@ -340,6 +340,7 @@
 		1698887B292F43D300CEC7B9 /* FetchAccessibleChatRoomsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchAccessibleChatRoomsUseCase.swift; sourceTree = "<group>"; };
 		1698887F292F54E400CEC7B9 /* DefaultAccessibleChatRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAccessibleChatRoomsRepository.swift; sourceTree = "<group>"; };
 		16988881292F550500CEC7B9 /* AccessibleChatRoomsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleChatRoomsRepository.swift; sourceTree = "<group>"; };
+		16BBBC5D2948DC880009B444 /* userScenario.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = userScenario.gpx; sourceTree = "<group>"; };
 		310A2CAD356585635B2824F6 /* Pods-NearTalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NearTalk.release.xcconfig"; path = "Target Support Files/Pods-NearTalk/Pods-NearTalk.release.xcconfig"; sourceTree = "<group>"; };
 		5506CDDA292B4D270002F328 /* FriendListDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListDIContainer.swift; sourceTree = "<group>"; };
 		5506CDDC292B4F810002F328 /* FetchFriendListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFriendListUseCase.swift; sourceTree = "<group>"; };
@@ -1170,6 +1171,7 @@
 				603FD398292B421D00687ED4 /* naver.gpx */,
 				608F9F4D2948F2F9007C3687 /* mohyun.gpx */,
 				55B25CD3293F6C3D009F7963 /* textMoveGPS.gpx */,
+				16BBBC5D2948DC880009B444 /* userScenario.gpx */,
 			);
 			path = GPSPoints;
 			sourceTree = "<group>";

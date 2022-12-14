@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>메인지도 권한 요쳥</string>
+	<string>NearTalk의 지도 사용을 위한 권한요청입니다.</string>
 	<key>FCM_SERVER_KEY</key>
 	<string>$(FCM_SERVER_KEY)</string>
 	<key>FCM_URL</key>
