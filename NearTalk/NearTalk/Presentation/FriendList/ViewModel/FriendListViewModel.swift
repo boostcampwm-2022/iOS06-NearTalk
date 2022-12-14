@@ -21,20 +21,29 @@ protocol FriendListViewModelInput {
 
 protocol FriendListViewModelOutput {
     var friendsData: BehaviorRelay<[Friend]> { get }
+    var myUUID: String? { get }
 }
 
 protocol FriendListViewModel: FriendListViewModelInput, FriendListViewModelOutput {}
 
 final class DefaultFriendListViewModel: FriendListViewModel {
     
+    private let userDefaultsUseCase: UserDefaultUseCase
     private let fetchFriendListUseCase: FetchFriendListUseCase
     private let actions: FriendListViewModelActions?
     private let disposeBag: DisposeBag = DisposeBag()
     
+    var myUUID: String? { self.userDefaultsUseCase.fetchUserUUID() }
+    
     // MARK: - OUTPUT
     var friendsData: BehaviorRelay<[Friend]> = BehaviorRelay<[Friend]>(value: [])
     
-    init(fetchFriendListUseCase: FetchFriendListUseCase, actions: FriendListViewModelActions? = nil) {
+    init(
+        userDefaultsUseCase: UserDefaultUseCase,
+        fetchFriendListUseCase: FetchFriendListUseCase,
+        actions: FriendListViewModelActions? = nil
+    ) {
+        self.userDefaultsUseCase = userDefaultsUseCase
         self.fetchFriendListUseCase = fetchFriendListUseCase
         self.actions = actions
         
@@ -46,7 +55,6 @@ final class DefaultFriendListViewModel: FriendListViewModel {
     }
     
     // MARK: - INPUT
-    
     func reload() {
         self.fetchFriendListUseCase.reload()
         
