@@ -23,5 +23,6 @@ protocol ChatRoomListRepository {
     func fetchUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
     func observeUserChatRoomTicketList() -> Observable<[UserChatRoomTicket]>
+    func observeUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> Observable<UserChatRoomTicket>
     func dropUserFromChatRooms() -> Completable
 }

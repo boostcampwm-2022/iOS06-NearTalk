@@ -29,6 +29,7 @@ protocol RealTimeDatabaseService {
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
     func observeUserChatRoomTicketList(_ userID: String) -> Observable<[UserChatRoomTicket]>
+    func observeUserChatRoomTicket(_ userID: String, _ roomID: String) -> Observable<UserChatRoomTicket>
     func deleteUserTicketList(_ userID: String) -> Completable
 }
 
@@ -217,7 +218,6 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
         }
     }
     
-
     func observeChatRoomInfo(_ chatRoomID: String) -> Observable<ChatRoom> {
         Observable<ChatRoom>.create { [weak self] observable in
             guard let self
@@ -353,6 +353,28 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
                 
                     observable.onNext(tickets)
                     
+                }
+            return Disposables.create()
+        }
+    }
+    
+    func observeUserChatRoomTicket(_ userID: String, _ roomID: String) -> Observable<UserChatRoomTicket> {
+        Observable<UserChatRoomTicket>.create { [weak self] observable in
+            guard let self
+            else {
+                observable.onError(DatabaseError.failedToFetch)
+                return Disposables.create()
+            }
+            self.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(userID)
+                .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
+                .child(roomID)
+                .observe(.value) { snapshot in
+                    if let value: [String: Any] = snapshot.value as? [String: Any],
+                       let ticket: UserChatRoomTicket = try? UserChatRoomTicket.decode(dictionary: value) {
+                        observable.onNext(ticket)
+                    }
                 }
             return Disposables.create()
         }
