@@ -160,8 +160,6 @@ final class ChatViewController: UIViewController {
 // MARK: - UICollectionViewDelegate
 extension ChatViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("🚧 ", #function, indexPath.row)
-        
         if indexPath.row > 29,
            !self.isReadyToFetchPreviousMessages {
             self.isReadyToFetchPreviousMessages.toggle()

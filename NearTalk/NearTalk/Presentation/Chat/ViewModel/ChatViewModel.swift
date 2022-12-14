@@ -383,8 +383,7 @@ extension DefaultChatViewModel {
     }
     
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool = false) {
-        guard let timeStamp: Double = message.createdAtTimeStamp,
-              !self.hasFirstMessage.value,
+        guard !self.hasFirstMessage.value,
               !self.isLoading.value
         else {
             return
@@ -392,7 +391,7 @@ extension DefaultChatViewModel {
         
         self.isLoading.accept(true)
         self.messagingUseCase.fetchMessage(
-            before: Date(timeIntervalSince1970: timeStamp),
+            before: message,
             roomID: self.chatRoomID,
             totalMessageCount: 30
         )
