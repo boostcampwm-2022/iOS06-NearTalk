@@ -79,7 +79,7 @@ class UserProfileInputViewController: PhotoImagePickerViewController {
     
     func configureRootViewConstraint() {
         self.rootView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(self.scrollView.safeAreaLayoutGuide)
             make.width.height.equalToSuperview()
         }
     }
