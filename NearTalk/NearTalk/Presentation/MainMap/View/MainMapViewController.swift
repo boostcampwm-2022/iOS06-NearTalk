@@ -397,6 +397,7 @@ extension MainMapViewController: CLLocationManagerDelegate {
         case .notDetermined, .restricted, .denied:
             manager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse, .authorizedAlways:
+            manager.desiredAccuracy = kCLLocationAccuracyBest
             manager.startUpdatingLocation()
         default:
             manager.requestWhenInUseAuthorization()
