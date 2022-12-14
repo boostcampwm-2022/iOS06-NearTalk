@@ -29,6 +29,14 @@ final class ProfileDetailDIContainer {
         return DefaultUserDefaultsService()
     }
     
+    func makeDataBaseService() -> RealTimeDatabaseService {
+        return DefaultRealTimeDatabaseService()
+    }
+    
+    func makeStorageService() -> StorageService {
+        return DefaultStorageService()
+    }
+    
     // MARK: - UseCases
     func makeFetchProfileUseCase() -> FetchProfileUseCase {
         return DefaultFetchProfileUseCase(profileRepository: self.makeProfileDetailRepository())
@@ -52,6 +60,12 @@ final class ProfileDetailDIContainer {
         return DefaultUpdateProfileUseCase(repository: makeProfileDetailRepository(), userDefaultsRepository: makeUserDefaultsRepository())
     }
     
+    func makeFetchChatRoomUseCase() -> FetchChatRoomUseCase {
+        return DefaultFetchChatRoomUseCase(chatRoomListRepository: makeChatRoomListRepository(),
+                                           profileRepository: makeProfileDetailRepository(),
+                                           userDefaultsRepository: makeUserDefaultsRepository())
+    }
+    
     // MARK: - Repositories
     func makeProfileDetailRepository() -> ProfileRepository {
         return DefaultProfileRepository(
@@ -62,12 +76,21 @@ final class ProfileDetailDIContainer {
     func makeUserDefaultsRepository() -> UserDefaultsRepository {
         return DefaultUserDefaultsRepository(userDefaultsService: makeUserDefaultService())
     }
+    
+    func makeChatRoomListRepository() -> ChatRoomListRepository {
+        return DefaultChatRoomListRepository(dataTransferService: makeStorageService(),
+                                             profileRepository: makeProfileDetailRepository(),
+                                             databaseService: makeDataBaseService(),
+                                             firestoreService: makeFirestoreService())
+    }
+    
     // MARK: - ViewModels
     func makeProfileDetailViewModel(
         actions: ProfileDetailViewModelActions
     ) -> any ProfileDetailViewModelable {
         return ProfileDetailViewModel(
             userID: self.userID,
+            fetchChatRoomUseCase: self.makeFetchChatRoomUseCase(),
             fetchProfileUseCase: self.makeFetchProfileUseCase(),
             uploadChatRoomInfoUseCase: self.makeUploadChatRoomInfoUseCase(),
             removeFriendUseCase: self.makeRemoveFriendUseCase(),
