@@ -36,7 +36,7 @@ final class RootTabBarCoordinator: Coordinator {
         }
         
         var inactivatedImage: UIImage? {
-            guard let color: UIColor = .primaryColor
+            guard let color: UIColor = .label
             else {
                 return nil
             }
@@ -54,7 +54,7 @@ final class RootTabBarCoordinator: Coordinator {
         }
         
         var activatedImage: UIImage? {
-            guard let color: UIColor = .secondaryColor
+            guard let color: UIColor = .label
             else {
                 return nil
             }
