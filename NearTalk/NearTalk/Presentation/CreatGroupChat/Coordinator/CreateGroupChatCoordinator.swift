@@ -30,7 +30,7 @@ final class CreateGroupChatCoordinator {
         let actions: CreateGroupChatViewModelActions = .init(showChatViewController: showChatViewController)
         let viewController = dependencies.makeCreateGroupChatViewController(actions: actions)
         viewController.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(viewController, animated: true)
+        self.navigationController?.topViewController?.present(viewController, animated: true)
         self.createGroupChatViewController = viewController
     }
 
@@ -41,8 +41,9 @@ final class CreateGroupChatCoordinator {
             return
         }
         
-        let diContainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
-        let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
+        let dicontainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
+        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        self.createGroupChatViewController?.dismiss(animated: true)
         coordinator.start()
     }
 }

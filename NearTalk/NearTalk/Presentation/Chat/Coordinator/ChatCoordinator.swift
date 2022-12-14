@@ -27,7 +27,6 @@ final class ChatCoordinator {
     func start() {
         let viewController = dependencies.makeChatViewController()
         viewController.hidesBottomBarWhenPushed = true
-        self.navigationController?.popViewController(animated: false)
         self.navigationController?.pushViewController(viewController, animated: true)
         self.chatViewController = viewController
     }
