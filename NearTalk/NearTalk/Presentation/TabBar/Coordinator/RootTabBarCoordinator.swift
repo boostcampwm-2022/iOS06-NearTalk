@@ -36,7 +36,7 @@ final class RootTabBarCoordinator: Coordinator {
         }
         
         var inactivatedImage: UIImage? {
-            guard let color: UIColor = .label
+            guard let color: UIColor = .primaryColor
             else {
                 return nil
             }
@@ -45,16 +45,16 @@ final class RootTabBarCoordinator: Coordinator {
             case .mapView:
                 return UIImage(systemName: "map")?.withTintColor(color)
             case .chatRoomList:
-                return UIImage(systemName: "message")?.withTintColor(color)
+                return UIImage(systemName: "message.badge")?.withTintColor(color)
             case .friendList:
-                return UIImage(systemName: "person.3")?.withTintColor(color)
+                return UIImage(systemName: "person.line.dotted.person")?.withTintColor(color)
             case .myProfile:
-                return UIImage(systemName: "person")?.withTintColor(color)
+                return UIImage(systemName: "person.text.rectangle")?.withTintColor(color)
             }
         }
         
         var activatedImage: UIImage? {
-            guard let color: UIColor = .label
+            guard let color: UIColor = .secondaryColor
             else {
                 return nil
             }
@@ -63,11 +63,11 @@ final class RootTabBarCoordinator: Coordinator {
             case .mapView:
                 return UIImage(systemName: "map.fill")?.withTintColor(color)
             case .chatRoomList:
-                return UIImage(systemName: "message.fill")?.withTintColor(color)
+                return UIImage(systemName: "message.badge.filled.fill")?.withTintColor(color)
             case .friendList:
-                return UIImage(systemName: "person.3.fill")?.withTintColor(color)
+                return UIImage(systemName: "person.line.dotted.person.fill")?.withTintColor(color)
             case .myProfile:
-                return UIImage(systemName: "person.fill")?.withTintColor(color)
+                return UIImage(systemName: "person.text.rectangle.fill")?.withTintColor(color)
             }
         }
     }
