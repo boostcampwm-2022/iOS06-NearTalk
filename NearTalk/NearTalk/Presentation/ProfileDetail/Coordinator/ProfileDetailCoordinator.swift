@@ -23,7 +23,10 @@ final class ProfileDetailCoordinator {
     }
     
     func start() {
-        let actions = ProfileDetailViewModelActions(showChatViewController: showChatViewController)
+        let actions = ProfileDetailViewModelActions(
+            showChatViewController: self.showChatViewController,
+            dismissProfileDetailController: self.dismissProfileDetailController
+        )
         
         let viewController: ProfileDetailViewController = self.dependencies.makeProfileDetailViewController(actions: actions)
         self.navigationController?.present(viewController, animated: true)
@@ -36,13 +39,17 @@ final class ProfileDetailCoordinator {
             return
         }
         
-        let dicontainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
-        let coordinator = dicontainer.makeChatCoordinator(navigationController: navigationController)
+        let diContainer = self.dependencies.makeChatDIContainer(chatRoomID: chatRoomID)
+        let coordinator = diContainer.makeChatCoordinator(navigationController: navigationController)
         navigationController.dismiss(animated: true)
         coordinator.start()
     }
     
-    func pushAlertViewController(username: String) {
-        print(#function)
+    func dismissProfileDetailController() {
+        guard let navigationController = self.navigationController
+        else {
+            return
+        }
+        navigationController.dismiss(animated: true)
     }
 }
