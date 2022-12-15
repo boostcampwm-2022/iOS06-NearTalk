@@ -1,6 +1,6 @@
 # NearTalk 소개
 
-<img src="/images/AppIcon.png" width="250">
+<img src="/images/logo.png" width="250">
 
 - 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "근방톡" 입니다.
 - 실시간 위치 기반으로 근처에 있는 채팅방에 입장하고 대화할 수 있습니다.
