@@ -1,13 +1,6 @@
 # NearTalk 소개
 
-<p align="center"><img src="/images/nearTalkLogo.png" width="250"></p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swift&logoColor=white"/>
-  <img src="https://img.shields.io/badge/UIkit-2396F3?style=for-the-badge&logo=UIkit&logoColor=white"/>
-  <img src="https://img.shields.io/badge/RxSwift-8D1F89?style=for-the-badge&logo=ReactiveX&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white"/>
-</p>
+<img src="/images/Logo.png" width="250">
 
 - 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "근방톡" 입니다.
 - 실시간 위치 기반으로 근처에 있는 채팅방에 입장하고 대화할 수 있습니다.
@@ -46,6 +39,26 @@
 ### 사용자 실시간 위치를 기준으로 채팅방 생성
 
 ### 애플 소셜 로그인
+
+<table>
+ <tr>
+  <td>로그인 화면</td>
+  <td>회원 탈퇴</td>
+ </tr>
+  <td>
+   <img width="818" alt="스크린샷 2022-12-15 17 39 03" src="https://user-images.githubusercontent.com/46563413/207814240-257d4f19-08bd-4f86-aee2-e40eaa499746.png">
+  </td>
+  <td>
+   <img width="862" alt="스크린샷 2022-12-15 17 39 38" src="https://user-images.githubusercontent.com/46563413/207814166-317274b9-d563-415a-8a0f-8c9b556aefe1.png">
+  </td>
+ </tr>
+</table>
+
+별도의 이메일, 비밀번호 필요 없이, 애플 계정만으로 회원 가입 및 로그인이 가능합니다.
+
+- 애플 로그인 이후, 로그아웃을 하지 않았다면, 해당 애플 계정에 연결된 계정으로 자동 로그인이 됩니다.
+- 애플 로그인은 회원 가입, 로그인, 회원 탈퇴 때 요구됩니다.
+- 앱에 로그인한 애플 계정 변경을 원하실 경우, 설정 앱 -> icloud -> 암호 및 보안 -> Apple ID를 사용하는 앱 -> NearTalk 앱 -> Apple ID 사용 중단 클릭을 하셔야 합니다.
 
 ### 푸시 알림 On/Off
 
@@ -126,7 +139,7 @@
 
 ### MVVM - C
 
-- View와 독립적으로 개발할 수 있는 viewModel을 활용해서 유닛 테스트하기에 용이한 **MVVM 패턴**을 도입했습니다.
+- View와 독립적으로 개발할 수 있는 viewModel을 활용해서 유닛 테스트하기에 용이한 **MVVM 패턴**을 ****입했습니다.
 - View의 화면전환 로직을 viewController에서 분리하는 것으로 화면전환을 유연하게 할 수 있는 **코디네이터 패턴**을 도입했습니다.
 
 ## 기술적인 도전
@@ -144,3 +157,10 @@
 
    <img src="images/carthage_1.png" width="500px" />
 
+### 접근 허용된 사진만 불러오기
+
+https://user-images.githubusercontent.com/46563413/207805355-73482552-b042-48fe-bd9a-92d9e390936f.mov
+
+- 앱 실행 중 접근 허용하지 않은 사진을 아예 화면에서 보이지 않게 하기 위해 구현했습니다.
+- PHPickerViewController, UIImageViewController는 접근을 허용하지 않은 사진까지 불러옵니다.
+- PHAsset, PHPhotoLibrary, CollectionView를 활용하여 앱에서 사진을 Import 할 때 접근이 허용된 사진만 불러오는 Picker를 구현했습니다.
