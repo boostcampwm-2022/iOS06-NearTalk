@@ -2,6 +2,10 @@
 
 <p align="center"><img src="/images/nearTalkLogo.png" width="250"></p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swiftt&logoColor=white"/>
+</p>
+
 - 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "근방톡" 입니다.
 - 실시간 위치 기반으로 근처에 있는 채팅방에 입장하고 대화할 수 있습니다.
 - 친구를 맺고 DM을 보낼 수 있습니다.
