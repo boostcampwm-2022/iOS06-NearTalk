@@ -3,7 +3,7 @@
 <p align="center"><img src="/images/nearTalkLogo.png" width="250"></p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swiftt&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swift&logoColor=white"/>
 </p>
 
 - 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "근방톡" 입니다.
