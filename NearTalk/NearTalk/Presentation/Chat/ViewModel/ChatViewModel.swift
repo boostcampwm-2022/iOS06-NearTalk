@@ -193,6 +193,7 @@ extension DefaultChatViewModel {
                 self?.bindNewMessage()
                 self?.observeNewMessage()
                 self?.observeChatRoom()
+                self?.fetchParticipantTickets()
             }).disposed(by: self.disposeBag)
     }
     
@@ -261,9 +262,6 @@ extension DefaultChatViewModel {
                 }
                 self.chatRoom.accept(chatRoom)
                 self.userUUIDList = userUUIDList
-                
-                // TODO: -
-                self.fetchParticipantTickets()
                 
                 return .just(userUUIDList)
             }
@@ -441,13 +439,9 @@ extension DefaultChatViewModel {
                 else {
                     return
                 }
-                ///
+                
                 self.messageCreatedTimeList[messageID] = createdAtTimeStamp
-                ///
                 self.fetchMessages(before: message, isInitialMessage: true)
-                
-                // TODO: -
-                
             }).disposed(by: self.disposeBag)
     }
     
@@ -457,7 +451,6 @@ extension DefaultChatViewModel {
         }
         self.fetchChatRoomInfoUseCase.fetchParticipantTickets(chatRoom)
             .subscribe(onNext: { ticketList in
-                print(">>>>>")
                 ticketList.forEach { [weak self] ticket in
                     guard let self,
                           let ticketID = ticket.uuid,
@@ -470,7 +463,6 @@ extension DefaultChatViewModel {
                         .subscribe(onSuccess: { chatMessage in
                             self.lastUpdatedTimeOfTickets[ticketID] = chatMessage.createdAtTimeStamp
                             self.lastUpdatedTimeOfTicketsRelay.accept(self.lastUpdatedTimeOfTickets)
-                            print("🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨")
                         })
                         .disposed(by: self.disposeBag)
                     
@@ -521,7 +513,6 @@ extension DefaultChatViewModel {
                     self.messageCreatedTimeList[uuid] = createdAtTimeStamp
                 }
                 newValue.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
-
                 
                 self.chatMessages.accept(newValue)
                 self.isLoading.accept(false)

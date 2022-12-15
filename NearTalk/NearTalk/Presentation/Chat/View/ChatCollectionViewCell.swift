@@ -186,7 +186,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     private func bindTicket(message: String) {
         self.ticketsRelay
             .asDriver()
-            .drive(onNext: { [weak self] lastUpdatedTimeOfTickets in
+            .drive(onNext: { [weak self] (lastUpdatedTimeOfTickets: [String: Double]) in
                 guard let self,
                       let createdAt = self.createdAt else {
                     return
@@ -198,10 +198,11 @@ class ChatCollectionViewCell: UICollectionViewCell {
                     return lastUpdatedTime < createdAt
                 }).count
                 print("📩 [메세지]: \(message) | [안읽은 사람 수]: \(count) | [총인원]: \(lastUpdatedTimeOfTickets.count)")
-//                if count > 0 {
-//                    self.countOfUnreadMessagesLabel.text = "\(count)"
-//                }
-                self.countOfUnreadMessagesLabel.text = "\(count)"
+                if count > 0 {
+                    self.countOfUnreadMessagesLabel.text = "\(count)"
+                } else {
+                    self.countOfUnreadMessagesLabel.text = ""
+                }
             })
             .disposed(by: self.disposeBag)
     }
