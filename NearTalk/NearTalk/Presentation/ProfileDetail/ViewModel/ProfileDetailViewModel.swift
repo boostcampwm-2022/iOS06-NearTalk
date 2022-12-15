@@ -155,7 +155,8 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                         recentMessageText: nil,
                         recentMessageDateTimeStamp: Date().timeIntervalSince1970,
                         maxNumberOfParticipants: 2,
-                        messageCount: nil)
+                        messageCount: 0
+        )
     }
     
     private func userProfileUpdate(userID: String, chatRoomUUID: String) {

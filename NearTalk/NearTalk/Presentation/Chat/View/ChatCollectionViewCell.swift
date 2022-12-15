@@ -85,7 +85,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         
         self.createdAt = messageItem.createdAt
         self.ticketsRelay = tickets
-        self.bindTicket()
+        self.bindTicket(message: messageItem.message!)
         
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
@@ -183,7 +183,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
         return dateFormatter.string(from: date)
     }
     
-    private func bindTicket() {
+    private func bindTicket(message: String) {
         self.ticketsRelay
             .asDriver()
             .drive(onNext: { [weak self] lastUpdatedTimeOfTickets in
@@ -193,12 +193,15 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 }
                 let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
                     let lastUpdatedTime = Date(timeIntervalSince1970: time)
+                    print("------------------------------------------------------")
+                    print("🚨", lastUpdatedTime, createdAt)
                     return lastUpdatedTime < createdAt
                 }).count
-//                print("📩 [안읽은 사람 수]: \(count)")
-                if count > 0 {
-                    self.countOfUnreadMessagesLabel.text = "\(count)"
-                }
+                print("📩 [메세지]: \(message) | [안읽은 사람 수]: \(count)")
+//                if count > 0 {
+//                    self.countOfUnreadMessagesLabel.text = "\(count)"
+//                }
+                self.countOfUnreadMessagesLabel.text = "\(count)"
             })
             .disposed(by: self.disposeBag)
     }
