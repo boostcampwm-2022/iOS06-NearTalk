@@ -190,7 +190,7 @@ extension DefaultChatViewModel {
                 }
             }
             .subscribe(onCompleted: { [weak self] in
-//                self?.bindNewMessage()
+                self?.bindNewMessage()
                 self?.observeNewMessage()
                 self?.observeChatRoom()
             }).disposed(by: self.disposeBag)
@@ -206,6 +206,7 @@ extension DefaultChatViewModel {
                     return
                 }
                 print("🔥", message.text!)
+                
                 if self.initialMessage.value == nil {
                     self.initialMessage.accept(message)
                     return
@@ -261,6 +262,10 @@ extension DefaultChatViewModel {
                 }
                 self.chatRoom.accept(chatRoom)
                 self.userUUIDList = userUUIDList
+                
+                // TODO: -
+                self.fetchParticipantTickets()
+                
                 return .just(userUUIDList)
             }
     }
@@ -281,21 +286,6 @@ extension DefaultChatViewModel {
                 }
             })
             .asCompletable()
-    }
-    
-    private func fetchUserChatRoomTicketList(_ userUUIDList: [String]) -> Completable {
-        self.enterChatRoomUseCase.fetchSingleUserChatRoomTickets(
-            userIDList: userUUIDList.last!,
-            chatRoomID: self.chatRoomID
-        )
-        .do(onSuccess: { [weak self] ticket in
-            guard let self else {
-                return
-            }
-            
-            self.ticketList = [ticket]
-        })
-        .asCompletable()
     }
     
     private func isVisitedChatRoom(_ roomID: String) -> Single<Bool> {
@@ -476,10 +466,16 @@ extension DefaultChatViewModel {
                     else {
                         return
                     }
-                    self.lastUpdatedTimeOfTickets[ticketID] = self.messageCreatedTimeList[lastReadMessageID]
+                    
+                    self.messagingUseCase.fetchSingleMessage(messageID: lastReadMessageID, roomID: self.chatRoomID)
+                        .subscribe(onSuccess: { chatMessage in
+                            self.lastUpdatedTimeOfTickets[ticketID] = chatMessage.createdAtTimeStamp
+                            self.lastUpdatedTimeOfTicketsRelay.accept(self.lastUpdatedTimeOfTickets)
+                            print("🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨")
+                        })
+                        .disposed(by: self.disposeBag)
+                    
                 }
-                print(self.lastUpdatedTimeOfTickets)
-                self.lastUpdatedTimeOfTicketsRelay.accept(self.lastUpdatedTimeOfTickets)
             })
             .disposed(by: self.disposeBag)
     }
@@ -526,9 +522,7 @@ extension DefaultChatViewModel {
                     self.messageCreatedTimeList[uuid] = createdAtTimeStamp
                 }
                 newValue.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
-                
-                // TODO: -
-                self.fetchParticipantTickets()
+
                 
                 self.chatMessages.accept(newValue)
                 self.isLoading.accept(false)
@@ -543,13 +537,6 @@ extension DefaultChatViewModel {
             }
         )
         .disposed(by: self.disposeBag)
-    }
-    
-    private func fetch(userUUIDList: [String]) -> Completable {
-        Completable.zip([
-            fetchChatRoomUserProfileList(userUUIDList),
-            fetchUserChatRoomTicketList(userUUIDList)
-        ])
     }
 }
 

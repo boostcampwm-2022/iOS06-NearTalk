@@ -197,7 +197,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
                     print("🚨", lastUpdatedTime, createdAt)
                     return lastUpdatedTime < createdAt
                 }).count
-                print("📩 [메세지]: \(message) | [안읽은 사람 수]: \(count)")
+                print("📩 [메세지]: \(message) | [안읽은 사람 수]: \(count) | [총인원]: \(lastUpdatedTimeOfTickets.count)")
 //                if count > 0 {
 //                    self.countOfUnreadMessagesLabel.text = "\(count)"
 //                }

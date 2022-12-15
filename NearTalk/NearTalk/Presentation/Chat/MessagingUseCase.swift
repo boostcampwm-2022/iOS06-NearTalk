@@ -13,6 +13,7 @@ protocol MessagingUseCase {
     func observeMessage(roomID: String) -> Observable<ChatMessage>
     func updateChatRoom(chatRoom: ChatRoom, userID: String) -> Completable
     func fetchMessage(before message: ChatMessage, roomID: String, totalMessageCount: Int) -> Single<[ChatMessage]>
+    func fetchSingleMessage(messageID: String, roomID: String) -> Single<ChatMessage>
 }
 
 final class DefalultMessagingUseCase: MessagingUseCase {
