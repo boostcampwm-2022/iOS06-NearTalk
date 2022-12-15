@@ -13,6 +13,7 @@ import RxSwift
 struct ProfileDetailViewModelActions {
     let showChatViewController: (String) -> Void
     var showChatListViewController: (() -> Void)?
+    let dismissProfileDetailController: () -> Void
 }
 
 protocol ProfileDetailViewModelInput {
@@ -103,12 +104,13 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                 else {
                     return
                 }
-                print("deleteFriendButtonDidTapEvent")
+                
                 self.removeFriendUseCase.removeFriend(with: self.userID)
                     .subscribe { event in
                         switch event {
                         case .completed:
-                            self.actions.showChatListViewController?()
+                            self.actions.dismissProfileDetailController()
+                            print("친구 삭제 성공!!")
                         case .error(let error):
                             print("ERROR: ", error.localizedDescription)
                         }
@@ -153,7 +155,8 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                         recentMessageText: nil,
                         recentMessageDateTimeStamp: Date().timeIntervalSince1970,
                         maxNumberOfParticipants: 2,
-                        messageCount: nil)
+                        messageCount: 0
+        )
     }
     
     private func userProfileUpdate(userID: String, chatRoomUUID: String) {

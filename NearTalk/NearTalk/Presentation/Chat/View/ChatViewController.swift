@@ -11,6 +11,8 @@ import UIKit
 
 final class ChatViewController: UIViewController {
     // MARK: - UI Properties
+    private let dropButton: UIBarButtonItem = .init(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: nil, action: nil)
+    
     private lazy var chatCollectionView: UICollectionView = UICollectionView(
         frame: .zero,
         collectionViewLayout: compositionalLayout
@@ -65,6 +67,7 @@ final class ChatViewController: UIViewController {
         self.addSubviews()
         self.configureChatInputAccessoryView()
         self.configureChatCollectionView()
+        self.configureNavigation()
         self.bind()
         self.chatInputAccessoryView.messageInputTextField.delegate = self
         
@@ -75,7 +78,6 @@ final class ChatViewController: UIViewController {
         // 제스처
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard(_:)))
         self.chatCollectionView.addGestureRecognizer(tapGesture)
-        self.configureNavigation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -85,13 +87,7 @@ final class ChatViewController: UIViewController {
     
     private func configureNavigation() {
         self.navigationController?.navigationBar.tintColor = .label
-        let dropButton: UIBarButtonItem = .init(image: UIImage(systemName: "rectangle.portrait.and.arrow.right"), style: .plain, target: nil, action: nil)
         self.navigationItem.rightBarButtonItem = dropButton
-        dropButton.rx.tap
-            .subscribe { [weak self] _ in
-                self?.viewModel.dropRoom()
-            }
-            .disposed(by: self.disposeBag)
     }
 
     private func scrollToBottom() {
@@ -104,6 +100,12 @@ final class ChatViewController: UIViewController {
     }
         
     private func bind() {
+        self.dropButton.rx.tap
+            .bind { [weak self] _ in
+                self?.viewModel.dropRoom()
+            }
+            .disposed(by: self.disposeBag)
+        
         self.chatInputAccessoryView.messageInputTextField.rx.text.orEmpty
             .map { !$0.isEmpty }
             .bind(to: chatInputAccessoryView.sendButton.rx.isEnabled)
