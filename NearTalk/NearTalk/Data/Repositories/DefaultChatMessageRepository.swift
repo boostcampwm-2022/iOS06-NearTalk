@@ -27,10 +27,8 @@ final class DefaultChatMessageRepository: ChatMessageRepository {
         self.fcmService = fcmService
     }
     
-    #warning("메시지 전송 결과에 대한 예외처리 필요")
     func sendMessage(message: ChatMessage, roomID: String, roomName: String, chatMemberIDList: [String]) -> Completable {
             self.databaseService.sendMessage(message)
-                .andThen(self.databaseService.increaseChatRoomMessageCount(roomID))
                 .andThen(self.sendPushNotification(message, roomName, chatMemberIDList))
     }
     
