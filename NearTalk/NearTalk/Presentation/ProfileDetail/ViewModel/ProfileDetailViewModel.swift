@@ -132,6 +132,8 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                     self.uploadChatRoomInfoUseCase.createChatRoom(newDMChat)
                         .subscribe(onCompleted: { self.actions.showChatViewController(chatRoomUUID) })
                         .disposed(by: self.disposeBag)
+                    
+                    self.createFriendChatRoomTicket(ticket: self.configureChatRoomTicket(userID: userID, roomID: chatRoomUUID), friendID: userID)
                 }
             })
             .disposed(by: disposeBag)
@@ -153,7 +155,7 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                         recentMessageText: nil,
                         recentMessageDateTimeStamp: Date().timeIntervalSince1970,
                         maxNumberOfParticipants: 2,
-                        messageCount: nil)
+                        messageCount: 0)
     }
     
     private func userProfileUpdate(userID: String, chatRoomUUID: String) {
@@ -184,5 +186,23 @@ final class ProfileDetailViewModel: ProfileDetailViewModelable {
                 
             })
             .disposed(by: self.disposeBag)
+    }
+    
+    
+    private func createFriendChatRoomTicket(ticket: UserChatRoomTicket, friendID: String) {
+        self.fetchChatRoomUseCase.createFriendChatRoomTicket(ticket: ticket, friendID: friendID)
+            .subscribe(onSuccess: { _ in
+                print("친구 티켓 업데이트 완료")
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func configureChatRoomTicket(userID: String, roomID: String) -> UserChatRoomTicket {
+        return UserChatRoomTicket(uuid: UUID().uuidString,
+                                        userID: userID,
+                                        roomID: roomID,
+                                        lastReadMessageID: nil,
+                                        createdAtTimeStamp: Date().timeIntervalSince1970,
+                                        lastRoomMessageCount: nil)
     }
 }

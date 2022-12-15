@@ -204,11 +204,14 @@ extension DefaultChatViewModel {
                       let messageID = message.uuid else {
                     return
                 }
-                self.updateTicketAndChatRoom(message, messageCount)
+                
                 if self.initialMessage.value == nil {
                     self.initialMessage.accept(message)
                     return
+                } else {
+                    self.updateTicketAndChatRoom(message, messageCount)
                 }
+                
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
                 newChatMessages.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
