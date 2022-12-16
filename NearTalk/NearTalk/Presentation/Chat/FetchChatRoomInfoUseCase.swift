@@ -42,7 +42,7 @@ final class DefaultFetchChatRoomInfoUseCase: FetchChatRoomInfoUseCase {
         let fetchTickets: [Observable<UserChatRoomTicket>] = userList.map {
             self.chatRoomListRepository.observeUserChatRoomTicket($0, roomID)
         }
-        return Observable.zip(fetchTickets)
+        return Observable.combineLatest(fetchTickets)
     }
 }
 

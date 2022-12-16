@@ -102,6 +102,22 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
             .map { $0.chatRooms ?? [] }
     }
     
+    func fetchObservableUserChatRoomUUIDList() -> Observable<[String]> {
+        self.profileRepository
+            .fetchMyProfile()
+            .flatMap { [weak self] (profile: UserProfile) in
+                guard let self,
+                      let uuid: String = profile.uuid else {
+                    throw ChatRoomListRepositoryError.failedToFetch
+                }
+                return self.databaseService.fetchUserChatRoomTicketList(uuid)
+            }
+            .asObservable()
+            .map { (tickets: [UserChatRoomTicket]) in
+                return tickets.compactMap({ $0.roomID })
+            }
+    }
+    
     func fetchChatRoomInfo(_ chatRoomID: String) -> Single<ChatRoom> {
         self.databaseService.fetchChatRoomInfo(chatRoomID)
     }
@@ -113,6 +129,10 @@ extension DefaultChatRoomListRepository: ChatRoomListRepository {
     // MARK: - UserChatRoomTicket
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket> {
         self.databaseService.createUserChatRoomTicket(ticket)
+    }
+    
+    func createFriendChatRoomTicket(_ ticket: UserChatRoomTicket, _ friendID: String) -> Single<UserChatRoomTicket> {
+        self.databaseService.createFriendChatRoomTicket(ticket, friendID)
     }
     
     func fetchUserChatRoomTickets() -> Single<[UserChatRoomTicket]> {

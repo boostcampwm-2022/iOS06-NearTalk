@@ -18,6 +18,7 @@ protocol ChatRoomListRepository {
     
     #warning("TicketRepository로 추출")
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
+    func createFriendChatRoomTicket(_ ticket: UserChatRoomTicket, _ friendID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTickets() -> Single<[UserChatRoomTicket]>
     func fetchUserChatRoomTicket(_ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicket(_ userUUID: String, _ roomID: String) -> Single<UserChatRoomTicket>
