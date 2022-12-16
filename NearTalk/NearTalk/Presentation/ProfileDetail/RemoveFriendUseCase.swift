@@ -22,8 +22,6 @@ final class DefaultRemoveFriendUseCase: RemoveFriendUseCase {
     }
     
     func removeFriend(with userID: String) -> Completable {
-        // 1. firebase에서 삭제 -> O
-        // 2. Coredata에서 삭제 -> ?
         return self.userProfileRepository.removeFriend(userID)
     }
 }
