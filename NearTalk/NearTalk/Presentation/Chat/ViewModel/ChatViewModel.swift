@@ -198,7 +198,6 @@ extension DefaultChatViewModel {
     private func observeNewMessage() {
         self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
             .subscribe(onNext: { [weak self] message in
-                print("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅", self?.chatRoom.value?.messageCount!)
                 guard let self,
                       let messageCount = self.chatRoom.value?.messageCount
                 else {
@@ -233,6 +232,8 @@ extension DefaultChatViewModel {
                 else {
                     return
                 }
+                
+                self.chatRoom.accept(chatRoom)
 
                 self.fetchProfileUseCase.fetchUserProfiles(with: newUserList).subscribe(onSuccess: {
                     self.userProfilesRelay.accept($0)
@@ -246,7 +247,6 @@ extension DefaultChatViewModel {
                 }
                 
                 self.userUUIDList = newUserList
-                self.chatRoom.accept(chatRoom)
             })
             .disposed(by: self.disposeBag)
     }
@@ -375,7 +375,7 @@ extension DefaultChatViewModel {
         ])
         .subscribe(
             onCompleted: {
-                print("[🚧 success] to update chatRoom and ticket")
+                print("[🚧 onCompleted] to update chatRoom and ticket")
             }, onError: { error in
                 print("[🚧 error]", error)
             }
@@ -403,7 +403,7 @@ extension DefaultChatViewModel {
         else {
             return Completable.error(ChatViewModelError.failedToFetch)
         }
-        print(messageCount)
+        
         newChatRoom.messageCount = messageCount + 1
         newChatRoom.recentMessageID = message.uuid
         newChatRoom.recentMessageDateTimeStamp = message.createdAtTimeStamp
@@ -423,7 +423,7 @@ extension DefaultChatViewModel {
                 return self.updateTicketWithNewMessage(lastMessage, messageCount)
             })
             .subscribe(onCompleted: {
-                print("성공")
+                print("[🚧 onCompleted]", #function)
             })
             .disposed(by: self.disposeBag)
     }
@@ -494,9 +494,7 @@ extension DefaultChatViewModel {
                     self?.isLoading.accept(false)
                     return
                 }
-                
-                print("✅✅✅✅✅333✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅", messages.count)
-                
+                                
                 if messages.count == 0 {
                     self.hasFirstMessage.accept(true)
                 }
