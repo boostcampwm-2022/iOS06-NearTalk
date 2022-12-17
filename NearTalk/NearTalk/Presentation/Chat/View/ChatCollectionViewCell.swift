@@ -93,7 +93,6 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.timeLabel.text = self.convertDateToString(with: messageItem.createdAt)
                 
         if isInComing {
-            print(">~~~", messageItem.senderID)
             self.bindUserProfile(senderID: messageItem.senderID,
                                  userName: messageItem.userName,
                                  imagePath: messageItem.imagePath)
@@ -195,16 +194,10 @@ class ChatCollectionViewCell: UICollectionViewCell {
                 }
                 let count = lastUpdatedTimeOfTickets.filter({ (_, time) in
                     let lastUpdatedTime = Date(timeIntervalSince1970: time)
-//                    print("------------------------------------------------------")
-//                    print("🚨", lastUpdatedTime, createdAt)
                     return lastUpdatedTime < createdAt
                 }).count
-//                print("📩 [메세지]: \(message) | [안읽은 사람 수]: \(count) | [총인원]: \(lastUpdatedTimeOfTickets.count)")
-                if count > 0 {
-                    self.countOfUnreadMessagesLabel.text = "\(count)"
-                } else {
-                    self.countOfUnreadMessagesLabel.text = ""
-                }
+                
+                self.countOfUnreadMessagesLabel.text = count > 0 ? String(count) : ""
             })
             .disposed(by: self.disposeBag)
     }
@@ -217,8 +210,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
             return
         }
         
-//        self.nameLabel.text = "알수 없음"
-//        self.setImage(path: imagePath)
+        self.nameLabel.text = "알수 없음"
+        self.setImage(path: imagePath)
         
         self.userProfileRelay
             .asDriver()

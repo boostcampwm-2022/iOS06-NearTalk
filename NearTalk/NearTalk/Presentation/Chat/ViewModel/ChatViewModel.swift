@@ -21,10 +21,10 @@ protocol ChatViewModelOutput {
     var chatMessages: BehaviorRelay<[ChatMessage]> { get }
     var lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> { get }
     var userProfilesRelay: BehaviorRelay<[UserProfile]> { get }
+    var dropOutEvent: Observable<Bool> { get }
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
-    var dropOutEvent: Observable<Bool> { get }
 }
 
 protocol ChatViewModel: ChatViewModelInput, ChatViewModelOutput { }
@@ -38,7 +38,6 @@ class DefaultChatViewModel: ChatViewModel {
     private let chatRoomID: String
     private var userUUIDList: [String]
     private var userProfileList: [String: UserProfile]
-    private var messageCreatedTimeList: [String: Double]
     private var lastUpdatedTimeOfTickets: [String: Double]
     private var ticketList: [UserChatRoomTicket]
     
@@ -86,7 +85,6 @@ class DefaultChatViewModel: ChatViewModel {
         
         self.ticketList = []
         self.lastUpdatedTimeOfTickets = [:]
-        self.messageCreatedTimeList = [:]
         self.userProfileList = [:]
         self.userUUIDList = []
         self.chatRoom = .init(value: nil)
@@ -138,7 +136,6 @@ class DefaultChatViewModel: ChatViewModel {
     
     func getUserProfile(userID: String) -> UserProfile? {
         return userProfilesRelay.value.filter({$0.uuid == userID}).first
-//        return self.userProfileList[userID]
     }
     
     func dropRoom() {
@@ -201,15 +198,16 @@ extension DefaultChatViewModel {
     private func observeNewMessage() {
         self.messagingUseCase.observeMessage(roomID: self.chatRoomID)
             .subscribe(onNext: { [weak self] message in
+                print("✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅", self?.chatRoom.value?.messageCount!)
                 guard let self,
-                      let messageCount = self.chatRoom.value?.messageCount,
-                      let createdAtTimeStamp = message.createdAtTimeStamp,
-                      let messageID = message.uuid else {
+                      let messageCount = self.chatRoom.value?.messageCount
+                else {
                     return
                 }
                 
                 if self.initialMessage.value == nil {
                     self.initialMessage.accept(message)
+                    self.updateTicketAndChatRoom(message, messageCount)
                     return
                 } else {
                     self.updateTicketAndChatRoom(message, messageCount)
@@ -218,9 +216,7 @@ extension DefaultChatViewModel {
                 var newChatMessages: [ChatMessage] = self.chatMessages.value
                 newChatMessages.append(message)
                 newChatMessages.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
-                ///
-                self.messageCreatedTimeList[messageID] = createdAtTimeStamp
-                ///
+
                 self.chatMessages.accept(newChatMessages)
             }, onError: { error in
                 print(error)
@@ -264,11 +260,6 @@ extension DefaultChatViewModel {
                     return .error(ChatViewModelError.failedToFetch)
                 }
                 
-                self.fetchProfileUseCase.fetchUserProfiles(with: userUUIDList).subscribe(onSuccess: {
-                    self.userProfilesRelay.accept($0)
-                })
-                .disposed(by: self.disposeBag)
-                
                 self.chatRoom.accept(chatRoom)
                 self.userUUIDList = userUUIDList
                 
@@ -283,7 +274,6 @@ extension DefaultChatViewModel {
                 else {
                     return
                 }
-                print("!@!@!@!@!@!", userProfiles.map({$0.uuid}))
                 self.userProfilesRelay.accept(userProfiles)
                 
                 userProfiles.forEach { userProfile in
@@ -413,6 +403,7 @@ extension DefaultChatViewModel {
         else {
             return Completable.error(ChatViewModelError.failedToFetch)
         }
+        print(messageCount)
         newChatRoom.messageCount = messageCount + 1
         newChatRoom.recentMessageID = message.uuid
         newChatRoom.recentMessageDateTimeStamp = message.createdAtTimeStamp
@@ -448,14 +439,11 @@ extension DefaultChatViewModel {
         self.initialMessage
             .subscribe(onNext: { [weak self] (message: ChatMessage?) in
                 guard let self,
-                      let message,
-                      let messageID = message.uuid,
-                      let createdAtTimeStamp = message.createdAtTimeStamp
+                      let message
                 else {
                     return
                 }
                 
-                self.messageCreatedTimeList[messageID] = createdAtTimeStamp
                 self.fetchMessages(before: message, isInitialMessage: true)
             }).disposed(by: self.disposeBag)
     }
@@ -507,7 +495,7 @@ extension DefaultChatViewModel {
                     return
                 }
                 
-                print("🚧 ", messages.count)
+                print("✅✅✅✅✅333✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅", messages.count)
                 
                 if messages.count == 0 {
                     self.hasFirstMessage.accept(true)
@@ -520,13 +508,6 @@ extension DefaultChatViewModel {
                     newValue = messages + newValue
                 }
                 
-                newValue.forEach { message in
-                    guard let createdAtTimeStamp = message.createdAtTimeStamp,
-                    let uuid = message.uuid else {
-                        return
-                    }
-                    self.messageCreatedTimeList[uuid] = createdAtTimeStamp
-                }
                 newValue.sort(by: { $0.createdAtTimeStamp! < $1.createdAtTimeStamp! })
                 
                 self.chatMessages.accept(newValue)
