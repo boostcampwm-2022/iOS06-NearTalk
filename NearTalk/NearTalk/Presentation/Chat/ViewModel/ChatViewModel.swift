@@ -20,6 +20,7 @@ protocol ChatViewModelOutput {
     var chatRoom: BehaviorRelay<ChatRoom?> { get }
     var chatMessages: BehaviorRelay<[ChatMessage]> { get }
     var lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> { get }
+    var userProfilesRelay: BehaviorRelay<[UserProfile]> { get }
     
     func getUserProfile(userID: String) -> UserProfile?
     func fetchMessages(before message: ChatMessage, isInitialMessage: Bool)
@@ -52,8 +53,9 @@ class DefaultChatViewModel: ChatViewModel {
     private let initialMessage: BehaviorRelay<ChatMessage?> = .init(value: nil)
     private let hasFirstMessage: BehaviorRelay<Bool> = .init(value: false)
     let userChatRoomTicket: BehaviorRelay<UserChatRoomTicket?> = .init(value: nil)
-    let userProfilesRely: BehaviorRelay<[UserProfile]?> = .init(value: nil)
     let lastUpdatedTimeOfTicketsRelay: BehaviorRelay<[String: Double]> = .init(value: [:])
+    let userProfilesRelay: BehaviorRelay<[UserProfile]> = .init(value: [])
+    let nameRelay: BehaviorRelay<String?> = .init(value: nil)
     private var disposeBag: DisposeBag = DisposeBag()
     private let dropEvent: PublishSubject<Bool> = PublishSubject()
     
@@ -92,8 +94,6 @@ class DefaultChatViewModel: ChatViewModel {
         
         self.initiateChatRoom()
         self.bindInitialMessage()
-        // TODO: - chatRoom 존재하지 않을때 예외처리
-//        self.fetchParticipantTickets()
     }
     
     func viewWillDisappear() {
@@ -137,7 +137,8 @@ class DefaultChatViewModel: ChatViewModel {
     }
     
     func getUserProfile(userID: String) -> UserProfile? {
-        return self.userProfileList[userID]
+        return userProfilesRelay.value.filter({$0.uuid == userID}).first
+//        return self.userProfileList[userID]
     }
     
     func dropRoom() {
@@ -236,7 +237,11 @@ extension DefaultChatViewModel {
                 else {
                     return
                 }
-                self.chatRoom.accept(chatRoom)
+
+                self.fetchProfileUseCase.fetchUserProfiles(with: newUserList).subscribe(onSuccess: {
+                    self.userProfilesRelay.accept($0)
+                })
+                .disposed(by: self.disposeBag)
                 
                 let userSet: Set<String> = Set(userList)
                 let newUserSet: Set<String> = Set(newUserList)
@@ -245,9 +250,7 @@ extension DefaultChatViewModel {
                 }
                 
                 self.userUUIDList = newUserList
-                self.fetchChatRoomUserProfileList(newUserList).subscribe(onCompleted: {
-                    print("🚧 user list is modified")
-                }).dispose()
+                self.chatRoom.accept(chatRoom)
             })
             .disposed(by: self.disposeBag)
     }
@@ -260,6 +263,12 @@ extension DefaultChatViewModel {
                 else {
                     return .error(ChatViewModelError.failedToFetch)
                 }
+                
+                self.fetchProfileUseCase.fetchUserProfiles(with: userUUIDList).subscribe(onSuccess: {
+                    self.userProfilesRelay.accept($0)
+                })
+                .disposed(by: self.disposeBag)
+                
                 self.chatRoom.accept(chatRoom)
                 self.userUUIDList = userUUIDList
                 
@@ -274,6 +283,9 @@ extension DefaultChatViewModel {
                 else {
                     return
                 }
+                print("!@!@!@!@!@!", userProfiles.map({$0.uuid}))
+                self.userProfilesRelay.accept(userProfiles)
+                
                 userProfiles.forEach { userProfile in
                     guard let uuid = userProfile.uuid
                     else {
@@ -281,6 +293,9 @@ extension DefaultChatViewModel {
                     }
                     self.userProfileList[uuid] = userProfile
                 }
+            }, onError: { error in
+                print(error)
+                
             })
             .asCompletable()
     }
