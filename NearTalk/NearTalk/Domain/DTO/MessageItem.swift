@@ -9,7 +9,8 @@ import Foundation
 
 struct MessageItem: Hashable {
     var id: String
-    var userName: String
+    var senderID: String?
+    var userName: String?
     var message: String?
     var type: MyMessageType
     var imagePath: String?
@@ -23,7 +24,8 @@ struct MessageItem: Hashable {
         createdAtTimeStamp: Double? = nil
     ) {
         self.id = chatMessage.uuid ?? UUID().uuidString
-        self.userName = userProfile?.username  ?? "알수없음"
+        self.senderID = chatMessage.senderID
+        self.userName = userProfile?.username
         self.message = chatMessage.text
         self.type = chatMessage.senderID == myID ? MyMessageType.send : MyMessageType.receive
         self.imagePath = userProfile?.profileImagePath

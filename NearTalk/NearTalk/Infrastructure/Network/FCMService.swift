@@ -19,8 +19,7 @@ enum FCMServiceError: Error {
 
 final class DefaultFCMService: FCMService {
     func sendMessage(_ message: ChatMessage, _ roomName: String, _ tokenList: [String]) -> Completable {
-        print("🚧 ", #function)
-        print("-+++++++", tokenList)
+        print("🚧 ", #function, tokenList)
         return Completable.create { completable in
             let dto: FCMNotificationDTO = .init(
                 notification: .init(title: "\(roomName)", body: message.text),

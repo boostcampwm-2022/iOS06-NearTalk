@@ -62,14 +62,14 @@ class ProfileDetailViewController: UIViewController {
         $0.setTitle("채팅 하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Metric.buttonTitleFontSize, weight: .bold)
         $0.layer.cornerRadius = Metric.cornerRadius
-        $0.backgroundColor = .systemOrange
+        $0.backgroundColor = .secondaryColor
     }
 
     private lazy var deleteFriendButton: UIButton = UIButton().then {
         $0.setTitle("친구 삭제하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: Metric.buttonTitleFontSize, weight: .bold)
         $0.layer.cornerRadius = Metric.cornerRadius
-        $0.backgroundColor = .systemOrange
+        $0.backgroundColor = .secondaryColor
     }
     
     // MARK: - LifeCycle

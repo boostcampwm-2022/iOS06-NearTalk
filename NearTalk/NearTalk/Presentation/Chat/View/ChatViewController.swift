@@ -231,7 +231,11 @@ private extension ChatViewController {
             else {
                 return UICollectionViewCell()
             }
-            cell.configure(messageItem: item, tickets: self.viewModel.lastUpdatedTimeOfTicketsRelay) {
+            
+            cell.ticketsRelay = self.viewModel.lastUpdatedTimeOfTicketsRelay
+            cell.userProfileRelay = self.viewModel.userProfilesRelay
+            
+            cell.configure(messageItem: item) {
                 var snapshot = self.dataSource.snapshot()
                 snapshot.reloadItems([item])
             }
