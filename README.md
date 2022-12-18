@@ -69,9 +69,7 @@
 
 > 애플 계정으로 회원 가입, 로그인, 회원 탈퇴
 
-<img alt="로그인화면" src="https://user-images.githubusercontent.com/46563413/208241267-fe0fdd14-4c4e-46ae-bbc8-c834e7fc471a.png" width=25% />
-<img src="https://user-images.githubusercontent.com/46563413/208241268-bfe4279b-c6a3-46e7-b03d-1f129d11338c.png" width=25% />
-<img src="https://user-images.githubusercontent.com/46563413/208241504-b7e0fd32-a51e-4216-a221-ad216ede02b7.png" width=24% />
+<img alt="로그인화면" src="https://user-images.githubusercontent.com/46563413/208241267-fe0fdd14-4c4e-46ae-bbc8-c834e7fc471a.png" width=25% /><img src="https://user-images.githubusercontent.com/46563413/208241268-bfe4279b-c6a3-46e7-b03d-1f129d11338c.png" width=25% /><img src="https://user-images.githubusercontent.com/46563413/208241504-b7e0fd32-a51e-4216-a221-ad216ede02b7.png" width=24% />
 
 > 텍스트와 이미지로 프로필 등록 및 편집
 
