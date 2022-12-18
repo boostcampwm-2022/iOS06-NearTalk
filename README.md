@@ -1,6 +1,6 @@
 # NearTalk
 
-<p align="center"><img src="/images/nearTalkLogo.png" width="250"></p>
+<p align="center"><img src="/images/nearTalkLogo2.png" width="1000"></p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swift&logoColor=white"/>
@@ -9,9 +9,13 @@
   <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white"/>
 </p>
 
+<br>
+
 > 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "NeakTalk(근방톡)" 입니다.
 > 
 > 개발 기간: 2022.11.07 ~ 2022.12.16
+
+<br>
 
 ## 프로젝트 소개
 > 💫 근방에서 금방 만나요, 근방톡 💫
@@ -20,6 +24,8 @@
 
 - 친구를 맺은 후, 거리에 상관 없이 개인 채팅방을 만들 수 있습니다.
 
+<br>
+
 ## 팀원 소개
 
 |`S001` 고병학|`S009` 김영욱|`S013` 김준영|`S025` 신동은|`S046` 임창묵|
@@ -27,9 +33,9 @@
 |<img src="https://avatars.githubusercontent.com/u/41236155?v=4" width="150">|<img src="https://avatars.githubusercontent.com/u/100309352?v=4" width="150">|<img src="https://avatars.githubusercontent.com/u/46563413?v=4" width="150">|<img src="https://avatars.githubusercontent.com/u/55118858?v=4" width="150">|<img src="https://avatars.githubusercontent.com/u/58398099?v=4" width="150">|
 |[@bengHak](https://github.com/bengHak)|[@yw22](https://github.com/yw22)|[@prestonk162](https://github.com/prestonk162)|[@dongeunshin](https://github.com/dongeunshin)|[@lymchgmk](https://github.com/lymchgmk)|
 
-## 개발환경 및 라이브러리
+<br>
 
-### 개발환경
+## 개발환경
 
 #### IDE
 ![badge](https://img.shields.io/badge/Xcode-14.1-147EFB?style=for-the-badge&logo=Xcode&logoColor=147EFB)
@@ -37,9 +43,9 @@
 #### iOS 최소 지원
 ![badge](https://img.shields.io/badge/iOS-15.0-lightgrey.svg?style=for-the-badge&logo=apple&logoColor=white)
 
+<br>
 
-
-### 프레임워크 및 라이브러리
+## 프레임워크 및 라이브러리
 
 #### Package Dependency Manager
 ![badge](https://img.shields.io/badge/CocoaPods-1.11.3-EE3322.svg?style=for-the-badge&logo=CocoaPods&logoColor=EE3322)
@@ -63,10 +69,13 @@
 #### Dependency injection
 ![badge](https://img.shields.io/badge/Swinject-2.8.3-F08138.svg?style=for-the-badge&logo=Swift&logoColor=F08138)
 
+<br>
+
 ## 프로젝트 주요 기능
 
 > 메인지도 화면
 
+> 그룹 채팅/ DM 채팅 
 
 > 채팅방 목록
 
