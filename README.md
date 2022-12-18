@@ -84,4 +84,11 @@
 |`시스템 설정 (라이트)`|`시스템 설정 (다크)`|`다크 모드`|`라이트 모드`|
 |
 
+## Wiki Page
+- [Wiki](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki)
+
+## Trouble Shooting & Discussion
+- [Trouble Shotting & Discussion](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki/%EB%AC%B8%EC%A0%9C-%EC%83%81%ED%99%A9-&-Discussion)
+
 ## 기술적인 도전
+- [기술적 도전](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki/%EA%B8%B0%EC%88%A0%EC%A0%81-%EB%8F%84%EC%A0%84)
