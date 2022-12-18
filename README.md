@@ -65,131 +65,25 @@
 
 ## 프로젝트 주요 기능
 
-### 사용자 실시간 위치를 기준으로 채팅방 생성
+> QR 코드를 통한 친구 추가 및 채팅
 
-### 애플 소셜 로그인
+> 애플 계정으로 회원 가입, 로그인, 회원 탈퇴
 
-<table>
- <tr>
-  <td>로그인 화면</td>
-  <td>회원 탈퇴</td>
- </tr>
-  <td>
-   <img width="818" alt="스크린샷 2022-12-15 17 39 03" src="https://user-images.githubusercontent.com/46563413/207814240-257d4f19-08bd-4f86-aee2-e40eaa499746.png">
-  </td>
-  <td>
-   <img width="862" alt="스크린샷 2022-12-15 17 39 38" src="https://user-images.githubusercontent.com/46563413/207814166-317274b9-d563-415a-8a0f-8c9b556aefe1.png">
-  </td>
- </tr>
-</table>
+<img alt="로그인화면" src="https://user-images.githubusercontent.com/46563413/208241267-fe0fdd14-4c4e-46ae-bbc8-c834e7fc471a.png" width=25% />
+<img src="https://user-images.githubusercontent.com/46563413/208241268-bfe4279b-c6a3-46e7-b03d-1f129d11338c.png" width=25% />
+<img src="https://user-images.githubusercontent.com/46563413/208241504-b7e0fd32-a51e-4216-a221-ad216ede02b7.png" width=24% />
 
-별도의 이메일, 비밀번호 필요 없이, 애플 계정만으로 회원 가입 및 로그인이 가능합니다.
+> 텍스트와 이미지로 프로필 등록 및 편집
 
-- 애플 로그인 이후, 로그아웃을 하지 않았다면, 해당 애플 계정에 연결된 계정으로 자동 로그인이 됩니다.
-- 애플 로그인은 회원 가입, 로그인, 회원 탈퇴 때 요구됩니다.
-- 앱에 로그인한 애플 계정 변경을 원하실 경우, 설정 앱 -> icloud -> 암호 및 보안 -> Apple ID를 사용하는 앱 -> NearTalk 앱 -> Apple ID 사용 중단 클릭을 하셔야 합니다.
+<img src="https://user-images.githubusercontent.com/46563413/208240532-1d88021f-a63d-4e5b-b345-aba544bd9706.png" width=24%><img src="https://user-images.githubusercontent.com/46563413/208240524-efbd816b-180f-43c5-88c6-3308162bcbf8.png" width=25%><img src="https://user-images.githubusercontent.com/46563413/208240519-c09d4849-36b7-4f61-876e-e2ebb23a156c.png" width=25%>
 
-### 푸시 알림 On/Off
+- 프로필 사진은 설정 앱에서 접근을 허용한 사진만 사용 가능합니다.
 
-### 프로필 등록 및 수정
+> 다크 모드 지원
 
-#### 프로필 등록
-첫 로그인 이후, 프로필 등록 단계에서 프로필 등록이 가능합니다. (로그인 직후, 앱을 종료할 경우, 프로필 등록 페이지로 이동합니다)
-
-#### 프로필 수정
-앱 로그인 이후, 마이 프로필 -> 프로필 수정 화면에서 프로필 수정이 가능합니다.
-
-<table>
- <tr>
-    <td>프로필 등록</td>
-    <td>프로필 수정</td>
- </tr>
- <tr>
-    <td><img width="862" alt="스크린샷 2022-12-15 15 14 01" src="https://user-images.githubusercontent.com/46563413/207786439-86435afa-6ce0-4861-a9fb-8535305aa346.png"></td>
-    <td><img width="818" alt="스크린샷 2022-12-15 15 25 00" src="https://user-images.githubusercontent.com/46563413/207788099-e0a31785-5c35-46ff-8a9b-3f4637fe1546.png"></td>
-   </td>
- <tr>
-</table>
-
-
-프로필은 다음의 요소로 구성됩니다.
-```
-- 닉네임 (한글, 영어소문자, 숫자만 포함된 3-20자 텍스트)
-- 상태메세지 (50자 이하 텍스트)
-- 이미지 (사진)
-```
-
-### 다크 모드 지원
-마이 프로필 -> 앱 설정 -> 테마 설정 화면에서 테마 선택이 가능합니다.
-
-테마 모드
-```
-- 시스템 설정 (설정 앱에서 선택한 테마)
-- 다크 모드 (설정 앱 테마 값 무시)
-- 라이트 모드 (설정 앱 테마 값 무시)
-```
-
-<table>
-   <tr>
-      <td>시스템 설정 (라이트)</td>
-      <td>시스템 설정 (다크)</td>
-      <td>다크 모드</td>
-      <td>라이트 모드</td>
-   </tr>
-   <tr>
-      <td>
-      <img width="818" alt="스크린샷 2022-12-15 15 36 07" src="https://user-images.githubusercontent.com/46563413/207793332-4969031b-31e8-4aa9-a2cd-431336bfa04c.png">
-      </td>
-      <td>
-      <img width="818" alt="스크린샷 2022-12-15 15 57 08" src="https://user-images.githubusercontent.com/46563413/207793514-eb9bc6d1-eb39-4f55-a41b-81fc5356e872.png">
-      </td>
-      <td>
-      <img width="818" alt="스크린샷 2022-12-15 15 37 54" src="https://user-images.githubusercontent.com/46563413/207793358-a2cc4484-e4e9-4ee4-849b-dbf0d5008f6e.png">
-      </td>
-      <td>
-      <img width="818" alt="스크린샷 2022-12-15 15 38 03" src="https://user-images.githubusercontent.com/46563413/207793380-9479f293-26e9-4d57-95f9-1272f121e4ef.png">
-      </td>
-   </tr>
-</table>
-
-### 그룹 채팅
-
-### 친구 추가
-
-### DM 채팅
-
-## 아키텍쳐 & 디자인 패턴
-
-### Clean Architecture
-
-- 프레젠테이션 레이어, 도메인 레이어, 데이터 레이어로 분리된 코드로 각 레이어에서 개발한 결과물을 합칠 때 이점이 있기 때문에 도입했습니다.
-- 도메인 레이어가 UI와 독립적이기 때문에 비즈니스 로직의 유닛 테스트에 용이합니다.
-- MVVM에서 viewModel이 커지는 것을 use case와 repsoitory 코드로 분산할 수 있습니다.
-
-### MVVM - C
-
-- View와 독립적으로 개발할 수 있는 viewModel을 활용해서 유닛 테스트하기에 용이한 **MVVM 패턴**을 ****입했습니다.
-- View의 화면전환 로직을 viewController에서 분리하는 것으로 화면전환을 유연하게 할 수 있는 **코디네이터 패턴**을 도입했습니다.
+|<img src="https://user-images.githubusercontent.com/46563413/208240529-b5491a10-ecd7-48a2-9ed7-864962c94d1c.png">|<img src="https://user-images.githubusercontent.com/46563413/208240528-319d5a8e-d366-4ce1-aa98-ceadce89dc2a.png">|<img src="https://user-images.githubusercontent.com/46563413/208240536-42a3aa2a-0964-4f55-9022-214a30b6ecda.png">|<img src="https://user-images.githubusercontent.com/46563413/208240534-5134dc2e-bd93-4390-bf2b-06410c515481.png">|
+|:-:|:-:|:-:|:-:|
+|`시스템 설정 (라이트)`|`시스템 설정 (다크)`|`다크 모드`|`라이트 모드`|
+|
 
 ## 기술적인 도전
-
-### Carthage
-
-1. Carthage 설치 (터미널에서 실행)
-   - `brew install carthage`
-2. 프로젝트 폴더에서 프레임워크, 라이브러리 빌드 (터미널에서 실행)
-   - `carthage update --use-xcframeworks --platform iOS`
-3. 프로젝트 폴더 내 `Carthage/Build/` 폴더를 Xcode 프로젝트 최상단에 추가
-
-   <img src="images/carthage.png" width="300px" />
-4. Target의 "Build Settings"에 "Other Linker Flags"에 `$(OTHER_LDFLAGS) -ObjC`를 추가한다.
-
-   <img src="images/carthage_1.png" width="500px" />
-
-### 접근 허용된 사진만 불러오기
-
-https://user-images.githubusercontent.com/46563413/207805355-73482552-b042-48fe-bd9a-92d9e390936f.mov
-
-- 앱 실행 중 접근 허용하지 않은 사진을 아예 화면에서 보이지 않게 하기 위해 구현했습니다.
-- PHPickerViewController, UIImageViewController는 접근을 허용하지 않은 사진까지 불러옵니다.
-- PHAsset, PHPhotoLibrary, CollectionView를 활용하여 앱에서 사진을 Import 할 때 접근이 허용된 사진만 불러오는 Picker를 구현했습니다.
