@@ -47,7 +47,7 @@
 
 ## 프레임워크 및 라이브러리
 
-#### Package Dependency Manager
+#### Package dependency manager
 ![badge](https://img.shields.io/badge/CocoaPods-1.11.3-EE3322.svg?style=for-the-badge&logo=CocoaPods&logoColor=EE3322)
 
 #### Networking
@@ -59,7 +59,7 @@
 ![badge](https://img.shields.io/badge/RxGesture-4.0.0-B7174C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7174C)
 ![badge](https://img.shields.io/badge/RxBlocking-6.5-B7172C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7172C)
 
-#### UI Autolayout
+#### Autolayout
 ![badge](https://img.shields.io/badge/SnapKit-5.6.0-F05138?style=for-the-badge&logo=Swift&logoColor=F05138)
 ![badge](https://img.shields.io/badge/Then-3.0.0-F06138.svg?style=for-the-badge&logo=Swift&logoColor=F06138)
 
@@ -149,4 +149,4 @@
 - View의 화면전환 로직을 viewController에서 분리하는 것으로 화면전환을 유연하게 할 수 있는 **코디네이터 패턴**을 도입했습니다.
 
 
-#### [프로젝트 과정을 보고싶으시다면 WIKI를 참고해주세요!](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki)
+#### [혹시, 프로젝트 과정이 궁금하시다면 저희 Wiki를 참고해주세요!](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki)
