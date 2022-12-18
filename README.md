@@ -74,7 +74,7 @@
 ## 프로젝트 주요 기능
 
 > 메인지도 화면
-
+<img alt="[메인지도] 권한요청" src="/images/screenshot/메인지도/권한요청.png" width=20%><img alt="[메인지도] 지도뷰" src="/images/screenshot/메인지도/지도뷰.png" width=20%><img alt="[메인지도] 채팅방 클러스터링" src="/images/screenshot/메인지도/채팅방 클러스터링.gif" width=20%><img alt="[메인지도] 콜아웃뷰" src="/images/screenshot/메인지도/콜아웃뷰.gif" width=20%><img alt="[메인지도] 바텀시트" src="/images/screenshot/메인지도/바텀시트.gif" width=20%>
 <br>
 
 > 그룹 채팅/ DM 채팅 
@@ -101,11 +101,11 @@
 
 <br>
 
-> QR 코드를 통한 친구 추가/삭제 및 채팅
+> QR코드를 통한 친구 추가/삭제 및 채팅
 
 <img alt="친구목록01" src="/images/screenshot/친구목록01.png" width=20% /> <img alt="친구목록02" src="/images/screenshot/친구목록02.png" width=20% /> <img alt="친구목록03" src="/images/screenshot/친구목록03.png" width=20% /> <img alt="친구추가01" src="/images/screenshot/친구추가01.gif" width=20% />
 
-- QR 코드를 통하여 친구추가와 추가한 친구를 삭제할 수 있습니다.
+- QR코드를 통하여 친구추가와 추가한 친구를 삭제할 수 있습니다.
 - QR코드로 추가한 친구와 대화할수 있습니다.
 
 <br>
