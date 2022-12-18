@@ -125,4 +125,4 @@
 - Firebase-ios-sdk의 빌드시간을 줄이기 위해 Carthage를 활용했습니다.
 - Carthage 적용 후 클린 빌드 시간 단축할 수 있었습니다. **(88초 -> 16.3초)**
 
-자세한 내용 위키를 참고해주세요~? ![]()
+저희의 개발기를 보고싶으시다면 WIKI를 참고해주세요! ![iOS06_NearTalk](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki)
