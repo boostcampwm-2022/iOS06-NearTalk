@@ -27,6 +27,7 @@ protocol RealTimeDatabaseService {
     
     // MARK: 유저-채팅방 티켓 정보
     func createUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
+    func createFriendChatRoomTicket(_ ticket: UserChatRoomTicket, _ friendID: String) -> Single<UserChatRoomTicket>
     func updateUserChatRoomTicket(_ ticket: UserChatRoomTicket) -> Single<UserChatRoomTicket>
     func fetchSingleUserChatRoomTicket(_ userID: String, _ roomID: String) -> Single<UserChatRoomTicket>
     func fetchUserChatRoomTicketList(_ userID: String) -> Single<[UserChatRoomTicket]>
@@ -259,6 +260,27 @@ final class DefaultRealTimeDatabaseService: RealTimeDatabaseService {
             self.ref
                 .child(FirebaseKey.RealtimeDB.users.rawValue)
                 .child(userID)
+                .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
+                .child(roomID)
+                .setValue(ticketData)
+            single(.success(ticket))
+            return Disposables.create()
+        }
+    }
+    
+    func createFriendChatRoomTicket(_ ticket: UserChatRoomTicket, _ friendID: String) -> Single<UserChatRoomTicket> {
+        Single<UserChatRoomTicket>.create { [weak self] single in
+            guard let self,
+                  let roomID: String = ticket.roomID,
+                  let ticketData: [String: Any] = try? ticket.encode()
+            else {
+                single(.failure(DatabaseError.failedToCreate))
+                return Disposables.create()
+            }
+            
+            self.ref
+                .child(FirebaseKey.RealtimeDB.users.rawValue)
+                .child(friendID)
                 .child(FirebaseKey.RealtimeDB.userChatRoomTickets.rawValue)
                 .child(roomID)
                 .setValue(ticketData)

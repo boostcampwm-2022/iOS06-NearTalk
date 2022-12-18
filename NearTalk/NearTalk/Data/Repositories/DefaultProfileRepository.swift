@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-final class DefaultProfileRepository: ProfileRepository {
+ final class DefaultProfileRepository: ProfileRepository {
     private let firestoreService: FirestoreService
     private let firebaseAuthService: AuthService
     

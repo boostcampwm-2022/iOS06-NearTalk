@@ -15,6 +15,7 @@ class ChatCollectionViewCell: UICollectionViewCell {
     // MARK: - Proporty
     static let identifier = String(describing: ChatRoomListCell.self)
     var ticketsRelay: BehaviorRelay<[String: Double]>!
+    var userProfileRelay: BehaviorRelay<[UserProfile]>!
     private var createdAt: Date?
     private var viewModel: ChatViewModel?
     private var disposeBag: DisposeBag = DisposeBag()
@@ -79,22 +80,22 @@ class ChatCollectionViewCell: UICollectionViewCell {
         self.disposeBag = DisposeBag()
     }
 
-    func configure(messageItem: MessageItem, tickets: BehaviorRelay<[String: Double]>, completion: (() -> Void)? = nil) {
+    func configure(messageItem: MessageItem, completion: (() -> Void)? = nil) {
         self.profileImageView.image = nil
         let isInComing = messageItem.type == .receive
         
         self.createdAt = messageItem.createdAt
-        self.ticketsRelay = tickets
-        self.bindTicket()
+        self.bindTicket(message: messageItem.message!)
         
         self.textView.backgroundColor = isInComing ? .secondaryBackground : .primaryColor
         self.textView.textColor = isInComing ? .label : .whiteLabel
         self.textView.text = messageItem.message
-        self.nameLabel.text = isInComing ? messageItem.userName : ""
         self.timeLabel.text = self.convertDateToString(with: messageItem.createdAt)
                 
         if isInComing {
-            self.setImage(path: messageItem.imagePath)
+            self.bindUserProfile(senderID: messageItem.senderID,
+                                 userName: messageItem.userName,
+                                 imagePath: messageItem.imagePath)
             
             self.textView.snp.remakeConstraints { make in
                 make.leading.equalTo(profileImageView.snp.trailing).offset(5)
@@ -183,10 +184,10 @@ class ChatCollectionViewCell: UICollectionViewCell {
         return dateFormatter.string(from: date)
     }
     
-    private func bindTicket() {
+    private func bindTicket(message: String) {
         self.ticketsRelay
             .asDriver()
-            .drive(onNext: { [weak self] lastUpdatedTimeOfTickets in
+            .drive(onNext: { [weak self] (lastUpdatedTimeOfTickets: [String: Double]) in
                 guard let self,
                       let createdAt = self.createdAt else {
                     return
@@ -195,10 +196,33 @@ class ChatCollectionViewCell: UICollectionViewCell {
                     let lastUpdatedTime = Date(timeIntervalSince1970: time)
                     return lastUpdatedTime < createdAt
                 }).count
-//                print("📩 [안읽은 사람 수]: \(count)")
-                if count > 0 {
-                    self.countOfUnreadMessagesLabel.text = "\(count)"
+                
+                self.countOfUnreadMessagesLabel.text = count > 0 ? String(count) : ""
+            })
+            .disposed(by: self.disposeBag)
+    }
+    
+    private func bindUserProfile(senderID: String?, userName: String?, imagePath: String?) {
+        guard userName == nil,
+              imagePath == nil else {
+            self.nameLabel.text = userName
+            self.setImage(path: imagePath)
+            return
+        }
+        
+        self.nameLabel.text = "알수 없음"
+        self.setImage(path: imagePath)
+        
+        self.userProfileRelay
+            .asDriver()
+            .drive(onNext: { [weak self] (userProfiles: [UserProfile]) in
+                guard let self,
+                     let userProfile = userProfiles.filter({ $0.uuid == senderID }).first else {
+                    return
                 }
+                
+                self.nameLabel.text = userProfile.username ?? "알수 없음"
+                self.setImage(path: userProfile.profileImagePath)
             })
             .disposed(by: self.disposeBag)
     }

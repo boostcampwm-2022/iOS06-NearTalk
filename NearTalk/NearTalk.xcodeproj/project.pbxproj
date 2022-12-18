@@ -929,6 +929,11 @@
 				83D5ECC8292BA7C400AD1781 /* UploadImageUseCase.swift */,
 				83D5ECC0292B622500AD1781 /* ValidateUseCase.swift */,
 				603FD399292B4F0F00687ED4 /* VerifyUserUseCase.swift */,
+				7C43C1EE2935F810008322FC /* UserDefaultUseCase.swift */,
+				7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */,
+				7C749850292F706F00FADA94 /* MessagingUseCase.swift */,
+				7C8197432939E79700A7DD8F /* EnterChatRoomUseCase.swift */,
+				833D035529496E720029DF76 /* DropChatRoomUseCase.swift */,
 			);
 			path = UseCases;
 			sourceTree = "<group>";
@@ -1060,6 +1065,7 @@
 				6008FC9C2925DBCF0044F017 /* NCLocation.swift */,
 				162B1B6B2935176D004724D9 /* NCMapRegion.swift */,
 				603EDDA22926C01D00BEE65C /* UserChatModel.swift */,
+				7CAA2CFD29404D1A00630692 /* MessageItem.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -1243,15 +1249,9 @@
 		7C254DA6292DB205004D4CEC /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				7C43C1EE2935F810008322FC /* UserDefaultUseCase.swift */,
-				7C522E1E2935BE0100331EB6 /* FetchChatRoomInfoUseCase.swift */,
-				7C749850292F706F00FADA94 /* MessagingUseCase.swift */,
-				7C8197432939E79700A7DD8F /* EnterChatRoomUseCase.swift */,
-				833D035529496E720029DF76 /* DropChatRoomUseCase.swift */,
 				7C254DA9292DB22B004D4CEC /* Coordinator */,
 				7C254DA8292DB21E004D4CEC /* ViewModel */,
 				7C254DA7292DB217004D4CEC /* View */,
-				7CAA2CFD29404D1A00630692 /* MessageItem.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -2223,9 +2223,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = NearTalk/NearTalk.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 92NGUT4BRA;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/watchOS",
@@ -2257,6 +2259,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.codershigh.boostcamp.NearTalk.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = neartalk;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
