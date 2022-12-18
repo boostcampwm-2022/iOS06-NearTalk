@@ -75,7 +75,7 @@
 
 > 메인지도 화면
 
-<img alt="[메인지도] 권한요청" src="/images/screenshot/메인지도/권한요청.png" width=20%> <img alt="[메인지도] 채팅방 클러스터링" src="/images/screenshot/메인지도/채팅방 클러스터링.gif" width=20%> <img alt="[메인지도] 콜아웃뷰" src="/images/screenshot/메인지도/콜아웃뷰.gif" width=20%> <img alt="[메인지도] 바텀시트" src="/images/screenshot/메인지도/바텀시트.gif" width=20%> <img alt="[메인지도] 입장가능거리" src="/images/screenshot/메인지도/입장가능거리.gif" width=20%>
+<img alt="[메인지도] 권한요청" src="/images/screenshot/메인지도/권한요청.png" width=18%> <img alt="[메인지도] 채팅방 클러스터링" src="/images/screenshot/메인지도/채팅방 클러스터링.gif" width=18%> <img alt="[메인지도] 콜아웃뷰" src="/images/screenshot/메인지도/콜아웃뷰.gif" width=18%> <img alt="[메인지도] 바텀시트" src="/images/screenshot/메인지도/바텀시트.gif" width=18%> <img alt="[메인지도] 입장가능거리" src="/images/screenshot/메인지도/입장가능거리.gif" width=18%>
 
 <br>
 
