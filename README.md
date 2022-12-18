@@ -22,24 +22,36 @@
 
 ## 개발환경 및 라이브러리
 
-### iOS 최소 버전
-- iOS `15.0`
-
 ### 개발환경
-- Xcode `14.1`
-- macOS Ventura `13.0`
-- macOS Monterey `12.6`
 
-### 프레임워크 및 라이브러리 버전
+#### IDE
+![badge](https://img.shields.io/badge/Xcode-14.1-147EFB?style=for-the-badge&logo=Xcode&logoColor=147EFB)
 
-- RxSwift `6.5.0`
-- RxCocoa `6.5.0`
-- RxGesture `4.0.0`
-- RxBlocking `6.5.0`
-- Firebase `10.3.0`
-- SnapKit `5.6.0`
-- Kingfisher `7.4.1`
-- Then `3.0.0`
+#### iOS 최소 지원
+![badge](https://img.shields.io/badge/iOS-15.0-lightgrey.svg?style=for-the-badge&logo=apple&logoColor=white)
+
+
+
+### 프레임워크 및 라이브러리
+
+#### Dependency Manager
+![badge](https://img.shields.io/badge/CocoaPods-1.11.3-EE3322.svg?style=for-the-badge&logo=CocoaPods&logoColor=EE3322)
+
+#### Asynchronous programming
+![badge](https://img.shields.io/badge/RxSwift-6.5.0-B7178C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7178C)
+![badge](https://img.shields.io/badge/RxCocoa-6.5.0-B7176C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7176C)
+![badge](https://img.shields.io/badge/RxGesture-4.0.0-B7174C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7174C)
+![badge](https://img.shields.io/badge/RxBlocking-6.5-B7172C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7172C)
+
+#### UI Autolayout
+![badge](https://img.shields.io/badge/SnapKit-5.6.0-F05138?style=for-the-badge&logo=Swift&logoColor=F05138)
+![badge](https://img.shields.io/badge/Then-3.0.0-F06138.svg?style=for-the-badge&logo=Swift&logoColor=F06138)
+
+#### Image caching
+![badge](https://img.shields.io/badge/Kingfisher-7.4.1-F07138.svg?style=for-the-badge&logo=Swift&logoColor=F07138)
+
+#### Dependency injection
+![badge](https://img.shields.io/badge/Swinject-2.8.3-F08138.svg?style=for-the-badge&logo=Swift&logoColor=F08138)
 
 ## 기능
 
