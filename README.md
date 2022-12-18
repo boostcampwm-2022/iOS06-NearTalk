@@ -65,7 +65,24 @@
 
 ## 프로젝트 주요 기능
 
-> QR 코드를 통한 친구 추가 및 채팅
+> 메인지도 화면
+
+
+> 채팅방 목록
+- Group 채팅방과 DM 채팅방을 분리했습니다.
+- 현재위치기반으로 입장 가능한 채팅방을 UI로 표시했습니다.
+- 실시간으로 서버와 동기화해 새로운 메세지가 올때마다 UI를 업데이트합니다.
+<img alt="채팅방목록01" src="/images/screenshot/채팅방목록01.png" width=33% />
+<img alt="채팅방목록02" src="/images/screenshot/채팅방목록02.png" width=33% />
+<img alt="채팅방목록03" src="/images/screenshot/채팅방목록03.png" width=33% />
+
+> QR 코드를 통한 친구 추가/삭제 및 채팅
+- QR 코드를 통하여 친구추가와 추가한 친구를 삭제할 수 있습니다.
+- QR코드로 추가한 친구와 대화할수 있습니다.
+<img alt="친구목록01" src="/images/screenshot/친구목록01.png" width=25% />
+<img alt="친구목록02" src="/images/screenshot/친구목록01.png" width=25% />
+<img alt="친구목록03" src="/images/screenshot/친구목록01.png" width=25% />
+<img alt="친구추가01" src="/images/screenshot/친구추가01.gif" width=25% />
 
 > 애플 계정으로 회원 가입, 로그인, 회원 탈퇴
 
