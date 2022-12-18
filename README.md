@@ -147,4 +147,4 @@
 - View의 화면전환 로직을 viewController에서 분리하는 것으로 화면전환을 유연하게 할 수 있는 **코디네이터 패턴**을 도입했습니다.
 
 
-#### ![프로젝트 과정을 보고싶으시다면 WIKI를 참고해주세요!](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki)
+#### [프로젝트 과정을 보고싶으시다면 WIKI를 참고해주세요!](https://github.com/boostcampwm-2022/iOS06-NearTalk/wiki)
