@@ -75,7 +75,20 @@
 
 > 메인지도 화면
 
+<br>
+
 > 그룹 채팅/ DM 채팅 
+
+<img alt="채팅생성" src="/images/채팅생성.png" width=20%> <img alt="메세지작성" src="/images/메세지작성.png" width=20% > <img alt="메세지발신" src="/images/메세지발신.png" width=20% >
+
+- 채팅방을 생성하고 메세지를 작성할 수 있습니다.
+
+<img alt="채팅입장" src="/images/채팅방입장.png" width=20%> <img alt="메세지송수신" src="/images/메세지송수신.png" width=20% > <img alt="채팅방탈퇴" src="/images/채팅방탈퇴.png" width=20% >
+
+- 지도에서 입장한 채팅방에서 그룹 채팅이 가능합니다.
+- 우 상단 버튼을 통해 채팅방 나가기를 할 수 있습니다.
+
+<br>
 
 > 채팅방 목록
 
@@ -85,6 +98,8 @@
 - 현재위치기반으로 입장 가능한 채팅방을 UI로 표시했습니다.
 - 실시간으로 서버와 동기화해 새로운 메세지가 올때마다 UI를 업데이트합니다.
 
+<br>
+
 > QR 코드를 통한 친구 추가/삭제 및 채팅
 
 <img alt="친구목록01" src="/images/screenshot/친구목록01.png" width=20% /> <img alt="친구목록02" src="/images/screenshot/친구목록02.png" width=20% /> <img alt="친구목록03" src="/images/screenshot/친구목록03.png" width=20% /> <img alt="친구추가01" src="/images/screenshot/친구추가01.gif" width=20% />
@@ -92,9 +107,13 @@
 - QR 코드를 통하여 친구추가와 추가한 친구를 삭제할 수 있습니다.
 - QR코드로 추가한 친구와 대화할수 있습니다.
 
+<br>
+
 > 애플 계정으로 회원 가입, 로그인, 회원 탈퇴
 
 <img alt="로그인화면" src="https://user-images.githubusercontent.com/46563413/208241267-fe0fdd14-4c4e-46ae-bbc8-c834e7fc471a.png" width=25% /><img src="https://user-images.githubusercontent.com/46563413/208241268-bfe4279b-c6a3-46e7-b03d-1f129d11338c.png" width=25% /><img src="https://user-images.githubusercontent.com/46563413/208241504-b7e0fd32-a51e-4216-a221-ad216ede02b7.png" width=24% />
+
+<br>
 
 > 텍스트와 이미지로 프로필 등록 및 편집
 
@@ -102,12 +121,15 @@
 
 - 프로필 사진은 설정 앱에서 접근을 허용한 사진만 사용 가능합니다.
 
+<br>
+
 > 다크 모드 지원
 
 |<img src="https://user-images.githubusercontent.com/46563413/208240529-b5491a10-ecd7-48a2-9ed7-864962c94d1c.png">|<img src="https://user-images.githubusercontent.com/46563413/208240528-319d5a8e-d366-4ce1-aa98-ceadce89dc2a.png">|<img src="https://user-images.githubusercontent.com/46563413/208240536-42a3aa2a-0964-4f55-9022-214a30b6ecda.png">|<img src="https://user-images.githubusercontent.com/46563413/208240534-5134dc2e-bd93-4390-bf2b-06410c515481.png">|
 |:-:|:-:|:-:|:-:|
 |`시스템 설정 (라이트)`|`시스템 설정 (다크)`|`다크 모드`|`라이트 모드`|
 
+<br>
 
 ## 아키텍쳐 & 디자인 패턴
 <img alt="Data Flow" src="/images/Flow.png">
