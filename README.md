@@ -1,4 +1,4 @@
-# NearTalk 소개
+# NearTalk
 
 <p align="center"><img src="/images/nearTalkLogo.png" width="250"></p>
 
@@ -9,9 +9,16 @@
   <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white"/>
 </p>
 
-- 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "근방톡" 입니다.
-- 실시간 위치 기반으로 근처에 있는 채팅방에 입장하고 대화할 수 있습니다.
-- 친구를 맺고 DM을 보낼 수 있습니다.
+> 근처에 있는 사람들과 실시간 소통할 수 있는 메신저 앱 "NeakTalk(근방톡)" 입니다.
+> 
+> 개발 기간: 2022.11.07 ~ 2022.12.16
+
+## 프로젝트 소개
+> 💫 근방에서 금방 만나요, 근방톡 💫
+
+- 실시간 위치 기반으로 근처에 있는 오픈 그룹 채팅방에 입장하고, 다른 사람들과 채팅을 할 수 있습니다.
+
+- 친구를 맺은 후, 거리에 상관 없이 개인 채팅방을 만들 수 있습니다.
 
 ## 팀원 소개
 
@@ -37,6 +44,9 @@
 #### Dependency Manager
 ![badge](https://img.shields.io/badge/CocoaPods-1.11.3-EE3322.svg?style=for-the-badge&logo=CocoaPods&logoColor=EE3322)
 
+#### Networking
+![badge](https://img.shields.io/badge/Firebase-10.3.0-FFCA28.svg?style=for-the-badge&logo=Firebase&logoColor=FFCA28)
+
 #### Asynchronous programming
 ![badge](https://img.shields.io/badge/RxSwift-6.5.0-B7178C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7178C)
 ![badge](https://img.shields.io/badge/RxCocoa-6.5.0-B7176C.svg?style=for-the-badge&logo=ReactiveX&logoColor=B7176C)
@@ -53,7 +63,7 @@
 #### Dependency injection
 ![badge](https://img.shields.io/badge/Swinject-2.8.3-F08138.svg?style=for-the-badge&logo=Swift&logoColor=F08138)
 
-## 기능
+## 프로젝트 주요 기능
 
 ### 사용자 실시간 위치를 기준으로 채팅방 생성
 
